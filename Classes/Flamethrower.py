@@ -1,5 +1,4 @@
-class Flamethrower:
-    pos = ()
-    
-    def __init__(self, pos: tuple):
-        self.pos = pos
+import Item
+
+class Flamethrower(Item):
+    ...
