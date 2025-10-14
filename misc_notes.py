@@ -53,7 +53,7 @@ def clear():
     """
     os.system('cls' if os.name=='nt' else 'clear')
 
-import random:
+import random
 n=42
 for _ in range(n):
     print(random.randint(1,10))
