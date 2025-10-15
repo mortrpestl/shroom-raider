@@ -8,7 +8,7 @@ class Grid:
         ('L🧑',Player),
         ('T🌲',Tree),
         ('+🍄',Mushroom), #implement
-        ('R🪨',Rock), #implement
+        ('R🪨',Stone), 
         ('~🟦',Water),
         ('-⬜',PavedTile)
         ] 
