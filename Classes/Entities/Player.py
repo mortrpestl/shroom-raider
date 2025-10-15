@@ -1,4 +1,4 @@
-from Classes.EntityTypes.Entity import Entity
+from Classes.Entity import Entity
 
 import Flamethrower
 import Axe
