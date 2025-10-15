@@ -1,3 +1,10 @@
+"""
+TODO:
+- Implement self._push() (checks inbounds, updates coordinates)
+- Implement self.destroy() (destroys object from memory)
+"""
+
+
 class Entity:
     __pos = []
     __icon = ""
