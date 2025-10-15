@@ -39,6 +39,7 @@ class Grid:
                 obj = Grid.init_coord(self.__grid_vis_map[r][c],(r,c))
                 self.__grid_obj_map[r].append(obj)
 
+        self.connect_trees()
         Grid.grid_list[name] = self
 
     def init_coord(symbol, coord):
@@ -55,6 +56,12 @@ class Grid:
         
         return item_type(coord)
 
+    def connect_trees(self):
+        for r in range(self.__map_rows):
+            for c in range(self.__map_cols):
+                cell = self.get_obj_in_coord(r,c)
+                if isinstance(cell,Tree): cell.find_neighbors(self.__grid_obj_map)
+
     def get_by_name(name):
         """
         Gets Grid instance by name.
@@ -67,9 +74,9 @@ class Grid:
         """
         Gets item type at certain coordinate
         """
-        def inbounds(r,c): return 0<=r<self.map_rows and 0<=c<self.map_cols
+        def in_bounds(r,c): return 0<=r<self.map_rows and 0<=c<self.map_cols
 
-        if not inbounds(r,c):
+        if not in_bounds(r,c):
             raise IndexError(f'coordinate {r,c} out of bounds')
         
         return self.__grid_obj_map[r][c]
