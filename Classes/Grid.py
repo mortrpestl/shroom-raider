@@ -1,6 +1,7 @@
 import os
 
 from Classes.Entities import * 
+from Classes.Entity import Entity
 
 class Grid:
     #you can add more keys (e.g. 'L🧑' to 'L🧑F' to allow 'F' to move Player)
@@ -29,20 +30,21 @@ class Grid:
 
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
-        self.map_rows, self.map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
-        self.__grid_obj_map = [[] for _ in range(self.map_rows)]
+        self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
+        self.__grid_obj_map = [[] for _ in range(self.__map_rows)]
 
 
         #initizalize all items and makes object map for collision detection
-        for r in range(self.map_rows):
-            for c in range(self.map_cols):
+        for r in range(self.__map_rows):
+            for c in range(self.__map_cols):
                 obj = Grid.init_coord(self.__grid_vis_map[r][c],(r,c))
                 self.__grid_obj_map[r].append(obj)
 
         self.connect_trees()
         Grid.grid_list[name] = self
 
-    def init_coord(symbol, coord):
+    @classmethod
+    def init_coord(cls, symbol, coord):
         """
         Given a symbol and coordinates, create instance of that item (if applicable)
         """
@@ -61,7 +63,8 @@ class Grid:
             for c in range(self.__map_cols):
                 cell = self.get_obj_in_coord(r,c)
                 if isinstance(cell,Tree): cell.find_neighbors(self.__grid_obj_map)
-
+                
+    @staticmethod
     def get_by_name(name):
         """
         Gets Grid instance by name.
@@ -70,11 +73,11 @@ class Grid:
             raise KeyError(f'No grid found with name:{name}')
         return Grid.grid_list[name]
 
-    def get_obj_in_coord(self,r,c):
+    def get_obj_in_coord(self,r,c) -> Entity:
         """
         Gets item type at certain coordinate
         """
-        def in_bounds(r,c): return 0<=r<self.map_rows and 0<=c<self.map_cols
+        def in_bounds(r,c): return 0<=r<self.__map_rows and 0<=c<self.__map_cols
 
         if not in_bounds(r,c):
             raise IndexError(f'coordinate {r,c} out of bounds')
@@ -89,7 +92,9 @@ class Grid:
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
         """
-        insert render imple here
+        rudimentary display code
         """
+        for i in self.__grid_vis_map:
+            print(i)
 
     
