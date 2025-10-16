@@ -1,0 +1,16 @@
+from Classes.Grid import Grid
+
+
+test = """
+TTTTTTTTT
+T...+...T
+T...~...T
+T...R.T.T
+T.T.LTT.T
+T.x...*.T
+T.......T
+T.......T
+TTTTTTTTT
+"""
+g = Grid("test", test)
+g.render()

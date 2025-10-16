@@ -1,13 +1,16 @@
 from Classes.Entity import Entity
+from Classes.Entities.import_entities import import_entities
 
-import Flamethrower
-import Axe
+needed = {"Flamethrower", "Axe"}
+items = import_entities(needed)
+Flamethrower = items["Flamethrower"]
+Axe = items["Axe"]
 
 class Player(Entity):
     __item = None
     __mushroom_count = 0
     
-    def __init__(self, pos: tuple, item: Entity): 
+    def __init__(self, pos: tuple, item: Entity = None): 
         self.__pos = pos
         self.__item = item
         self.__mushroom_count = 0

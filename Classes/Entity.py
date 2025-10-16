@@ -1,4 +1,3 @@
-from Classes.Grid import Grid
 
 """
 TODO:
@@ -14,7 +13,8 @@ class Entity:
     _is_pushable = False # If True, Player can push this Entity
     _is_deadly = False # If True, Player gets game over'd when on it. 
 
-    def __init__(self, pos: list, on_grid: Grid):
+    def __init__(self, pos: list, on_grid):
+        from Classes.Grid import Grid #this placement is intentional, if outside, will hit circular import eerror
         self.__pos = pos
         self.__on_grid = on_grid
 
