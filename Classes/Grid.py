@@ -1,25 +1,13 @@
 import os
+from Classes.Entities.import_entities import import_entities
 
-from Classes.Entities import * 
-from Classes.Entity import Entity
 
 class Grid:
     #you can add more keys (e.g. 'L🧑' to 'L🧑F' to allow 'F' to move Player)
-    TILE_MAP = [
-        ('L🧑',Player),
-        ('T🌲',Tree),
-        ('+🍄',Mushroom), #implement
-        ('R🪨',Stone), 
-        ('~🟦',Water),
-        ('-⬜',PavedTile)
-        ] 
     
-    
+    grid_list = dict() #stores levels by level name
     #can add other looks for empty tiles for future use
     EMPTY_TILES = {'.'}
-
-    tile_dict = {s:v for (pair,v) in TILE_MAP for s in list(pair)}
-    grid_list = dict() #stores levels by level name
 
     def __init__(self, name, map_data: str):
         """
@@ -33,36 +21,52 @@ class Grid:
         self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
         self.__grid_obj_map = [[] for _ in range(self.__map_rows)]
 
+        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
-        #initizalize all items and makes object map for collision detection
+        #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj = Grid.init_coord(self.__grid_vis_map[r][c],(r,c))
+                obj = Grid.init_coord(self.__grid_vis_map[r][c], (r,c), entities, self)
                 self.__grid_obj_map[r].append(obj)
 
-        self.connect_trees()
+        self.connect_trees(entities)
         Grid.grid_list[name] = self
 
     @classmethod
-    def init_coord(cls, symbol, coord):
+    def init_coord(cls, symbol, coord, entities, grid):
         """
         Given a symbol and coordinates, create instance of that item (if applicable)
         """
-
         if symbol in Grid.EMPTY_TILES:
             return None 
         
-        item_type = Grid.tile_dict.get(symbol)
+        tile_map = {
+            'L🧑': entities["Player"],
+            'T🌲': entities["Tree"],
+            '+🍄': entities["Mushroom"],
+            'R🪨': entities["Stone"],
+            '~🟦': entities["Water"],
+            '-⬜': entities["PavedTile"],
+            'x🪓': entities["Axe"],
+            '*🔥': entities["Flamethrower"]
+        }
+
+        tile_dict = {k:entity for keys,entity in tile_map.items() for k in keys}
+
+        print(tile_dict)
+
+        item_type = tile_dict.get(symbol)
         if not item_type:
             raise ValueError(f'Unknown type symbol: {symbol}')
         
-        return item_type(coord)
+        return item_type(coord, grid)
 
-    def connect_trees(self):
+    def connect_trees(self, entities):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 cell = self.get_obj_in_coord(r,c)
-                if isinstance(cell,Tree): cell.find_neighbors(self.__grid_obj_map)
+                Tree = entities["Tree"]
+                if isinstance(cell, Tree): cell.find_neighbors(self.__grid_obj_map)
                 
     @staticmethod
     def get_by_name(name):
@@ -73,10 +77,12 @@ class Grid:
             raise KeyError(f'No grid found with name:{name}')
         return Grid.grid_list[name]
 
-    def get_obj_in_coord(self,r,c) -> Entity:
+    def get_obj_in_coord(self,r,c):
         """
         Gets item type at certain coordinate
         """
+        from Classes.Entity import Entity
+
         def in_bounds(r,c): return 0<=r<self.__map_rows and 0<=c<self.__map_cols
 
         if not in_bounds(r,c):
@@ -97,4 +103,6 @@ class Grid:
         for i in self.__grid_vis_map:
             print(i)
 
-    
+        #for debugging
+        for i in self.__grid_obj_map:
+            print(i)

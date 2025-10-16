@@ -2,8 +2,8 @@ from Classes.Entity import Entity
 
 
 class Tree(Entity):
-    def __init__(self, coord):
-        super().__init__(coord)
+    def __init__(self, coord, on_grid):
+        super().__init__(coord, on_grid)
         self.neighbors = set()
 
     def find_neighbors(self,__grid_obj_map):
