@@ -8,7 +8,7 @@ T...~...T
 T...R.T.T
 T.T.LTT.T
 T.x...*.T
-T.......T
+T...R...T
 T.......T
 TTTTTTTTT
 """

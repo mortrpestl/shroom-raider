@@ -20,14 +20,16 @@ class Grid:
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
         self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
         self.__grid_obj_map = [[] for _ in range(self.__map_rows)]
+        self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
         entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj = Grid.init_coord(self.__grid_vis_map[r][c], (r,c), entities, self)
+                obj, display = Grid.init_coord(self.__grid_vis_map[r][c], (r,c), entities, self)
                 self.__grid_obj_map[r].append(obj)
+                self.__grid_user_display[r].append(display)
 
         self.connect_trees(entities)
         Grid.grid_list[name] = self
@@ -38,28 +40,41 @@ class Grid:
         Given a symbol and coordinates, create instance of that item (if applicable)
         """
         if symbol in Grid.EMPTY_TILES:
-            return None 
+            return None, "　"
         
         tile_map = {
-            'L🧑': entities["Player"],
-            'T🌲': entities["Tree"],
-            '+🍄': entities["Mushroom"],
-            'R🪨': entities["Stone"],
-            '~🟦': entities["Water"],
-            '-⬜': entities["PavedTile"],
-            'x🪓': entities["Axe"],
-            '*🔥': entities["Flamethrower"]
+            'L': entities["Player"],
+            'T': entities["Tree"],
+            '+': entities["Mushroom"],
+            'R': entities["Stone"],
+            '~': entities["Water"],
+            '-': entities["PavedTile"],
+            'x': entities["Axe"],
+            '*': entities["Flamethrower"]
+        }
+
+        symbol_map = {
+            'L': "🧑",
+            'T': "🌲", 
+            '+': "🍄",
+            'R': "🪨 ",
+            '~': "🟦",
+            '-': "⬜",
+            'x': "🪓",
+            '*': "🔥"
         }
 
         tile_dict = {k:entity for keys,entity in tile_map.items() for k in keys}
-
-        print(tile_dict)
+        symbol_dict = {k:entity for keys,entity in symbol_map.items() for k in keys}
 
         item_type = tile_dict.get(symbol)
-        if not item_type:
+        item_display_value = symbol_dict.get(symbol)
+
+        if not item_type or not item_display_value:
             raise ValueError(f'Unknown type symbol: {symbol}')
+
         
-        return item_type(coord, grid)
+        return item_type(coord, grid), item_display_value
 
     def connect_trees(self, entities):
         for r in range(self.__map_rows):
@@ -104,5 +119,5 @@ class Grid:
             print(i)
 
         #for debugging
-        for i in self.__grid_obj_map:
-            print(i)
+        for i in self.__grid_user_display:
+            print(''.join(i))
