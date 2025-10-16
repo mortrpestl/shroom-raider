@@ -7,15 +7,13 @@ TODO:
 
 class Entity:
     __pos = []
-    __icon = ""
     _is_collideable = False # If True, any other collideable object cannot occupy this Entity's space
     _is_collectable = False # If True, Player can collect this Entity
     _is_pushable = False # If True, Player can push this Entity
     _is_deadly = False # If True, Player gets game over'd when on it. 
 
-    def __init__(self, pos: list, icon: str):
+    def __init__(self, pos: list):
         self.__pos = pos
-        self.__icon = icon
 
     def get_pos(self):
         return self.__pos
