@@ -23,7 +23,7 @@ def map_gen(R,C):
                 row.append(elements[random.randint(0,len(elements)-1)])
         map.append(row)
 
-    map[random.randint(0,R-1)][random.randint(0,C-1)]='L'
+    map[random.randint(1,R-2)][random.randint(1,C-2)]='L'
 
     return '\n'.join(''.join(row) for row in map)
 
@@ -33,7 +33,7 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
     for i in range(n):
         R,C = random.randint(lowest_R,highest_R), random.randint(lowest_C,highest_C)
 
-        map = f'{R} {C}\n{map_gen(R, C)}\n'
+        map = f'{R} {C}\n{map_gen(R, C)}'
         filename = f'test{start_numbering + i}.txt'
         with open(filename, 'w') as f:
             f.write(map)
@@ -41,4 +41,3 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
         maps.append(map)
 
     return ''.join(maps)
-    
