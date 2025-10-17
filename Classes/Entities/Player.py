@@ -1,5 +1,7 @@
 from Classes.Entity import Entity
+from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
+
 
 needed = {"Flamethrower", "Axe"}
 items = import_entities(needed)
@@ -7,11 +9,8 @@ Flamethrower = items["Flamethrower"]
 Axe = items["Axe"]
 
 class Player(Entity):
-    __item = None
-    __mushroom_count = 0
-    
-    def __init__(self, pos: tuple, item: Entity = None): 
-        self.__pos = pos
+    def __init__(self, pos: list, on_grid: Grid, item: Entity | None = None): 
+        super().__init__(pos, on_grid)
         self.__item = item
         self.__mushroom_count = 0
 

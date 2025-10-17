@@ -7,16 +7,15 @@ TODO:
 
 
 class Entity:
-    __pos = []
-    _is_collideable = False # If True, any other collideable object cannot occupy this Entity's space
-    _is_collectable = False # If True, Player can collect this Entity
-    _is_pushable = False # If True, Player can push this Entity
-    _is_deadly = False # If True, Player gets game over'd when on it. 
 
     def __init__(self, pos: list, on_grid):
         from Classes.Grid import Grid #this placement is intentional, if outside, will hit circular import eerror
         self.__pos = pos
         self.__on_grid = on_grid
+        self._is_collideable = False # If True, any other collideable object cannot occupy this Entity's space
+        self._is_collectable = False # If True, Player can collect this Entity
+        self._is_pushable = False # If True, Player can push this Entity
+        self._is_deadly = False # If True, Player gets game over'd when on it. 
 
     def get_pos(self):
         return self.__pos
