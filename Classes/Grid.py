@@ -5,7 +5,7 @@ from Classes.Entities.import_entities import import_entities
 class Grid:
     #you can add more keys (e.g. 'L🧑' to 'L🧑F' to allow 'F' to move Player)
     
-    grid_list = dict() #stores levels by level name
+    GRID_LIST = dict() #stores levels by level name
     #can add other looks for empty tiles for future use
     EMPTY_TILES = {'.'}
 
@@ -32,7 +32,7 @@ class Grid:
                 self.__grid_user_display[r].append(display)
 
         self.connect_trees(entities)
-        Grid.grid_list[name] = self
+        Grid.GRID_LIST[name] = self
 
     @classmethod
     def init_coord(cls, symbol, coord, entities, grid):
@@ -41,37 +41,24 @@ class Grid:
         """
         if symbol in Grid.EMPTY_TILES:
             return None, "　"
-        
-        tile_map = {
-            'L': entities["Player"],
-            'T': entities["Tree"],
-            '+': entities["Mushroom"],
-            'R': entities["Stone"],
-            '~': entities["Water"],
-            '-': entities["PavedTile"],
-            'x': entities["Axe"],
-            '*': entities["Flamethrower"]
+
+        character_map = {
+            'L': (entities["Player"], "🧑"),
+            'T': (entities["Tree"], "🌲"),
+            '+': (entities["Mushroom"], "🍄"),
+            'R': (entities["Stone"], "🪨 "),
+            '~': (entities["Water"], "🟦"),
+            '-': (entities["PavedTile"], "⬜"),
+            'x': (entities["Axe"], "🪓"),
+            '*': (entities["Flamethrower"], "🔥")
         }
 
-        symbol_map = {
-            'L': "🧑",
-            'T': "🌲", 
-            '+': "🍄",
-            'R': "🪨 ",
-            '~': "🟦",
-            '-': "⬜",
-            'x': "🪓",
-            '*': "🔥"
-        }
+        item = character_map.get(symbol)
 
-        tile_dict = {k:entity for keys,entity in tile_map.items() for k in keys}
-        symbol_dict = {k:entity for keys,entity in symbol_map.items() for k in keys}
-
-        item_type = tile_dict.get(symbol)
-        item_display_value = symbol_dict.get(symbol)
-
-        if not item_type or not item_display_value:
+        if not item:
             raise ValueError(f'Unknown type symbol: {symbol}')
+        
+        item_type, item_display_value = item
 
         
         return item_type(coord, grid), item_display_value
@@ -88,9 +75,9 @@ class Grid:
         """
         Gets Grid instance by name.
         """
-        if name not in Grid.grid_list:
+        if name not in Grid.GRID_LIST:
             raise KeyError(f'No grid found with name:{name}')
-        return Grid.grid_list[name]
+        return Grid.GRID_LIST[name]
 
     def get_obj_in_coord(self,r,c):
         """
