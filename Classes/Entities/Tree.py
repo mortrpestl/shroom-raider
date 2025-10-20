@@ -8,35 +8,37 @@ class Tree(Entity):
 
     Attributes:
         See Base class.
-        neighbors: A set containing the neighboring Trees of a Tree
     """
 
-    def __init__(self, coord, on_grid):
+    def __init__(self, coord, on_grid, ascii='T'):
         """Initializes a Tree object.
 
         Args:
             See Base class.
         """
-        super().__init__(coord, on_grid)
-        self.neighbors = set()
+        super().__init__(coord, on_grid, ascii)
 
-    def find_neighbors(self,__grid_obj_map):
-        """Finds neighboring Tree instances of a Tree instance.
+    def burn_connected(self, visited=None):
+        """Burns all connected Tree instances
 
-        Adds valid neighboring Tree instances to attribute neighbor
-        
         Args:
             grid_obj_map: (See Grid) A list containing the Entities arranged by their position values.
         """
-        drcs = [(1,1),(1,-1),(-1,1),(-1,-1)]
+        if visited is None:
+            visited = set()
+        grid = self.get_on_grid()
+        obj_map = grid.get_obj_map()
 
-        def in_bounds(r,c): return 0<=r<len(__grid_obj_map) and 0<=c<len(__grid_obj_map[0])
+        r,c = self.get_pos()
+        visited.add((r, c))
+        self.destroy()
 
-        for dr,dc in drcs:
-            r,c = self.get_pos()
-            nr,nc = r+dr,c+dc
-            if in_bounds(nr,nc):
-                neighbor = __grid_obj_map[nr][nc]
-                if isinstance(neighbor, Tree):
-                    self.neighbors.add(neighbor)
+        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < len(obj_map) and 0 <= nc < len(obj_map[0]):
+                neighbor = obj_map[nr][nc]
+                if isinstance(neighbor, Tree) and (nr, nc) not in visited:
+                    neighbor.burn_connected(obj_map, visited)
+        
+
                     

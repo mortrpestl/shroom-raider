@@ -41,6 +41,9 @@ class Entity:
     def get_ascii(self):
         return self.__ascii
     
+    def get_on_grid(self):
+        return self.__on_grid
+    
     def get_pos(self):
         """Get Entity's position
         
@@ -128,3 +131,10 @@ class Entity:
             a boolean
         """
         return self._is_deadly  
+
+    def destroy(self):
+        """
+        Destroys an object from the grid (and also deletes it)
+        """
+        r,c=self.pos
+        self.on_grid[r][c].pop()

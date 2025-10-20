@@ -16,7 +16,7 @@ class Player(Entity):
         item: an Entity (or None) that the Player is currently holding
         mushroom_count: the number of mushrooms that the Player has collected
     """
-    def __init__(self, pos: list, on_grid: Grid, item: Entity | None = None):
+    def __init__(self, pos: list, on_grid: Grid, ascii = 'L',item: Entity | None = None):
         """Initializes a Player (Entity) with additional item param.
 
         Args:

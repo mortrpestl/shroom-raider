@@ -37,7 +37,7 @@ class Grid:
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
         self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
-        self.__grid_obj_map = [[[] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
+        self.__grid_obj_map = [[[None] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
         entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
@@ -104,7 +104,13 @@ class Grid:
                 cell = self.get_obj_in_coord(r,c)
                 Tree = entities["Tree"]
                 if isinstance(cell, Tree): cell.find_neighbors(self.__grid_obj_map)
-                
+
+    def get_map_rows(self):
+        return self.__map_rows
+    
+    def get_map_cols(self):
+        return self.__map_cols
+    
     @staticmethod
     def get_by_name(name):
         """ Gets Grid instance by name.
