@@ -1,6 +1,7 @@
 import os
 from Classes.Entities.import_entities import import_entities
 
+# !TODO, refactor obj map into list of rows of stacks
 
 class Grid:
     """Grid (or Level) arranges Entities and keeps track of Entities' positions.
