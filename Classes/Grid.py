@@ -37,7 +37,7 @@ class Grid:
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
         self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
-        self.__grid_obj_map = [[] for _ in range(self.__map_rows)]
+        self.__grid_obj_map = [[[None] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
         entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
@@ -46,10 +46,10 @@ class Grid:
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj, display = Grid.init_coord(self.__grid_vis_map[r][c], (r,c), entities, self)
-                self.__grid_obj_map[r].append(obj)
+                self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
-        self.connect_trees(entities)
+        self.connect_trees(entities) #! refactor, we will be connecting trees on the fly now
         Grid.GRID_LIST[name] = self
 
     @classmethod
@@ -93,7 +93,7 @@ class Grid:
 
         return item_type(coord, grid), item_display_value
 
-    def connect_trees(self, entities):
+    def connect_trees(self, entities): # ! refactor
         """Connects all adjacent trees in the Grid.
 
         Args:
@@ -104,7 +104,13 @@ class Grid:
                 cell = self.get_obj_in_coord(r,c)
                 Tree = entities["Tree"]
                 if isinstance(cell, Tree): cell.find_neighbors(self.__grid_obj_map)
-                
+
+    def get_map_rows(self):
+        return self.__map_rows
+    
+    def get_map_cols(self):
+        return self.__map_cols
+    
     @staticmethod
     def get_by_name(name):
         """ Gets Grid instance by name.
@@ -142,11 +148,20 @@ class Grid:
         if not in_bounds(r,c):
             raise IndexError(f'coordinate {r,c} out of bounds')
         
-        return self.__grid_obj_map[r][c]
+        return self.__grid_obj_map[r][c][-1]
+
+    def visualize_map(self):
+        for r in range(self.__map_rows):
+            for c in range(self.__map_cols):
+                obj_in_coord = self.get_obj_in_coord(r,c)
+
+                self.__grid_vis_map[r][c] = obj_in_coord.get_ascii()
 
     def render(self):
         """Renders a given grid on the terminal"""
         
+        self.visualize_map()
+
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
         """

@@ -27,7 +27,7 @@ class Entity:
     _is_pushable = False # If True, Player can push this Entity
     _is_deadly = False # If True, Player gets game over'd when on it. 
 
-    def __init__(self, pos: list, on_grid):
+    def __init__(self, pos: list, on_grid, ascii: str):
         """Initializes the instance based on position within the Grid its residing in
         Args:
             pos: Defines the position of this Entity.
@@ -36,8 +36,14 @@ class Entity:
         from Classes.Grid import Grid #this placement is intentional, if outside, will hit circular import eerror
         self.__pos = pos
         self.__on_grid = on_grid
+        self.__ascii = ascii
         
-
+    def get_ascii(self):
+        return self.__ascii
+    
+    def get_on_grid(self):
+        return self.__on_grid
+    
     def get_pos(self):
         """Get Entity's position
         
@@ -125,3 +131,10 @@ class Entity:
             a boolean
         """
         return self._is_deadly  
+
+    def destroy(self):
+        """
+        Destroys an object from the grid (and also deletes it)
+        """
+        r,c=self.pos
+        self.on_grid[r][c].pop()
