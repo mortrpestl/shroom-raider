@@ -185,15 +185,15 @@ class Grid:
                 obj_in_coord = self.get_obj_in_coord(r,c)
                 
                 if not obj_in_coord: 
-                    self.__grid_vis_map[r][c] = self.EMPTY_TILES
+                    self.__grid_user_display[r][c] = "　"
                 else:
-                    self.__grid_vis_map[r][c] = self.get_vis_of_obj(obj_in_coord)
+                    self.__grid_user_display[r][c] = self.get_vis_of_obj(obj_in_coord)
 
     def render(self):
         """Renders a given grid on the terminal"""
         
         self.visualize_map()
-
+        print(self.get_grid_obj_map())
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
         """
