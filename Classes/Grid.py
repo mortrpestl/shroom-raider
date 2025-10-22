@@ -19,7 +19,7 @@ class Grid:
     #you can add more keys (e.g. 'L🧑' to 'L🧑F' to allow 'F' to move Player)
     
     GRID_LIST = dict()
-    EMPTY_TILES = {'.'} #can add other looks for empty tiles for future use
+    EMPTY_TILES = '.' #can add other looks for empty tiles for future use
 
     def __init__(self, name, map_data: str):
         """
@@ -33,6 +33,7 @@ class Grid:
         """
 
         self.__name = name
+        self.__player_pos = (0, 0)
 
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
@@ -49,7 +50,7 @@ class Grid:
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
-        self.connect_trees(entities) #! refactor, we will be connecting trees on the fly now
+        # self.connect_trees(entities) #! refactor, we will be connecting trees on the fly now
         Grid.GRID_LIST[name] = self
 
     @classmethod
@@ -72,6 +73,9 @@ class Grid:
         """
         if symbol in Grid.EMPTY_TILES:
             return None, "　"
+        
+        if symbol == 'L':
+            grid.__player_pos = coord
 
         character_map = {
             'L': (entities["Player"], "🧑"),
@@ -91,7 +95,7 @@ class Grid:
         
         item_type, item_display_value = item
 
-        return item_type(coord, grid), item_display_value
+        return item_type(coord, grid, symbol), item_display_value
 
     def connect_trees(self, entities): # ! refactor
         """Connects all adjacent trees in the Grid.
@@ -150,26 +154,57 @@ class Grid:
         
         return self.__grid_obj_map[r][c][-1]
 
+    def get_vis_of_obj(self, obj):
+        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+
+        character_map = {
+            entities["Player"]: "🧑",
+            entities["Tree"]: "🌲",
+            entities["Mushroom"]: "🍄",
+            entities["Stone"]: "🪨 ",
+            entities["Water"]: "🟦",
+            entities["PavedTile"]: "⬜",
+            entities["Axe"]: "🪓",
+            entities["Flamethrower"]: "🔥"
+        }
+
+        for cm in character_map:
+            if isinstance(obj, cm): return character_map[cm]
+
+    def get_grid_obj_map(self):
+        return self.__grid_obj_map
+    
     def visualize_map(self):
+
+        # ! refactor later
+        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        
+
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj_in_coord = self.get_obj_in_coord(r,c)
-
-                self.__grid_vis_map[r][c] = obj_in_coord.get_ascii()
+                
+                if not obj_in_coord: 
+                    self.__grid_user_display[r][c] = "　"
+                else:
+                    self.__grid_user_display[r][c] = self.get_vis_of_obj(obj_in_coord)
 
     def render(self):
         """Renders a given grid on the terminal"""
         
         self.visualize_map()
-
+        print(self.get_grid_obj_map())
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
         """
         rudimentary display code
         """
-        for i in self.__grid_vis_map:
+        for i in self.__grid_obj_map:
             print(i)
 
         #for debugging
         for i in self.__grid_user_display:
             print(''.join(i))
+
+    def get_player(self):
+        return self.get_obj_in_coord(*self.__player_pos)

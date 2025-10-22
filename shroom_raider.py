@@ -2,6 +2,7 @@ import sys
 from argparse import ArgumentParser
 
 from Classes.Grid import Grid
+from Classes.Entities.Player import Player
 
 
 def main():
@@ -16,6 +17,14 @@ def main():
 
             g = Grid("test", level)
             g.render()
+
+            p = g.get_player()
+
+            while True:
+                p.set_pos(input('hello: '))
+                g.render()
+                print(p.get_pos())
+                
     elif len(sys.argv) == 2: 
         # * If given level file, but no instructions file
         ...

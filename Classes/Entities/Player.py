@@ -23,12 +23,13 @@ class Player(Entity):
             See Base class.
             item: the item the Player is currently holding
         """
-        super().__init__(pos, on_grid)
+        super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
 
     # ! code below was generated using AI 
     # ! prompt: make me the getters and setters for the attributes of this class
+
     def get_item(self):
         """Gets current item Player is holding
         

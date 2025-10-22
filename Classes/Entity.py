@@ -70,8 +70,12 @@ class Entity:
         Raises:
             Exception: This Entity collided with an unpushable, collideable Entity
         """
-        # TODO (if necessary) add functionality to take in r, c as parameters (note: there is no method overloading in py)
-        r, c = self.get_pos()
+
+        r,c = self.get_pos()
+        on_grid = self.get_on_grid()
+
+        on_grid.get_grid_obj_map()[r][c].pop()
+
         for direction in directions:
             match direction.lower():
                 case "w": r -= 1
@@ -79,12 +83,19 @@ class Entity:
                 case "a": c -= 1
                 case "d": c += 1
             target_obj = self.get_obj_in_coord(r, c)
-            if target_obj.get_pushable(): 
-                self.push(direction, target_obj)
-            elif target_obj.get_collideable():
-                raise Exception(f"collided with an unpushable entity!")
-                #* probably wiser to implement a custom error for this
-            self.__pos = [r,c]
+            if target_obj: 
+                if target_obj.get_pushable():
+                    self.push(direction, target_obj)
+                elif target_obj.get_collideable():
+                    raise Exception(f"collided with an unpushable entity!")
+                    #* probably wiser to implement a custom error for this
+            self.__pos = [r,c] 
+            # pop from r,c
+            # push into new r,c
+            
+            on_grid.get_grid_obj_map()[r][c].append(self)
+
+            print(r, c) #debug
     
 
     def get_obj_in_coord(self, r, c):
@@ -122,7 +133,10 @@ class Entity:
         Returns:
             a boolean
         """
-        return self._is_pushable
+        try:
+            return self._is_pushable
+        except:
+            return False
     
     def get_deadly(self):
         """Gets this Entity's deadliness.
