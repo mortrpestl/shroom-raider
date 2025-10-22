@@ -1,0 +1,10 @@
+9 44
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTLTTTTT
+T.....T..........R.............~......R....T
+T...~...TT.............x...T...x.......T...T
+T....T...x....x~.Rx....T.T...-Tx....T...x..T
+T...R.........R.~..x.T.......x....T.....-..T
+T...R..........T....*..~..*.R.....T..-T...TT
+T...x...~.....R.R..........+x.*.*..........T
+T..R.+...TRT.....+.......TR..xTT...R*......T
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

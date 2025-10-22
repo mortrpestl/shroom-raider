@@ -1,0 +1,12 @@
+11 37
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+T.Tx......R.........-...~T..T.......T
+T.*...........R.-....R......R.......T
+TT..T......T...T..........+....R..+.T
+TR.T.x........-.T...........*....T.RT
+T..R.......T.x...*....T.............T
+T.....R.T.T..L..+...~....T..........T
+T..R................R.T+....T.T..T..T
+T..~....-.......R...T.x....T........T
+T.........+.......R*...~....T...x...T
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

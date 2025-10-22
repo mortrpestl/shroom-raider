@@ -1,0 +1,9 @@
+8 40
+TTTTTTTTTTTTTTTTTTTTTTTLTTTTTTTTTTTTTTTT
+T...RR.....+....R.xT~...R+...~.......~.T
+T..TT........T.~................T......T
+T...........TT.-..RT.....T.~..x...~....T
+T.......RT..T..T........R....T....T....T
+T..T...T....*...-T...+.................T
+T......T...+.R...TT.T..............T..*T
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
