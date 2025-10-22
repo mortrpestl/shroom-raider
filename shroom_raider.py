@@ -13,17 +13,24 @@ def main():
         with open("Levels/test.txt", encoding="utf-8") as lvl_file:
             r, c = lvl_file.readline().split()
             level = lvl_file.read()
-            print(level)
 
             g = Grid("test", level)
             g.render()
 
             p = g.get_player()
 
-            while True:
-                p.set_pos(input('hello: '))
+            while True: # ! refactor to add an endgame condition
+                player_input = input('Direction?: ')
+
+                if len(player_input) == 0:
+                    continue
+                elif len(player_input) == 1:
+                    p.set_pos(player_input)
+                else:
+                    for i in player_input:
+                        p.set_pos(i)
+
                 g.render()
-                print(p.get_pos())
                 
     elif len(sys.argv) == 2: 
         # * If given level file, but no instructions file
