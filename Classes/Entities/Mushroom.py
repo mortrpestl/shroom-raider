@@ -6,3 +6,7 @@ class Mushroom(Entity):
 
     def __init__(self, pos, on_grid, ascii='+'):
         super().__init__(pos, on_grid, ascii)
+
+    def collect(self, p):
+        p.increment_mushroom_count()
+        self.destroy()
