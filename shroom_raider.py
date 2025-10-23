@@ -5,7 +5,7 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 def reset(level):
-    global g
+    global g, p
     g = Grid("test", level)
     p = g.get_player()
     return g,p
@@ -18,9 +18,9 @@ def parser(instructions,p,g,level):
         inst = inst.lower()
         if inst=='!':
             g,p = reset(level)
-        elif inst in 'wasd':
+        elif inst in 'wasdWASD':
             p.set_pos(inst)
-        elif inst=='p':
+        elif inst=='pP':
             p.collect_item()
         else:
             pass
