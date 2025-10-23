@@ -44,7 +44,6 @@ def main():
         with open("Levels/test10.txt", encoding="utf-8") as lvl_file:
             r, c = lvl_file.readline().split()
             level = lvl_file.read()
-            print(level)
 
             g = Grid("test", level)
             

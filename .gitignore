@@ -1,2 +1,3 @@
 # ignores the auto-generated pycache files
-.__pycache__/
+Classes/__pycache__
+Classes/Entities/__pycache__
