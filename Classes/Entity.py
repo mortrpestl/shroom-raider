@@ -86,11 +86,14 @@ class Entity:
 
             # TODO fix logic of this.
             if target_obj: 
-                if target_obj.get_pushable():
-                    self.push(direction, target_obj)
-                elif target_obj.get_collideable():
-                    raise Exception(f"collided with an unpushable entity!")
-                    #* probably wiser to implement a custom error for this
+                try:
+                    if target_obj.get_pushable(self):
+                        self.push(direction, target_obj)
+                    elif target_obj.get_collideable():
+                        raise Exception(f"collided with an unpushable entity!")
+                        #* probably wiser to implement a custom error for this
+                finally:
+                    self.__pos = [r,c]
             self.__pos = [r,c] 
             # pop from r,c
             # push into new r,c
