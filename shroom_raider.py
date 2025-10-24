@@ -1,14 +1,13 @@
 import sys
-from argparse import ArgumentParser
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 def reset(level):
-    global g, p
-    g = Grid("test", level)
-    p = g.get_player()
-    return g,p
+    global G, P
+    G = Grid("test", level)
+    P = G.get_player()
+    return G,P
 
 def item_equipped(p):
     return p.get_item()
@@ -37,6 +36,8 @@ def parser(instructions,p,g,level):
 
 
 def main():
+    global G, P
+
     if len(sys.argv) == 1: 
         # * This is where we will have our main menu
         # ! Code below is for testing
@@ -45,23 +46,47 @@ def main():
             r, c = lvl_file.readline().split()
             level = lvl_file.read()
 
-            g = Grid("test", level)
+            G = Grid("test", level)
             
-            g.render()
+            G.render()
 
-            p = g.get_player()
+            P = G.get_player()
 
             while True:
-                g,p = parser(input('Type input here: '),p,g,level)
+                G,P = parser(input('Type input here: '),P,G,level)
                 
     elif len(sys.argv) == 2: 
-        # * If given level file, but no instructions file
+        with open(sys.argv[1], encoding='utf-8') as lvl_file:
+            r, c = lvl_file.readline().split()
+            level = lvl_file.read()
+
+            G = Grid('Level X', level)
+            G.render()
+
+            P = G.get_player()
+
+            while True:
+                G, P = parser(input('Type input here: '), P, G, level)
         ...
     elif len(sys.argv) == 3:
-        # * If given level file and instructions file 
-        ...
+        with open(sys.argv[1], encoding='utf-8') as lvl_file:
+            with open(sys.argv[2], encoding='utf-8') as inpt_file:
+
+                            r, c = lvl_file.readline().split()
+            level = lvl_file.read()
+
+            G = Grid('Level X', level)
+            G.render()
+
+            P = G.get_player()
+
+            inputs = inpt_file.readline()
+            while True:
+                G, P = parser(inputs, P, G, level)
+                
     else:
         print('Invalid Arguments')
     
-
-main()
+if __name__ == '__main__':
+    P, G = None, None
+    main()
