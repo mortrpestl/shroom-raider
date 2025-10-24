@@ -60,7 +60,7 @@ class Entity:
             entity: The entity that will be pushed
         """
         # TODO check whether the pusher is a valid pusher (Rock cannot push Rock for ex.)
-        entity.set_pos(direction)
+        return entity.set_pos(direction)
 
     def set_pos(self, directions):
         """Move entity by one cell corresponding to directions in input
@@ -73,8 +73,7 @@ class Entity:
 
         r,c = self.get_pos()
         on_grid = self.get_on_grid()
-
-        on_grid.get_grid_obj_map()[r][c].pop()
+        pushed = True
 
         for direction in directions:
             match direction.lower():
@@ -85,21 +84,19 @@ class Entity:
             target_obj = self.get_obj_in_coord(r, c)
 
             # TODO fix logic of this.
-            if target_obj: 
-                try:
-                    if target_obj.get_pushable(self):
-                        self.push(direction, target_obj)
-                    elif target_obj.get_collideable():
-                        raise Exception(f"collided with an unpushable entity!")
-                        #* probably wiser to implement a custom error for this
-                finally:
-                    self.__pos = [r,c]
-            self.__pos = [r,c] 
-            # pop from r,c
-            # push into new r,c
-            on_grid.get_grid_obj_map()[r][c].append(self)
-
-            print(r, c) #debug
+            if target_obj != None: 
+                if target_obj.get_pushable(self):
+                    pushed = self.push(direction, target_obj)
+                elif target_obj.get_collideable():
+                    pushed = False
+                    continue
+            if pushed:
+                on_grid.get_grid_obj_map()[self.__pos[0]][self.__pos[1]].pop()
+                on_grid.get_grid_obj_map()[r][c].append(self)
+                self.__pos = [r, c]
+        else:
+            return pushed
+            
     
 
     def get_obj_in_coord(self, r, c):
