@@ -46,15 +46,14 @@ class Grid:
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj, display = Grid.init_coord(self.__grid_vis_map[r][c], (r,c), entities, self)
+                obj, display = self.init_coord(self.__grid_vis_map[r][c], (r,c), entities)
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
         # self.connect_trees(entities) #! refactor, we will be connecting trees on the fly now
         Grid.GRID_LIST[name] = self
 
-    @classmethod
-    def init_coord(cls, symbol, coord, entities, grid):
+    def init_coord(self, symbol, coord, entities):
         """Given a symbol and coordinates, create an instance of that Entity (if applicable)
 
         Args:
@@ -75,7 +74,7 @@ class Grid:
             return None, "　"
         
         if symbol == 'L':
-            grid.__player_pos = coord
+            self.__player_pos = coord
 
         character_map = {
             'L': (entities["Player"], "🧑"),
@@ -95,7 +94,7 @@ class Grid:
         
         item_type, item_display_value = item
 
-        return item_type(coord, grid, symbol), item_display_value
+        return item_type(coord, self, symbol), item_display_value
 
     def add_layer_to_coord(self,r,c,entity):
         self.get_grid_obj_map()[r][c].append(entity)
