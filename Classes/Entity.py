@@ -84,6 +84,7 @@ class Entity:
                 case "d": c += 1
             target_obj = self.get_obj_in_coord(r, c)
 
+            # TODO fix logic of this.
             if target_obj: 
                 if target_obj.get_pushable():
                     self.push(direction, target_obj)
