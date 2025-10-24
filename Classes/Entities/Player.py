@@ -3,10 +3,13 @@ from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 
 
-needed = {"Flamethrower", "Axe"}
+needed = {"Flamethrower", "Axe", "Mushroom"}
 items = import_entities(needed)
 Flamethrower = items["Flamethrower"]
 Axe = items["Axe"]
+Mushroom = items["Mushroom"]
+
+inventory = set()
 
 class Player(Entity):
     """Inherits Entity. Player acts as the user's representation in the game. 
@@ -61,5 +64,46 @@ class Player(Entity):
     def increment_mushroom_count(self):
         """Increases mushroom count by 1"""
         self.__mushroom_count += 1
+
+    def above_item(self):
+        r,c = self.get_pos()
+        on_grid = self.get_on_grid()
+
+        stack = on_grid.get_layers_from_coord(r,c)
+        player = stack[-1] if stack else None
+        item = stack[-2] if len(stack) > 1 else None
+
+        is_item = isinstance(item, (Axe, Flamethrower))
+
+        if is_item: return item.__class__.__name__
+        return False
+
+    def above_mushroom(self):
+        r,c = self.get_pos()
+        on_grid = self.get_on_grid()
+
+        stack = on_grid.get_layers_from_coord(r,c)
+        player = stack[-1] if stack else None
+        shroom = stack[-2] if len(stack) > 1 else None
+
+        is_item = isinstance(shroom, Mushroom)
+
+        if is_item: return shroom
+        return False
+    
+    def collect_item(self):
+        r,c = self.get_pos()
+        on_grid = self.get_on_grid()
+
+        #this option should only be SHOWN if there is an item, thus a method "item_below()" is recommended to be implemented (note: i did above with a different name)
+        player = on_grid.pop_layer_from_coord(r,c)
+        item = on_grid.pop_layer_from_coord(r,c)
+
+        if isinstance(item,(Axe,Flamethrower)):
+            self.set_item(item)
+        elif item is not None:
+            on_grid.add_layer_to_coord(r,c,item)
+
+        on_grid.add_layer_to_coord(r,c,player)
 
 

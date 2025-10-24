@@ -97,6 +97,12 @@ class Grid:
 
         return item_type(coord, grid, symbol), item_display_value
 
+    def add_layer_to_coord(self,r,c,entity):
+        self.get_grid_obj_map()[r][c].append(entity)
+
+    def pop_layer_from_coord(self,r,c):
+        return self.get_grid_obj_map()[r][c].pop()
+
     def connect_trees(self, entities): # ! refactor
         """Connects all adjacent trees in the Grid.
 
@@ -171,8 +177,13 @@ class Grid:
         for cm in character_map:
             if isinstance(obj, cm): return character_map[cm]
 
+    
+
     def get_grid_obj_map(self):
         return self.__grid_obj_map
+    
+    def get_layers_from_coord(self,r,c):
+        return self.__grid_obj_map[r][c]
     
     def visualize_map(self):
 
@@ -193,18 +204,19 @@ class Grid:
         """Renders a given grid on the terminal"""
         
         self.visualize_map()
-        print(self.get_grid_obj_map())
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
         """
         rudimentary display code
         """
-        for i in self.__grid_obj_map:
-            print(i)
-
-        #for debugging
         for i in self.__grid_user_display:
             print(''.join(i))
+
+        #for debugging
+        # for i in self.__grid_obj_map:
+        #     print(i)
+
+        
 
     def get_player(self):
         return self.get_obj_in_coord(*self.__player_pos)

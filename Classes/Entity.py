@@ -83,6 +83,8 @@ class Entity:
                 case "a": c -= 1
                 case "d": c += 1
             target_obj = self.get_obj_in_coord(r, c)
+
+            # TODO fix logic of this.
             if target_obj: 
                 if target_obj.get_pushable():
                     self.push(direction, target_obj)
@@ -92,7 +94,6 @@ class Entity:
             self.__pos = [r,c] 
             # pop from r,c
             # push into new r,c
-            
             on_grid.get_grid_obj_map()[r][c].append(self)
 
             print(r, c) #debug
@@ -150,5 +151,6 @@ class Entity:
         """
         Destroys an object from the grid (and also deletes it)
         """
-        r,c=self.pos
-        self.on_grid[r][c].pop()
+        r,c=self.get_pos()
+        grid=self.get_on_grid()
+        grid.get_grid_obj_map()[r][c].pop()
