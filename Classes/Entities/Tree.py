@@ -9,6 +9,7 @@ class Tree(Entity):
     Attributes:
         See Base class.
     """
+    _is_collideable = True
 
     def __init__(self, coord, on_grid, ascii='T'):
         """Initializes a Tree object.
