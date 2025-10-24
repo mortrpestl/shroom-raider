@@ -127,7 +127,7 @@ class Entity:
 
         return self._is_collectable
 
-    def get_pushable(self):
+    def get_pushable(self, pusher):
         """Gets this Entity's pushability
 
         Returns:
