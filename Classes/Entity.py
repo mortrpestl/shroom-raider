@@ -73,11 +73,12 @@ class Entity:
                 case "a": c -= 1
                 case "d": c += 1
             target_obj = self.get_obj_in_coord(r, c)
-            if target_obj.get_pushable(): 
-                self.push(direction, target_obj)
-            elif target_obj.get_collideable():
-                raise Exception(f"collided with an unpushable entity!")
-                #* probably wiser to implement a custom error for this
+            if target_obj:
+                if target_obj.get_pushable(self): 
+                    self.push(direction, target_obj)
+                elif target_obj.get_collideable():
+                    raise Exception(f"collided with an unpushable entity!")
+                    #* probably wiser to implement a custom error for this
             self.__pos = [r,c]
     
 
@@ -110,7 +111,7 @@ class Entity:
 
         return self._is_collectable
 
-    def get_pushable(self):
+    def get_pushable(self, pusher):
         """Gets this Entity's pushability
 
         Returns:
