@@ -3,11 +3,12 @@ from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 
 
-needed = {"Flamethrower", "Axe", "Mushroom"}
+needed = {"Flamethrower", "Axe", "Mushroom", "Water"}
 items = import_entities(needed)
 Flamethrower = items["Flamethrower"]
 Axe = items["Axe"]
 Mushroom = items["Mushroom"]
+Water = items["Water"]
 
 inventory = set()
 
@@ -107,3 +108,17 @@ class Player(Entity):
         on_grid.add_layer_to_coord(r,c,player)
 
 
+    def above_water(self):
+        r,c = self.get_pos()
+        on_grid = self.get_on_grid()
+
+        stack = on_grid.get_layers_from_coord(r,c)
+
+        player = stack[-1] if stack else None
+        puddle = stack[-2] if len(stack) > 1 else None
+
+        is_water = isinstance(puddle, Water)
+
+        print(stack)
+        if is_water: return True
+        return False

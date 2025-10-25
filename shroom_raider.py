@@ -30,6 +30,10 @@ def parser(instructions,p,g,level):
         if  shroom:=p.above_mushroom(): 
             shroom.collect(p)
 
+        if p.above_water():
+            print('heyyy')
+            p.destroy()
+
             print(f'Collected a mushroom! You now have {p.get_mushroom_count()} mushroom{"s" if p.get_mushroom_count()>1 else ""}.')
 
     return g,p
