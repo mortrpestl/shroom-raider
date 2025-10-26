@@ -119,6 +119,5 @@ class Player(Entity):
 
         is_water = isinstance(puddle, Water)
 
-        print(stack)
         if is_water: return True
         return False
