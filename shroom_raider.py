@@ -29,8 +29,10 @@ def parser(instructions,p,g,level):
             print(f'You are above item "{p.above_item()}". Collect with "p"?')
         if  shroom:=p.above_mushroom(): 
             shroom.collect(p)
-
             print(f'Collected a mushroom! You now have {p.get_mushroom_count()} mushroom{"s" if p.get_mushroom_count()>1 else ""}.')
+        if p.above_water():
+            p.destroy()
+            return g, None
 
     return g,p
 
@@ -52,8 +54,12 @@ def main():
 
             P = G.get_player()
 
-            while True:
+            while P is not None:
                 G,P = parser(input('Type input here: '),P,G,level)
+
+            else:
+                 G.render()
+                 print('Sorry bos, gg ka na') # debug statement
                 
     elif len(sys.argv) == 2: 
         with open(sys.argv[1], encoding='utf-8') as lvl_file:
