@@ -17,7 +17,8 @@ def parser(instructions,p:Player,g,level):
         elif inst in 'wasd':
             p.set_pos(inst)
         elif inst=='p':
-            p.collect_item()
+            if p.get_item() == None:
+                p.collect_item()
         else:
             pass
         g.render()
