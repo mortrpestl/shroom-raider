@@ -9,22 +9,19 @@ def reset(level):
     P = G.get_player()
     return G,P
 
-def item_equipped(p):
-    return p.get_item()
-
-def parser(instructions,p,g,level):
+def parser(instructions,p:Player,g,level):
     for inst in instructions:
         inst = inst.lower()
         if inst=='!':
             g,p = reset(level)
         elif inst in 'wasd':
-            p.set_pos(inst, item_equipped(p))
+            p.set_pos(inst)
         elif inst=='p':
             p.collect_item()
         else:
             pass
         g.render()
-        if item_equipped(p): print(f'Item equipped: {item_equipped(p).__class__.__name__}')
+        if p.get_item(): print(f'Item equipped: {p.get_item().__class__.__name__}')
         if p.above_item(): 
             print(f'You are above item "{p.above_item()}". Collect with "p"?')
         if  shroom:=p.above_mushroom(): 

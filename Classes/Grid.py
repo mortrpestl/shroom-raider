@@ -41,7 +41,7 @@ class Grid:
         self.__grid_obj_map = [[[None] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
-        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
@@ -80,7 +80,7 @@ class Grid:
             'L': (entities["Player"], "🧑"),
             'T': (entities["Tree"], "🌲"),
             '+': (entities["Mushroom"], "🍄"),
-            'R': (entities["Stone"], "🪨 "),
+            'R': (entities["Rock"], "🪨 "),
             '~': (entities["Water"], "🟦"),
             '-': (entities["PavedTile"], "⬜"),
             'x': (entities["Axe"], "🪓"),
@@ -160,13 +160,13 @@ class Grid:
         return self.__grid_obj_map[r][c][-1]
 
     def get_vis_of_obj(self, obj):
-        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
         character_map = {
             entities["Player"]: "🧑",
             entities["Tree"]: "🌲",
             entities["Mushroom"]: "🍄",
-            entities["Stone"]: "🪨 ",
+            entities["Rock"]: "🪨 ",
             entities["Water"]: "🟦",
             entities["PavedTile"]: "⬜",
             entities["Axe"]: "🪓",
@@ -187,7 +187,7 @@ class Grid:
     def visualize_map(self):
 
         # ! refactor later
-        entities = import_entities({"Player","Tree","Stone","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
         
 
         for r in range(self.__map_rows):

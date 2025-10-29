@@ -53,75 +53,47 @@ class Entity:
             A list containing two values, [r,c]: the row (r) and the column (c) its residing in
         """
         return self.__pos
-    
-    def push(self, direction, entity):
-        """Push another Entity in the same direction this Entity moved
 
-        Args:
-            direction: The direction this Entity moved
-            entity: The entity that will be pushed
-        """
-        # TODO check whether the pusher is a valid pusher (Rock cannot push Rock for ex.)
-        return entity.set_pos(direction)
-
-    def set_pos(self, directions, item=None):
-
-        entities = import_entities({"Axe","Flamethrower"})
-
-
-        """Move entity by one cell corresponding to directions in input
+    def let_set_pos(self, direction, r, c):
+        target_obj = self.get_obj_in_coord(r, c)
+        on_grid = self.get_on_grid()
         
-        Args:
-            directions: String of instructions pertaining to movement
-        Raises:
-            Exception: This Entity collided with an unpushable, collideable Entity
-        """
+        # Is there nothing? then you are free to move
+        if target_obj == None: return True
 
-        free_to_move = False
+        # Is the target coordinate out of the Grid? then you cannot move. 
+        if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
+            return False
+        
+        # Is the object pushable? then TRY to push that object.
+        if target_obj.get_pushable(self):
+            return target_obj.set_pos(direction) # If the target entity cannot move, then the current entity cannot too.
+            
+        # Is the object collideable, otherwise? then you cannot move to that.
+        elif target_obj.get_collideable():
+            return False
+
+        return True
+
+    def set_pos(self, directions):
         r,c = self.get_pos()
         on_grid = self.get_on_grid()
-        pushed = True
 
-        def in_bounds(r,c):
-            return 0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])
-        
         for direction in directions:
             match direction.lower():
                 case "w": r -= 1
                 case "s": r += 1
                 case "a": c -= 1
                 case "d": c += 1
-            if not in_bounds(r,c):
-                return 
-            target_obj = self.get_obj_in_coord(r, c)
 
-            # TODO fix logic of this.
-            if target_obj != None: 
-                if target_obj.get_burnable():
-                    if isinstance(item,entities["Flamethrower"]):
-                        target_obj.burn_connected()
-                        self.set_item(None)
-                        free_to_move = True   
-                    if isinstance(item,entities["Axe"]):
-                        target_obj.chop()
-                        self.set_item(None)
-                        free_to_move = True                    
-
-                if not free_to_move:
-                    if target_obj.get_pushable(self):
-                        pushed = self.push(direction, target_obj)
-                    elif target_obj.get_collideable():
-                        pushed = False
-                        continue
-            if pushed:
+            if self.let_set_pos(direction, r, c):
                 on_grid.get_grid_obj_map()[self.__pos[0]][self.__pos[1]].pop()
                 on_grid.get_grid_obj_map()[r][c].append(self)
                 self.__pos = [r, c]
-        else:
-            return pushed
+            else:
+                return False # The Entity failed to move (important for push logic)
+        return True # The Entity has moved
             
-    
-
     def get_obj_in_coord(self, r, c):
         """Gets Entity on a coordinate residing in the same Grid
 

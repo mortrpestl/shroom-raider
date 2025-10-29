@@ -20,6 +20,7 @@ class Player(Entity):
         item: an Entity (or None) that the Player is currently holding
         mushroom_count: the number of mushrooms that the Player has collected
     """
+
     def __init__(self, pos: list, on_grid: Grid, ascii = 'L',item: Entity | None = None):
         """Initializes a Player (Entity) with additional item param.
 
@@ -31,6 +32,22 @@ class Player(Entity):
         self.__item = item
         self.__mushroom_count = 0
 
+    def let_set_pos(self, direction, r, c):
+        target_obj = self.get_obj_in_coord(r, c)
+
+        if target_obj == None: return True
+
+        if target_obj.get_burnable():
+            if isinstance(self.get_item(),Flamethrower):
+                target_obj.burn_connected()
+                self.set_item(None)
+                free_to_move = True   
+            if isinstance(self.get_item(),Axe):
+                target_obj.chop()
+                self.set_item(None)
+                free_to_move = True
+
+        return super().let_set_pos(direction, r, c)  
     # ! code below was generated using AI 
     # ! prompt: make me the getters and setters for the attributes of this class
 
@@ -42,7 +59,7 @@ class Player(Entity):
         """
         return self.__item
 
-    def set_item(self, item: Entity):
+    def set_item(self, item: Entity | None):
         """Sets current item to a different item
 
         Args:
@@ -65,6 +82,8 @@ class Player(Entity):
     def increment_mushroom_count(self):
         """Increases mushroom count by 1"""
         self.__mushroom_count += 1
+
+    # ! end of generation
 
     def above_item(self):
         r,c = self.get_pos()
