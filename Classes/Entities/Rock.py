@@ -30,10 +30,6 @@ class Rock(Entity):
             return True
         else:
             return False
-    
-    # * Simple Setters
-    def set_pos(self, directions): return super().set_pos(directions)
-
 
     
         

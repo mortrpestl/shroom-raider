@@ -38,14 +38,11 @@ class Grid:
     
     def get_layers_from_coord(self,r,c): return self.__grid_obj_map[r][c]
 
-    def get_grid_obj_map(self): return self.__grid_obj_map
-    
-    def get_layers_from_coord(self,r,c): return self.__grid_obj_map[r][c]
-
     # * Complex Getters
 
     def pop_layer_from_coord(self,r,c): return self.get_grid_obj_map()[r][c].pop()
 
+    @staticmethod
     def get_grid_by_name(name):
 
         if name not in Grid.GRID_LIST:
