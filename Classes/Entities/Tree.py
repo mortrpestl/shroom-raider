@@ -10,6 +10,7 @@ class Tree(Entity):
         See Base class.
     """
     _is_collideable = True
+    _is_burnable = True
 
     def __init__(self, coord, on_grid, ascii='T'):
         """Initializes a Tree object.
@@ -28,18 +29,21 @@ class Tree(Entity):
         if visited is None:
             visited = set()
         grid = self.get_on_grid()
-        obj_map = grid.get_obj_map()
+        obj_map = grid.get_grid_obj_map()
 
         r,c = self.get_pos()
         visited.add((r, c))
         self.destroy()
 
-        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < len(obj_map) and 0 <= nc < len(obj_map[0]):
-                neighbor = obj_map[nr][nc]
-                if isinstance(neighbor, Tree) and (nr, nc) not in visited:
-                    neighbor.burn_connected(obj_map, visited)
+        for dr,dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+            nr,nc = r+dr, c+dc
+            if 0<=nr<len(obj_map) and 0<=nc<len(obj_map[0]):
+                neighbor = obj_map[nr][nc][-1]
+                if isinstance(neighbor,Tree) and (nr,nc) not in visited:
+                    neighbor.burn_connected(visited)
+
+    def chop(self):
+        self.destroy()
         
 
                     

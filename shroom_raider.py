@@ -18,7 +18,7 @@ def parser(instructions,p,g,level):
         if inst=='!':
             g,p = reset(level)
         elif inst in 'wasd':
-            p.set_pos(inst)
+            p.set_pos(inst, item_equipped(p))
         elif inst=='p':
             p.collect_item()
         else:
