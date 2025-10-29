@@ -42,15 +42,16 @@ class Entity:
             return False
 
     def get_movement_validity(self, direction, r, c):
-        target_obj = self.get_obj_in_coord(r, c)
-        on_grid = self.get_on_grid()
-        
-        # Is there nothing? then you are free to move
-        if target_obj == None: return True
-
+        on_grid = self.get_on_grid() # always get grid first
         # Is the target coordinate out of the Grid? then you cannot move. 
         if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
             return False
+        
+        # now, get the object if in bounds
+        target_obj = self.get_obj_in_coord(r, c)
+        
+        # Is there nothing? then you are free to move
+        if target_obj == None: return True
         
         # Is the object pushable? then TRY to push that object.
         if target_obj.get_pushable(self):
