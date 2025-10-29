@@ -22,12 +22,12 @@ def parser(instructions,p:Player,g,level):
             pass
         g.render()
         if p.get_item(): print(f'Item equipped: {p.get_item().__class__.__name__}')
-        if p.above_item(): 
-            print(f'You are above item "{p.above_item()}". Collect with "p"?')
-        if  shroom:=p.above_mushroom(): 
+        if p.get_above_item(): 
+            print(f'You are above item "{p.get_above_item()}". Collect with "p"?')
+        if  shroom:=p.get_above_mushroom(): 
             shroom.collect(p)
             print(f'Collected a mushroom! You now have {p.get_mushroom_count()} mushroom{"s" if p.get_mushroom_count()>1 else ""}.')
-        if p.above_water():
+        if p.get_above_water():
             p.destroy()
             return g, None
 

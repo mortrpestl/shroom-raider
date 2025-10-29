@@ -1,6 +1,8 @@
 from Classes.Entity import Entity
 
 class Water(Entity):
+
+    # * Attributes
     _is_collectable = False
     _is_collideable = False
     _is_deadly = True

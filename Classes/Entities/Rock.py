@@ -3,6 +3,7 @@ from Classes.Entities.import_entities import import_entities
 
 class Rock(Entity):
 
+    # * Attributes
     _is_collectable = False
     _is_collideable = True
     _is_pushable = True
@@ -11,7 +12,9 @@ class Rock(Entity):
     def __init__(self, pos, on_grid, ascii='R'):
         super().__init__(pos, on_grid, ascii)
 
-    def let_set_pos(self, direction, r, c):
+    # * Complex Getters
+
+    def get_movement_validity(self, direction, r, c):
         target_obj = self.get_obj_in_coord(r, c)
 
         if target_obj == None: return True
@@ -19,17 +22,19 @@ class Rock(Entity):
         if target_obj.get_collectable():
             return False # cannot move on collectables.
         
-        return super().let_set_pos(direction, r, c)
+        return super().get_movement_validity(direction, r, c)
     
-    def set_pos(self, directions):
-        return super().set_pos(directions)
-
     def get_pushable(self, pusher):
         entities = import_entities({"Player"})
         if isinstance(pusher, entities["Player"]):
             return True
         else:
             return False
+    
+    # * Simple Setters
+    def set_pos(self, directions): return super().set_pos(directions)
+
+
     
         
     

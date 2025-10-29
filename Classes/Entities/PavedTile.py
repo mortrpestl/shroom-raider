@@ -1,6 +1,8 @@
 from Classes.Entity import Entity
 
 class PavedTile(Entity):
+
+    # * Attributes
     _is_collectable = True
     _is_collideable = False
 

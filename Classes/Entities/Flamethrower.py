@@ -3,6 +3,8 @@ from Classes.Entities.import_entities import import_entities
 
 
 class Flamethrower(Entity):
+
+    # * Attribues
     _is_collectable = True
     _is_collideable = False
 
