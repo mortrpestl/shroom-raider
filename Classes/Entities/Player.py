@@ -23,6 +23,11 @@ class Player(Entity):
 
 
     def get_movement_validity(self, direction, r, c):
+        on_grid = self.get_on_grid() # always get grid first
+        # Is the target coordinate out of the Grid? then you cannot move. 
+        if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
+            return False
+        
         target_obj = self.get_obj_in_coord(r, c)
 
         if target_obj == None: return True
