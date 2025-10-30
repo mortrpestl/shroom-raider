@@ -64,6 +64,8 @@ class Entity:
         return True
 
     # * Simple Setters
+    def set_coordinate(self, r, c):
+        self.__pos = [r, c]
 
     # * Complex Setters
 
@@ -79,9 +81,9 @@ class Entity:
                 case "d": c += 1
 
             if self.get_movement_validity(direction, r, c):
-                on_grid.get_grid_obj_map()[self.__pos[0]][self.__pos[1]].pop()
-                on_grid.get_grid_obj_map()[r][c].append(self)
-                self.__pos = [r, c]
+                on_grid.pop_layer_from_coord(*self.__pos)
+                on_grid.add_layer_to_coord(r, c, self)
+                self.set_coordinate(r, c)
             else:
                 return False # The Entity failed to move (important for push logic)
         return True # The Entity has moved
