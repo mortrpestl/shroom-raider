@@ -88,10 +88,10 @@ class Entity:
                 return False # The Entity failed to move (important for push logic)
         return True # The Entity has moved
 
-    def destroy(self):
+    def destroy(self,layer=-1):
 
         r,c=self.get_pos()
         grid=self.get_on_grid()
-        grid.get_grid_obj_map()[r][c].pop()
+        grid.get_grid_obj_map()[r][c].pop(layer)
 
     # * Misc functions

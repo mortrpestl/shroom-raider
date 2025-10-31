@@ -20,6 +20,7 @@ class Player(Entity):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
+        self.__is_dead = 0
 
 
     def get_movement_validity(self, direction, r, c):
@@ -53,6 +54,8 @@ class Player(Entity):
     def get_mushroom_count(self): return self.__mushroom_count
 
     def increment_mushroom_count(self): self.__mushroom_count += 1
+
+    def get_is_dead(self): return self.__is_dead
 
     # * Complex Getters
 
@@ -94,6 +97,8 @@ class Player(Entity):
         return False
     
     # * Simple Setters
+
+    def kill(self): self.__is_dead = 1
 
     # * Complex Setters
     

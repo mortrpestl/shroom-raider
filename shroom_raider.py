@@ -3,37 +3,49 @@ import sys
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
+item_here = 'No items here'
+holding_anything = None
+mushrooms_collected = 0
+
 def reset(level):
     global G, P
     G = Grid("test", level)
     P = G.get_player()
     return G,P
 
-def parser(instructions,p:Player,g,level):
+def parser(instructions,p:Player,g,level,reset_only):
+    global item_here, holding_anything, mushrooms_collected
     for inst in instructions:
         inst = inst.lower()
         if inst=='!':
             g,p = reset(level)
+        if reset_only=='reset_only':
+            continue
         elif inst in 'wasd':
             p.set_pos(inst)
         elif inst=='p':
-            if p.get_item() == None:
+            if p.get_item() == None: #! TEST: Will item in inventory be replaced if picked up new item?
                 p.collect_item()
         else:
-            pass
-        g.render()
-        if p.get_item(): print(f'Item equipped: {p.get_item().__class__.__name__}')
+            continue
+
+        if p.get_item(): 
+            holding_anything = f'Holding item {p.get_item().__class__.__name__}'
+        else:
+            holding_anything = None
+
         if p.get_above_item(): 
-            print(f'You are above item "{p.get_above_item()}". Collect with "p"?')
-        if  shroom:=p.get_above_mushroom(): 
+            item_here = f'Above item {p.get_above_item()}'
+        else:
+            item_here = 'No items here'
+
+        if shroom:=p.get_above_mushroom():
             shroom.collect(p)
-            print(f'Collected a mushroom! You now have {p.get_mushroom_count()} mushroom{"s" if p.get_mushroom_count()>1 else ""}.')
+
         if p.get_above_water():
             p.destroy()
+            p.kill()
             return g, None
-
-    return g,p
-
 
 def main():
     global G, P
@@ -42,23 +54,21 @@ def main():
         # * This is where we will have our main menu
         # ! Code below is for testing
 
-        with open("Levels/test10.txt", encoding="utf-8") as lvl_file:
+        with open("Levels/test.txt", encoding="utf-8") as lvl_file:
             r, c = lvl_file.readline().split()
             level = lvl_file.read()
 
             G = Grid("test", level)
             
-            G.render()
 
             P = G.get_player()
+            print()
 
-            while P is not None:
-                G,P = parser(input('Type input here: '),P,G,level)
+            while (stop_or_reset_only:=G.render(P,G,item_here,holding_anything))!="stop":
+                parser(input(),P,G,level,stop_or_reset_only)
 
-            else:
-                 G.render()
-                 print('Sorry bos, gg ka na') # debug statement
-                
+        
+    # ! TODO: Should probably refactor the code below        
     elif len(sys.argv) == 2: 
         with open(sys.argv[1], encoding='utf-8') as lvl_file:
             r, c = lvl_file.readline().split()

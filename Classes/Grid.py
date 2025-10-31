@@ -11,6 +11,7 @@ class Grid:
 
         self.__name = name
         self.__player_pos = (0, 0)
+        self.__total_mushrooms = 0
 
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
@@ -38,6 +39,9 @@ class Grid:
     
     def get_layers_from_coord(self,r,c): return self.__grid_obj_map[r][c]
 
+    def get_total_mushrooms(self): return self.__total_mushrooms
+
+    def increment_total_mushrooms(self): self.__total_mushrooms += 1
     # * Complex Getters
 
     def pop_layer_from_coord(self,r,c): return self.get_grid_obj_map()[r][c].pop()
@@ -94,6 +98,9 @@ class Grid:
         if symbol == 'L':
             self.__player_pos = coord
 
+        if symbol == '+':
+            self.increment_total_mushrooms()
+
         character_map = {
             'L': (entities["Player"], "🧑"),
             'T': (entities["Tree"], "🌲"),
@@ -129,11 +136,42 @@ class Grid:
                 else:
                     self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord)
 
-    def render(self):
-        
+    def render(self,P,G,item_here,holding_anything):
+        total_mushrooms = G.get_total_mushrooms()
+        mushrooms_collected = P.get_mushroom_count()
+
+        win = mushrooms_collected == G.get_total_mushrooms()
+        lose = P.get_is_dead()
+
         self.visualize_map()
+        
         #clears system file
         os.system('cls' if os.name=='nt' else 'clear')
 
         for i in self.__grid_user_display:
+          
             print(''.join(i))
+
+        print(f'\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected')
+        if win:
+            print('You win!')
+            return 'reset_only'
+        if lose:
+            print('You lose...')
+            return 'reset_only'
+
+        to_print = f"""
+                    [W] Move up
+                    [A] Move left
+                    [S] Move down
+                    [D] Move right
+                    [!] Reset
+
+                    {item_here}
+                    {holding_anything if holding_anything!=None else "Not holding anything"}
+
+                    What will you do? 
+                    """
+
+
+        for line in to_print.split('\n'): print(line)

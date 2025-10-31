@@ -12,4 +12,4 @@ class Mushroom(Entity):
     # * Complex Setter
     def collect(self, p):
         p.increment_mushroom_count()
-        self.destroy()
+        self.destroy(-2)
