@@ -12,6 +12,7 @@ class Grid:
         self.__name = name
         self.__player_pos = (0, 0)
         self.__total_mushrooms = 0
+        self.__is_cleared = False
 
         #convert string provided into grid
         self.__grid_vis_map = [list(rows) for rows in map_data.strip().split('\n')]
@@ -46,6 +47,8 @@ class Grid:
 
     def pop_layer_from_coord(self,r,c): return self.get_grid_obj_map()[r][c].pop()
 
+    def get_is_cleared(self): return self.__is_cleared
+
     @staticmethod
     def get_grid_by_name(name):
 
@@ -64,24 +67,39 @@ class Grid:
         
         return self.__grid_obj_map[r][c][-1]
     
-    def get_display_symbol_of_obj(self, obj):
+    def get_display_symbol_of_obj(self, obj, mode="emoji"):
         entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
-        character_map = {
-            entities["Player"]: "🧑",
-            entities["Tree"]: "🌲",
-            entities["Mushroom"]: "🍄",
-            entities["Rock"]: "🪨 ",
-            entities["Water"]: "🟦",
-            entities["PavedTile"]: "⬜",
-            entities["Axe"]: "🪓",
-            entities["Flamethrower"]: "🔥"
-        }
+        if mode=="emoji":
+            character_map = {
+                entities["Player"]: "🧑",
+                entities["Tree"]: "🌲",
+                entities["Mushroom"]: "🍄",
+                entities["Rock"]: "🪨 ",
+                entities["Water"]: "🟦",
+                entities["PavedTile"]: "⬜",
+                entities["Axe"]: "🪓",
+                entities["Flamethrower"]: "🔥"
+            }
+        else:
+            character_map = {
+                entities["Player"]: "L",
+                entities["Tree"]: "T",
+                entities["Mushroom"]: "+",
+                entities["Rock"]: "R",
+                entities["Water"]: "~",
+                entities["PavedTile"]: "-",
+                entities["Axe"]: "x",
+                entities["Flamethrower"]: "*"
+            }
 
         for cm in character_map:
             if isinstance(obj, cm): return character_map[cm]
 
     # * Simple Setters
+
+    def level_clear(self): #clear/win the level
+        self.__is_cleared = True
 
     # * Complex Setters
 
@@ -121,7 +139,7 @@ class Grid:
 
         return item_type(coord, self, symbol), item_display_value
     
-    def visualize_map(self):
+    def visualize_map(self, mode='emoji'):
 
         # ! refactor later
         entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
@@ -132,46 +150,54 @@ class Grid:
                 obj_in_coord = self.get_obj_in_coord(r,c)
                 
                 if not obj_in_coord: 
-                    self.__grid_user_display[r][c] = "　"
+                    self.__grid_user_display[r][c] = "　" if mode=='emoji' else "."
                 else:
-                    self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord)
+                    self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord, mode)
 
-    def render(self,P,G,item_here,holding_anything):
+    def get_vis_map_as_str(self):
+        grid_str_rep = []
+
+        self.visualize_map(mode='ascii')
+
+        for row in self.__grid_user_display:
+            grid_str_rep.append(''.join(row))
+
+        return '\n'.join(grid_str_rep)
+    
+    def render(self, P, G, item_here, holding_anything, test_mode=False):
         total_mushrooms = G.get_total_mushrooms()
         mushrooms_collected = P.get_mushroom_count()
-
         win = mushrooms_collected == G.get_total_mushrooms()
         lose = P.get_is_dead()
 
         self.visualize_map()
-        
-        #clears system file
+
         os.system('cls' if os.name=='nt' else 'clear')
 
-        for i in self.__grid_user_display:
-          
-            print(''.join(i))
+        for row in self.__grid_user_display:
+            print(''.join(row))
 
         print(f'\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected')
         if win:
             print('You win!')
-            return 'reset_only'
         if lose:
             print('You lose...')
+
+        if not win and not lose:
+            terminal_gui = f"""
+[W] Move up
+[A] Move left
+[S] Move down
+[D] Move right
+[!] Reset
+
+{item_here}
+{holding_anything if holding_anything is not None else "Not holding anything"}
+
+What will you do? """
+
+            print(terminal_gui,end='')
+
+        if win or lose:
             return 'reset_only'
-
-        to_print = f"""
-                    [W] Move up
-                    [A] Move left
-                    [S] Move down
-                    [D] Move right
-                    [!] Reset
-
-                    {item_here}
-                    {holding_anything if holding_anything!=None else "Not holding anything"}
-
-                    What will you do? 
-                    """
-
-
-        for line in to_print.split('\n'): print(line)
+        return None

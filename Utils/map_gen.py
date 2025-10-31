@@ -3,12 +3,12 @@ import random
 element_probabilities = {
     '.':100,
     'T':10,
-    'R':10,
-    'x':10,
-    '*':5,
-    '-':5,
-    '~':5,
-    '+':5,}
+    'R':5,
+    'x':2,
+    '*':2,
+    '-':2,
+    '~':2,
+    '+':2,}
 
 elements = [l for (element, prob) in element_probabilities.items() for a in list(prob*element) for l in a]
 
@@ -34,7 +34,7 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
         R,C = random.randint(lowest_R,highest_R), random.randint(lowest_C,highest_C)
 
         map = f'{R} {C}\n{map_gen(R, C)}'
-        filename = f'test{start_numbering + i}.txt'
+        filename = f'Levels/test{start_numbering + i}.txt'
         with open(filename, 'w') as f:
             f.write(map)
 
@@ -42,4 +42,5 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
 
     return ''.join(maps)
 
-print(map_gen(9,9))
+# generate_n_maps(10, 8, 10, 13, 20, 1)
+generate_n_maps(1, 1000, 1000, 1000, 1000, 1000)

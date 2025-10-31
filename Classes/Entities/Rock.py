@@ -15,6 +15,14 @@ class Rock(Entity):
     # * Complex Getters
 
     def get_movement_validity(self, direction, r, c):
+        on_grid = self.get_on_grid() # always get grid first
+        rows = len(on_grid.get_grid_obj_map())
+        cols = len(on_grid.get_grid_obj_map()[0])
+
+        # Is the target coordinate out of the Grid? then you cannot move. 
+        if not ((0<=r<rows) and (0<=c<cols)):
+            return False
+        
         target_obj = self.get_obj_in_coord(r, c)
 
         if target_obj == None: return True

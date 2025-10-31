@@ -4,11 +4,11 @@ element_probabilities = {
     '.':100,
     'T':10,
     'R':5,
-    'x':5,
-    '*':5,
-    '-':5,
-    '~':5,
-    '+':5,}
+    'x':2,
+    '*':2,
+    '-':2,
+    '~':2,
+    '+':2,}
 
 elements = [l for (element, prob) in element_probabilities.items() for a in list(prob*element) for l in a]
 
@@ -33,3 +33,5 @@ print(map_gen(20,10))
 print(map_gen(3,3))
 print(map_gen(3,4))
 print(map_gen(4,3))
+
+print(map_gen(1000,1000))
