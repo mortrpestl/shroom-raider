@@ -1,11 +1,15 @@
-10 17
+14 17
 TTTTTTTTTTTTTTTTT
-T.T.R...+L..+...T
-TxT.-.*..T..R.T*T
-TT+...TTxRT~+*.RT
-T.T.-...T.....+TT
-T..R.*.T..x....RT
-T.~T.*...-......T
-T.....*T.~xT.x..T
-T..T*...R....x+RT
+T...*~~.._T...+.T
+T.T+..T+....__.*T
+T........~L..~..T
+T.R.+.T*.T.x....T
+T.x....T~.x..R..T
+T.....R.T.......T
+Tx....T..*...T_.T
+Tx~._.x..T.x....T
+T~~...T_.....*.RT
+T........._T.*..T
+T.*T........T..+T
+T.RR.....~T...+.T
 TTTTTTTTTTTTTTTTT

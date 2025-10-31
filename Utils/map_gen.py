@@ -4,11 +4,11 @@ element_probabilities = {
     '.':100,
     'T':10,
     'R':5,
-    'x':2,
-    '*':2,
-    '-':2,
-    '~':2,
-    '+':2,}
+    'x':3,
+    '*':3,
+    '_':5,
+    '~':5,
+    '+':5,}
 
 elements = [l for (element, prob) in element_probabilities.items() for a in list(prob*element) for l in a]
 
@@ -43,4 +43,4 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
     return ''.join(maps)
 
 # generate_n_maps(10, 8, 10, 13, 20, 1)
-generate_n_maps(1, 1000, 1000, 1000, 1000, 1000)
+generate_n_maps(10, 10, 15, 15, 20, 1)

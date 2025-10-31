@@ -88,7 +88,7 @@ class Grid:
                 entities["Mushroom"]: "+",
                 entities["Rock"]: "R",
                 entities["Water"]: "~",
-                entities["PavedTile"]: "-",
+                entities["PavedTile"]: "_",
                 entities["Axe"]: "x",
                 entities["Flamethrower"]: "*"
             }
@@ -125,7 +125,7 @@ class Grid:
             '+': (entities["Mushroom"], "🍄"),
             'R': (entities["Rock"], "🪨 "),
             '~': (entities["Water"], "🟦"),
-            '-': (entities["PavedTile"], "⬜"),
+            '_': (entities["PavedTile"], "⬜"),
             'x': (entities["Axe"], "🪓"),
             '*': (entities["Flamethrower"], "🔥")
         }
