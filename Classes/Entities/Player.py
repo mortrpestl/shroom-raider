@@ -93,12 +93,7 @@ class Player(Entity):
 
         puddle = stack[-2] if len(stack) > 1 else None
 
-        is_water = isinstance(puddle, Water)
-
-        if is_water: 
-            return True
-        
-        return False
+        return isinstance(puddle, Water)
     
     # * Simple Setters
 
