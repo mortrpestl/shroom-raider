@@ -1,5 +1,13 @@
+#!/usr/bin/env python3
 import sys
+import io
 import os
+
+# Make child process stdout/stderr tolerant of unicode on Windows.
+# This avoids UnicodeEncodeError when printing characters that the console
+# cannot represent. We ignore encoding errors so the program doesn't crash.
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
@@ -7,91 +15,131 @@ from Classes.Entities.Player import Player
 item_here = 'No items here'
 holding_anything = None
 
-ENABLE_TEST_MODE = True #toggle if you want to get logs; for testing
-LEVEL_NAME = 'test1'
+ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
+LEVEL_NAME = 'TEST'
 
-def check_win_condition(P,G):
+
+def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
-# for generating test
+
+# for generating test logs (when ENABLE_TEST_MODE True)
 if ENABLE_TEST_MODE:
     base_folder = "Logs"
     os.makedirs(base_folder, exist_ok=True)
-    
+
     existing = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()]
     run_number = max([int(d) for d in existing], default=0) + 1
-    
+
     run_folder = os.path.join(base_folder, str(run_number))
     os.makedirs(run_folder)
-    
+
     with open(f'Levels/{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
         dst.write(src.read())
 
     INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
     OUTPUT_LOG_FILE = os.path.join(run_folder, "output.txt")
 
+
 def reset(level):
     global G, P
     G = Grid("test", level)
     P = G.get_player()
-    return G,P
+    return G, P
+
 
 def parser(instructions, P: Player, G, level, reset_only):
+    """
+    Process instructions. instructions can be:
+      - a single-line string ("WASD")
+      - a multi-line string ("WAD!WWW\nASDW")
+      - an iterable/list of lines (["WAD!WWW", "ASDW"])
+
+    Behavior:
+      - Each line is treated like one input() call (interactive).
+      - For each line: process characters left-to-right.
+      - If a character is invalid (not one of w,a,s,d,p or '!'), stop processing the rest of the current line.
+      - If '!' is encountered: reset the level immediately and stop processing the rest of the current line.
+      - After finishing a line (or breaking out), continue to the next line (if any).
+      - reset_only: if 'reset_only' is passed, parser should stop processing further instructions (keeps previous behavior).
+    """
     global item_here, holding_anything
 
+    if instructions is None:
+        return
+
+    # Normalize to list of lines; preserve an empty string as a single line.
+    if isinstance(instructions, str):
+        lines = instructions.splitlines() if '\n' in instructions else [instructions]
+    else:
+        # assume iterable of lines
+        lines = list(instructions)
+
+    # Test-mode logging of lines (not per-char)
     if ENABLE_TEST_MODE:
         with open(INPUT_LOG_FILE, "a", encoding="utf-8") as f:
-            if instructions!='?': f.write("".join(instructions)+"\n")
+            for ln in lines:
+                if ln != '?':
+                    f.write(str(ln) + "\n")
 
-    for inst in instructions:
-        inst = inst.lower()
+    for line in lines:
+        # Each iteration of this loop simulates one input() call from interactive mode
+        for inst in line:
+            inst = inst.lower()
 
-        if ENABLE_TEST_MODE and inst == '?':
-            with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
-                if G.get_is_cleared():
-                    f.write("CLEAR\n")
-                else:
-                    f.write("NO CLEAR\n")
-                f.write(G.get_vis_map_as_str())
-            exit()
-        
-        if inst == '!':
-            G, P = reset(level)
-        if reset_only == 'reset_only':
-            continue
-    
-        if G.get_is_cleared() or P.get_is_dead():
-            continue
+            if ENABLE_TEST_MODE and inst == '?':
+                with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
+                    f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
+                    f.write(G.get_vis_map_as_str())
+                # If test mode asks for output, exit immediately to mimic previous behavior
+                exit()
 
-        
-        
-        elif inst in 'wasd':
-            P.set_pos(inst)
-        elif inst == 'p':
-            if P.get_item() is None:
-                P.collect_item()
-        else:
-            break
+            # Reset character: reset the level immediately and stop processing remainder of this line
+            if inst == '!':
+                G, P = reset(level)
+                break
 
-        if P.get_item():
-            holding_anything = f'Holding item {P.get_item().__class__.__name__}'
-        else:
-            holding_anything = None
+            # If caller set reset_only flag for this parser call, stop processing this line
+            if reset_only == 'reset_only':
+                break
 
-        if P.get_above_item():
-            item_here = f'Above item {P.get_above_item()}'
-        else:
-            item_here = 'No items here'
+            # If level is cleared or player is dead, stop processing this line
+            if G.get_is_cleared() or P.get_is_dead():
+                break
 
-        if shroom := P.get_above_mushroom():
-            shroom.collect(P)
+            # Accept valid move/pick characters only; invalid char stops the current line
+            if inst not in 'wasdp':
+                break
 
-        if P.get_above_water():
-            P.destroy()
-            P.kill()
+            # Movement & actions
+            if inst in 'wasd':
+                P.set_pos(inst)
+            elif inst == 'p':
+                if P.get_item() is None:
+                    P.collect_item()
 
-        check_win_condition(P,G)
+            # Update item/holding strings
+            if P.get_item():
+                holding_anything = f'Holding item {P.get_item().__class__.__name__}'
+            else:
+                holding_anything = None
+
+            if P.get_above_item():
+                item_here = f'Above item {P.get_above_item()}'
+            else:
+                item_here = 'No items here'
+
+            if shroom := P.get_above_mushroom():
+                shroom.collect(P)
+
+            if P.get_above_water():
+                P.destroy()
+                P.kill()
+
+            check_win_condition(P, G)
+
+        # end of one line -> move to next line
 
 
 def main():
@@ -100,46 +148,52 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        #no arguments: manual play using default LEVEL_NAME
+        # No arguments: manual play using default LEVEL_NAME
         with open(f"Levels/{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
-            r, c = map(int, lvl_file.readline().split())
+            first_line = lvl_file.readline().lstrip('\ufeff')
+            r, c = map(int, first_line.split())
             level = lvl_file.read()
 
-            G = Grid(LEVEL_NAME, level)
-            P = G.get_player()
-            print()
+        G = Grid(LEVEL_NAME, level)
+        P = G.get_player()
+        print()
 
-            check_win_condition(P,G)
+        check_win_condition(P, G)
 
-            while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
-                parser(input(), P, G, level, stop_or_reset_only)
+        while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
+            # each input() returns one line; parser will process that line
+            parser(input(), P, G, level, stop_or_reset_only)
         return
 
+    # file-based modes (non-interactive)
     if args[0] == "-f" and len(args) >= 2:
         stage_file = args[1]
 
         with open(stage_file, encoding="utf-8") as lvl_file:
-            r, c = map(int, lvl_file.readline().split())
+            first_line = lvl_file.readline().lstrip('\ufeff')
+            r, c = map(int, first_line.split())
             level = lvl_file.read()
 
         G = Grid(stage_file, level)
         P = G.get_player()
-        
-        check_win_condition(P,G)
-        
-        #possible input 1: -f <stage_file>
+
+        check_win_condition(P, G)
+
+        # possible input 1: -f <stage_file> (interactive manual mode)
         if len(args) == 2:
             while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
                 parser(input(), P, G, level, stop_or_reset_only)
 
-        #possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
+        # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
+        # But process the moves with "input #1 semantics" (line-by-line), then emit final output once.
         elif len(args) >= 6 and args[2] == "-m" and args[4] == "-o":
-            moves = args[3]
+            moves = args[3]    # may contain '\n' to indicate multiple input() lines
             out_file = args[5]
 
-            for m in moves:
-                parser(m, P, G, level, reset_only=False)
+            # Process moves as lines; parser will treat each line like an input() call
+            parser(moves, P, G, level, reset_only=False)
 
+            # Write final output once (exact same format as possible input #2)
             with open(out_file, "w", encoding="utf-8") as f:
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
@@ -153,7 +207,8 @@ def main():
                   "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>")
     else:
         print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
-     
+
+
 if __name__ == '__main__':
     P, G = None, None
     main()
