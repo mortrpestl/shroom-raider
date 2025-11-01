@@ -36,7 +36,7 @@ for folder in os.listdir(logs_dir):
     else:
         print(f"Warning: Folder {folder} has no matching ID in Excel.")
 
-output_file = os.path.join(base_dir, "unit-tests.xlsx")
+output_file = os.path.join(base_dir, "unit_tests.xlsx")
 df.to_excel(output_file, index=False, engine="openpyxl")
 
 print(f"Merged data saved to: {output_file}")

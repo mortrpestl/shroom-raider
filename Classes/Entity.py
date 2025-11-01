@@ -11,7 +11,7 @@ class Entity:
 
     def __init__(self, pos: list, on_grid, ascii: str):
         from Classes.Grid import Grid #this placement is intentional, if outside, will hit circular import eerror
-        self.__pos = pos
+        self.__pos = list(pos)
         self.__on_grid = on_grid
         self.__ascii = ascii
 
