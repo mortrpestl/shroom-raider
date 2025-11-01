@@ -4,14 +4,12 @@ import io
 import os
 
 # ! the 2 lines of code below were written with AI assistance
+# ! Prompt: {diogn insert it here} 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
-
-item_here = 'No items here'
-holding_anything = None
 
 ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = 'TEST'
@@ -22,24 +20,6 @@ def check_win_condition(P, G):
         G.level_clear()
 
 
-# for generating test logs (when ENABLE_TEST_MODE True)
-if ENABLE_TEST_MODE:
-    base_folder = "Logs"
-    os.makedirs(base_folder, exist_ok=True)
-
-    existing = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()]
-    run_number = max([int(d) for d in existing], default=0) + 1
-
-    run_folder = os.path.join(base_folder, str(run_number))
-    os.makedirs(run_folder)
-
-    with open(f'{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
-        dst.write(src.read())
-
-    INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
-    OUTPUT_LOG_FILE = os.path.join(run_folder, "output.txt")
-
-
 def reset(level):
     global G, P
     G = Grid("test", level)
@@ -47,7 +27,7 @@ def reset(level):
     return G, P
 
 
-def parser(instructions, P: Player, G, level, reset_only):
+def parser(instructions, P: Player, G: Grid, level, reset_only):
     """
     Process instructions. instructions can be:
       - a single-line string ("WASD")
@@ -92,7 +72,7 @@ def parser(instructions, P: Player, G, level, reset_only):
                 G, P = reset(level)
                 break
 
-            if reset_only == 'reset_only':
+            if reset_only:
                 break
 
             if G.get_is_cleared() or P.get_is_dead():
@@ -139,11 +119,11 @@ def main():
 
         G = Grid(LEVEL_NAME, level)
         P = G.get_player()
-        print()
 
         check_win_condition(P, G)
 
-        while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
+        while True:
+            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
         return
@@ -164,7 +144,8 @@ def main():
 
         # possible input 1: -f <stage_file> (interactive manual mode)
         if len(args) == 2:
-            while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
+            while True:
+                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
                 parser(input(), P, G, level, stop_or_reset_only)
 
         # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
@@ -192,4 +173,23 @@ def main():
 
 if __name__ == '__main__':
     P, G = None, None
+    item_here = 'No items here'
+    holding_anything = None
+
+    if ENABLE_TEST_MODE:
+        base_folder = "Logs"
+        os.makedirs(base_folder, exist_ok=True)
+
+        existing = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()]
+        run_number = max([int(d) for d in existing], default=0) + 1
+
+        run_folder = os.path.join(base_folder, str(run_number))
+        os.makedirs(run_folder)
+
+        with open(f'{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
+            dst.write(src.read())
+
+        INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
+        OUTPUT_LOG_FILE = os.path.join(run_folder, "output.txt")
+
     main()

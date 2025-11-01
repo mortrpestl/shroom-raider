@@ -166,7 +166,8 @@ class Grid:
     def render(self, P, G, item_here, holding_anything, test_mode=False):
         total_mushrooms = G.get_total_mushrooms()
         mushrooms_collected = P.get_mushroom_count()
-        win = mushrooms_collected == G.get_total_mushrooms()
+
+        win = (mushrooms_collected == total_mushrooms)
         lose = P.get_is_dead()
 
         self.visualize_map()
@@ -177,26 +178,16 @@ class Grid:
             print(''.join(row))
 
         print(f'\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected')
+
         if win:
             print('You win!')
         if lose:
             print('You lose...')
 
         if not win and not lose:
-            terminal_gui = f"""
-[W] Move up
-[A] Move left
-[S] Move down
-[D] Move right
-[!] Reset
-
-{item_here}
-{holding_anything if holding_anything is not None else "Not holding anything"}
-
-What will you do? """
-
+            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here}\n{holding_anything if holding_anything is not None else "Not holding anything"}\n\nWhat will you do? """
             print(terminal_gui,end='')
 
         if win or lose:
-            return 'reset_only'
-        return None
+            return True
+        return False

@@ -9,6 +9,7 @@ from Classes.Entities.import_entities import import_entities
 # TODO Refactor this stuff
 needed = {"Flamethrower", "Axe", "Mushroom", "Water"}
 items = import_entities(needed)
+
 Flamethrower = items["Flamethrower"]
 Axe = items["Axe"]
 Mushroom = items["Mushroom"]
@@ -20,7 +21,7 @@ class Player(Entity):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
-        self.__is_dead = 0
+        self.__is_dead = False
 
     def get_movement_validity(self, direction, r, c):
         on_grid = self.get_on_grid() # always get grid first
@@ -95,14 +96,13 @@ class Player(Entity):
         is_water = isinstance(puddle, Water)
 
         if is_water: 
-            self.kill()
             return True
         
         return False
     
     # * Simple Setters
 
-    def kill(self): self.__is_dead = 1
+    def kill(self): self.__is_dead = True
 
     # * Complex Setters
     

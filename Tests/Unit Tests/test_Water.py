@@ -65,5 +65,5 @@ def test_player_moving_into_water_is_deadly(test_grid):
     # Player should have moved but is now dead
     assert result == True
     assert player.get_pos() == [2, 3]   # matches Water's location
-    assert player.get_is_dead() == 1
+    assert player.get_is_dead() == True
 
