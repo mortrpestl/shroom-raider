@@ -43,8 +43,11 @@ class Entity:
 
     def get_movement_validity(self, direction, r, c):
         on_grid = self.get_on_grid() # always get grid first
+        rows = len(on_grid.get_grid_obj_map())
+        cols = len(on_grid.get_grid_obj_map()[0])
+
         # Is the target coordinate out of the Grid? then you cannot move. 
-        if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
+        if not ((0<=r<rows) and (0<=c<cols)):
             return False
         
         # now, get the object if in bounds

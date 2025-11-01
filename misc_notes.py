@@ -6,7 +6,7 @@ T🌲 - tree
 +🍄 - mushroom
 R🪨 - rock
 ~🟦 - water
--⬜ - paved tile
+_⬜ - paved tile
 
 x🪓 - axe
 *🔥 - flamethrower

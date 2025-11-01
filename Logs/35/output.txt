@@ -1,0 +1,12 @@
+NO CLEAR
+TTTTTTTTTTTTTTTTTTTTT
+T..~...*........~...T
+T...+R..R...........T
+T.......R.....R.....T
+T.....R..R.R......R.T
+TR...............L..T
+T........._..*...R..T
+TR..Rx~...R*....__~.T
+T..*Rx.....+T.......T
+T...T.R........*...RT
+TTTTTTTTTTTTTTTTTTTTT
