@@ -3,12 +3,12 @@ import random
 element_probabilities = {
     '.':100,
     'T':10,
-    'R':5,
-    'x':3,
-    '*':3,
-    '_':5,
-    '~':5,
-    '+':5,}
+    'R':10,
+    'x':10,
+    '*':10,
+    '_':10,
+    '~':10,
+    '+':10,}
 
 elements = [l for (element, prob) in element_probabilities.items() for a in list(prob*element) for l in a]
 
@@ -27,7 +27,10 @@ def map_gen(R,C):
 
     return '\n'.join(''.join(row) for row in map)
 
-def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering):
+def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None, highest_C=None):
+    if highest_R==None and highest_C==None:
+        highest_R=lowest_R
+        highest_C=lowest_C
     maps = []
 
     for i in range(n):
@@ -43,4 +46,6 @@ def generate_n_maps(n, lowest_R, lowest_C, highest_R, highest_C, start_numbering
     return ''.join(maps)
 
 # generate_n_maps(10, 8, 10, 13, 20, 1)
-generate_n_maps(10, 10, 15, 15, 20, 1)
+lowest_R, highest_R = (30,30)
+lowest_C, highest_C = (30,30)
+generate_n_maps(lowest_R=lowest_R, lowest_C=lowest_C, highest_R=highest_R, highest_C=highest_C)

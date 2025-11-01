@@ -1,0 +1,11 @@
+CLEAR
+TTTTTTTTTTTTTTTTTTT
+T.....R..T.....x..T
+T~...x*._..R......T
+TT~_.*.........~.RT
+T.*.._.....x..*...T
+T..~~~.......R*...T
+T..~L_......_.*T.RT
+TR.~~~..R.x*...RR.T
+TR....~T.T_.......T
+TTTTTTTTTTTTTTTTTTT

@@ -2,13 +2,13 @@ import random
 
 element_probabilities = {
     '.':100,
-    'T':10,
-    'R':5,
-    'x':2,
-    '*':2,
-    '_':2,
-    '~':2,
-    '+':2,}
+    'T':20,
+    'R':10,
+    'x':5,
+    '*':5,
+    '_':5,
+    '~':5,
+    '+':5,}
 
 elements = [l for (element, prob) in element_probabilities.items() for a in list(prob*element) for l in a]
 

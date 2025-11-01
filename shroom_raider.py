@@ -6,11 +6,15 @@ from Classes.Entities.Player import Player
 
 item_here = 'No items here'
 holding_anything = None
-mushrooms_collected = 0
 
-ENABLE_TEST_MODE = False #toggle if you want to get logs; for testing
+ENABLE_TEST_MODE = True #toggle if you want to get logs; for testing
 LEVEL_NAME = 'test1'
 
+def check_win_condition(P,G):
+    if P.get_mushroom_count() == G.get_total_mushrooms():
+        G.level_clear()
+
+# for generating test
 if ENABLE_TEST_MODE:
     base_folder = "Logs"
     os.makedirs(base_folder, exist_ok=True)
@@ -21,6 +25,9 @@ if ENABLE_TEST_MODE:
     run_folder = os.path.join(base_folder, str(run_number))
     os.makedirs(run_folder)
     
+    with open(f'Levels/{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
+        dst.write(src.read())
+
     INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
     OUTPUT_LOG_FILE = os.path.join(run_folder, "output.txt")
 
@@ -30,8 +37,8 @@ def reset(level):
     P = G.get_player()
     return G,P
 
-def parser(instructions, p: Player, g, level, reset_only):
-    global item_here, holding_anything, mushrooms_collected
+def parser(instructions, P: Player, G, level, reset_only):
+    global item_here, holding_anything
 
     if ENABLE_TEST_MODE:
         with open(INPUT_LOG_FILE, "a", encoding="utf-8") as f:
@@ -42,44 +49,50 @@ def parser(instructions, p: Player, g, level, reset_only):
 
         if ENABLE_TEST_MODE and inst == '?':
             with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
-                if mushrooms_collected == G.get_total_mushrooms():
+                if G.get_is_cleared():
                     f.write("CLEAR\n")
                 else:
                     f.write("NO CLEAR\n")
                 f.write(G.get_vis_map_as_str())
             exit()
-
+        
         if inst == '!':
-            g, p = reset(level)
+            G, P = reset(level)
         if reset_only == 'reset_only':
             continue
+    
+        if G.get_is_cleared() or P.get_is_dead():
+            continue
+
+        
+        
         elif inst in 'wasd':
-            p.set_pos(inst)
+            P.set_pos(inst)
         elif inst == 'p':
-            if p.get_item() is None:
-                p.collect_item()
+            if P.get_item() is None:
+                P.collect_item()
         else:
             break
 
-        if p.get_item():
-            holding_anything = f'Holding item {p.get_item().__class__.__name__}'
+        if P.get_item():
+            holding_anything = f'Holding item {P.get_item().__class__.__name__}'
         else:
             holding_anything = None
 
-        if p.get_above_item():
-            item_here = f'Above item {p.get_above_item()}'
+        if P.get_above_item():
+            item_here = f'Above item {P.get_above_item()}'
         else:
             item_here = 'No items here'
 
-        if shroom := p.get_above_mushroom():
-            shroom.collect(p)
+        if shroom := P.get_above_mushroom():
+            shroom.collect(P)
 
-        if p.get_above_water():
-            p.destroy()
-            p.kill()
+        if P.get_above_water():
+            P.destroy()
+            P.kill()
 
-        if mushrooms_collected == G.get_total_mushrooms():
-            G.level_clear()
+        check_win_condition(P,G)
+
 
 def main():
     global G, P
@@ -96,6 +109,8 @@ def main():
             P = G.get_player()
             print()
 
+            check_win_condition(P,G)
+
             while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
                 parser(input(), P, G, level, stop_or_reset_only)
         return
@@ -109,7 +124,9 @@ def main():
 
         G = Grid(stage_file, level)
         P = G.get_player()
-
+        
+        check_win_condition(P,G)
+        
         #possible input 1: -f <stage_file>
         if len(args) == 2:
             while (stop_or_reset_only := G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)) != "stop":
@@ -124,7 +141,7 @@ def main():
                 parser(m, P, G, level, reset_only=False)
 
             with open(out_file, "w", encoding="utf-8") as f:
-                if mushrooms_collected == G.get_total_mushrooms():
+                if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
                 else:
                     f.write("NO CLEAR\n")
@@ -136,7 +153,7 @@ def main():
                   "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>")
     else:
         print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
-    
+     
 if __name__ == '__main__':
     P, G = None, None
     main()

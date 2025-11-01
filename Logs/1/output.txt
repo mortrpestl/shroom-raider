@@ -1,24 +1,11 @@
-🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲
-🌲🧑🪨 　　　　　🪓　　　　　　🔥　🌲
-🌲　　　　　　　　　　　　　　　　🌲
-🌲　　　🪓　🪓🌲　🪓　　🪨 　　🪓🍄🌲
-🌲　　🪓　　　⬜　　　　　　　🪓　🌲
-🌲　🍄🍄🟦🍄　　　　　　　　🟦🪓　🌲
-🌲　　　🪨 　　　🟦　　　　🍄　　　🌲
-🌲⬜　🪨 🪓　　　　🔥🔥🌲🪓🪓🪨 🌲🌲🌲
-🌲　　　　　　　🪨 　　　　🔥🌲　🔥🌲
-🌲🪨 　　　　🪨 🪓🪨 ⬜　　　🍄　　　🌲
-🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲
-
-0 out of 6 mushroom(s) collected
-
-[W] Move up
-[A] Move left
-[S] Move down
-[D] Move right
-[!] Reset
-
-No items here
-Not holding anything
-
-What will you do? 
+NO CLEAR
+TTTTTTTTTTTTTTTTTTT
+T....+R..T+....x..T
+T~...x*._..R......T
+TT~_.*...+.....~.RT
+T.*.._.....x..*.L.T
+T.......R....R*...T
+T..........._.*T.RT
+TR._.~..R.x*...RR.T
+TR....~T.T_.......T
+TTTTTTTTTTTTTTTTTTT

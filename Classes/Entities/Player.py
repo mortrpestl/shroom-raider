@@ -106,7 +106,8 @@ class Player(Entity):
         r,c = self.get_pos()
         on_grid = self.get_on_grid()
 
-        #this option should only be SHOWN if there is an item, thus a method "item_below()" is recommended to be implemented (note: i did above with a different name)
+        if not self.get_above_item(): return
+
         player = on_grid.pop_layer_from_coord(r,c)
         item = on_grid.pop_layer_from_coord(r,c)
 
