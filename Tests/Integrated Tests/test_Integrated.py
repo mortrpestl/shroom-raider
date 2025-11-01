@@ -115,9 +115,15 @@ def run_game_case(testcase):
 
 #this is where the fun begins
 params = [
-    pytest.param(tc, id=f"{tc['ID'].zfill(3)} | {tc['Category'][:12]:^12} | {tc['Description'][:50]:^50} | {tc.get('Day Added','')[:8]:^8}")
+    pytest.param(tc, id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:24]:^24} | {tc['Description']:<90}")
     for tc in df.to_dict("records")
 ]
+
+#if you desire a date feature
+# params = [
+#     pytest.param(tc, id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:12]:^24} | {tc['Description'][:50]:^50} | {tc.get('Day Added','')[:8]:^8}")
+#     for tc in df.to_dict("records")
+# ]
 
 #generate tests for each assert
 @pytest.mark.parametrize("testcase", params)

@@ -22,7 +22,6 @@ class Player(Entity):
         self.__mushroom_count = 0
         self.__is_dead = 0
 
-
     def get_movement_validity(self, direction, r, c):
         on_grid = self.get_on_grid() # always get grid first
         # Is the target coordinate out of the Grid? then you cannot move. 
@@ -40,6 +39,8 @@ class Player(Entity):
             if isinstance(self.get_item(),Axe):
                 target_obj.chop()
                 self.set_item(None)
+        if isinstance(target_obj, Water):
+            self.kill()
 
         return super().get_movement_validity(direction, r, c)  
 
@@ -93,7 +94,10 @@ class Player(Entity):
 
         is_water = isinstance(puddle, Water)
 
-        if is_water: return True
+        if is_water: 
+            self.kill()
+            return True
+        
         return False
     
     # * Simple Setters
@@ -101,6 +105,7 @@ class Player(Entity):
     def kill(self): self.__is_dead = 1
 
     # * Complex Setters
+    
     
     def collect_item(self):
         r,c = self.get_pos()

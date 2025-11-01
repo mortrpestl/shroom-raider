@@ -35,7 +35,7 @@ if ENABLE_TEST_MODE:
     run_folder = os.path.join(base_folder, str(run_number))
     os.makedirs(run_folder)
 
-    with open(f'Levels/{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
+    with open(f'{LEVEL_NAME}.txt', encoding="utf-8") as src, open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst:
         dst.write(src.read())
 
     INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
@@ -149,7 +149,7 @@ def main():
 
     if not args:
         # No arguments: manual play using default LEVEL_NAME
-        with open(f"Levels/{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
+        with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip('\ufeff')
             r, c = map(int, first_line.split())
             level = lvl_file.read()

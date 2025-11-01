@@ -10,7 +10,7 @@ class Grid:
     def __init__(self, name, map_data: str):
 
         self.__name = name
-        self.__player_pos = (0, 0)
+        self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
         self.__is_cleared = False
 
@@ -154,10 +154,10 @@ class Grid:
                 else:
                     self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord, mode)
 
-    def get_vis_map_as_str(self):
+    def get_vis_map_as_str(self,mode='ascii'):
         grid_str_rep = []
 
-        self.visualize_map(mode='ascii')
+        self.visualize_map(mode)
 
         for row in self.__grid_user_display:
             grid_str_rep.append(''.join(row))
