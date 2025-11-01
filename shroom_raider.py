@@ -3,9 +3,7 @@ import sys
 import io
 import os
 
-# Make child process stdout/stderr tolerant of unicode on Windows.
-# This avoids UnicodeEncodeError when printing characters that the console
-# cannot represent. We ignore encoding errors so the program doesn't crash.
+# ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
@@ -69,14 +67,11 @@ def parser(instructions, P: Player, G, level, reset_only):
     if instructions is None:
         return
 
-    # Normalize to list of lines; preserve an empty string as a single line.
     if isinstance(instructions, str):
         lines = instructions.splitlines() if '\n' in instructions else [instructions]
     else:
-        # assume iterable of lines
         lines = list(instructions)
 
-    # Test-mode logging of lines (not per-char)
     if ENABLE_TEST_MODE:
         with open(INPUT_LOG_FILE, "a", encoding="utf-8") as f:
             for ln in lines:
@@ -84,7 +79,6 @@ def parser(instructions, P: Player, G, level, reset_only):
                     f.write(str(ln) + "\n")
 
     for line in lines:
-        # Each iteration of this loop simulates one input() call from interactive mode
         for inst in line:
             inst = inst.lower()
 
@@ -92,34 +86,27 @@ def parser(instructions, P: Player, G, level, reset_only):
                 with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
                     f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
                     f.write(G.get_vis_map_as_str())
-                # If test mode asks for output, exit immediately to mimic previous behavior
                 exit()
 
-            # Reset character: reset the level immediately and stop processing remainder of this line
             if inst == '!':
                 G, P = reset(level)
                 break
 
-            # If caller set reset_only flag for this parser call, stop processing this line
             if reset_only == 'reset_only':
                 break
 
-            # If level is cleared or player is dead, stop processing this line
             if G.get_is_cleared() or P.get_is_dead():
                 break
 
-            # Accept valid move/pick characters only; invalid char stops the current line
             if inst not in 'wasdp':
                 break
 
-            # Movement & actions
             if inst in 'wasd':
                 P.set_pos(inst)
             elif inst == 'p':
                 if P.get_item() is None:
                     P.collect_item()
 
-            # Update item/holding strings
             if P.get_item():
                 holding_anything = f'Holding item {P.get_item().__class__.__name__}'
             else:
@@ -139,16 +126,12 @@ def parser(instructions, P: Player, G, level, reset_only):
 
             check_win_condition(P, G)
 
-        # end of one line -> move to next line
-
-
 def main():
     global G, P
 
     args = sys.argv[1:]
 
     if not args:
-        # No arguments: manual play using default LEVEL_NAME
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip('\ufeff')
             r, c = map(int, first_line.split())
@@ -185,15 +168,13 @@ def main():
                 parser(input(), P, G, level, stop_or_reset_only)
 
         # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
-        # But process the moves with "input #1 semantics" (line-by-line), then emit final output once.
+        # but process the moves with "input #1 semantics" (line-by-line), then emit final output once.
         elif len(args) >= 6 and args[2] == "-m" and args[4] == "-o":
-            moves = args[3]    # may contain '\n' to indicate multiple input() lines
+            moves = args[3]    # may contain '\n' to indicate multiple input() lines (for testing), but the CS11 tester will probably not integrate this (we will be working under that assumption)
             out_file = args[5]
 
-            # Process moves as lines; parser will treat each line like an input() call
             parser(moves, P, G, level, reset_only=False)
 
-            # Write final output once (exact same format as possible input #2)
             with open(out_file, "w", encoding="utf-8") as f:
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
@@ -201,7 +182,7 @@ def main():
                     f.write("NO CLEAR\n")
                 f.write(G.get_vis_map_as_str())
 
-        else:
+        else: # this is just for safety
             print("Invalid arguments. Usage:\n"
                   "python3 shroom_raider.py -f <stage_file>\n"
                   "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>")

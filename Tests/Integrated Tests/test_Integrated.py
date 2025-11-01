@@ -5,16 +5,21 @@ import pandas as pd
 import pytest
 import shutil
 
+# Base directory of this test file
 base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Temporary directory for test outputs
 TEMP_DIR = os.path.join(base_dir, "Temp")
 os.makedirs(TEMP_DIR, exist_ok=True)
 
+# Paths for input Excel test cases and the main game script
 EXCEL_FILE = os.path.join(base_dir, "integrated_tests.xlsx")
 SCRIPT = os.path.join(base_dir, "..", "..", "shroom_raider.py")
 
-#delete all files/folders generated after Integrated Tests
+
 @pytest.fixture(scope="session", autouse=True)
 def cleanup_unit_tests():
+    """Fixture that cleans up temporary files and directories after all tests."""
     yield
     if os.path.exists(TEMP_DIR):
         shutil.rmtree(TEMP_DIR)
@@ -22,23 +27,29 @@ def cleanup_unit_tests():
 """
 Integrated Testing
 
-- use this if you want to test input/expected output comparison
-- open the integrated_tests.xlsx folder and add expected input/output
-
+- File eads test cases from an Excel sheet, runs the game script with the provided input,
+  and compares the output to the expected output.
+- For testing actual game logic.
+- Add test cases in the 'integrated_tests.xlsx' file, and run 'pytest -v' to see it all run.
 """
 
-
-
-# read and extract rows from excel file
+# Read test cases from Excel and normalize columns
 df = pd.read_excel(EXCEL_FILE, dtype=str)
 df.columns = [c if not c.startswith("Unnamed") else "Category" for c in df.columns]
 df.fillna("", inplace=True)
 
+# Ensure required columns exist in the Excel sheet
 required = {"Category", "ID", "Description", "Input Grid", "Input String", "Output"}
 missing = required - set(df.columns)
 if missing: raise ValueError(f"Missing columns in Excel file: {missing}")
 
+
 def extract_short_date(date_val):
+    """
+    Convert a date string to a short 'YY-MM-DD' format.
+
+    Returns an empty string if the conversion fails or the value is invalid.
+    """
     try:
         dt = pd.to_datetime(date_val, errors='coerce')
         if pd.isna(dt): return ""
@@ -46,9 +57,21 @@ def extract_short_date(date_val):
     except Exception:
         return ""
 
+
+# Add a 'Day Added' column with formatted dates
 df["Day Added"] = df["Date Added"].apply(extract_short_date)
 
+
 def run_game_case(testcase):
+    """
+    Execute the game for a single test case.
+
+    - Writes the grid to a temporary file
+    - Runs the game script with the input moves
+    - Captures the script's output
+    - Cleans up temporary files
+    Returns: expected_output, actual_output, description, date, category
+    """
     test_id = testcase["ID"]
     category = testcase["Category"]
     desc = testcase["Description"].strip()
@@ -57,11 +80,13 @@ def run_game_case(testcase):
     moves_raw = testcase["Input String"].replace('\r\n', '\n').replace('\r', '\n').rstrip("\n")
     expected_output = testcase["Output"].replace('\r\n', '\n').replace('\r', '\n').strip()
 
+    # Skip if input grid or expected output is missing
     if not grid_raw:
         pytest.skip(f"{test_id} No grid provided.")
     if not expected_output:
         pytest.skip(f"{test_id} No expected output.")
 
+    # Prepare temporary level file
     levels_dir = os.path.join(TEMP_DIR, "Levels")
     os.makedirs(levels_dir, exist_ok=True)
     level_path = os.path.join(levels_dir, f"test_{test_id}.txt")
@@ -73,6 +98,7 @@ def run_game_case(testcase):
         if len(first_parts) == 2 and all(p.isdigit() for p in first_parts):
             header_present = True
 
+    # Write the grid to the temporary file
     with open(level_path, "w", encoding="utf-8") as f:
         if header_present:
             f.write("\n".join(lines))
@@ -85,6 +111,7 @@ def run_game_case(testcase):
     tmp_out_path = os.path.join(TEMP_DIR, f"out_{test_id}.txt")
     env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
 
+    # Run the game script
     proc = subprocess.run(
         ["python3", SCRIPT, "-f", level_path, "-m", moves_raw, "-o", tmp_out_path],
         capture_output=True,
@@ -95,6 +122,7 @@ def run_game_case(testcase):
         timeout=30,
     )
 
+    # Raise error if script crashes
     if proc.returncode != 0:
         raise AssertionError(
             f"Script crashed for test {test_id} ({category})\n"
@@ -102,32 +130,44 @@ def run_game_case(testcase):
             f"stdout:\n{proc.stdout}"
         )
 
+    # Raise error if output file is not created
     if not os.path.exists(tmp_out_path):
         raise AssertionError(f"Expected output file not created by script for test {test_id}")
 
+    # Read the output
     with open(tmp_out_path, "r", encoding="utf-8", errors="ignore") as f:
         actual_output = f.read().strip()
 
+    # Clean up temporary files
     os.remove(tmp_out_path)
     os.remove(level_path)
     
     return expected_output, actual_output, desc, date, category
 
-#this is where the fun begins
+
+# Generate pytest parameters with readable test IDs
 params = [
-    pytest.param(tc, id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:24]:^24} | {tc['Description']:<90}")
+    pytest.param(
+        tc,
+        id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:24]:^24} | {tc['Description']:<90}"
+    )
     for tc in df.to_dict("records")
 ]
 
-#if you desire a date feature
+# Uncomment if you want to include the date in test IDs
 # params = [
 #     pytest.param(tc, id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:12]:^24} | {tc['Description'][:50]:^50} | {tc.get('Day Added','')[:8]:^8}")
 #     for tc in df.to_dict("records")
 # ]
 
-#generate tests for each assert
 @pytest.mark.parametrize("testcase", params)
 def test_shroom_case(testcase):
+    """
+    Run a single integrated test case.
+
+    - Compares the actual output to the expected output line by line
+    - Raises an assertion error if outputs differ, with a formatted comparison table
+    """
     expected, actual, desc, date, category = run_game_case(testcase)
     test_id = testcase["ID"]
     moves = testcase["Input String"]

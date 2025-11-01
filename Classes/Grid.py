@@ -29,7 +29,6 @@ class Grid:
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
-        # self.connect_trees(entities) #! refactor, we will be connecting trees on the fly now
         Grid.GRID_LIST[name] = self
     
     # * Simple Getters

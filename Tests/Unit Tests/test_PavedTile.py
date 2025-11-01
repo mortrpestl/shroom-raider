@@ -23,6 +23,9 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
+    """
+    Tests if PavedTile properly renders in grid (along with other objects we will use for testing)
+    """
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)
