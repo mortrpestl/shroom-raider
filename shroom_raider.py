@@ -70,7 +70,6 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
 
             if inst == '!':
                 G, P = reset(level)
-                break
 
             if reset_only:
                 break
@@ -78,7 +77,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             if G.get_is_cleared() or P.get_is_dead():
                 break
 
-            if inst not in 'wasdp':
+            if inst not in 'wasdp!':
                 break
 
             if inst in 'wasd':
