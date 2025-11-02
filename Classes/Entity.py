@@ -92,9 +92,6 @@ class Entity:
         return True # The Entity has moved
 
     def destroy(self,layer=-1):
-
-        r,c=self.get_pos()
-        grid=self.get_on_grid()
-        grid.get_grid_obj_map()[r][c].pop(layer)
+        self.get_on_grid().pop_layer_from_coord(*self.get_pos(), layer)
 
     # * Misc functions
