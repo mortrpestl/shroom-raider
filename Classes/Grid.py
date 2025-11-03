@@ -20,12 +20,12 @@ class Grid:
         self.__grid_obj_map = [[[None] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
-        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        self.ENTITIES = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
 
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj, display = self.init_coord(self.__grid_vis_map[r][c], (r,c), entities)
+                obj, display = self.init_coord(self.__grid_vis_map[r][c], (r,c))
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
@@ -44,7 +44,7 @@ class Grid:
     def increment_total_mushrooms(self): self.__total_mushrooms += 1
     # * Complex Getters
 
-    def pop_layer_from_coord(self,r,c): return self.get_grid_obj_map()[r][c].pop()
+    def pop_layer_from_coord(self,r,c,layer=-1): return self.get_grid_obj_map()[r][c].pop(layer)
 
     def get_is_cleared(self): return self.__is_cleared
 
@@ -67,29 +67,27 @@ class Grid:
         return self.__grid_obj_map[r][c][-1]
     
     def get_display_symbol_of_obj(self, obj, mode="emoji"):
-        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
-
         if mode=="emoji":
             character_map = {
-                entities["Player"]: "🧑",
-                entities["Tree"]: "🌲",
-                entities["Mushroom"]: "🍄",
-                entities["Rock"]: "🪨 ",
-                entities["Water"]: "🟦",
-                entities["PavedTile"]: "⬜",
-                entities["Axe"]: "🪓",
-                entities["Flamethrower"]: "🔥"
+                self.ENTITIES["Player"]: "🧑",
+                self.ENTITIES["Tree"]: "🌲",
+                self.ENTITIES["Mushroom"]: "🍄",
+                self.ENTITIES["Rock"]: "🪨 ",
+                self.ENTITIES["Water"]: "🟦",
+                self.ENTITIES["PavedTile"]: "⬜",
+                self.ENTITIES["Axe"]: "🪓",
+                self.ENTITIES["Flamethrower"]: "🔥"
             }
         else:
             character_map = {
-                entities["Player"]: "L",
-                entities["Tree"]: "T",
-                entities["Mushroom"]: "+",
-                entities["Rock"]: "R",
-                entities["Water"]: "~",
-                entities["PavedTile"]: "_",
-                entities["Axe"]: "x",
-                entities["Flamethrower"]: "*"
+                self.ENTITIES["Player"]: "L",
+                self.ENTITIES["Tree"]: "T",
+                self.ENTITIES["Mushroom"]: "+",
+                self.ENTITIES["Rock"]: "R",
+                self.ENTITIES["Water"]: "~",
+                self.ENTITIES["PavedTile"]: "_",
+                self.ENTITIES["Axe"]: "x",
+                self.ENTITIES["Flamethrower"]: "*"
             }
 
         for cm in character_map:
@@ -107,7 +105,7 @@ class Grid:
     
     # * Misc 
 
-    def init_coord(self, symbol, coord, entities):
+    def init_coord(self, symbol, coord):
 
         if symbol in Grid.EMPTY_TILES:
             return None, "　"
@@ -119,14 +117,14 @@ class Grid:
             self.increment_total_mushrooms()
 
         character_map = {
-            'L': (entities["Player"], "🧑"),
-            'T': (entities["Tree"], "🌲"),
-            '+': (entities["Mushroom"], "🍄"),
-            'R': (entities["Rock"], "🪨 "),
-            '~': (entities["Water"], "🟦"),
-            '_': (entities["PavedTile"], "⬜"),
-            'x': (entities["Axe"], "🪓"),
-            '*': (entities["Flamethrower"], "🔥")
+            'L': (self.ENTITIES["Player"], "🧑"),
+            'T': (self.ENTITIES["Tree"], "🌲"),
+            '+': (self.ENTITIES["Mushroom"], "🍄"),
+            'R': (self.ENTITIES["Rock"], "🪨 "),
+            '~': (self.ENTITIES["Water"], "🟦"),
+            '_': (self.ENTITIES["PavedTile"], "⬜"),
+            'x': (self.ENTITIES["Axe"], "🪓"),
+            '*': (self.ENTITIES["Flamethrower"], "🔥")
         }
 
         item = character_map.get(symbol)
@@ -139,11 +137,6 @@ class Grid:
         return item_type(coord, self, symbol), item_display_value
     
     def visualize_map(self, mode='emoji'):
-
-        # ! refactor later
-        entities = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
-        
-
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj_in_coord = self.get_obj_in_coord(r,c)
