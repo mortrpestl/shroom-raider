@@ -156,6 +156,7 @@ def main():
             parser(moves, P, G, level, reset_only=False)
 
             with open(out_file, "w", encoding="utf-8") as f:
+                f.write(f'{r} {c}\n')
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
                 else:
