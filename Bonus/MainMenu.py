@@ -1,153 +1,195 @@
-#!/usr/bin/env python3
-"""Simpler launcher: minimal dependencies and straightforward code.
-
-Uses os.path and importlib to load `PlayerData.py` from the "Bonus Classes"
-folder and runs `shroom_raider.py -f <level>` as a subprocess.
-"""
-
 import os, sys, subprocess, tempfile, json, time
 from Bonus_Classes.PlayerData import Data
+import LevelManager
 
 HERE = os.path.dirname(__file__)
+SHROOM_SCRIPT = os.path.join(HERE, "shroom_raider.py")
 
-def list_levels():
-	lvl_dir = os.path.join(HERE, "Levels")
-	if not os.path.isdir(lvl_dir):
-		return []
-	files = [f for f in sorted(os.listdir(lvl_dir)) if f.endswith('.txt')]
-	return files
+# * Helper Functions
 
-def choose_level(files):
-	if not files:
-		print("No levels in Bonus/Levels/")
-		return None
-	print("Available levels:")
-	for i, name in enumerate(files, 1):
-		print(" %d. %s" % (i, name))
-	while True:
-		choice = input("Select level number or 'q' to quit: ").strip()
-		if choice == 'q': return None
-		if choice.isdigit():
-			n = int(choice)
-			if 1 <= n <= len(files): return files[n-1]
-		print("Invalid choice")
+def clear_terminal(): os.system('cls' if os.name=='nt' else 'clear')
+def wait(seconds): time.sleep(seconds)
 
-def launch_game(level_name):
-	script = os.path.join(HERE, 'shroom_raider.py')
-	level_path = os.path.join(HERE, 'Levels', level_name)
-	# create a temporary report file path for the game to write its run summary
+# * Advanced Helper Functions
 
-	# ! refactor this so its the job of PlayerData to detect and store changes in shroom_raider
-	fd, report_path = tempfile.mkstemp(prefix='shroom_report_', suffix='.json', dir=HERE)
-	os.close(fd)
-	cmd = [sys.executable, script, '-f', level_path, '-R', report_path]
-	print('Running:', ' '.join(cmd))
-	rc = subprocess.call(cmd)
-	report = None
-	if os.path.exists(report_path):
-		for attempt in range(5):
-			try:
-				if os.path.getsize(report_path) == 0:
-					raise ValueError('report file empty')
-				with open(report_path, 'r', encoding='utf-8') as f:
-					report = json.load(f)
-				break
-			except Exception as e:
-				if attempt < 4:
-					time.sleep(0.1)
-					continue
-				print('Failed to read report:', e)
-		try:
-			os.remove(report_path)
-		except Exception:
-			pass
-	return rc, report
+def show_statistics(pdata):
+    if pdata == None: print("No statistics available.")
+    else:
+        print("\nPlayer statistics:")
+        print(pdata)
 
+# * Level List Helper Functions
 
+def print_levels_table(levels):
+    """
+    Print a summary of the levels.
+    """
+
+    headers = ["ID", "Title", "Description", "Difficulty"]
+    rows = []
+    for lvl in levels:
+        rows.append([
+            str(lvl.get("id", "")),
+            str(lvl.get("title", "")),
+            str(lvl.get("description", "")).replace("\n", " "),
+            str(lvl.get("difficulty", "Normal"))
+        ])
+
+    col_widths = []
+    for i, h in enumerate(headers):
+        max_cell = max(len(row[i]) for row in rows)
+        col_widths.append(max(len(h), max_cell))
+
+    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+    inner_width = len(header_line) + 2
+
+    print("+" + "-" * inner_width + "+") # top
+    print(f"| {header_line} |")
+    print("|" + "-" * inner_width + "|")
+
+    for row in rows:
+        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
+        print(f"| {row_line} |")
+
+    print("+" + "-" * inner_width + "+") # bottom
+
+# * Level Selection and Launching Functions
+
+def choose_level(levels):
+    """
+    Displays Level Select menu and returns chosen level dict or None on quit.
+    """
+    
+    # if no levels
+    clear_terminal()
+    if not levels:
+        print("No levels found in Levels/")
+        return None
+
+    # if there is levels
+    print("""
++-------------------------+
+|      LEVEL SELECT       |
++-------------------------+
+""")
+    while True:
+        print_levels_table(levels)
+        choice = input("Select level ID or number (or 'q' to quit): ").strip()
+        if choice == 'q': return None
+        if choice.isdigit():
+            n = int(choice)
+            for lvl in levels:
+                if lvl.get("id") == n: return lvl
+            if 1<=n<=len(levels): return levels[n-1]
+            
+        print("Invalid choice."); wait(1); clear_terminal()
+        
+def make_stage_file_from_grid(grid_text):
+    """
+    Creates: the file to send to shroom_raider.py from grid_text.
+    Returns: path to this temporary file, for sending to shroom_raider.py
+    """
+    if not grid_text.strip():
+        raise ValueError("Empty grid")
+
+    content = grid_text.strip() + "\n"
+    fd, path = tempfile.mkstemp(prefix="stage_", suffix=".txt", dir=HERE)
+    os.close(fd)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    return path
+
+def launch_game_with_level(level):
+    """
+    Send the level to shroom_raider.py
+    """
+    # create temp files to store level
+    stage_path = make_stage_file_from_grid(level["grid"])
+    report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
+    os.close(report_fd)
+
+    try:
+        # run game
+        cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
+        print(f"\nRunning: {' '.join(cmd)}\n")
+        return_code = subprocess.call(cmd)
+
+        # load report
+        report = None
+        if os.path.getsize(report_path) > 0:
+            with open(report_path, "r", encoding="utf-8") as f:
+                report = json.load(f)
+        return return_code, report
+    finally:
+        # cleans up temp files
+        for path in (stage_path, report_path):
+            if os.path.exists(path):
+                os.remove(path)
+
+# gameplay start + loop
 def main():
-	print('WELCOME TO SHROOM RAIDER')
-	username = input("Username (Enter=guest): ").strip() or 'GUEST'
-	pdata = None
-	if Data is not None:
-		try: pdata = Data(username); print('Loaded', pdata)
-		except Exception: pdata = None
+    print("""
++------------------------+
+|WELCOME TO SHROOM RAIDER|
++------------------------+
+          """)
+    
+    username = input("Username (Enter=guest): ").strip() or "GUEST"
+    pdata = Data(username)
 
-	# Main menu loop: choose a level, run it, then return here. Save data on
-	# win (0) or loss (2). Choosing 'q' at level selection exits.
-	while True:
-		files = list_levels()
-		lvl = choose_level(files)
-		if not lvl:
-			print('No level chosen, exiting.'); break
+    while True:
+        levels = LevelManager.load_levels()
+        lvl = choose_level(levels)
 
-		# play loop for this level; after each run offer options
-		while True:
-			rc, report = launch_game(lvl)
+        if lvl=='q': print("Quitting launcher."); exit()  # can change to more fancy text
+            
 
-			# One attempt to (re)create pdata if missing
-			if pdata is None and Data is not None:
-				try: pdata = Data(username)
-				except Exception: pdata = None
+        while True:
+            #return code -> determines if ran successfully (0:win,2:dead)
+            return_code, report = launch_game_with_level(lvl)
+            clear_terminal()
 
-			if pdata is not None:
-				try:
-					if report is not None:
-						pdata.total_mushrooms_collected += int(report.get('mushrooms_collected', 0))
-						pdata.total_tiles_walked += int(report.get('moves_made', 0))
-						if report.get('win'): pdata.total_wins += 1
-						pdata.total_times += 1
-					elif rc in (0, 2):
-						if rc == 0: pdata.total_wins += 1
-						pdata.total_times += 1
-					pdata.save(); print('PlayerData saved')
-				except Exception as e:
-					print('Save failed:', e)
+            if report:
+                pdata.apply_report_dict(report)
+                # print("updated data")
+            elif return_code in (0,2):
+                if return_code == 0: pdata.record_win()
+                pdata.record_move(0)
+                pdata.commit_session()
+                # print("saved data")
 
-			# present options to the player instead of immediately returning
-			while True:
-				print('\nRun finished. Options:')
-				print("  r - replay level")
-				print("  m - return to main menu")
-				print("  s - view statistics")
-				print("  q - quit launcher")
-				choice = input('Choose (r/m/s/q): ').strip().lower()
-				if choice in ('r', 'replay'):
-					print('Replaying...')
-					break  # break inner options loop to replay
-				if choice in ('m', 'menu'):
-					print('Returning to main menu...')
-					break  # break inner options loop and outer play loop
-				if choice in ('s', 'statistics'):
-					# show stats (attempt to load/instantiate if needed)
-					if pdata is None:
-						try:
-							# try a direct import now that package layout should exist
-							from Bonus.Bonus_Classes.PlayerData import Data as DataClass
-							pdata = DataClass(username)
-						except Exception as e:
-							print('Cannot load statistics:', e); pdata = None
-					if pdata is None:
-						print('No statistics available for this player')
-					else:
-						try:
-							print('\nPlayer statistics:')
-							print(pdata)
-						except Exception as e:
-							print('Failed to display statistics:', e)
-					continue
-				if choice in ('q', 'quit'):
-					print('Quitting launcher.'); sys.exit(0)
-				print('Invalid choice')
 
-			# if user chose replay, continue playing this level
-			if choice in ('r', 'replay'):
-				continue
-			# if user chose menu, break play loop to choose new level
-			if choice in ('m', 'menu'):
-				break
-		# end play loop -> back to level selection
+            while True:
+                # the gameloop
+                print("""
++---------------------------+
+|      LEVEL PROCESSED      |
++---------------------------+
+| r - Replay Level          |
+| m - Return to Main Menu   |
+| s - View Statistics       |
+| q - Quit Launcher         |
++---------------------------+
+""")
+                choice = input("Choose your option: ").strip().lower()
+                clear_terminal()
+                match choice:
+                    case "r" | "m":
+                        break
+                    case "s":
+                        show_statistics(pdata)
+                        continue
+                    case "q":
+                        print("Quitting launcher.")  # can change to more fancy text
+                        exit()
+                    case _:
+                        print("Invalid choice, try again.")
 
+
+            if choice in ("r", "replay"): continue #continue playing the level
+            if choice in ("m", "menu"): #stop and go back to menu
+                clear_terminal()
+                break
 
 if __name__ == '__main__':
-	main()
-
+    main()
