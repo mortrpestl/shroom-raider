@@ -1,0 +1,13 @@
+12 12
+TTTTTTTTTTTT
+T.._..R....T
+T._..._.T..T
+T*T.....x.*T
+T...__..T.+T
+TT....*.+..T
+T....+.x.~.T
+T_T*.x..x~.T
+T+x......xLT
+Tx~.+...+..T
+TxT*....._.T
+TTTTTTTTTTTT

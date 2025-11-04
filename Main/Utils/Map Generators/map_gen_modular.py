@@ -28,10 +28,3 @@ def map_gen(R,C):
     return f'{R} {C}\n' + '\n'.join(''.join(row) for row in map)
 
 print(map_gen(10,10))
-print(map_gen(10,20))
-print(map_gen(20,10))
-print(map_gen(3,3))
-print(map_gen(3,4))
-print(map_gen(4,3))
-
-print(map_gen(1000,1000))

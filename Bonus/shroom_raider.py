@@ -4,7 +4,7 @@ import io
 import os
 
 # ! the 2 lines of code below were written with AI assistance
-# ! Prompt: {diogn insert it here} 
+# ! Prompt: {My Python script keeps breaking when I print emojis through subprocess 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
@@ -13,6 +13,8 @@ from Classes.Entities.Player import Player
 
 ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = 'TEST'
+REPORT_FILE = None
+moves_made = 0
 
 
 def check_win_condition(P, G):
@@ -42,7 +44,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
       - After finishing a line (or breaking out), continue to the next line (if any).
       - reset_only: if 'reset_only' is passed, parser should stop processing further instructions (keeps previous behavior).
     """
-    global item_here, holding_anything
+    global item_here, holding_anything, moves_made
 
     if instructions is None:
         return
@@ -74,14 +76,13 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             if reset_only:
                 break
 
-            if G.get_is_cleared() or P.get_is_dead():
-                break
-
             if inst not in 'wasdp!':
                 break
 
             if inst in 'wasd':
-                P.set_pos(inst)
+                moved = P.set_pos(inst)
+                if moved:
+                    moves_made += 1
             elif inst == 'p':
                 if P.get_item() is None:
                     P.collect_item()
@@ -105,10 +106,54 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
 
             check_win_condition(P, G)
 
+            # If the action just cleared the level or killed the player, allow
+            # the movement/collection to complete, then stop processing the
+            # remainder of the current line.
+            if G.get_is_cleared() or P.get_is_dead():
+                break
+
+
+def _maybe_write_report(G, P, win: bool, dead: bool):
+    """If REPORT_FILE is set, write a small JSON summary including mushrooms
+    collected and moves made so the launcher can update PlayerData.
+    """
+    import json
+    global REPORT_FILE, moves_made
+    if not REPORT_FILE:
+        return
+    try:
+        payload = {
+            "mushrooms_collected": P.get_mushroom_count(),
+            "moves_made": moves_made,
+            "win": bool(win),
+            "dead": bool(dead)
+        }
+        # write atomically: write to temp then replace
+        tmp = REPORT_FILE + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(payload, f)
+            f.flush(); os.fsync(f.fileno())
+        try:
+            os.replace(tmp, REPORT_FILE)
+        except Exception:
+            # best effort: try simple write
+            with open(REPORT_FILE, 'w', encoding='utf-8') as f:
+                json.dump(payload, f)
+    except Exception as e:
+        print(f"Failed to write report file {REPORT_FILE}: {e}")
+
 def main():
-    global G, P
+    global G, P, REPORT_FILE, moves_made
 
     args = sys.argv[1:]
+
+    # support optional report file argument: -R <path>
+    if '-R' in args:
+        idx = args.index('-R')
+        if idx + 1 < len(args):
+            REPORT_FILE = args[idx + 1]
+            # remove the -R and its value from args so rest of logic is unchanged
+            args = args[:idx] + args[idx+2:]
 
     if not args:
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
@@ -121,10 +166,28 @@ def main():
 
         check_win_condition(P, G)
 
+        # initial render before any input so the player sees the starting map
+        stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
         while True:
-            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
+            # render once after processing the input so the player sees the
+            # resulting map state (single draw per turn). Capture the next
+            # stop_or_reset_only for the following loop.
+            try:
+                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+            except Exception:
+                # best effort: continue even if render fails
+                stop_or_reset_only = False
+            # after processing a line, if the player cleared or died, exit with code
+            if G.get_is_cleared():
+                print("CLEAR")
+                _maybe_write_report(G, P, True, False)
+                sys.exit(0)
+            if P.get_is_dead():
+                print("DEAD")
+                _maybe_write_report(G, P, False, True)
+                sys.exit(2)
         return
 
     # file-based modes (non-interactive)
@@ -143,9 +206,22 @@ def main():
 
         # possible input 1: -f <stage_file> (interactive manual mode)
         if len(args) == 2:
+            # initial render once before interactive input loop
+            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
             while True:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
                 parser(input(), P, G, level, stop_or_reset_only)
+                try:
+                    stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                except Exception:
+                    stop_or_reset_only = False
+                if G.get_is_cleared():
+                    print("CLEAR")
+                    _maybe_write_report(G, P, True, False)
+                    sys.exit(0)
+                if P.get_is_dead():
+                    print("DEAD")
+                    _maybe_write_report(G, P, False, True)
+                    sys.exit(2)
 
         # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
         # but process the moves with "input #1 semantics" (line-by-line), then emit final output once.
@@ -155,13 +231,23 @@ def main():
 
             parser(moves, P, G, level, reset_only=False)
 
+            # render final frame after applying all moves so output reflects
+            # the last state before writing the report/output
+            try:
+                G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+            except Exception:
+                pass
+
             with open(out_file, "w", encoding="utf-8") as f:
                 f.write(f'{r} {c}\n')
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
+                    _maybe_write_report(G, P, True, False)
+                    sys.exit(0)
                 else:
                     f.write("NO CLEAR\n")
-                f.write(G.get_vis_map_as_str())
+                    _maybe_write_report(G, P, False, True)
+                    sys.exit(2)
 
         else: # this is just for safety
             print("Invalid arguments. Usage:\n"
