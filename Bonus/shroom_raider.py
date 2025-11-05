@@ -1,4 +1,5 @@
 import sys, io, os, json, time
+from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -40,13 +41,13 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 with open("output_debug.txt","w",encoding="utf-8") as f:
                     f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
                     f.write(G.get_vis_map_as_str())
-                exit()
+                exit(EXIT_CODES["quit"])
 
             # non-WASDP inputs
             if inst == "q":
                 print("Quitting to main menu...", flush=True)
                 time.sleep(1.5)  # wait 1-2 seconds
-                exit(3)
+                exit(EXIT_CODES["quit"])
             if inst == "!":
                 G, P = reset(level)
             if reset_only:
@@ -136,11 +137,11 @@ def main():
             if G.get_is_cleared():
                 print("CLEAR")
                 write_report(G, P, True, False)
-                sys.exit(0)
+                sys.exit(EXIT_CODES["victory"])
             if P.get_is_dead():
                 print("DEAD")
                 write_report(G, P, False, True)
-                sys.exit(2)
+                sys.exit(EXIT_CODES["defeat"])
         return
 
     # file-based
@@ -164,13 +165,11 @@ def main():
                 except Exception:
                     stop_or_reset_only = False
                 if G.get_is_cleared():
-                    print("VICTORY")
                     write_report(G, P, True, False)
-                    sys.exit(0)
+                    sys.exit(EXIT_CODES["victory"])
                 if P.get_is_dead():
-                    print("DEFEAT")
                     write_report(G, P, False, True)
-                    sys.exit(2)
+                    sys.exit(EXIT_CODES["defeat"])
 
         # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
         # but process the moves with "input #1 semantics" (line-by-line), then emit final output once.
@@ -187,11 +186,11 @@ def main():
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")
                     write_report(G, P, True, False)
-                    sys.exit(0)
+                    sys.exit(EXIT_CODES["victory"])
                 else:
                     f.write("NO CLEAR\n")
                     write_report(G, P, False, True)
-                    sys.exit(2)
+                    sys.exit(EXIT_CODES["defeat"])
         else:
             print("Invalid arguments. Usage:\npython3 shroom_raider.py -f <stage_file>\npython3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>")
     else:

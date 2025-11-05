@@ -1,6 +1,7 @@
 import os, sys, subprocess, tempfile, json, time
 from Bonus_Classes.PlayerData import Data
 import LevelManager
+from exit_codes import EXIT_CODES
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "shroom_raider.py")
@@ -9,6 +10,7 @@ SHROOM_SCRIPT = os.path.join(HERE, "shroom_raider.py")
 
 def clear_terminal(): os.system('cls' if os.name=='nt' else 'clear')
 def wait(seconds): time.sleep(seconds)
+def print_and_wait(message, seconds=1): print(message); wait(seconds); clear_terminal()
 
 # * Advanced Helper Functions
 
@@ -75,7 +77,7 @@ def choose_level(levels):
     while True:
         print_levels_table(levels)
         choice = input("Select level ID or number (or 'q' to quit): ").strip()
-        if choice == 'q': return None
+        if choice == 'q': return 'q'
         if choice.isdigit():
             n = int(choice)
             for lvl in levels:
@@ -141,23 +143,26 @@ def main():
         levels = LevelManager.load_levels()
         lvl = choose_level(levels)
 
-        if lvl=='q': print("Quitting launcher."); exit()  # can change to more fancy text
+        if lvl=='q': 
+            print("Quitting launcher."); 
+            exit(EXIT_CODES["quit"])  # <-- updated
             
 
         while True:
-            #return code -> determines if ran successfully (0:win,2:dead)
+            #return code -> determines if ran successfully
             return_code, report = launch_game_with_level(lvl)
+            wait(3)
             clear_terminal()
 
             if report:
                 pdata.apply_report_dict(report)
                 # print("updated data")
-            elif return_code in (0,2):
-                if return_code == 0: pdata.record_win()
+            elif return_code in (EXIT_CODES["victory"],EXIT_CODES["defeat"]):
+                if return_code == EXIT_CODES["victory"]: 
+                    pdata.record_win()
                 pdata.record_move(0)
                 pdata.commit_session()
                 # print("saved data")
-
 
             while True:
                 # the gameloop
@@ -181,7 +186,7 @@ def main():
                         continue
                     case "q":
                         print("Quitting launcher.")  # can change to more fancy text
-                        exit()
+                        exit(EXIT_CODES["quit"])  # <-- updated
                     case _:
                         print("Invalid choice, try again.")
 
