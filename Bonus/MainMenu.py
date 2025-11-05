@@ -113,6 +113,11 @@ def launch_game_with_level(level):
     try:
         # run game
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
+
+        # optional dark mode parameter
+        if "dark_radius" in level:
+            cmd += ["--dark", str(level["dark_radius"])]
+
         print(f"\nRunning: {' '.join(cmd)}\n")
         return_code = subprocess.call(cmd)
 
@@ -136,7 +141,7 @@ def main():
 +------------------------+
           """)
     
-    username = input("Username (Enter=guest): ").strip() or "GUEST"
+    username = input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
     pdata = Data(username)
 
     while True:

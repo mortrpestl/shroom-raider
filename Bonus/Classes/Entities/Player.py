@@ -7,43 +7,52 @@ from Classes.Entities.import_entities import import_entities
 # This was done very early in development, and was done mostly as a test of what AI is capable of in terms of working within the context of a project
 
 # TODO Refactor this stuff
-needed = {"Flamethrower", "Axe", "Mushroom", "Water"}
+needed = {"Flamethrower", "Axe", "Mushroom", "Water", "Flash"}
 items = import_entities(needed)
 
 Flamethrower = items["Flamethrower"]
 Axe = items["Axe"]
 Mushroom = items["Mushroom"]
 Water = items["Water"]
+Flash = items["Flash"]
 
 class Player(Entity):
 
-    def __init__(self, pos: list, on_grid: Grid, ascii = 'L',item: Entity | None = None):
+    def __init__(self, pos: list, on_grid: Grid, ascii='L', item: Entity | None = None):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
         self.__is_dead = False
 
-    def get_movement_validity(self, direction, r, c):
-        on_grid = self.get_on_grid() # always get grid first
-        # Is the target coordinate out of the Grid? then you cannot move. 
-        if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
-            return False
-        
-        target_obj = self.get_obj_in_coord(r, c)
+    def set_pos(self, direction: str) -> bool:
+        # call Entity's movement logic
+        moved = super().set_pos(direction)
+        if moved:
+            r, c = self.get_pos()
+            self.get_on_grid().set_player_pos([r, c])
+        return moved
 
-        if target_obj == None: return True
+    def get_movement_validity(self, direction, r, c):
+        on_grid = self.get_on_grid()  # always get grid first
+        # Is the target coordinate out of the Grid? then you cannot move. 
+        if not (0 <= r < len(on_grid.get_grid_obj_map()) and 0 <= c < len(on_grid.get_grid_obj_map()[0])):
+            return False
+
+        target_obj = self.get_obj_in_coord(r, c)
+        if target_obj is None: 
+            return True
 
         if target_obj.get_burnable():
-            if isinstance(self.get_item(),Flamethrower):
+            if isinstance(self.get_item(), Flamethrower):
                 target_obj.burn_connected()
-                self.set_item(None)  
-            if isinstance(self.get_item(),Axe):
+                self.set_item(None)
+            if isinstance(self.get_item(), Axe):
                 target_obj.chop()
                 self.set_item(None)
         if isinstance(target_obj, Water):
             self.kill()
 
-        return super().get_movement_validity(direction, r, c)  
+        return super().get_movement_validity(direction, r, c)
 
     # * Simple Getters, AI generated with minor edits
 
@@ -51,7 +60,9 @@ class Player(Entity):
 
     def set_item(self, item: Entity | None): self.__item = item
     
-    def use_item(self): self.__item = None
+    def use_item(self):
+        if isinstance(self.__item, Flash): self.__item.use()
+        self.__item = None
 
     def get_mushroom_count(self): return self.__mushroom_count
 
@@ -62,60 +73,57 @@ class Player(Entity):
     # * Complex Getters
 
     def get_above_item(self):
-        r,c = self.get_pos()
+        r, c = self.get_pos()
         on_grid = self.get_on_grid()
 
-        stack = on_grid.get_layers_from_coord(r,c)
+        stack = on_grid.get_layers_from_coord(r, c)
         item = stack[-2] if len(stack) > 1 else None
 
-        is_item = isinstance(item, (Axe, Flamethrower))
-
-        if is_item: return item.__class__.__name__
+        # new: detect any collectable entity (explicit list not used here)
+        if item and isinstance(item, (Axe, Flamethrower, Flash)):
+            return f'{item}'
         return False
 
     def get_above_mushroom(self):
-        r,c = self.get_pos()
+        r, c = self.get_pos()
         on_grid = self.get_on_grid()
 
-        stack = on_grid.get_layers_from_coord(r,c)
+        stack = on_grid.get_layers_from_coord(r, c)
         shroom = stack[-2] if len(stack) > 1 else None
 
-        is_item = isinstance(shroom, Mushroom)
-
-        if is_item: return shroom
+        if isinstance(shroom, Mushroom):
+            return shroom
         return False
-    
+
     def get_above_water(self):
-        r,c = self.get_pos()
+        r, c = self.get_pos()
         on_grid = self.get_on_grid()
 
-        stack = on_grid.get_layers_from_coord(r,c)
-
+        stack = on_grid.get_layers_from_coord(r, c)
         puddle = stack[-2] if len(stack) > 1 else None
 
         return isinstance(puddle, Water)
-    
+
     # * Simple Setters
 
     def kill(self): self.__is_dead = True
 
     # * Complex Setters
-    
-    
+
     def collect_item(self):
-        r,c = self.get_pos()
+        r, c = self.get_pos()
         on_grid = self.get_on_grid()
 
-        if not self.get_above_item(): return
+        above_item_name = self.get_above_item()
+        if not above_item_name: 
+            return
 
-        player = on_grid.pop_layer_from_coord(r,c)
-        item = on_grid.pop_layer_from_coord(r,c)
+        player = on_grid.pop_layer_from_coord(r, c)
+        item = on_grid.pop_layer_from_coord(r, c)
 
-        if isinstance(item,(Axe,Flamethrower)):
+        if item and isinstance(item, (Axe, Flamethrower, Flash)):
             self.set_item(item)
         elif item is not None:
-            on_grid.add_layer_to_coord(r,c,item)
+            on_grid.add_layer_to_coord(r, c, item)
 
-        on_grid.add_layer_to_coord(r,c,player)
-
-
+        on_grid.add_layer_to_coord(r, c, player)

@@ -1,10 +1,11 @@
 import os
 import json
 import pandas as pd
+import time
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
-HEADERS = ["username","total_mushrooms_collected","total_tiles_walked","total_wins","total_times"]
+HEADERS = ["username","total_mushrooms_collected","total_tiles_walked","total_wins","total_times","total_seconds_played"]
 
 # * Pandas helpers
 
@@ -25,6 +26,7 @@ class Data:
         self.total_tiles_walked = 0
         self.total_wins = 0
         self.total_times = 0
+        self.total_seconds_played = 0
         self.reset_session()
         self._load_or_create()
 
@@ -36,6 +38,7 @@ class Data:
         self.session_tiles = 0
         self.session_win = False
         self.session_dead = False
+        self.session_start_time = time.time()  # start timing this session
 
     def record_move(self, n=1):
         self.session_tiles += n
@@ -53,10 +56,11 @@ class Data:
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
-                self.total_mushrooms_collected = safe_int(row["total_mushrooms_collected"])
-                self.total_tiles_walked = safe_int(row["total_tiles_walked"])
-                self.total_wins = safe_int(row["total_wins"])
-                self.total_times = safe_int(row["total_times"])
+                self.total_mushrooms_collected = safe_int(row.get("total_mushrooms_collected", 0))
+                self.total_tiles_walked = safe_int(row.get("total_tiles_walked", 0))
+                self.total_wins = safe_int(row.get("total_wins", 0))
+                self.total_times = safe_int(row.get("total_times", 0))
+                self.total_seconds_played = safe_int(row.get("total_seconds_played", 0))
                 break
         else:
             rows.append(self.to_dict())
@@ -68,6 +72,7 @@ class Data:
         self.total_mushrooms_collected += self.session_mushrooms
         self.total_tiles_walked += self.session_tiles
         self.total_times += 1
+        self.total_seconds_played += int(time.time() - self.session_start_time)
         if self.session_win:
             self.total_wins += 1
         self.save()
@@ -90,6 +95,7 @@ class Data:
             "total_tiles_walked": self.total_tiles_walked,
             "total_wins": self.total_wins,
             "total_times": self.total_times,
+            "total_seconds_played": self.total_seconds_played
         }
 
     def apply_report_dict(self, report):
@@ -113,5 +119,6 @@ class Data:
 |  Tiles Walked    : {self.total_tiles_walked:<13} |
 |  Total Wins      : {self.total_wins:<13} |
 |  Total Runs      : {self.total_times:<13} |
+|  Total Time(sec) : {self.total_seconds_played:<13} |
 +----------------------------------+
 """.strip()

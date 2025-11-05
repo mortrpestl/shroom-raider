@@ -8,6 +8,7 @@ class Entity:
     _is_pushable = False # If True, Player can push this Entity
     _is_deadly = False # If True, Player gets game over'd when on it. 
     _is_burnable = False # If True, triggers burning of Tree
+    _is_passive = False # If True, affects the map in some way without having to be directly used on another object
 
     def __init__(self, pos: list, on_grid, ascii: str):
         from Classes.Grid import Grid #this placement is intentional, if outside, will hit circular import eerror
@@ -17,6 +18,8 @@ class Entity:
 
     # * Simple Getters
         
+    def __repr__(self): return self.__class__.__name__
+
     def get_ascii(self): return self.__ascii
     
     def get_on_grid(self): return self.__on_grid
@@ -33,6 +36,8 @@ class Entity:
 
     def get_deadly(self): return self._is_deadly
 
+    def get_passive(self): return self._is_passive
+    
     # * Complex Getters
 
     def get_pushable(self, pusher): # TODO complete, or refactor

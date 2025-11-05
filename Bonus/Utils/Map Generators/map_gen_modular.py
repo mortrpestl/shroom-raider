@@ -26,4 +26,4 @@ def map_gen(R,C):
 
     return f'{R} {C}\n' + '\n'.join(''.join(row) for row in map)
 
-print(map_gen(25,25))
+print(map_gen(30,30))
