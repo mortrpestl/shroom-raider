@@ -145,7 +145,7 @@ def main():
 
         if lvl=='q': 
             print("Quitting launcher."); 
-            exit(EXIT_CODES["quit"])  # <-- updated
+            exit(EXIT_CODES["quit"])
             
 
         while True:
@@ -186,7 +186,7 @@ def main():
                         continue
                     case "q":
                         print("Quitting launcher.")  # can change to more fancy text
-                        exit(EXIT_CODES["quit"])  # <-- updated
+                        exit(EXIT_CODES["quit"])
                     case _:
                         print("Invalid choice, try again.")
 
