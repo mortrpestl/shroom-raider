@@ -1,4 +1,5 @@
 import sys, io, os, json, time
+from keyboard import is_pressed as ip
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -153,6 +154,7 @@ def main():
         item_here, holding_anything = "No items here", None
         stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
         while True:
+            
             item_here, holding_anything = parser(input(), P, G, level, stop_or_reset_only)
             try:
                 stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)

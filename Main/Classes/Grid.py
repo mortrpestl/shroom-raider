@@ -56,12 +56,12 @@ class Grid:
             raise KeyError(f'No grid found with name:{name}')
         return Grid.GRID_LIST[name]
     
-    def get_obj_in_coord(self, r: int, c: int):
+    def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
 
         if not (0<=r<self.__map_rows and 0<=c<self.__map_cols):
             raise IndexError(f'coordinate {r,c} out of bounds')
 
-        return self.__grid_obj_map[r][c][-1]
+        return self.__grid_obj_map[r][c][layer]
     
     def get_display_symbol_of_obj(self, obj, mode="emoji"):
         if mode=="emoji":
@@ -153,9 +153,12 @@ class Grid:
 
         return '\n'.join(grid_str_rep)
     
-    def render(self, P, G, item_here, holding_anything, test_mode=False):
+    def render(self, P, G, test_mode=False):
         total_mushrooms = G.get_total_mushrooms()
         mushrooms_collected = P.get_mushroom_count()
+        item_here = G.get_obj_in_coord(*P.get_pos(), -2) #element below player
+        held_item = P.get_item()
+
 
         win = (mushrooms_collected == total_mushrooms)
         lose = P.get_is_dead()
@@ -176,7 +179,7 @@ class Grid:
             print('You lose...')
             return True
         else:
-            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here}\n{holding_anything if holding_anything is not None else "Not holding anything"}\n\nWhat will you do? """
+            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here.__class__.__name__}\n{held_item if held_item is not None else "Not holding anything"}\n\nWhat will you do? """
             print(terminal_gui,end='')
             return False
 

@@ -86,16 +86,6 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 if P.get_item() is None:
                     P.collect_item()
 
-            if P.get_item():
-                holding_anything = f'Holding item {P.get_item().__class__.__name__}'
-            else:
-                holding_anything = None
-
-            if P.get_above_item():
-                item_here = f'Above item {P.get_above_item()}'
-            else:
-                item_here = 'No items here'
-
             if shroom := P.get_above_mushroom():
                 shroom.collect(P)
 
@@ -122,7 +112,7 @@ def main():
         check_win_condition(P, G)
 
         while True:
-            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+            stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
         return
@@ -144,7 +134,7 @@ def main():
         # possible input 1: -f <stage_file> (interactive manual mode)
         if len(args) == 2:
             while True:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
                 parser(input(), P, G, level, stop_or_reset_only)
 
         # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
