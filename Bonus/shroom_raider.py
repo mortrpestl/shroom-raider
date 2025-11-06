@@ -9,7 +9,7 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 ENABLE_TEST_MODE = False
-LEVEL_NAME = "TEST"
+LEVEL_NAME = "Bonus/Levels/TEST"
 REPORT_FILE = None
 moves_made = 0
 

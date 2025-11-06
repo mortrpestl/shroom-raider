@@ -29,7 +29,7 @@ class Grid:
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
-        Grid.GRID_LIST[name] = self
+        Grid.GRID_LIST[self.__name] = self
     
     # * Simple Getters
 
@@ -42,6 +42,7 @@ class Grid:
     def get_total_mushrooms(self): return self.__total_mushrooms
 
     def increment_total_mushrooms(self): self.__total_mushrooms += 1
+
     # * Complex Getters
 
     def pop_layer_from_coord(self,r,c,layer=-1): return self.get_grid_obj_map()[r][c].pop(layer)
@@ -57,13 +58,9 @@ class Grid:
     
     def get_obj_in_coord(self, r: int, c: int):
 
-        from Classes.Entity import Entity
-
-        def in_bounds(r,c): return 0<=r<self.__map_rows and 0<=c<self.__map_cols
-
-        if not in_bounds(r,c):
+        if not (0<=r<self.__map_rows and 0<=c<self.__map_cols):
             raise IndexError(f'coordinate {r,c} out of bounds')
-        
+
         return self.__grid_obj_map[r][c][-1]
     
     def get_display_symbol_of_obj(self, obj, mode="emoji"):
@@ -174,13 +171,12 @@ class Grid:
 
         if win:
             print('You win!')
-        if lose:
+            return True
+        elif lose:
             print('You lose...')
-
-        if not win and not lose:
+            return True
+        else:
             terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here}\n{holding_anything if holding_anything is not None else "Not holding anything"}\n\nWhat will you do? """
             print(terminal_gui,end='')
+            return False
 
-        if win or lose:
-            return True
-        return False
