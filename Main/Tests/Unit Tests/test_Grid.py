@@ -110,9 +110,9 @@ def test_get_grid_by_name_returns_correct_instance_or_raises_keyerror(small_grid
 def test_render_behavior_returns_expected_values(small_grid):
     """Verify render output for dummy, winning, and losing players."""
     g = small_grid
-    assert g.render(DummyPlayer(), g, "", None, test_mode=True) == False
-    assert g.render(WinPlayer(g), g, "", None, test_mode=True) == True
-    assert g.render(LosePlayer(), g, "", None, test_mode=True) == True
+    assert g.render(DummyPlayer(), g, test_mode=True) == False
+    assert g.render(WinPlayer(g), g, test_mode=True) == True
+    assert g.render(LosePlayer(), g, test_mode=True) == True
 
 def test_top_layer_object_returns_correct_layer_after_pop(small_grid):
     """Ensure get_obj_in_coord returns topmost object, correctly updated after adding/popping layers."""
