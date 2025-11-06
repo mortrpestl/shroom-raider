@@ -5,6 +5,7 @@ class Entity:
     # * Attributes
     _is_collideable = False # If True, any other collideable object cannot occupy this Entity's space
     _is_collectable = False # If True, Player can collect this Entity
+    _is_storable = False # If True, then Player can keep this in inventory
     _is_pushable = False # If True, Player can push this Entity
     _is_deadly = False # If True, Player gets game over'd when on it. 
     _is_burnable = False # If True, triggers burning of Tree
@@ -27,19 +28,17 @@ class Entity:
 
     def get_burnable(self): return self._is_burnable
 
-    def get_collideable(self): return self._is_collideable
+    def get_collideable(self): return self._is_collideable or self._is_pushable # all pushables are collideable
 
-    def get_collectable(self): return self._is_collectable
+    def get_collectable(self): return self._is_collectable or self._is_storable # all storables are collectables
+    
+    def get_storable(self): return self._is_storable
 
     def get_deadly(self): return self._is_deadly
 
-    # * Complex Getters
+    def get_pushable(self, pusher): return self._is_pushable
 
-    def get_pushable(self, pusher): # TODO complete, or refactor
-        try:
-            return self._is_pushable
-        except:
-            return False
+    # * Complex Getters
 
     def get_movement_validity(self, direction, r, c):
         on_grid = self.get_on_grid() # always get grid first
@@ -47,8 +46,7 @@ class Entity:
         cols = len(on_grid.get_grid_obj_map()[0])
 
         # Is the target coordinate out of the Grid? then you cannot move. 
-        if not ((0<=r<rows) and (0<=c<cols)):
-            return False
+        if not ((0<=r<rows) and (0<=c<cols)): return False
         
         # now, get the object if in bounds
         target_obj = self.get_obj_in_coord(r, c)
@@ -61,10 +59,13 @@ class Entity:
             return target_obj.set_pos(direction) # If the target entity cannot move, then the current entity cannot too.
             
         # Is the object collideable, otherwise? then you cannot move to that.
-        elif target_obj.get_collideable():
-            return False
+        elif target_obj.get_collideable(): return False
 
         return True
+    
+    def get_above_entity(self):
+        stack = self.get_on_grid().get_layers_from_coord(*self.get_pos())
+        return stack[-2] if len(stack) > 1 else None
 
     # * Simple Setters
     def set_coordinate(self, r, c):
@@ -91,7 +92,11 @@ class Entity:
                 return False # The Entity failed to move (important for push logic)
         return True # The Entity has moved
 
-    def destroy(self,layer=-1):
-        self.get_on_grid().pop_layer_from_coord(*self.get_pos(), layer)
+    def destroy(self):
+        on_grid_stck = self.get_on_grid().get_layers_from_coord(*self.get_pos())
+        for i in range(-1, -len(on_grid_stck)-1, -1):
+            if on_grid_stck[i] == self: 
+                self.get_on_grid().pop_layer_from_coord(*self.get_pos(), i)
+                break
 
     # * Misc functions

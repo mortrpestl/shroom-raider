@@ -62,23 +62,14 @@ class Player(Entity):
     # * Complex Getters
 
     def get_above_item(self):
-        r,c = self.get_pos()
-        on_grid = self.get_on_grid()
+        item = super().get_above_entity()
 
-        stack = on_grid.get_layers_from_coord(r,c)
-        item = stack[-2] if len(stack) > 1 else None
+        if not item: return False 
 
-        is_item = isinstance(item, (Axe, Flamethrower))
-
-        if is_item: return item.__class__.__name__
-        return False
+        return item if item.get_storable() else False
 
     def get_above_mushroom(self):
-        r,c = self.get_pos()
-        on_grid = self.get_on_grid()
-
-        stack = on_grid.get_layers_from_coord(r,c)
-        shroom = stack[-2] if len(stack) > 1 else None
+        shroom = super().get_above_entity()
 
         is_item = isinstance(shroom, Mushroom)
 
@@ -86,12 +77,7 @@ class Player(Entity):
         return False
     
     def get_above_water(self):
-        r,c = self.get_pos()
-        on_grid = self.get_on_grid()
-
-        stack = on_grid.get_layers_from_coord(r,c)
-
-        puddle = stack[-2] if len(stack) > 1 else None
+        puddle = super().get_above_entity()
 
         return isinstance(puddle, Water)
     
@@ -100,22 +86,21 @@ class Player(Entity):
     def kill(self): self.__is_dead = True
 
     # * Complex Setters
-    
-    
+
     def collect_item(self):
         r,c = self.get_pos()
         on_grid = self.get_on_grid()
 
+        item = self.get_above_item()
+
         if not self.get_above_item(): return
 
-        player = on_grid.pop_layer_from_coord(r,c)
-        item = on_grid.pop_layer_from_coord(r,c)
-
-        if isinstance(item,(Axe,Flamethrower)):
+        if item.get_storable():
             self.set_item(item)
-        elif item is not None:
-            on_grid.add_layer_to_coord(r,c,item)
+            item.destroy()
 
-        on_grid.add_layer_to_coord(r,c,player)
+    #def collect_shroom(self):
+
+
 
 

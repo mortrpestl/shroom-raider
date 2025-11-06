@@ -92,7 +92,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 holding_anything = None
 
             if P.get_above_item():
-                item_here = f'Above item {P.get_above_item()}'
+                item_here = f'Above item {P.get_above_item().__class__.__name__}'
             else:
                 item_here = 'No items here'
 
