@@ -23,28 +23,6 @@ class Player(Entity):
         self.__mushroom_count = 0
         self.__is_dead = False
 
-    def get_movement_validity(self, direction, r, c):
-        on_grid = self.get_on_grid() # always get grid first
-        # Is the target coordinate out of the Grid? then you cannot move. 
-        if not (0<=r<len(on_grid.get_grid_obj_map()) and 0<=c<len(on_grid.get_grid_obj_map()[0])):
-            return False
-        
-        target_obj = self.get_obj_in_coord(r, c)
-
-        if target_obj == None: return True
-
-        if target_obj.get_burnable():
-            if isinstance(self.get_item(),Flamethrower):
-                target_obj.burn_connected()
-                self.set_item(None)  
-            if isinstance(self.get_item(),Axe):
-                target_obj.chop()
-                self.set_item(None)
-        if isinstance(target_obj, Water):
-            self.kill()
-
-        return super().get_movement_validity(direction, r, c)  
-
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self): return self.__item
@@ -60,6 +38,23 @@ class Player(Entity):
     def get_is_dead(self): return self.__is_dead
 
     # * Complex Getters
+
+    def get_movement_validity(self, direction : str, r : int, c : int):
+        if not self.in_bounds(r, c): return False
+        
+        target_obj = self.get_obj_in_coord(r, c)
+
+        if target_obj == None: return True
+
+        if target_obj.get_burnable():
+            if isinstance(self.get_item(),Flamethrower):
+                target_obj.burn_connected()
+                self.set_item(None)  
+            if isinstance(self.get_item(),Axe):
+                target_obj.chop()
+                self.set_item(None)
+                
+        return super().get_movement_validity(direction, r, c)  
     
     # * Simple Setters
 
@@ -84,6 +79,19 @@ class Player(Entity):
         if isinstance(shroom, Mushroom):
             self.increment_mushroom_count()
             shroom.destroy()
+
+    def set_pos(self, direction : str):
+        if super().set_pos(direction):
+            entity_below = self.get_entity_below()
+            if not entity_below: return True
+            elif entity_below.get_deadly():
+                self.kill()
+                self.destroy()
+            return True
+        else:
+            return False
+
+        
 
 
 

@@ -60,7 +60,7 @@ def test_player_moving_into_water_is_deadly(test_grid):
     g.add_layer_to_coord(2, 3, water)
     
     # Attempt move right
-    result = player.set_pos(["d"])
+    result = player.set_pos("d")
     
     # Player should have moved but is now dead
     assert result == True

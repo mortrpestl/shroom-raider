@@ -89,12 +89,6 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
 
             P.collect_shroom() # if applicable
 
-            if tile := P.get_entity_below():
-                if tile.get_deadly():
-                    P.destroy()
-                    P.kill()
-
-
             check_win_condition(P, G)
 
 def main():

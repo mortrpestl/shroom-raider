@@ -53,7 +53,7 @@ def test_rock_push_into_empty_space_succeeds(test_grid):
     rock = ENTITIES["Rock"]([1,1], g)
     g.add_layer_to_coord(1,1, rock)
 
-    moved = rock.set_pos(["s"])
+    moved = rock.set_pos("s")
     assert moved == True
     assert g.get_obj_in_coord(2,1) == rock
     assert g.get_obj_in_coord(1,1) is None
@@ -70,11 +70,11 @@ def test_rock_cannot_move_outside_grid(test_grid):
     rock = ENTITIES["Rock"]([0,0], g)
     g.add_layer_to_coord(0,0, rock)
 
-    moved = rock.set_pos(["w"])
+    moved = rock.set_pos("w")
     assert moved == False
     assert rock.get_pos() == [0,0]
 
-    moved = rock.set_pos(["a"])
+    moved = rock.set_pos("a")
     assert moved == False
     assert rock.get_pos() == [0,0]
 
@@ -94,7 +94,7 @@ def test_rock_push_into_water_converts_to_paved_tile(test_grid):
     g.add_layer_to_coord(1,1, rock)
     g.add_layer_to_coord(2,1, water)
 
-    moved = rock.set_pos(["s"])
+    moved = rock.set_pos("s")
     assert moved == True
     target_obj = g.get_obj_in_coord(2,1)
     assert target_obj is not None
@@ -116,7 +116,7 @@ def test_rock_push_invalid_blocked_by_collectable(test_grid):
     g.add_layer_to_coord(1,1, rock)
     g.add_layer_to_coord(2,1, collectable)
 
-    moved = rock.set_pos(["s"])
+    moved = rock.set_pos("s")
     assert moved == False
     assert g.get_obj_in_coord(1,1) == rock
     assert g.get_obj_in_coord(2,1) == collectable
