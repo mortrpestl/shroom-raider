@@ -58,7 +58,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             for ln in lines:
                 if ln != '?':
                     f.write(str(ln) + "\n")
-
+    
     for line in lines:
         for inst in line:
             inst = inst.lower()
@@ -119,6 +119,7 @@ def main():
 
         while True:
             stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
+            if stop_or_reset_only: exit()
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
 
@@ -137,6 +138,7 @@ def main():
 
             while True:
                 stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
+                if stop_or_reset_only: exit()
                 parser(input(), P, G, level, stop_or_reset_only)
 
         elif args.movement_file != None and args.output_file != None:

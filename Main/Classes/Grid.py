@@ -118,7 +118,8 @@ class Grid:
     def visualize_map(self, mode='emoji'):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj_in_coord = self.get_obj_in_coord(r,c)
+                obj_in_coord = self.get_obj_in_coord(
+                    r,c)
                 
                 if not obj_in_coord: 
                     self.__grid_user_display[r][c] = "　" if mode=='emoji' else "."
