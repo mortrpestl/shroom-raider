@@ -62,64 +62,64 @@ def test_kill_sets_is_dead_flag(test_grid):
     player.kill()
     assert player.get_is_dead() == 1
 
-def test_get_above_item_returns_item(test_grid):
-    """
-    * Verify: get_above_item() returns an Axe or Flamethrower Entity if present beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    axe = ENTITIES["Axe"](player.get_pos(), g)
-    g.add_layer_to_coord(*player.get_pos(), axe)
-    g.add_layer_to_coord(*player.get_pos(), player)
-    result = player.get_above_item()
-    assert isinstance(result, ENTITIES["Axe"]) or isinstance(result, ENTITIES["Flamethrower"])
+# def test_get_above_item_returns_item(test_grid):
+#     """
+#     * Verify: get_above_item() returns an Axe or Flamethrower Entity if present beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     axe = ENTITIES["Axe"](player.get_pos(), g)
+#     g.add_layer_to_coord(*player.get_pos(), axe)
+#     g.add_layer_to_coord(*player.get_pos(), player)
+#     result = player.get_above_item()
+#     assert isinstance(result, ENTITIES["Axe"]) or isinstance(result, ENTITIES["Flamethrower"])
 
-def test_get_above_item_returns_false_when_not_collectible(test_grid):
-    """
-    * Verify: get_above_item() returns False when no item beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    assert player.get_above_item() == False
+# def test_get_above_item_returns_false_when_not_collectible(test_grid):
+#     """
+#     * Verify: get_above_item() returns False when no item beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     assert player.get_above_item() == False
 
-def test_get_above_mushroom_returns_object(test_grid):
-    """
-    * Verify: get_above_mushroom() returns Mushroom instance if present beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    shroom = ENTITIES["Mushroom"](player.get_pos(), g)
-    g.add_layer_to_coord(*player.get_pos(), shroom)
-    g.add_layer_to_coord(*player.get_pos(), player)
-    result = player.get_above_mushroom()
-    assert isinstance(result, ENTITIES["Mushroom"])
+# def test_get_above_mushroom_returns_object(test_grid):
+#     """
+#     * Verify: get_above_mushroom() returns Mushroom instance if present beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     shroom = ENTITIES["Mushroom"](player.get_pos(), g)
+#     g.add_layer_to_coord(*player.get_pos(), shroom)
+#     g.add_layer_to_coord(*player.get_pos(), player)
+#     result = player.get_above_mushroom()
+#     assert isinstance(result, ENTITIES["Mushroom"])
 
-def test_get_above_mushroom_returns_false_if_none(test_grid):
-    """
-    * Verify: get_above_mushroom() returns False when no Mushroom beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    assert player.get_above_mushroom() == False
+# def test_get_above_mushroom_returns_false_if_none(test_grid):
+#     """
+#     * Verify: get_above_mushroom() returns False when no Mushroom beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     assert player.get_above_mushroom() == False
 
-def test_get_above_water_returns_true(test_grid):
-    """
-    * Verify: get_above_water() returns True when Water is beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    water = ENTITIES["Water"](player.get_pos(), g)
-    g.add_layer_to_coord(*player.get_pos(), water)
-    g.add_layer_to_coord(*player.get_pos(), player)
-    assert player.get_above_water() == True
+# def test_get_above_water_returns_true(test_grid):
+#     """
+#     * Verify: get_above_water() returns True when Water is beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     water = ENTITIES["Water"](player.get_pos(), g)
+#     g.add_layer_to_coord(*player.get_pos(), water)
+#     g.add_layer_to_coord(*player.get_pos(), player)
+#     assert player.get_above_water() == True
 
-def test_get_above_water_returns_false_if_none(test_grid):
-    """
-    * Verify: get_above_water() returns False when no Water beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    assert player.get_above_water() == False
+# def test_get_above_water_returns_false_if_none(test_grid):
+#     """
+#     * Verify: get_above_water() returns False when no Water beneath Player
+#     """
+#     g = test_grid
+#     player = g.get_player()
+#     assert player.get_above_water() == False
 
 def test_collect_item_adds_to_player_and_removes_from_grid(test_grid):
     """

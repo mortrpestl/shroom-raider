@@ -87,12 +87,13 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 if P.get_item() is None:
                     P.collect_item()
 
-            if shroom := P.get_above_mushroom():
-                shroom.collect(P)
+            P.collect_shroom() # if applicable
 
-            if P.get_above_water():
-                P.destroy()
-                P.kill()
+            if tile := P.get_entity_below():
+                if tile.get_deadly():
+                    P.destroy()
+                    P.kill()
+
 
             check_win_condition(P, G)
 

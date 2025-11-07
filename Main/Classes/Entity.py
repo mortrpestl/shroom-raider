@@ -63,7 +63,7 @@ class Entity:
 
         return True
     
-    def get_above_entity(self):
+    def get_entity_below(self):
         stack = self.get_on_grid().get_layers_from_coord(*self.get_pos())
         return stack[-2] if len(stack) > 1 else None
 

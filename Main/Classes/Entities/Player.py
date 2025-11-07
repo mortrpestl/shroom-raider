@@ -60,26 +60,6 @@ class Player(Entity):
     def get_is_dead(self): return self.__is_dead
 
     # * Complex Getters
-
-    def get_above_item(self):
-        item = super().get_above_entity()
-
-        if not item: return False 
-
-        return item if item.get_storable() else False
-
-    def get_above_mushroom(self):
-        shroom = super().get_above_entity()
-
-        is_item = isinstance(shroom, Mushroom)
-
-        if is_item: return shroom
-        return False
-    
-    def get_above_water(self):
-        puddle = super().get_above_entity()
-
-        return isinstance(puddle, Water)
     
     # * Simple Setters
 
@@ -88,16 +68,22 @@ class Player(Entity):
     # * Complex Setters
 
     def collect_item(self):
+        item = self.get_entity_below()
 
-        item = self.get_above_item()
-
-        if not self.get_above_item(): return
+        if not item: return
 
         if item.get_storable():
             self.set_item(item)
             item.destroy()
 
-    #def collect_shroom(self):
+    def collect_shroom(self):
+        shroom = self.get_entity_below()
+
+        if not shroom: return
+
+        if isinstance(shroom, Mushroom):
+            self.increment_mushroom_count()
+            shroom.destroy()
 
 
 

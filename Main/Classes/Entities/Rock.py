@@ -48,7 +48,9 @@ class Rock(Entity):
             on_grid = self.get_on_grid()
             r, c = self.get_pos()
 
-            object_below = on_grid.get_layers_from_coord(r, c)[-2]
+            object_below = self.get_entity_below()
+            if not object_below: return True
+
             if isinstance(object_below, entities["Water"]): # Is the Rock on Water?
                 new_paved_tile = entities["PavedTile"]((r, c), self.get_on_grid(), '-')
                 self.destroy() # Destroy Rock
