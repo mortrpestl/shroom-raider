@@ -118,7 +118,7 @@ def main():
         check_win_condition(P, G)
 
         while True:
-            stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
+            stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
             if stop_or_reset_only: exit()
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
@@ -137,7 +137,7 @@ def main():
         if args.movement_file == None or args.output_file == None:
 
             while True:
-                stop_or_reset_only = G.render(P, G, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
                 if stop_or_reset_only: exit()
                 parser(input(), P, G, level, stop_or_reset_only)
 

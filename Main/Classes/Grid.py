@@ -1,4 +1,5 @@
 import os
+from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 
 class Grid:
@@ -7,7 +8,7 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = '.' #can add other looks for empty tiles for future use
 
-    def __init__(self, name, map_data: str):
+    def __init__(self, name: str, map_data: str):
 
         self.__name = name
         self.__player_pos = [0, 0]
@@ -48,7 +49,7 @@ class Grid:
 
     def get_grid_obj_map(self): return self.__grid_obj_map
     
-    def get_layers_from_coord(self,r,c): return self.__grid_obj_map[r][c]
+    def get_layers_from_coord(self, r: int, c: int): return self.__grid_obj_map[r][c]
 
     def get_total_mushrooms(self): return self.__total_mushrooms
 
@@ -56,12 +57,12 @@ class Grid:
 
     # * Complex Getters
 
-    def pop_layer_from_coord(self,r,c,layer=-1): return self.get_grid_obj_map()[r][c].pop(layer)
+    def pop_layer_from_coord(self, r: int, c: int,layer: int = -1): return self.get_grid_obj_map()[r][c].pop(layer)
 
     def get_is_cleared(self): return self.__is_cleared
 
     @staticmethod
-    def get_grid_by_name(name):
+    def get_grid_by_name(name: str):
 
         if name not in Grid.GRID_LIST:
             raise KeyError(f'No grid found with name:{name}')
@@ -74,7 +75,7 @@ class Grid:
 
         return self.__grid_obj_map[r][c][layer]
     
-    def get_display_symbol_of_obj(self, obj, mode="emoji"):
+    def get_display_symbol_of_obj(self, obj: Entity | None, mode: str ="emoji"):
         if mode=="emoji":
             offset = 0
         else:
@@ -90,12 +91,12 @@ class Grid:
 
     # * Complex Setters
 
-    def add_layer_to_coord(self,r,c,entity):
-        self.get_grid_obj_map()[r][c].append(entity)
+    def add_layer_to_coord(self, r: int, c: int, obj: Entity | None):
+        self.get_grid_obj_map()[r][c].append(obj)
     
     # * Misc 
 
-    def init_coord(self, symbol, coord):
+    def init_coord(self, symbol: str, coord: tuple):
 
         if symbol in Grid.EMPTY_TILES:
             return None, "　"
@@ -115,7 +116,7 @@ class Grid:
 
         return item_type(coord, self, symbol), item_display_value
     
-    def visualize_map(self, mode='emoji'):
+    def visualize_map(self, mode: str ='emoji'):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj_in_coord = self.get_obj_in_coord(
@@ -126,7 +127,7 @@ class Grid:
                 else:
                     self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord, mode)
 
-    def get_vis_map_as_str(self,mode='ascii'):
+    def get_vis_map_as_str(self, mode: str ='ascii'):
         grid_str_rep = []
 
         self.visualize_map(mode)
@@ -136,10 +137,10 @@ class Grid:
 
         return '\n'.join(grid_str_rep)
     
-    def render(self, P, G, test_mode=False):
-        total_mushrooms = G.get_total_mushrooms()
+    def render(self, P: Entity, test_mode: bool =False):
+        total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = P.get_mushroom_count()
-        item_here = G.get_obj_in_coord(*P.get_pos(), -2).__class__.__name__ #element below player
+        item_here = self.get_obj_in_coord(*P.get_pos(), -2).__class__.__name__ #element below player
         held_item = P.get_item().__class__.__name__
 
 
