@@ -1,4 +1,5 @@
 from Classes.Entity import Entity
+from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 
 class Rock(Entity):
@@ -9,12 +10,12 @@ class Rock(Entity):
     _is_pushable = True
     
 
-    def __init__(self, pos, on_grid, ascii='R'):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str ='R'):
         super().__init__(pos, on_grid, ascii)
 
     # * Complex Getters
 
-    def get_movement_validity(self, direction, r, c):
+    def get_movement_validity(self, direction: str, r: int, c: int):
         on_grid = self.get_on_grid() # always get grid first
         rows = len(on_grid.get_grid_obj_map())
         cols = len(on_grid.get_grid_obj_map()[0])
@@ -32,7 +33,7 @@ class Rock(Entity):
         
         return super().get_movement_validity(direction, r, c)
     
-    def get_pushable(self, pusher):
+    def get_pushable(self, pusher: Entity):
         entities = import_entities({"Player"})
         if isinstance(pusher, entities["Player"]):
             return True
@@ -42,7 +43,7 @@ class Rock(Entity):
     # * Simple Setters
     
     # * Complex Setters
-    def set_pos(self, directions):
+    def set_pos(self, directions: str):
         if super().set_pos(directions):
             entities = import_entities({"Water", "PavedTile"})
             on_grid = self.get_on_grid()

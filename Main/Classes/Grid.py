@@ -37,7 +37,7 @@ class Grid:
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj, display = self.init_coord(self.__grid_vis_map[r][c], (r,c))
+                obj, display = self.init_coord(self.__grid_vis_map[r][c], [r,c])
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
 
@@ -96,7 +96,7 @@ class Grid:
     
     # * Misc 
 
-    def init_coord(self, symbol: str, coord: tuple):
+    def init_coord(self, symbol: str, coord: list):
 
         if symbol in Grid.EMPTY_TILES:
             return None, "　"
@@ -137,15 +137,15 @@ class Grid:
 
         return '\n'.join(grid_str_rep)
     
-    def render(self, P: Entity, test_mode: bool =False):
+    def render(self, p: Entity, test_mode: bool =False):
         total_mushrooms = self.get_total_mushrooms()
-        mushrooms_collected = P.get_mushroom_count()
-        item_here = self.get_obj_in_coord(*P.get_pos(), -2).__class__.__name__ #element below player
-        held_item = P.get_item().__class__.__name__
+        mushrooms_collected = p.get_mushroom_count()
+        item_here = self.get_obj_in_coord(*p.get_pos(), -2).__class__.__name__ #element below player
+        held_item = p.get_item().__class__.__name__
 
 
         win = (mushrooms_collected == total_mushrooms)
-        lose = P.get_is_dead()
+        lose = p.get_is_dead()
 
         self.visualize_map()
 

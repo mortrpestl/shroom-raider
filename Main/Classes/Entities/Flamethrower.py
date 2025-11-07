@@ -1,5 +1,5 @@
 from Classes.Entity import Entity
-from Classes.Entities.import_entities import import_entities
+from Classes.Grid import Grid
 
 
 class Flamethrower(Entity):
@@ -8,5 +8,5 @@ class Flamethrower(Entity):
     _is_collectable = True
     _is_storable = True
 
-    def __init__(self, pos, on_grid, ascii='*'):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str ='*'):
         super().__init__(pos, on_grid, ascii)
