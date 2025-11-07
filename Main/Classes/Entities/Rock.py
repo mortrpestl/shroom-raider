@@ -16,14 +16,8 @@ class Rock(Entity):
     # * Complex Getters
 
     def get_movement_validity(self, direction: str, r: int, c: int):
-        on_grid = self.get_on_grid() # always get grid first
-        rows = len(on_grid.get_grid_obj_map())
-        cols = len(on_grid.get_grid_obj_map()[0])
+        if not self.in_bounds(r, c): return False
 
-        # Is the target coordinate out of the Grid? then you cannot move. 
-        if not ((0<=r<rows) and (0<=c<cols)):
-            return False
-        
         target_obj = self.get_obj_in_coord(r, c)
 
         if target_obj == None: return True
@@ -43,8 +37,8 @@ class Rock(Entity):
     # * Simple Setters
     
     # * Complex Setters
-    def set_pos(self, directions: str):
-        if super().set_pos(directions):
+    def set_pos(self, direction: str):
+        if super().set_pos(direction):
             entities = import_entities({"Water", "PavedTile"})
             on_grid = self.get_on_grid()
             r, c = self.get_pos()

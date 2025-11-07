@@ -10,6 +10,3 @@ class Mushroom(Entity):
         super().__init__(pos, on_grid, ascii)
 
     # * Complex Setter
-    def collect(self, p: Entity):
-        p.increment_mushroom_count()
-        self.destroy()

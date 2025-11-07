@@ -54,7 +54,7 @@ def test_mushroom_collect_increments_player_count_and_disappears_from_grid(test_
     g.add_layer_to_coord(1,1, player)
 
     initial_count = player.get_mushroom_count()
-    mush.collect(player)
+    player.collect_shroom()
 
     assert player.get_mushroom_count() == initial_count + 1
     layers = g.get_layers_from_coord(1,1)
