@@ -21,6 +21,26 @@ class Grid:
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
         self.ENTITIES = import_entities({"Player","Tree","Rock","Mushroom","Water","PavedTile","Axe","Flamethrower"})
+        self.character_mapping = { # for display
+                self.ENTITIES["Player"]: ("🧑", 'L'),
+                self.ENTITIES["Tree"]: ("🌲", 'T'),
+                self.ENTITIES["Mushroom"]: ("🍄", 'M'),
+                self.ENTITIES["Rock"]: ("🪨 ", 'R'),
+                self.ENTITIES["Water"]: ("🟦", '~'),
+                self.ENTITIES["PavedTile"]: ("⬜", '_'),
+                self.ENTITIES["Axe"]: ("🪓", 'x'),
+                self.ENTITIES["Flamethrower"]: ("🔥", '*')
+        }
+        self.initialization_map = { # for processing file inputs
+            'L': (self.ENTITIES["Player"], "🧑"),
+            'T': (self.ENTITIES["Tree"], "🌲"),
+            '+': (self.ENTITIES["Mushroom"], "🍄"),
+            'R': (self.ENTITIES["Rock"], "🪨 "),
+            '~': (self.ENTITIES["Water"], "🟦"),
+            '_': (self.ENTITIES["PavedTile"], "⬜"),
+            'x': (self.ENTITIES["Axe"], "🪓"),
+            '*': (self.ENTITIES["Flamethrower"], "🔥")
+        }
 
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
@@ -65,30 +85,12 @@ class Grid:
     
     def get_display_symbol_of_obj(self, obj, mode="emoji"):
         if mode=="emoji":
-            character_map = {
-                self.ENTITIES["Player"]: "🧑",
-                self.ENTITIES["Tree"]: "🌲",
-                self.ENTITIES["Mushroom"]: "🍄",
-                self.ENTITIES["Rock"]: "🪨 ",
-                self.ENTITIES["Water"]: "🟦",
-                self.ENTITIES["PavedTile"]: "⬜",
-                self.ENTITIES["Axe"]: "🪓",
-                self.ENTITIES["Flamethrower"]: "🔥"
-            }
+            offset = 0
         else:
-            character_map = {
-                self.ENTITIES["Player"]: "L",
-                self.ENTITIES["Tree"]: "T",
-                self.ENTITIES["Mushroom"]: "+",
-                self.ENTITIES["Rock"]: "R",
-                self.ENTITIES["Water"]: "~",
-                self.ENTITIES["PavedTile"]: "_",
-                self.ENTITIES["Axe"]: "x",
-                self.ENTITIES["Flamethrower"]: "*"
-            }
+            offset = 1
 
-        for cm in character_map:
-            if isinstance(obj, cm): return character_map[cm]
+        for cm in self.character_mapping:
+            if isinstance(obj, cm): return self.character_mapping[cm][offset]
 
     # * Simple Setters
 
@@ -113,18 +115,7 @@ class Grid:
         if symbol == '+':
             self.increment_total_mushrooms()
 
-        character_map = {
-            'L': (self.ENTITIES["Player"], "🧑"),
-            'T': (self.ENTITIES["Tree"], "🌲"),
-            '+': (self.ENTITIES["Mushroom"], "🍄"),
-            'R': (self.ENTITIES["Rock"], "🪨 "),
-            '~': (self.ENTITIES["Water"], "🟦"),
-            '_': (self.ENTITIES["PavedTile"], "⬜"),
-            'x': (self.ENTITIES["Axe"], "🪓"),
-            '*': (self.ENTITIES["Flamethrower"], "🔥")
-        }
-
-        item = character_map.get(symbol)
+        item = self.initialization_map.get(symbol)
 
         if not item:
             raise ValueError(f'Unknown type symbol: {symbol}')
