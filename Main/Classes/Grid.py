@@ -24,23 +24,14 @@ class Grid:
         self.character_mapping = { # for display
                 self.ENTITIES["Player"]: ("🧑", 'L'),
                 self.ENTITIES["Tree"]: ("🌲", 'T'),
-                self.ENTITIES["Mushroom"]: ("🍄", 'M'),
+                self.ENTITIES["Mushroom"]: ("🍄", '+'),
                 self.ENTITIES["Rock"]: ("🪨 ", 'R'),
                 self.ENTITIES["Water"]: ("🟦", '~'),
                 self.ENTITIES["PavedTile"]: ("⬜", '_'),
                 self.ENTITIES["Axe"]: ("🪓", 'x'),
                 self.ENTITIES["Flamethrower"]: ("🔥", '*')
         }
-        self.initialization_map = { # for processing file inputs
-            'L': (self.ENTITIES["Player"], "🧑"),
-            'T': (self.ENTITIES["Tree"], "🌲"),
-            '+': (self.ENTITIES["Mushroom"], "🍄"),
-            'R': (self.ENTITIES["Rock"], "🪨 "),
-            '~': (self.ENTITIES["Water"], "🟦"),
-            '_': (self.ENTITIES["PavedTile"], "⬜"),
-            'x': (self.ENTITIES["Axe"], "🪓"),
-            '*': (self.ENTITIES["Flamethrower"], "🔥")
-        }
+        self.initialization_map = {k[1]: (v, k[0]) for v, k in self.character_mapping.items()}
 
         #initialize all items and makes object map for collision detection
         for r in range(self.__map_rows):
