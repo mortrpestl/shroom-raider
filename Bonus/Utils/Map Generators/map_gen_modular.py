@@ -22,8 +22,8 @@ def map_gen(R,C):
                 row.append(elements[random.randint(0,len(elements)-1)])
         map.append(row)
 
-    # map[random.randint(1,R-2)][random.randint(1,C-2)]='L'
+    map[random.randint(1,R-2)][random.randint(1,C-2)]='L'
 
     return f'{R} {C}\n' + '\n'.join(''.join(row) for row in map)
 
-print(map_gen(30,30))
+print(map_gen(10,10))

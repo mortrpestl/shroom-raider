@@ -13,7 +13,7 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
-LEVEL_NAME = 'Main/TEST'
+LEVEL_NAME = 'TEST'
 
 
 def check_win_condition(P, G):

@@ -138,8 +138,8 @@ class Grid:
     def render(self, P, G, test_mode=False):
         total_mushrooms = G.get_total_mushrooms()
         mushrooms_collected = P.get_mushroom_count()
-        item_here = G.get_obj_in_coord(*P.get_pos(), -2) #element below player
-        held_item = P.get_item()
+        item_here = G.get_obj_in_coord(*P.get_pos(), -2).__class__.__name__ #element below player
+        held_item = P.get_item().__class__.__name__
 
 
         win = (mushrooms_collected == total_mushrooms)
@@ -161,7 +161,7 @@ class Grid:
             print('You lose...')
             return True
         else:
-            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here.__class__.__name__ + ' is here' if item_here != None else 'Nothing Here'}\n{held_item if held_item is not None else "Not holding anything"}\n\nWhat will you do? """
+            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here + ' is here' if item_here != 'NoneType' else 'Nothing Here'}\n{f'Holding item {held_item}' if held_item != "NoneType" else "Not holding anything"}\n\nWhat will you do? """
             print(terminal_gui,end='')
             return False
 
