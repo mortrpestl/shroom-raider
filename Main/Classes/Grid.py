@@ -179,7 +179,7 @@ class Grid:
             print('You lose...')
             return True
         else:
-            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here.__class__.__name__}\n{held_item if held_item is not None else "Not holding anything"}\n\nWhat will you do? """
+            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here.__class__.__name__ + ' is here' if item_here != None else 'Nothing Here'}\n{held_item if held_item is not None else "Not holding anything"}\n\nWhat will you do? """
             print(terminal_gui,end='')
             return False
 

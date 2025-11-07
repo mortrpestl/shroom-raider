@@ -88,8 +88,6 @@ class Player(Entity):
     # * Complex Setters
 
     def collect_item(self):
-        r,c = self.get_pos()
-        on_grid = self.get_on_grid()
 
         item = self.get_above_item()
 

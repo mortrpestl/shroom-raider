@@ -62,9 +62,9 @@ def test_kill_sets_is_dead_flag(test_grid):
     player.kill()
     assert player.get_is_dead() == 1
 
-def test_get_above_item_returns_name(test_grid):
+def test_get_above_item_returns_item(test_grid):
     """
-    * Verify: get_above_item() returns 'Axe' or 'Flamethrower' if present beneath Player
+    * Verify: get_above_item() returns an Axe or Flamethrower Entity if present beneath Player
     """
     g = test_grid
     player = g.get_player()
@@ -72,9 +72,9 @@ def test_get_above_item_returns_name(test_grid):
     g.add_layer_to_coord(*player.get_pos(), axe)
     g.add_layer_to_coord(*player.get_pos(), player)
     result = player.get_above_item()
-    assert result in {"Axe", "Flamethrower"}
+    assert isinstance(result, ENTITIES["Axe"]) or isinstance(result, ENTITIES["Flamethrower"])
 
-def test_get_above_item_returns_false_when_empty(test_grid):
+def test_get_above_item_returns_false_when_not_collectible(test_grid):
     """
     * Verify: get_above_item() returns False when no item beneath Player
     """
