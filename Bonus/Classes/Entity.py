@@ -38,6 +38,8 @@ class Entity:
 
     def get_deadly(self): return self._is_deadly
 
+    def get_pushable(self, pusher): return self._is_pushable
+
     def get_passive(self): return self._is_passive
     
     # * Complex Getters

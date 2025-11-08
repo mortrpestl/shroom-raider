@@ -75,8 +75,8 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 break
 
     # update UI strings
-    holding_anything = f"Holding item {P.get_item().__class__.__name__}" if P.get_item() else None
-    item_here = f"Above item {P.get_above_item()}" if P.get_above_item() else "No items here"
+    # holding_anything = f"Holding item {P.get_item().__class__.__name__}" if P.get_item() else None
+    # item_here = f"Above item {P.get_above_item()}" if P.get_above_item() else "No items here"
 
     return item_here, holding_anything
 
@@ -128,7 +128,10 @@ def main():
 
     # optional args
     REPORT_FILE = args.report_file
-    dark_radius = args.darkness_radius
+    try:
+        dark_radius = int(args.darkness_radius)
+    except Exception:
+        dark_radius = None
 
     if args.stage_file == None: # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
@@ -141,13 +144,13 @@ def main():
 
         check_win_condition(P, G)
 
-        item_here, holding_anything = "No items here", None
-        stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+        #item_here, holding_anything = "No items here", None
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
-            item_here, holding_anything = parser(input(), P, G, level, stop_or_reset_only)
+            parser(input(), P, G, level, stop_or_reset_only)
             try:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
             except Exception:
                 stop_or_reset_only = False
             if G.get_is_cleared():
@@ -171,13 +174,13 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        item_here, holding_anything = "No items here", None
-        stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+        #item_here, holding_anything = "No items here", None
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
-            item_here, holding_anything = parser(input(), P, G, level, stop_or_reset_only)
+            parser(input(), P, G, level, stop_or_reset_only)
             try:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
             except Exception:
                 stop_or_reset_only = False
             if G.get_is_cleared():

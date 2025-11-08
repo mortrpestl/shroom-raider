@@ -4,6 +4,7 @@ class Flash(Entity):
 
     # * Attributes
     _is_collectable = True
+    _is_storable = True
     _is_passive = True
 
     leeway = 5 

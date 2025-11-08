@@ -126,7 +126,7 @@ class Grid:
                 flashes.append((pos, radius))
         return flashes
 
-    def _compute_display_for_cell(self, r: int, c: int, obj: Entity, player_pos: list[int], dark_radius: int|None, flashes: list, mode: str):
+    def _compute_display_for_cell(self, r: int, c: int, obj: Entity|None, player_pos: list[int], dark_radius: int|None, flashes: list, mode: str):
         display = self.get_display_symbol_of_obj(obj, mode) if obj else "　"
         distance = abs(player_pos[0] - r) + abs(player_pos[1] - c)
 
@@ -198,8 +198,7 @@ class Grid:
 {item_here + ' is here' if item_here != 'NoneType' else 'Nothing Here'}
 {f'Holding item {held_item}' if held_item != "NoneType" else "Not holding anything"}
 
-What will you do? 
-            """
+What will you do? """
             print(terminal_gui, end="")
 
         return win or lose
