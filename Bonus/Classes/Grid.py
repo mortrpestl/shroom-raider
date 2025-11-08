@@ -1,4 +1,5 @@
 import os
+from pygame import mixer as m
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 
