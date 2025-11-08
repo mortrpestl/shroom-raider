@@ -1,0 +1,248 @@
+PS C:\Users\mortrpestl\Desktop\Archives\mortrpestl\The UPper Hand\1st Year\1st Sem\CS11\cs11project\cs11-project-jugemu-jugemu> git merge origin/main
+Updating 04cbd5b..612ab17
+Fast-forward
+ .gitignore                                         |   6 +-
+ .../__pycache__/PlayerData.cpython-313.pyc         | Bin 5213 -> 0 bytes
+ .../__pycache__/PlayerData.cpython-314.pyc         | Bin 6799 -> 0 bytes
+ .../__pycache__/__init__.cpython-313.pyc           | Bin 252 -> 0 bytes
+ .../__pycache__/__init__.cpython-314.pyc           | Bin 254 -> 0 bytes
+ Bonus/Classes/Entities/Axe.py                      |   4 +-
+ Bonus/Classes/Entities/Flamethrower.py             |   7 +-
+ Bonus/Classes/Entities/Flash.py                    |   3 +-
+ Bonus/Classes/Entities/Mushroom.py                 |   8 +-
+ Bonus/Classes/Entities/PavedTile.py                |   4 +-
+ Bonus/Classes/Entities/Player.py                   | 143 ++++++--------
+ Bonus/Classes/Entities/Rock.py                     |  23 +--
+ Bonus/Classes/Entities/Tree.py                     |   7 +-
+ .../Entities/__pycache__/Axe.cpython-313.pyc       | Bin 802 -> 0 bytes
+ .../Entities/__pycache__/Axe.cpython-314.pyc       | Bin 854 -> 0 bytes
+ .../__pycache__/Flamethrower.cpython-313.pyc       | Bin 902 -> 0 bytes
+ .../__pycache__/Flamethrower.cpython-314.pyc       | Bin 954 -> 0 bytes
+ .../Entities/__pycache__/Mushroom.cpython-313.pyc  | Bin 1063 -> 0 bytes
+ .../Entities/__pycache__/Mushroom.cpython-314.pyc  | Bin 1122 -> 0 bytes
+ .../Entities/__pycache__/PavedTile.cpython-313.pyc | Bin 791 -> 0 bytes
+ .../Entities/__pycache__/PavedTile.cpython-314.pyc | Bin 843 -> 0 bytes
+ .../Entities/__pycache__/Player.cpython-313.pyc    | Bin 5971 -> 0 bytes
+ .../Entities/__pycache__/Player.cpython-314.pyc    | Bin 6473 -> 0 bytes
+ .../Entities/__pycache__/Rock.cpython-313.pyc      | Bin 2812 -> 0 bytes
+ .../Entities/__pycache__/Rock.cpython-314.pyc      | Bin 2938 -> 0 bytes
+ .../Entities/__pycache__/Stone.cpython-313.pyc     | Bin 1121 -> 0 bytes
+ .../Entities/__pycache__/Tree.cpython-313.pyc      | Bin 2017 -> 0 bytes
+ .../Entities/__pycache__/Tree.cpython-314.pyc      | Bin 2124 -> 0 bytes
+ .../Entities/__pycache__/Water.cpython-313.pyc     | Bin 803 -> 0 bytes
+ .../Entities/__pycache__/Water.cpython-314.pyc     | Bin 855 -> 0 bytes
+ .../__pycache__/import_entities.cpython-313.pyc    | Bin 624 -> 0 bytes
+ .../__pycache__/import_entities.cpython-314.pyc    | Bin 766 -> 0 bytes
+ Bonus/Classes/Entity.py                            |  80 ++++----
+ Bonus/Classes/Grid.py                              | 205 ++++++++++-----------
+ Bonus/Classes/__pycache__/Entity.cpython-313.pyc   | Bin 4585 -> 0 bytes
+ Bonus/Classes/__pycache__/Entity.cpython-314.pyc   | Bin 4887 -> 0 bytes
+ Bonus/Classes/__pycache__/Grid.cpython-313.pyc     | Bin 10309 -> 0 bytes
+ Bonus/Classes/__pycache__/Grid.cpython-314.pyc     | Bin 11091 -> 0 bytes
+ TEST.txt => Bonus/Levels/TEST.txt                  |   0
+ Bonus/MainMenu.py                                  |   2 +-
+ Bonus/Statistics/PlayerData.xlsx                   | Bin 5461 -> 5463 bytes
+ .../generate_tests_to_csv.cpython-314.pyc          | Bin 2556 -> 0 bytes
+ .../__pycache__/map_gen.cpython-314.pyc            | Bin 2743 -> 0 bytes
+ .../__pycache__/map_gen_modular.cpython-314.pyc    | Bin 2071 -> 0 bytes
+ .../__pycache__/maze_gen.cpython-314.pyc           | Bin 1258 -> 0 bytes
+ Bonus/Utils/Map Generators/map_gen_modular.py      |   4 +-
+ Bonus/__pycache__/LevelManager.cpython-314.pyc     | Bin 4195 -> 0 bytes
+ Bonus/__pycache__/__init__.cpython-314.pyc         | Bin 240 -> 0 bytes
+ Bonus/__pycache__/exit_codes.cpython-314.pyc       | Bin 330 -> 0 bytes
+ Bonus/__pycache__/level_selector.cpython-314.pyc   | Bin 9621 -> 0 bytes
+ Bonus/__pycache__/mainmenu.cpython-314.pyc         | Bin 7530 -> 0 bytes
+ Bonus/__pycache__/shroom_raider.cpython-314.pyc    | Bin 13487 -> 0 bytes
+ Bonus/shroom_raider.py                             | 124 +++++--------
+ Main/Classes/Entities/Axe.py                       |   4 +-
+ Main/Classes/Entities/Flamethrower.py              |   5 +-
+ Main/Classes/Entities/Mushroom.py                  |   8 +-
+ Main/Classes/Entities/PavedTile.py                 |   4 +-
+ Main/Classes/Entities/Player.py                    | 124 +++++--------
+ Main/Classes/Entities/Rock.py                      |  23 +--
+ Main/Classes/Entities/Tree.py                      |   7 +-
+ .../Entities/__pycache__/Axe.cpython-313.pyc       | Bin 802 -> 0 bytes
+ .../Entities/__pycache__/Axe.cpython-314.pyc       | Bin 731 -> 0 bytes
+ .../__pycache__/Flamethrower.cpython-313.pyc       | Bin 902 -> 0 bytes
+ .../__pycache__/Flamethrower.cpython-314.pyc       | Bin 831 -> 0 bytes
+ .../Entities/__pycache__/Mushroom.cpython-313.pyc  | Bin 1063 -> 0 bytes
+ .../Entities/__pycache__/Mushroom.cpython-314.pyc  | Bin 999 -> 0 bytes
+ .../Entities/__pycache__/PavedTile.cpython-313.pyc | Bin 791 -> 0 bytes
+ .../Entities/__pycache__/PavedTile.cpython-314.pyc | Bin 720 -> 0 bytes
+ .../Entities/__pycache__/Player.cpython-313.pyc    | Bin 5971 -> 0 bytes
+ .../Entities/__pycache__/Player.cpython-314.pyc    | Bin 6350 -> 0 bytes
+ .../Entities/__pycache__/Rock.cpython-313.pyc      | Bin 2812 -> 0 bytes
+ .../Entities/__pycache__/Rock.cpython-314.pyc      | Bin 2815 -> 0 bytes
+ .../Entities/__pycache__/Stone.cpython-313.pyc     | Bin 1121 -> 0 bytes
+ .../Entities/__pycache__/Tree.cpython-313.pyc      | Bin 2017 -> 0 bytes
+ .../Entities/__pycache__/Tree.cpython-314.pyc      | Bin 2124 -> 0 bytes
+ .../Entities/__pycache__/Water.cpython-313.pyc     | Bin 803 -> 0 bytes
+ .../Entities/__pycache__/Water.cpython-314.pyc     | Bin 732 -> 0 bytes
+ .../__pycache__/import_entities.cpython-313.pyc    | Bin 624 -> 0 bytes
+ .../__pycache__/import_entities.cpython-314.pyc    | Bin 766 -> 0 bytes
+ Main/Classes/Entity.py                             |  78 ++++----
+ Main/Classes/Grid.py                               | 152 +++++++--------
+ Main/Classes/__pycache__/Entity.cpython-313.pyc    | Bin 4579 -> 0 bytes
+ Main/Classes/__pycache__/Entity.cpython-314.pyc    | Bin 4764 -> 0 bytes
+ Main/Classes/__pycache__/Grid.cpython-313.pyc      | Bin 10303 -> 0 bytes
+ Main/Classes/__pycache__/Grid.cpython-314.pyc      | Bin 10968 -> 0 bytes
+ Main/TEST.txt                                      |  17 ++
+ .../conftest.cpython-313-pytest-8.4.2.pyc          | Bin 808 -> 0 bytes
+ .../__pycache__/conftest.cpython-314.pyc           | Bin 576 -> 0 bytes
+ .../test_Integrated.cpython-313-pytest-8.4.2.pyc   | Bin 9333 -> 0 bytes
+ .../__pycache__/test_Integrated.cpython-314.pyc    | Bin 9489 -> 0 bytes
+ Main/Tests/Integrated Tests/integrated_tests.xlsx  | Bin 22040 -> 22057 bytes
+ .../conftest.cpython-313-pytest-8.4.2.pyc          | Bin 1412 -> 0 bytes
+ .../__pycache__/conftest.cpython-314.pyc           | Bin 1200 -> 0 bytes
+ .../__pycache__/helper_classes.cpython-313.pyc     | Bin 2858 -> 0 bytes
+ .../__pycache__/helper_classes.cpython-314.pyc     | Bin 3244 -> 0 bytes
+ .../test_Axe.cpython-313-pytest-8.4.2.pyc          | Bin 14573 -> 0 bytes
+ .../__pycache__/test_Axe.cpython-314.pyc           | Bin 4657 -> 0 bytes
+ .../test_Entity.cpython-313-pytest-8.4.2.pyc       | Bin 252 -> 0 bytes
+ .../test_Flamethrower.cpython-313-pytest-8.4.2.pyc | Bin 9212 -> 0 bytes
+ .../__pycache__/test_Flamethrower.cpython-314.pyc  | Bin 3738 -> 0 bytes
+ .../test_Grid.cpython-313-pytest-8.4.2.pyc         | Bin 29210 -> 0 bytes
+ .../__pycache__/test_Grid.cpython-314.pyc          | Bin 8379 -> 0 bytes
+ .../test_Mushroom.cpython-313-pytest-8.4.2.pyc     | Bin 7923 -> 0 bytes
+ .../__pycache__/test_Mushroom.cpython-314.pyc      | Bin 2496 -> 0 bytes
+ .../test_PavedTile.cpython-313-pytest-8.4.2.pyc    | Bin 25235 -> 0 bytes
+ .../__pycache__/test_PavedTile.cpython-314.pyc     | Bin 5083 -> 0 bytes
+ .../test_Player.cpython-313-pytest-8.4.2.pyc       | Bin 29252 -> 0 bytes
+ .../__pycache__/test_Player.cpython-314.pyc        | Bin 10313 -> 0 bytes
+ .../test_Rock.cpython-313-pytest-8.4.2.pyc         | Bin 18964 -> 0 bytes
+ .../__pycache__/test_Rock.cpython-314.pyc          | Bin 5556 -> 0 bytes
+ .../test_Tree.cpython-313-pytest-8.4.2.pyc         | Bin 15767 -> 0 bytes
+ .../__pycache__/test_Tree.cpython-314.pyc          | Bin 4949 -> 0 bytes
+ .../test_Water.cpython-313-pytest-8.4.2.pyc        | Bin 8912 -> 0 bytes
+ .../__pycache__/test_Water.cpython-314.pyc         | Bin 3300 -> 0 bytes
+ Main/Tests/Unit Tests/test_Axe.py                  |   8 +-
+ Main/Tests/Unit Tests/test_Grid.py                 |  12 +-
+ Main/Tests/Unit Tests/test_Mushroom.py             |   2 +-
+ Main/Tests/Unit Tests/test_PavedTile.py            |  15 +-
+ Main/Tests/Unit Tests/test_Player.py               |  67 ++++---
+ Main/Tests/Unit Tests/test_Rock.py                 |  10 +-
+ Main/Tests/Unit Tests/test_Water.py                |  36 ++--
+ ...ster_shroom_raider.cpython-313-pytest-8.4.2.pyc | Bin 8312 -> 0 bytes
+ ...test_shroom_raider.cpython-313-pytest-8.4.2.pyc | Bin 8298 -> 0 bytes
+ .../generate_tests_to_csv.cpython-314.pyc          | Bin 2555 -> 0 bytes
+ .../__pycache__/map_gen.cpython-314.pyc            | Bin 2742 -> 0 bytes
+ .../__pycache__/map_gen_modular.cpython-314.pyc    | Bin 1800 -> 0 bytes
+ .../__pycache__/maze_gen.cpython-314.pyc           | Bin 1257 -> 0 bytes
+ Main/Utils/Map Generators/map_gen.py               |  51 -----
+ Main/Utils/Map Generators/map_gen_modular.py       |  37 ----
+ Main/Utils/Map Generators/maze_gen.py              |  19 --
+ .../{File Parsers => }/generate_tests_to_csv.py    |   0
+ .../shroom-raider-tests-jugemu-jugemu.xlsx         | Bin
+ Main/Utils/{File Parsers => }/unit_tests.xlsx      | Bin
+ Main/__pycache__/shroom_raider.cpython-314.pyc     | Bin 9716 -> 0 bytes
+ Main/shroom_raider.py                              |  59 +++---
+ __pycache__/misc_notes.cpython-314.pyc             | Bin 1393 -> 0 bytes
+ __pycache__/shroom_raider.cpython-313.pyc          | Bin 9224 -> 0 bytes
+ misc_notes.py                                      |  61 ------
+ requirements.txt                                   |   4 -
+ 139 files changed, 586 insertions(+), 837 deletions(-)
+ delete mode 100644 Bonus/Bonus_Classes/__pycache__/PlayerData.cpython-313.pyc
+ delete mode 100644 Bonus/Bonus_Classes/__pycache__/PlayerData.cpython-314.pyc
+ delete mode 100644 Bonus/Bonus_Classes/__pycache__/__init__.cpython-313.pyc
+ delete mode 100644 Bonus/Bonus_Classes/__pycache__/__init__.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Axe.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Axe.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Flamethrower.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Flamethrower.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Mushroom.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Mushroom.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/PavedTile.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/PavedTile.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Player.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Player.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Rock.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Rock.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Stone.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Tree.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Tree.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Water.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/Water.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/import_entities.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/Entities/__pycache__/import_entities.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/__pycache__/Entity.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/__pycache__/Entity.cpython-314.pyc
+ delete mode 100644 Bonus/Classes/__pycache__/Grid.cpython-313.pyc
+ delete mode 100644 Bonus/Classes/__pycache__/Grid.cpython-314.pyc
+ rename TEST.txt => Bonus/Levels/TEST.txt (100%)
+ delete mode 100644 Bonus/Utils/File Parsers/__pycache__/generate_tests_to_csv.cpython-314.pyc
+ delete mode 100644 Bonus/Utils/Map Generators/__pycache__/map_gen.cpython-314.pyc
+ delete mode 100644 Bonus/Utils/Map Generators/__pycache__/map_gen_modular.cpython-314.pyc
+ delete mode 100644 Bonus/Utils/Map Generators/__pycache__/maze_gen.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/LevelManager.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/__init__.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/exit_codes.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/level_selector.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/mainmenu.cpython-314.pyc
+ delete mode 100644 Bonus/__pycache__/shroom_raider.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Axe.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Axe.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Flamethrower.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Flamethrower.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Mushroom.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Mushroom.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/PavedTile.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/PavedTile.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Player.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Player.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Rock.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Rock.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Stone.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Tree.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Tree.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Water.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/Water.cpython-314.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/import_entities.cpython-313.pyc
+ delete mode 100644 Main/Classes/Entities/__pycache__/import_entities.cpython-314.pyc
+ delete mode 100644 Main/Classes/__pycache__/Entity.cpython-313.pyc
+ delete mode 100644 Main/Classes/__pycache__/Entity.cpython-314.pyc
+ delete mode 100644 Main/Classes/__pycache__/Grid.cpython-313.pyc
+ delete mode 100644 Main/Classes/__pycache__/Grid.cpython-314.pyc
+ create mode 100644 Main/TEST.txt
+ delete mode 100644 Main/Tests/Integrated Tests/__pycache__/conftest.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Integrated Tests/__pycache__/conftest.cpython-314.pyc
+ delete mode 100644 Main/Tests/Integrated Tests/__pycache__/test_Integrated.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Integrated Tests/__pycache__/test_Integrated.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/conftest.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/conftest.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/helper_classes.cpython-313.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/helper_classes.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Axe.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Axe.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Entity.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Flamethrower.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Flamethrower.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Grid.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Grid.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Mushroom.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Mushroom.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_PavedTile.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_PavedTile.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Player.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Player.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Rock.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Rock.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Tree.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Tree.cpython-314.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Water.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/Unit Tests/__pycache__/test_Water.cpython-314.pyc
+ delete mode 100644 Main/Tests/__pycache__/test_master_shroom_raider.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Tests/__pycache__/test_shroom_raider.cpython-313-pytest-8.4.2.pyc
+ delete mode 100644 Main/Utils/File Parsers/__pycache__/generate_tests_to_csv.cpython-314.pyc
+ delete mode 100644 Main/Utils/Map Generators/__pycache__/map_gen.cpython-314.pyc
+ delete mode 100644 Main/Utils/Map Generators/__pycache__/map_gen_modular.cpython-314.pyc
+ delete mode 100644 Main/Utils/Map Generators/__pycache__/maze_gen.cpython-314.pyc
+ delete mode 100644 Main/Utils/Map Generators/map_gen.py
+ delete mode 100644 Main/Utils/Map Generators/map_gen_modular.py
+ delete mode 100644 Main/Utils/Map Generators/maze_gen.py
+ rename Main/Utils/{File Parsers => }/generate_tests_to_csv.py (100%)
+ rename Main/Utils/{File Parsers => }/shroom-raider-tests-jugemu-jugemu.xlsx (100%)
+ rename Main/Utils/{File Parsers => }/unit_tests.xlsx (100%)
+ delete mode 100644 Main/__pycache__/shroom_raider.cpython-314.pyc
+ delete mode 100644 __pycache__/misc_notes.cpython-314.pyc
+ delete mode 100644 __pycache__/shroom_raider.cpython-313.pyc
+ delete mode 100644 misc_notes.py
