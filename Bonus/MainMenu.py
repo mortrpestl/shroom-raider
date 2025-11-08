@@ -1,6 +1,8 @@
 import os, sys, subprocess, tempfile, json, time
-from Bonus_Classes.PlayerData import Data
 import LevelManager
+
+from Bonus_Classes.PlayerData import Data
+from Bonus_Classes.Leaderboard import show_personal_leaderboard, show_general_leaderboard, show_level_leaderboard
 from exit_codes import EXIT_CODES
 
 HERE = os.path.dirname(__file__)
@@ -151,36 +153,43 @@ def main():
         if lvl=='q': 
             print("Quitting launcher."); 
             exit(EXIT_CODES["quit"])
-            
 
         while True:
-            #return code -> determines if ran successfully
-            return_code, report = launch_game_with_level(lvl)
-            wait(3)
-            clear_terminal()
 
+            #session start
+            start_time = time.time()
+            return_code, report = launch_game_with_level(lvl)
+            end_time = time.time()
+            wait(1.25)
+            clear_terminal()
+            #session end
+
+            #process session data
             if report:
-                pdata.apply_report_dict(report)
-                # print("updated data")
-            elif return_code in (EXIT_CODES["victory"],EXIT_CODES["defeat"]):
-                if return_code == EXIT_CODES["victory"]: 
-                    pdata.record_win()
-                pdata.record_move(0)
-                pdata.commit_session()
-                # print("saved data")
+                elapsed_time = float(end_time - start_time)
+                pdata.apply_report_dict(
+                    report,
+                    return_code=return_code,
+                    level_id=lvl["id"],
+                    elapsed_time=elapsed_time
+                )
 
             while True:
                 # the gameloop
-                print("""
-+---------------------------+
-|      LEVEL PROCESSED      |
-+---------------------------+
-| r - Replay Level          |
-| m - Return to Main Menu   |
-| s - View Statistics       |
-| q - Quit Launcher         |
-+---------------------------+
-""")
+                print(f"""
+            +---------------------------+
+            |      LEVEL PROCESSED      |
+            +---------------------------+
+            | r - Replay Level          |
+            | m - Return to Main Menu   |
+            | s - View Statistics       |
+            | p - Personal Leaderboard  |
+            | g - General Leaderboard   |
+            | l - Level Leaderboard     |
+            | q - Quit Launcher         |
+            +---------------------------+
+            """)
+
                 choice = input("Choose your option: ").strip().lower()
                 clear_terminal()
                 match choice:
@@ -190,8 +199,17 @@ def main():
                         show_statistics(pdata)
                         continue
                     case "q":
-                        print("Quitting launcher.")  # can change to more fancy text
+                        print("Quitting launcher.")  
                         exit(EXIT_CODES["quit"])
+                    case "p":
+                        show_personal_leaderboard(pdata)
+                        continue
+                    case "g":
+                        show_general_leaderboard()
+                        continue
+                    case "l":
+                        show_level_leaderboard(lvl["id"])
+                        continue
                     case _:
                         print("Invalid choice, try again.")
 
