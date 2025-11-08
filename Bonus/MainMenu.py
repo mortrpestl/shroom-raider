@@ -1,7 +1,8 @@
 import os, sys, subprocess, tempfile, json, time
+import LevelManager
+
 from Bonus_Classes.PlayerData import Data
 from Bonus_Classes.Leaderboard import show_personal_leaderboard, show_general_leaderboard, show_level_leaderboard
-import LevelManager
 from exit_codes import EXIT_CODES
 
 HERE = os.path.dirname(__file__)

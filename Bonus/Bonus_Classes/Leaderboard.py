@@ -1,4 +1,5 @@
 import os, json
+
 from Bonus_Classes.PlayerData import read_all_rows
 from Utils.general_utils import format_time, tabulate
 from LevelManager import get_level_title

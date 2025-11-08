@@ -1,19 +1,16 @@
-import os, json, pandas as pd, time
+import os, json, time
+import pandas as pd
+
 from exit_codes import EXIT_CODES
 from Utils.general_utils import format_time, tabulate
 from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
-HEADERS = [
-    "username","total_mushrooms_collected","total_tiles_walked",
-    "total_wins","total_times","total_seconds_played","completed_data"
-]
+HEADERS = ["username","total_mushrooms_collected","total_tiles_walked","total_wins","total_times","total_seconds_played","completed_data"]
 
 # * Pandas helpers
 def read_all_rows():
-    if not os.path.exists(EXCEL_FILE):
-        return []
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
     rows = df.to_dict(orient="records")
     for r in rows:
