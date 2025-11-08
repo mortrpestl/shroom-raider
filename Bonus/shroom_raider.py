@@ -1,6 +1,7 @@
 import sys, io, os, json, time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
+from keyboard import is_pressed as p
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -14,6 +15,32 @@ ENABLE_TEST_MODE = False
 LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
 MOVES_MADE = 0
+
+ACTIVE = False
+
+def check_movement():
+    global ACTIVE
+
+    keys = (p('w'), p('s'), p('a'), p('d'), p('p'), p('f'), p('shift+!'), p('q'))
+
+    keys_pressed = keys.count(True)
+
+    if keys_pressed == 1:
+        if not ACTIVE:
+            ACTIVE = True
+            if keys[0]: return 'w'
+            elif keys[1]: return 's'
+            elif keys[2]: return 'a'
+            elif keys[3]: return 'd'
+            elif keys[4]: return 'p'
+            elif keys[5]: return 'f'
+            elif keys[6]: return '!'
+            else: return 'q'
+    elif keys_pressed == 0:
+        ACTIVE = False
+        return None
+    else:
+        return None
 
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
@@ -138,19 +165,22 @@ def main():
         stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
-            parser(input(), P, G, level, stop_or_reset_only)
-            try:
-                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
-            except Exception:
-                stop_or_reset_only = False
-            if G.get_is_cleared():
-                print("CLEAR")
-                write_report(G, P, True, False)
-                sys.exit(EXIT_CODES["victory"])
-            if P.get_is_dead():
-                print("DEAD")
-                write_report(G, P, False, True)
-                sys.exit(EXIT_CODES["defeat"])
+            input = check_movement()
+            if input != None:
+                parser(input, P, G, level, stop_or_reset_only)
+                G.render(P, test_mode=ENABLE_TEST_MODE)
+                try:
+                    stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                except Exception:
+                    stop_or_reset_only = False
+                if G.get_is_cleared():
+                    print("CLEAR")
+                    write_report(G, P, True, False)
+                    sys.exit(EXIT_CODES["victory"])
+                if P.get_is_dead():
+                    print("DEAD")
+                    write_report(G, P, False, True)
+                    sys.exit(EXIT_CODES["defeat"])
 
     # file-based
     if args.stage_file != None:
@@ -167,17 +197,22 @@ def main():
         stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
-            parser(input(), P, G, level, stop_or_reset_only)
-            try:
-                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
-            except Exception:
-                stop_or_reset_only = False
-            if G.get_is_cleared():
-                write_report(G, P, True, False)
-                sys.exit(EXIT_CODES["victory"])
-            if P.get_is_dead():
-                write_report(G, P, False, True)
-                sys.exit(EXIT_CODES["defeat"])
+            input = check_movement()
+            G.render(P, test_mode=ENABLE_TEST_MODE)
+            if input != None:
+                parser(input, P, G, level, stop_or_reset_only)
+                try:
+                    stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                except Exception:
+                    stop_or_reset_only = False
+                if G.get_is_cleared():
+                    print("CLEAR")
+                    write_report(G, P, True, False)
+                    sys.exit(EXIT_CODES["victory"])
+                if P.get_is_dead():
+                    print("DEAD")
+                    write_report(G, P, False, True)
+                    sys.exit(EXIT_CODES["defeat"])
 
 if __name__ == "__main__":
     s.initAll()
