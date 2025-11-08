@@ -27,8 +27,6 @@ class Player(Entity):
     def get_item(self): return self.__item
 
     def set_item(self, item: Entity | None): self.__item = item
-    
-    def use_item(self): self.__item = None
 
     def get_mushroom_count(self): return self.__mushroom_count
 
@@ -61,6 +59,14 @@ class Player(Entity):
 
     # * Complex Setters
 
+    def use_item(self):
+        equipped = self.get_item()
+        if not equipped: return
+
+        elif equipped.get_passive(): equipped.use()
+
+        self.set_item(None)
+
     def collect_item(self):
         item = self.get_entity_below()
 
@@ -82,10 +88,13 @@ class Player(Entity):
     def set_pos(self, direction : str):
         if super().set_pos(direction):
             entity_below = self.get_entity_below()
-            if not entity_below: return True
-            elif entity_below.get_deadly():
-                self.kill()
-                self.destroy()
+            if entity_below:
+                if entity_below.get_deadly():
+                    self.kill()
+                    self.destroy()
+            
+            self.get_on_grid().set_player_pos(self.get_pos())
+
             return True
         else:
             return False
