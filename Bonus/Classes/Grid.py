@@ -13,7 +13,7 @@ class Grid:
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
         self.__is_cleared = False
-        self._dark_radius = dark_radius
+        self.__dark_radius = dark_radius
 
         # convert string to grid
         self.__grid_vis_map = [list(row) for row in map_data.strip().split('\n')]
@@ -38,7 +38,7 @@ class Grid:
         }
         self.initialization_map = {k[1]: (v, k[0]) for v, k in self.character_mapping.items()}
 
-        self._active_flashes = []  # flashes affect darkness only
+        self.__active_flashes = []  # flashes affect darkness only
 
         # initialize objects in grid
         for r in range(self.__map_rows):
@@ -53,6 +53,8 @@ class Grid:
 
     def get_player(self): return self.get_obj_in_coord(*self.__player_pos)
 
+    def get_player_pos(self): return self.__player_pos
+
     def get_grid_obj_map(self): return self.__grid_obj_map
 
     def get_layers_from_coord(self, r: int, c: int): return self.__grid_obj_map[r][c]
@@ -61,9 +63,11 @@ class Grid:
 
     def increment_total_mushrooms(self): self.__total_mushrooms += 1
 
-    def get_dark_radius(self): return self._dark_radius
+    def get_dark_radius(self): return self.__dark_radius
 
     def get_is_cleared(self): return self.__is_cleared
+
+    def get_active_flashes(self): return self.__active_flashes
 
     @staticmethod
     def get_grid_by_name(name: str):
@@ -99,7 +103,7 @@ class Grid:
     # * Misc
     def init_coord(self, symbol: str, coord: list):
         if symbol in Grid.EMPTY_TILES: return None, "　"
-        if symbol == 'L': self.__player_pos = coord
+        if symbol == 'L': self.set_player_pos(coord)
         if symbol == '+': self.increment_total_mushrooms()
 
         item = self.initialization_map.get(symbol)
@@ -110,54 +114,46 @@ class Grid:
 
         return item_type(coord, self, symbol), item_display_value
 
-    # * Flash / Darkness
+    # * Flash / Darkness Setters
     def register_flash(self, flash: Entity):
-        if flash not in self._active_flashes:
-            self._active_flashes.append(flash)
+        if flash not in self.__active_flashes:
+            self.__active_flashes.append(flash)
 
-    def _gather_active_flash_positions(self):
-        flashes = []
-        for fl in list(self._active_flashes):
-            try:
-                pos, radius = fl.get_pos(), fl.get_radius()
-            except Exception:
-                continue
-            if pos is not None and radius > 0:
-                flashes.append((pos, radius))
-        return flashes
+    def update_all_flashes(self):
+        for flash in self.__active_flashes:
+            flash.update_radius()
+            if flash.get_radius() <= 0:
+                self.__active_flashes.remove(flash)
 
-    def _compute_display_for_cell(self, r: int, c: int, obj: Entity|None, player_pos: list[int], dark_radius: int|None, flashes: list, mode: str):
+    # * Visualization Helpers
+    def __compute_display_for_cell(self, r: int, c: int, obj: Entity|None, mode: str):
         display = self.get_display_symbol_of_obj(obj, mode) if obj else "　"
-        distance = abs(player_pos[0] - r) + abs(player_pos[1] - c)
+        dark_radius = self.get_dark_radius()
 
-        # lit by flash?
-        if any(abs(fr[0][0] - r) + abs(fr[0][1] - c) <= fr[1] for fr in flashes):
+        # skip darkness logic if no dark_radius
+        if dark_radius == None: return display
+
+        # * DARKNESS LOGIC
+        # lit by flash? then display object
+        if any(abs(fl.get_pos()[0] - r) + abs(fl.get_pos()[1] - c) <= fl.get_radius() 
+               for fl in self.get_active_flashes()):
             return display
 
         # darken if dark_radius is set and outside radius
-        if dark_radius is not None and distance > dark_radius:
+        distance = abs(self.get_player_pos()[0] - r) + abs(self.get_player_pos()[1] - c)
+        if distance > dark_radius:
             display = "⬛" if mode == "emoji" else "#"
 
         return display
 
-    def visualize_map(self, mode: str ="emoji", dark_radius: (int | None) =None):
-        dark_radius = self._dark_radius if dark_radius is None else dark_radius
-        player_pos = self.__player_pos
-        flashes = self._gather_active_flash_positions()
+    def visualize_map(self, mode: str ="emoji"):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj = self.get_obj_in_coord(r, c)
-                self.__grid_user_display[r][c] = self._compute_display_for_cell(
-                    r, c, obj, player_pos, dark_radius, flashes, mode
+                self.__grid_user_display[r][c] = self.__compute_display_for_cell(
+                    r, c, obj, mode
                 )
 
-    def update_all_flashes(self):
-        for fl in list(self._active_flashes):
-            fl.update_radius()
-            if fl.get_radius() <= 0:
-                self._active_flashes.remove(fl)
-
-    # * Visualization Helpers
     def get_vis_map_as_str(self, mode: str ="ascii"):
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
@@ -171,7 +167,7 @@ class Grid:
         
         win, lose = (mushrooms_collected == total_mushrooms), p.get_is_dead()
 
-        self.visualize_map(dark_radius=self.get_dark_radius())
+        self.visualize_map()
 
         os.system("cls" if os.name == "nt" else "clear")
         for row in self.__grid_user_display:

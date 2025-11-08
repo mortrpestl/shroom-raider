@@ -18,7 +18,7 @@ def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
-def reset(level, dark_radius=10000):
+def reset(level, dark_radius=None):
     global G, P
     G = Grid("test", level, dark_radius=dark_radius)
     P = G.get_player()
@@ -26,10 +26,8 @@ def reset(level, dark_radius=10000):
 
 def parser(instructions, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
-    item_here, holding_anything = "No items here", None
 
-    if instructions is None:
-        return item_here, holding_anything
+    if instructions is None: return
 
     if isinstance(instructions, str):
         lines = instructions.splitlines() if "\n" in instructions else [instructions]
@@ -74,12 +72,6 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             if G.get_is_cleared() or P.get_is_dead():
                 break
 
-    # update UI strings
-    # holding_anything = f"Holding item {P.get_item().__class__.__name__}" if P.get_item() else None
-    # item_here = f"Above item {P.get_above_item()}" if P.get_above_item() else "No items here"
-
-    return item_here, holding_anything
-
 def write_report(G, P, win: bool, dead: bool):
     global REPORT_FILE, MOVES_MADE
     if not REPORT_FILE:
@@ -120,11 +112,9 @@ def main():
 
     argument_parser = ap()
     argument_parser.add_argument('-f', '--stage_file')
-    argument_parser.add_argument('-d', '--darkness_radius', default=10000)
+    argument_parser.add_argument('-d', '--darkness_radius', default=None)
     argument_parser.add_argument('-R', '--report_file', default=None)
     args = argument_parser.parse_args()
-
-
 
     # optional args
     REPORT_FILE = args.report_file
@@ -144,7 +134,6 @@ def main():
 
         check_win_condition(P, G)
 
-        #item_here, holding_anything = "No items here", None
         stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
@@ -174,7 +163,6 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        #item_here, holding_anything = "No items here", None
         stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
 
         while True:
