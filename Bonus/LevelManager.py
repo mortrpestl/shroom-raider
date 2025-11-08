@@ -48,22 +48,15 @@ def load_levels():
             lvl["id"] = idx
     return levels
 
-def list_level_titles(include_difficulty=False):
-    """Returns [(id, title)] or [(id, title, difficulty)]"""
-    levels = load_levels()
-    if include_difficulty:
-        return [(lvl["id"], lvl["title"], lvl.get("difficulty", "Normal")) for lvl in levels]
-    return [(lvl["id"], lvl["title"]) for lvl in levels]
-
-def get_level_by_index(index: int):
-    """0-based index into load_levels()"""
-    levels = load_levels()
-    if 0 <= index < len(levels):
-        return levels[index]
-    return None
-
 def get_level_by_id(level_id: int):
+    """Lookup a level by id."""
+
     for lvl in load_levels():
         if lvl.get("id") == level_id:
             return lvl
     return None
+
+def get_level_title(level_id: int):
+    """Return the title for a level id or None if not found."""
+    lvl = get_level_by_id(level_id)
+    return lvl["title"] if lvl else None
