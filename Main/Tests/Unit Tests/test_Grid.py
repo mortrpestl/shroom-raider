@@ -75,12 +75,12 @@ def test_get_obj_in_coord_raises_for_out_of_bounds(small_grid):
 def test_init_coord_creates_correct_objects_and_raises_for_invalid():
     """Verify init_coord produces correct objects and raises ValueError for unknown symbols."""
     g = Grid("tmp", "L.T\n.+.\nR~_")
-    obj, _ = g.init_coord('L', (0, 0))
+    obj, _ = g.init_coord('L', [0, 0])
     assert isinstance(obj, ENTITIES["Player"])
-    obj2, _ = g.init_coord('T', (0, 1))
+    obj2, _ = g.init_coord('T', [0, 1])
     assert isinstance(obj2, ENTITIES["Tree"])
     with pytest.raises(ValueError):
-        g.init_coord('Z', (0, 0))
+        g.init_coord('Z', [0, 0])
     
     # ! previous version, changed because of refactor in Grid.
     # entities = ENTITIES
