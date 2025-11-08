@@ -1,4 +1,5 @@
 from Classes.Entity import Entity
+from Classes.Grid import Grid
 
 
 class Tree(Entity):
@@ -7,15 +8,15 @@ class Tree(Entity):
     _is_collideable = True
     _is_burnable = True
 
-    def __init__(self, coord, on_grid, ascii='T'):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str ='T'):
 
-        super().__init__(coord, on_grid, ascii)
+        super().__init__(pos, on_grid, ascii)
 
     # * Simple Setter
     def chop(self): self.destroy()
 
     # * Complex Setter
-    def burn_connected(self, visited=None):
+    def burn_connected(self, visited: set | None =None):
 
         if visited is None:
             visited = set()
