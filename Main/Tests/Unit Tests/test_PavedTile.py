@@ -62,7 +62,10 @@ def test_player_moves_over_and_off_pavedtile(test_grid):
     paved = g.get_obj_in_coord(3, 2)
 
     # path (r,c): (1,2) → (1,3) → (2,3) → (3,3) → (3,2)
-    moved = player.set_pos(["d", "s", "s", "a"])
+    #moved = player.set_pos(["d", "s", "s", "a"])
+    moved = False
+    for inst in "dssa":
+        moved = player.set_pos(inst)
     assert moved is True
     assert player.get_pos() == [3, 2]
 
@@ -71,7 +74,9 @@ def test_player_moves_over_and_off_pavedtile(test_grid):
     assert paved in layers
 
     # Move back to start: reverse path
-    moved = player.set_pos(["a", "w", "w", "d"])
+    moved = False
+    for inst in "awwd":
+        moved = player.set_pos(inst)
     assert moved is True
     assert player.get_pos() == [1, 2]
 
@@ -90,7 +95,7 @@ def test_player_pushes_rock_onto_pavedtile(test_grid):
     rock = g.get_obj_in_coord(2, 2)
     paved = g.get_obj_in_coord(3, 2)
 
-    moved = player.set_pos(["s"])
+    moved = player.set_pos("s")
     assert moved is True
     assert player.get_pos() == [2, 2]
     assert rock.get_pos() == [3, 2]
@@ -111,11 +116,11 @@ def test_rock_moves_off_pavedtile(test_grid):
     paved = g.get_obj_in_coord(3, 2)
 
     # Push Rock onto PavedTile
-    assert player.set_pos(["s"]) is True
+    assert player.set_pos("s") is True
     assert rock.get_pos() == [3, 2]
 
     # Move Rock further down manually
-    moved = rock.set_pos(["s"])
+    moved = rock.set_pos("s")
     assert moved is True
     assert rock.get_pos() == [4, 2]
 

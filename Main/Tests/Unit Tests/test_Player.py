@@ -5,9 +5,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
+from Classes.Entity import Entity
 
 # Register entities
-ENTITIES = import_entities({"Player", "Axe", "Flamethrower", "Mushroom", "Water", "Tree"})
+ENTITIES = import_entities({"Player", "Axe", "Flamethrower", "Mushroom", "Water", "Tree", "PavedTile"})
 
 @pytest.fixture
 def test_grid():
@@ -62,64 +63,61 @@ def test_kill_sets_is_dead_flag(test_grid):
     player.kill()
     assert player.get_is_dead() == 1
 
-def test_get_above_item_returns_name(test_grid):
+def test_get_entity_below_returns_axe_if_present(test_grid):
     """
-    * Verify: get_above_item() returns 'Axe' or 'Flamethrower' if present beneath Player
+    * Verify: get_entity_below() returns Axe if present beneath Player
     """
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"](player.get_pos(), g)
     g.add_layer_to_coord(*player.get_pos(), axe)
     g.add_layer_to_coord(*player.get_pos(), player)
-    result = player.get_above_item()
-    assert result in {"Axe", "Flamethrower"}
+    result = player.get_entity_below()
+    assert isinstance(result, ENTITIES["Axe"])
 
-def test_get_above_item_returns_false_when_empty(test_grid):
+def test_get_entity_below_returns_mushroom_if_present(test_grid):
     """
-    * Verify: get_above_item() returns False when no item beneath Player
+    * Verify: get_entity_below() returns Mushroom if present beneath Player
     """
     g = test_grid
     player = g.get_player()
-    assert player.get_above_item() == False
-
-def test_get_above_mushroom_returns_object(test_grid):
-    """
-    * Verify: get_above_mushroom() returns Mushroom instance if present beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    shroom = ENTITIES["Mushroom"](player.get_pos(), g)
+    shroom= ENTITIES["Mushroom"](player.get_pos(), g)
     g.add_layer_to_coord(*player.get_pos(), shroom)
     g.add_layer_to_coord(*player.get_pos(), player)
-    result = player.get_above_mushroom()
+    result = player.get_entity_below()
     assert isinstance(result, ENTITIES["Mushroom"])
 
-def test_get_above_mushroom_returns_false_if_none(test_grid):
+def test_get_entity_below_returns_water_if_present(test_grid):
     """
-    * Verify: get_above_mushroom() returns False when no Mushroom beneath Player
-    """
-    g = test_grid
-    player = g.get_player()
-    assert player.get_above_mushroom() == False
-
-def test_get_above_water_returns_true(test_grid):
-    """
-    * Verify: get_above_water() returns True when Water is beneath Player
+    * Verify: get_entity_below() returns Water if present beneath Player
     """
     g = test_grid
     player = g.get_player()
     water = ENTITIES["Water"](player.get_pos(), g)
     g.add_layer_to_coord(*player.get_pos(), water)
     g.add_layer_to_coord(*player.get_pos(), player)
-    assert player.get_above_water() == True
+    result = player.get_entity_below()
+    assert isinstance(result, ENTITIES["Water"])
 
-def test_get_above_water_returns_false_if_none(test_grid):
+def test_get_entity_below_returns_paved_tile_if_present(test_grid):
     """
-    * Verify: get_above_water() returns False when no Water beneath Player
+    * Verify: get_entity_below() returns Paved Tile if present beneath Player
     """
     g = test_grid
     player = g.get_player()
-    assert player.get_above_water() == False
+    paved = ENTITIES["PavedTile"](player.get_pos(), g)
+    g.add_layer_to_coord(*player.get_pos(), paved)
+    g.add_layer_to_coord(*player.get_pos(), player)
+    result = player.get_entity_below()
+    assert isinstance(result, ENTITIES["PavedTile"])
+
+def test_get_entity_below_returns_none_when_on_empty_tile(test_grid):
+    """
+    * Verify: get_entity_below() returns None when no Entity (i.e. Empty Tile) beneath Player
+    """
+    g = test_grid
+    player = g.get_player()
+    assert player.get_entity_below() == None
 
 def test_collect_item_adds_to_player_and_removes_from_grid(test_grid):
     """
@@ -154,6 +152,19 @@ def test_get_movement_validity_out_of_bounds(test_grid):
     assert player.get_movement_validity("s", 5, 2) == False
     assert player.get_movement_validity("a", 2, -1) == False
     assert player.get_movement_validity("d", 2, 5) == False
+
+def test_get_movement_validity_against_tree(test_grid):
+    """
+    * Verify: Player cannot move to a Tree
+    """
+    g = test_grid
+    player = g.get_player()
+    tree = ENTITIES["Tree"]([2, 3], g)
+    g.add_layer_to_coord(2, 3, tree)
+
+    result = player.get_movement_validity("d", 2, 3)
+    assert result == False 
+    assert g.get_obj_in_coord(2, 3) == tree
 
 def test_get_movement_validity_with_flamethrower(test_grid):
     """

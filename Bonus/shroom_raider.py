@@ -1,4 +1,5 @@
 import sys, io, os, json, time
+from argparse import ArgumentParser as ap
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -9,26 +10,24 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 ENABLE_TEST_MODE = False
-LEVEL_NAME = "TEST"
+LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
-moves_made = 0
+MOVES_MADE = 0
 
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
-def reset(level, dark_radius=10000):
+def reset(level, dark_radius=None):
     global G, P
     G = Grid("test", level, dark_radius=dark_radius)
     P = G.get_player()
     return G, P
 
 def parser(instructions, P: Player, G: Grid, level, reset_only):
-    global moves_made
-    item_here, holding_anything = "No items here", None
+    global MOVES_MADE
 
-    if instructions is None:
-        return item_here, holding_anything
+    if instructions is None: return
 
     if isinstance(instructions, str):
         lines = instructions.splitlines() if "\n" in instructions else [instructions]
@@ -61,38 +60,26 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             # WASDP inputs
             if inst in "wasd":
                 moved = P.set_pos(inst)
-                if moved: moves_made += 1
+                if moved: MOVES_MADE += 1
             elif inst == "p": P.collect_item()
             elif inst == "f": P.use_item()
 
             # mushroom collection
-            if shroom := P.get_above_mushroom():
-                shroom.collect(P)
-
-            # water kills
-            if P.get_above_water():
-                P.destroy()
-                P.kill()
+            P.collect_shroom()
 
             # win/loss check
             check_win_condition(P, G)
             if G.get_is_cleared() or P.get_is_dead():
                 break
 
-    # update UI strings
-    holding_anything = f"Holding item {P.get_item().__class__.__name__}" if P.get_item() else None
-    item_here = f"Above item {P.get_above_item()}" if P.get_above_item() else "No items here"
-
-    return item_here, holding_anything
-
 def write_report(G, P, win: bool, dead: bool):
-    global REPORT_FILE, moves_made
+    global REPORT_FILE, MOVES_MADE
     if not REPORT_FILE:
         return
     try:
         payload = {
             "mushrooms_collected": P.get_mushroom_count(),
-            "moves_made": moves_made,
+            "moves_made": MOVES_MADE,
             "win": bool(win),
             "dead": bool(dead)
         }
@@ -121,41 +108,38 @@ args will always be used by default
 
 
 def main():
-    global G, P, REPORT_FILE, moves_made
+    global G, P, REPORT_FILE, MOVES_MADE
 
-    args = sys.argv[1:]
-    dark_radius = 10000
+    argument_parser = ap()
+    argument_parser.add_argument('-f', '--stage_file')
+    argument_parser.add_argument('-d', '--darkness_radius', default=None)
+    argument_parser.add_argument('-R', '--report_file', default=None)
+    args = argument_parser.parse_args()
 
-    # handle optional args
-    if "-R" in args:
-        idx = args.index("-R")
-        if idx + 1 < len(args):
-            REPORT_FILE = args[idx+1]
-            args = args[:idx] + args[idx+2:]
-    if "--dark" in args:
-        idx = args.index("--dark")
-        if idx + 1 < len(args):
-            try:
-                dark_radius = int(args[idx+1])
-            except ValueError:
-                pass
-            args = args[:idx] + args[idx+2:]
+    # optional args
+    REPORT_FILE = args.report_file
+    try:
+        dark_radius = int(args.darkness_radius)
+    except Exception:
+        dark_radius = None
 
-    if not args:
-        # interactive default: read TEST.txt next to this script
+    if args.stage_file == None: # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r,c = map(int, first_line.split())
             level = lvl_file.read()
+
         G = Grid(LEVEL_NAME, level)
         P = G.get_player()
+
         check_win_condition(P, G)
-        item_here, holding_anything = "No items here", None
-        stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+
         while True:
-            item_here, holding_anything = parser(input(), P, G, level, stop_or_reset_only)
+            parser(input(), P, G, level, stop_or_reset_only)
             try:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
             except Exception:
                 stop_or_reset_only = False
             if G.get_is_cleared():
@@ -166,39 +150,33 @@ def main():
                 print("DEAD")
                 write_report(G, P, False, True)
                 sys.exit(EXIT_CODES["defeat"])
-        return
 
     # file-based
-    if args[0] == "-f" and len(args) >= 2:
-        stage_file = args[1]
-        with open(stage_file, encoding="utf-8") as lvl_file:
+    if args.stage_file != None:
+
+        with open(args.stage_file, encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r,c = map(int, first_line.split())
             level = lvl_file.read()
-        G = Grid(stage_file, level, dark_radius=dark_radius)
+
+        G = Grid(args.stage_file, level, dark_radius)
         P = G.get_player()
         check_win_condition(P, G)
 
-        # possible input 1: -f <stage_file> (interactive manual mode)
-        if len(args) == 2:
-            item_here, holding_anything = "No items here", None
-            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
-            while True:
-                item_here, holding_anything = parser(input(), P, G, level, stop_or_reset_only)
-                try:
-                    stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
-                except Exception:
-                    stop_or_reset_only = False
-                if G.get_is_cleared():
-                    write_report(G, P, True, False)
-                    sys.exit(EXIT_CODES["victory"])
-                if P.get_is_dead():
-                    write_report(G, P, False, True)
-                    sys.exit(EXIT_CODES["defeat"])
-        else:
-            print("Invalid arguments. Use -f <stage_file> or interactive mode")
-    else:
-        print("Invalid arguments. Use -f <stage_file> or interactive mode")
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+
+        while True:
+            parser(input(), P, G, level, stop_or_reset_only)
+            try:
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+            except Exception:
+                stop_or_reset_only = False
+            if G.get_is_cleared():
+                write_report(G, P, True, False)
+                sys.exit(EXIT_CODES["victory"])
+            if P.get_is_dead():
+                write_report(G, P, False, True)
+                sys.exit(EXIT_CODES["defeat"])
 
 if __name__ == "__main__":
     P,G = None,None

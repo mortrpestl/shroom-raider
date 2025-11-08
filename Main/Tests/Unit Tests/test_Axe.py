@@ -38,7 +38,7 @@ def test_player_can_collect_axe(test_grid):
     axe = ENTITIES["Axe"]([2, 3], g)
     g.add_layer_to_coord(2, 3, axe)
 
-    player.set_pos(["d"])
+    player.set_pos("d")
     player.collect_item()
 
     assert player.get_item() == axe
@@ -57,7 +57,7 @@ def test_player_uses_axe_on_tree(test_grid):
     tree = ENTITIES["Tree"]([2, 3], g)
     g.add_layer_to_coord(2, 3, tree)
 
-    result = player.set_pos(["d"])
+    result = player.set_pos("d")
     assert result == True
     assert g.get_obj_in_coord(2, 3) != tree
     assert player.get_item() is None
@@ -77,13 +77,13 @@ def test_player_tries_to_use_axe_on_two_trees(test_grid):
     g.add_layer_to_coord(2, 4, tree2)
 
     # Move right to first tree
-    result = player.set_pos(["d"])
+    result = player.set_pos("d")
     assert result == True
     assert g.get_obj_in_coord(2, 3) != tree1
     assert player.get_item() is None
 
     # Attempt to move right to second tree without another Axe
-    result2 = player.set_pos(["d"])
+    result2 = player.set_pos("d")
     assert result2 == False
     # Tree2 should remain
     assert g.get_obj_in_coord(2, 4) == tree2

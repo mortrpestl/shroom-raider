@@ -116,7 +116,7 @@ def launch_game_with_level(level):
 
         # optional dark mode parameter
         if "dark_radius" in level:
-            cmd += ["--dark", str(level["dark_radius"])]
+            cmd += ["-d", str(level["dark_radius"])]
 
         print(f"\nRunning: {' '.join(cmd)}\n")
         return_code = subprocess.call(cmd)

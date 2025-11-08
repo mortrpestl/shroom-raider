@@ -2,6 +2,7 @@
 import sys
 import io
 import os
+from argparse import ArgumentParser as ap
 
 # ! the 2 lines of code below were written with AI assistance
 # ! Prompt: {diogn insert it here} 
@@ -57,7 +58,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             for ln in lines:
                 if ln != '?':
                     f.write(str(ln) + "\n")
-
+    
     for line in lines:
         for inst in line:
             inst = inst.lower()
@@ -86,31 +87,20 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
                 if P.get_item() is None:
                     P.collect_item()
 
-            if P.get_item():
-                holding_anything = f'Holding item {P.get_item().__class__.__name__}'
-            else:
-                holding_anything = None
-
-            if P.get_above_item():
-                item_here = f'Above item {P.get_above_item()}'
-            else:
-                item_here = 'No items here'
-
-            if shroom := P.get_above_mushroom():
-                shroom.collect(P)
-
-            if P.get_above_water():
-                P.destroy()
-                P.kill()
+            P.collect_shroom() # if applicable
 
             check_win_condition(P, G)
 
 def main():
     global G, P
 
-    args = sys.argv[1:]
+    argument_parser = ap()
+    argument_parser.add_argument('-f', '--stage_file')
+    argument_parser.add_argument('-m', '--movement_file')
+    argument_parser.add_argument('-o', '--output_file')
+    args = argument_parser.parse_args()
 
-    if not args:
+    if args.stage_file == None:
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip('\ufeff')
             r, c = map(int, first_line.split())
@@ -122,40 +112,33 @@ def main():
         check_win_condition(P, G)
 
         while True:
-            stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+            stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+            if stop_or_reset_only: exit()
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
-        return
 
-    # file-based modes (non-interactive)
-    if args[0] == "-f" and len(args) >= 2:
-        stage_file = args[1]
-
-        with open(stage_file, encoding="utf-8") as lvl_file:
+    elif args.stage_file != None:
+        with open(args.stage_file, encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip('\ufeff')
             r, c = map(int, first_line.split())
             level = lvl_file.read()
 
-        G = Grid(stage_file, level)
+        G = Grid('UserInput', level)
         P = G.get_player()
 
         check_win_condition(P, G)
 
-        # possible input 1: -f <stage_file> (interactive manual mode)
-        if len(args) == 2:
+        if args.movement_file == None or args.output_file == None:
+
             while True:
-                stop_or_reset_only = G.render(P, G, item_here, holding_anything, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                if stop_or_reset_only: exit()
                 parser(input(), P, G, level, stop_or_reset_only)
 
-        # possible input 2: -f <stage_file> -m <string_of_moves> -o <output_file>
-        # but process the moves with "input #1 semantics" (line-by-line), then emit final output once.
-        elif len(args) >= 6 and args[2] == "-m" and args[4] == "-o":
-            moves = args[3]    # may contain '\n' to indicate multiple input() lines (for testing), but the CS11 tester will probably not integrate this (we will be working under that assumption)
-            out_file = args[5]
+        elif args.movement_file != None and args.output_file != None:
+            parser(args.movement_file, P, G, level, reset_only=False)
 
-            parser(moves, P, G, level, reset_only=False)
-
-            with open(out_file, "w", encoding="utf-8") as f:
+            with open(args.output_file, "w", encoding="utf-8") as f:
                 f.write(f'{r} {c}\n')
                 if P.get_mushroom_count() == G.get_total_mushrooms():
                     f.write("CLEAR\n")

@@ -4,6 +4,7 @@ class Flash(Entity):
 
     # * Attributes
     _is_collectable = True
+    _is_storable = True
     _is_passive = True
 
     leeway = 5 
@@ -25,7 +26,7 @@ class Flash(Entity):
         Activate flash at player position
         """
 
-        player_pos = self.get_on_grid().get_player().get_pos()
+        player_pos = self.get_on_grid().get_player_pos()
         self._placed_pos = list(player_pos)
         self._current_radius = self._max_radius
         self._active = True

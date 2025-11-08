@@ -75,12 +75,12 @@ def test_get_obj_in_coord_raises_for_out_of_bounds(small_grid):
 def test_init_coord_creates_correct_objects_and_raises_for_invalid():
     """Verify init_coord produces correct objects and raises ValueError for unknown symbols."""
     g = Grid("tmp", "L.T\n.+.\nR~_")
-    obj, _ = g.init_coord('L', (0, 0))
+    obj, _ = g.init_coord('L', [0, 0])
     assert isinstance(obj, ENTITIES["Player"])
-    obj2, _ = g.init_coord('T', (0, 1))
+    obj2, _ = g.init_coord('T', [0, 1])
     assert isinstance(obj2, ENTITIES["Tree"])
     with pytest.raises(ValueError):
-        g.init_coord('Z', (0, 0))
+        g.init_coord('Z', [0, 0])
     
     # ! previous version, changed because of refactor in Grid.
     # entities = ENTITIES
@@ -110,9 +110,9 @@ def test_get_grid_by_name_returns_correct_instance_or_raises_keyerror(small_grid
 def test_render_behavior_returns_expected_values(small_grid):
     """Verify render output for dummy, winning, and losing players."""
     g = small_grid
-    assert g.render(DummyPlayer(), g, "", None, test_mode=True) == False
-    assert g.render(WinPlayer(g), g, "", None, test_mode=True) == True
-    assert g.render(LosePlayer(), g, "", None, test_mode=True) == True
+    assert g.render(DummyPlayer(), test_mode=True) == False
+    assert g.render(WinPlayer(g), test_mode=True) == True
+    assert g.render(LosePlayer(), test_mode=True) == True
 
 def test_top_layer_object_returns_correct_layer_after_pop(small_grid):
     """Ensure get_obj_in_coord returns topmost object, correctly updated after adding/popping layers."""

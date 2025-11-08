@@ -1,0 +1,17 @@
+15 15
+TTTTTTTTTTTTTTT
+T.........*...T
+T.TTT...TTTTT.T
+T.T+T...TTTTT.T
+T.TTT...TT+TT.T
+T..x....TTTTT.T
+T.......TTTTT.T
+T.....L.......T
+T........R....T
+T..R....~~~...T
+T.T.T...~+~...T
+T.T+T...~~~...T
+T.TTT.RR......T
+T....R..RRR...T
+T....R++++R...T
+TTTTTTTTTTTTTTT
