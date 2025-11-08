@@ -67,13 +67,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             elif inst == "f": P.use_item()
 
             # mushroom collection
-            if shroom := P.get_above_mushroom():
-                shroom.collect(P)
-
-            # water kills
-            if P.get_above_water():
-                P.destroy()
-                P.kill()
+            P.collect_shroom()
 
             # win/loss check
             check_win_condition(P, G)

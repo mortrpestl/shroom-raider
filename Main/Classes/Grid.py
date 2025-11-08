@@ -6,7 +6,7 @@ class Grid:
     
     # * Attributes
     GRID_LIST = dict()
-    EMPTY_TILES = '.' #can add other looks for empty tiles for future use
+    EMPTY_TILES = '.' # default empty tiles
 
     def __init__(self, name: str, map_data: str):
 
@@ -55,11 +55,11 @@ class Grid:
 
     def increment_total_mushrooms(self): self.__total_mushrooms += 1
 
+    def get_is_cleared(self): return self.__is_cleared
+    
     # * Complex Getters
 
     def pop_layer_from_coord(self, r: int, c: int,layer: int = -1): return self.get_grid_obj_map()[r][c].pop(layer)
-
-    def get_is_cleared(self): return self.__is_cleared
 
     @staticmethod
     def get_grid_by_name(name: str):
@@ -97,20 +97,13 @@ class Grid:
     # * Misc 
 
     def init_coord(self, symbol: str, coord: list):
-
-        if symbol in Grid.EMPTY_TILES:
-            return None, "　"
-        
-        if symbol == 'L':
-            self.__player_pos = coord
-
-        if symbol == '+':
-            self.increment_total_mushrooms()
+        if symbol in Grid.EMPTY_TILES: return None, "　"
+        if symbol == 'L': self.__player_pos = coord
+        if symbol == '+': self.increment_total_mushrooms()
 
         item = self.initialization_map.get(symbol)
 
-        if not item:
-            raise ValueError(f'Unknown type symbol: {symbol}')
+        if not item: raise ValueError(f'Unknown type symbol: {symbol}')
         
         item_type, item_display_value = item
 
@@ -140,7 +133,7 @@ class Grid:
     def render(self, p: Entity, test_mode: bool =False):
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
-        item_here = self.get_obj_in_coord(*p.get_pos(), -2).__class__.__name__ #element below player
+        item_here = p.get_entity_below().__class__.__name__ #element below player
         held_item = p.get_item().__class__.__name__
 
 
@@ -150,20 +143,28 @@ class Grid:
         self.visualize_map()
 
         os.system('cls' if os.name=='nt' else 'clear')
-
         for row in self.__grid_user_display:
             print(''.join(row))
 
         print(f'\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected')
 
-        if win:
-            print('You win!')
-            return True
-        elif lose:
-            print('You lose...')
-            return True
+        if win: print('You win!')
+        elif lose: print('You lose...')
+
         else:
-            terminal_gui = f"""\n[W] Move up\n[A] Move left\n[S] Move down\n[D] Move right\n[!] Reset\n\n{item_here + ' is here' if item_here != 'NoneType' else 'Nothing Here'}\n{f'Holding item {held_item}' if held_item != "NoneType" else "Not holding anything"}\n\nWhat will you do? """
+            terminal_gui = f"""
+[W] Move up
+[A] Move left
+[S] Move down
+[D] Move right
+[!] Reset
+
+{item_here + ' is here' if item_here != 'NoneType' else 'Nothing Here'}
+{f'Holding item {held_item}' if held_item != "NoneType" else "Not holding anything"}
+
+What will you do?
+            """
             print(terminal_gui,end='')
-            return False
+        
+        return win or lose
 
