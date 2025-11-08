@@ -1,5 +1,6 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
+import Utils.sounds as s
 
 
 class Tree(Entity):
@@ -13,7 +14,9 @@ class Tree(Entity):
         super().__init__(pos, on_grid, ascii)
 
     # * Simple Setter
-    def chop(self): self.destroy()
+    def chop(self): 
+        s.axe_sound()
+        self.destroy()
 
     # * Complex Setter
     def burn_connected(self, visited: set | None =None):
