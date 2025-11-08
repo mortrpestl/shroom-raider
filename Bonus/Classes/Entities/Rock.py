@@ -1,6 +1,7 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
+import Utils.sounds as s
 
 class Rock(Entity):
 
@@ -39,6 +40,7 @@ class Rock(Entity):
     # * Complex Setters
     def set_pos(self, direction: str):
         if super().set_pos(direction):
+            s.push_sound()
             entities = import_entities({"Water", "PavedTile"})
             on_grid = self.get_on_grid()
             r, c = self.get_pos()
@@ -53,6 +55,7 @@ class Rock(Entity):
                 on_grid.add_layer_to_coord(r, c, new_paved_tile) # Add new paved tile
             return True
         else:
+            s.failpush_sound()
             return False
 
 

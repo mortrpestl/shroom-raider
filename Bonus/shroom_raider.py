@@ -1,5 +1,6 @@
 import sys, io, os, json, time
 from argparse import ArgumentParser as ap
+import Utils.sounds as s
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -179,6 +180,8 @@ def main():
                 sys.exit(EXIT_CODES["defeat"])
 
 if __name__ == "__main__":
+    s.initAll()
+
     P,G = None,None
     if ENABLE_TEST_MODE:
         # test-mode logging setup (unchanged)
