@@ -2,6 +2,7 @@ import sys, io, os, json, time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 from keyboard import is_pressed as p
+from keyboard import block_key as b
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -19,6 +20,10 @@ MOVES_MADE = 0
 ACTIVE = False
 
 def render_and_flush(G, P): result = G.render(P, test_mode=ENABLE_TEST_MODE); sys.stdout.flush(); return result
+
+def block_keys():
+    for _ in range(1, 84):
+        b(_)
 
 def check_movement():
     global ACTIVE
@@ -166,6 +171,8 @@ def main():
 
         stop_or_reset_only = render_and_flush(G, P)
 
+        block_keys()
+
         while True:
             key_input = check_movement()
             if key_input != None:
@@ -174,6 +181,7 @@ def main():
                     stop_or_reset_only = render_and_flush(G, P)
                 except Exception:
                     stop_or_reset_only = False
+
                 if G.get_is_cleared():
                     print("CLEAR")
                     write_report(G, P, True, False)
@@ -197,6 +205,8 @@ def main():
 
         stop_or_reset_only = render_and_flush(G, P)
 
+        block_keys()
+
         while True:
             key_input = check_movement()
             if key_input != None:
@@ -205,6 +215,7 @@ def main():
                     stop_or_reset_only = render_and_flush(G, P)
                 except Exception:
                     stop_or_reset_only = False
+
                 if G.get_is_cleared():
                     print("CLEAR")
                     write_report(G, P, True, False)
