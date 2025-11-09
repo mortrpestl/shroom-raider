@@ -267,28 +267,19 @@ if __name__ == "__main__":
     args = argument_parser.parse_args()
 
     if args.stage_file is not None:
-        try:
-            # run game
-            cmd = [sys.executable, SHROOM_SCRIPT, "-f", args.stage_file]
 
-            # optional dark mode parameter
-            if args.darkness_radius is not None:
-                cmd += ["-d", str(args.darkness_radius)]
+        cmd = [sys.executable, SHROOM_SCRIPT, "-f", args.stage_file]
 
-            # optional report parameter
-            if args.report_file is not None:
-                cmd += ["-R", str(args.report_file)]
+        # optional dark mode parameter
+        if args.darkness_radius is not None:
+            cmd += ["-d", str(args.darkness_radius)]
 
-            print(f"\nRunning: {' '.join(cmd)}\n")
-            return_code = subprocess.call(cmd)
+        # optional report parameter
+        if args.report_file is not None:
+            cmd += ["-R", str(args.report_file)]
 
-        finally:
-            # cleans up temp files
-            for path in (args.stage_file, args.report_file):
-                if path is None:
-                    continue
+        print(f"\nRunning: {' '.join(cmd)}\n")
+        return_code = subprocess.call(cmd)
 
-                if os.path.exists(path):
-                    os.remove(path)
     else:
         main()
