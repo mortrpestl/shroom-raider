@@ -8,6 +8,9 @@ import Utils.sounds as s
 import Utils.movement as m
 from exit_codes import EXIT_CODES
 
+from Classes.Grid import Grid
+from Classes.Entities.Player import Player
+
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -62,7 +65,7 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     if inst in "wasd":
         moved = P.set_pos(inst)
         if moved: MOVES_MADE += 1
-    elif inst == "p": P.collect_item()
+    elif inst == "p" and P.get_item() is None: P.collect_item()
     elif inst == "f": P.use_item()
 
     # mushroom collection
