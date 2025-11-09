@@ -163,9 +163,9 @@ def test_get_movement_validity_out_of_bounds(test_grid):
     """
     g = test_grid
     player = g.get_player()
-    assert not player.get_movement_validity("w", -1, 2) 
-    assert not player.get_movement_validity("s", 5, 2) 
-    assert not player.get_movement_validity("a", 2, -1) 
+    assert not player.get_movement_validity("w", -1, 2)
+    assert not player.get_movement_validity("s", 5, 2)
+    assert not player.get_movement_validity("a", 2, -1)
     assert not player.get_movement_validity("d", 2, 5)
 
 
@@ -196,7 +196,7 @@ def test_get_movement_validity_with_flamethrower(test_grid):
     player.set_item(ENTITIES["Flamethrower"]([0, 0], g))
 
     result = player.get_movement_validity("d", 2, 3)
-    assert result 
+    assert result
     assert g.get_obj_in_coord(2, 3) != tree
     assert player.get_item() is None
 
