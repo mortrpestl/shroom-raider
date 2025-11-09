@@ -15,4 +15,4 @@
            .+*: :*+:.:=:    =*-.:*+.  :++-::--    .=+-:::. :*+. :*+:  
 
                               USERNAME
-                (Input nothing to enter as 'Guest'):
+                (Input nothing to enter as 'Guest'):  
