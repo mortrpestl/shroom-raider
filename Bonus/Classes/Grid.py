@@ -26,25 +26,6 @@ class Grid:
         ]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
 
-<<<<<<< HEAD
-        self.ENTITIES = import_entities({
-            "Player", "Tree", "Rock", "Mushroom", "Water",
-            "PavedTile", "Axe", "Flamethrower", "Flash",
-            "Log", "Ice"
-        })
-        self.character_mapping = { # for display
-                self.ENTITIES["Player"]: ("🧑", 'L'),
-                self.ENTITIES["Tree"]: ("🌲", 'T'),
-                self.ENTITIES["Mushroom"]: ("🍄", '+'),
-                self.ENTITIES["Rock"]: ("🪨 ", 'R'),
-                self.ENTITIES["Water"]: ("🟦", '~'),
-                self.ENTITIES["PavedTile"]: ("⬜", '_'),
-                self.ENTITIES["Axe"]: ("🪓", 'x'),
-                self.ENTITIES["Flamethrower"]: ("🔥", '*'),
-                self.ENTITIES["Flash"]: ("💡", "?"),
-                self.ENTITIES["Log"]: ("📦", "o"),
-                self.ENTITIES["Ice"]: ("🧊", "#")
-=======
         self.ENTITIES = import_entities(
             {
                 "Player",
@@ -71,7 +52,6 @@ class Grid:
         }
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
->>>>>>> origin
         }
 
         self.__active_flashes = []  # flashes affect darkness only
