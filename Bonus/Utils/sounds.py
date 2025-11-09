@@ -1,14 +1,23 @@
 from pygame import mixer as m
 from random import randint
 
+# regular game
 WALK = []
 PAVEDWALK = []
+ONITEM = None
 AXE, FLAMETHROWER, SHROOM, FLASH = None, None, None, None
-
 PUSH = []
 FAILPUSH = None
+DEATH = None
 
+# bonus
 FAE = None
+ICE = None
+LOG = None
+BOMB = None
+
+# menu
+MENU = None
 
 # used this to save on typing: AI
 # for every playsound function, add a small 0.75 second delay to everything
@@ -20,7 +29,7 @@ def path(filename: str):
 
 
 def initialize_walk_sounds():
-    global WALK, PAVEDWALK
+    global WALK, PAVEDWALK, PUSH, FAILPUSH, ONITEM, DEATH
     walk_filenames = [
         "emptytile_step1.mp3",
         "emptytile_step2.mp3",
@@ -34,6 +43,7 @@ def initialize_walk_sounds():
         "pavedtile_step2.mp3",
         "pavedtile_step3.mp3",
     ]
+    push_filenames = ["push1.mp3", "push2.mp3"]
 
     for a in walk_filenames:
         WALK.append(m.Sound(path(a)))
@@ -41,31 +51,41 @@ def initialize_walk_sounds():
     for a in paved_walk_filenames:
         PAVEDWALK.append(m.Sound(path(a)))
 
-
-def initialize_item_usages():
-    global AXE, FLAMETHROWER, SHROOM, FLASH
-
-    AXE = m.Sound(path("axe_tree.mp3"))
-    FLAMETHROWER = m.Sound(path("burn_tree.mp3"))
-    SHROOM = m.Sound(path("mushroom_collected.mp3"))
-    FLASH = m.Sound(path("use_flash1.mp3"))
-
-
-def initialize_push_and_fae():
-    global PUSH, FAILPUSH, FAE
-    push_filenames = ["push1.mp3", "push2.mp3"]
+    ONITEM = m.Sound(path('on_item.ogg'))
 
     for p in push_filenames:
         PUSH.append(m.Sound(path(p)))
 
     FAILPUSH = m.Sound(path("push_not_successful.mp3"))
+    DEATH = m.Sound(path("death.ogg"))
+
+
+def initialize_item_usages():
+    global AXE, FLAMETHROWER, SHROOM, FLASH
+
+    AXE = m.Sound(path("axe_tree.mp3"))
+    FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
+    SHROOM = m.Sound(path("mushroom_collected.mp3"))
+    FLASH = m.Sound(path("use_flash1.mp3"))
+
+
+def initialize_bonus():
+    global FAE, ICE, LOG, BOMB
     FAE = m.Sound(path("fae_circle_enter.mp3"))
+    ICE = m.Sound(path("ice.ogg"))
+    LOG = m.Sound(path("move_log.ogg"))
+    BOMB = m.Sound(path("bomb.ogg"))
+
+
+def initialize_menu():
+    global MENU
+    MENU = m.Sound(path("main_menu_click.mp3"))
 
 
 def initAll():
     m.init()
     initialize_walk_sounds()
-    initialize_push_and_fae()
+    initialize_bonus()
     initialize_item_usages()
 
 
@@ -81,6 +101,12 @@ def paved_walk():
     i = randint(0, len(PAVEDWALK) - 1)
 
     PAVEDWALK[i].play()
+
+
+def on_item_sound():
+    global ONITEM
+    if ONITEM:
+        ONITEM.play()
 
 
 # the following code was made using AI:
@@ -125,7 +151,41 @@ def failpush_sound():
         FAILPUSH.play()
 
 
+def death_sound():
+    global DEATH
+    if DEATH:
+        DEATH.play()
+
+
+# bonus
+
+
 def fae_sound():
     global FAE
     if FAE:
         FAE.play()
+
+
+def ice_sound():
+    global ICE
+    if ICE:
+        ICE.play()
+
+
+def log_sound():
+    global LOG
+    if LOG:
+        LOG.play()
+
+
+def bomb_sound():
+    global BOMB
+    if BOMB:
+        BOMB.play()
+
+
+# menu
+def menu_sound():
+    global MENU
+    if MENU:
+        MENU.play()
