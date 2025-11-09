@@ -1,46 +1,41 @@
-import sys
-import io
 import os
+import sys
+import subprocess
+import tempfile
 import json
 import time
+import LevelManager
 from argparse import ArgumentParser as ap
-import Utils.sounds as s
-import Utils.movement as m
+
+from Bonus_Classes.PlayerData import Data
+from Bonus_Classes.Leaderboard import (
+    show_personal_leaderboard,
+    show_general_leaderboard,
+    show_level_leaderboard,
+)
 from exit_codes import EXIT_CODES
 
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
+HERE = os.path.dirname(__file__)
+SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 
-# Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
-
-ENABLE_TEST_MODE = False
-LEVEL_NAME = "Levels/TEST"
-REPORT_FILE = None
-MOVES_MADE = 0
-
-ACTIVE = False
+# * Helper Functions
 
 
-def render_and_flush(G, P):
-    result = G.render(P, test_mode=ENABLE_TEST_MODE)
-    sys.stdout.flush()
-    return result
+def clear_terminal():
+    os.system("cls" if os.name == "nt" else "clear")
 
 
-def check_win_condition(P, G):
-    if P.get_mushroom_count() == G.get_total_mushrooms():
-        G.level_clear()
+def wait(seconds):
+    time.sleep(seconds)
 
 
-def reset(level, dark_radius=None):
-    global G, P
-    G = Grid("test", level, dark_radius=dark_radius)
-    P = G.get_player()
-    return G, P
+def print_and_wait(message, seconds=1):
+    print(message)
+    wait(seconds)
+    clear_terminal()
 
 
+<<<<<<< HEAD
 def parser(inst, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
 
@@ -66,12 +61,9 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     # WASDP inputs
     if inst in "wasd":
         moved = P.set_pos(inst)
-        if moved:
-            MOVES_MADE += 1
-    elif inst == "p":
-        P.collect_item()
-    elif inst == "f":
-        P.use_item()
+        if moved: MOVES_MADE += 1
+    elif inst == "p" and P.get_item() is None: P.collect_item()
+    elif inst == "f": P.use_item()
 
     # mushroom collection
     P.collect_shroom()
@@ -80,131 +72,253 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     check_win_condition(P, G)
     if G.get_is_cleared() or P.get_is_dead():
         return
+=======
+# * Advanced Helper Functions
+>>>>>>> 8d8cd90d9b064483b7bec962c82d862a0135c935
 
 
-def write_report(G, P, win: bool, dead: bool):
-    global REPORT_FILE, MOVES_MADE
-    if not REPORT_FILE:
-        return
+def show_statistics(pdata):
+    if pdata is None:
+        print("No statistics available.")
+    else:
+        print("\nPlayer statistics:")
+        print(pdata)
+
+
+# * Level List Helper Functions
+
+
+def print_levels_table(levels):
+    """
+    Print a summary of the levels.
+    """
+
+    headers = ["ID", "Title", "Description", "Difficulty"]
+    rows = []
+    for lvl in levels:
+        rows.append(
+            [
+                str(lvl.get("id", "")),
+                str(lvl.get("title", "")),
+                str(lvl.get("description", "")).replace("\n", " "),
+                str(lvl.get("difficulty", "Normal")),
+            ]
+        )
+
+    col_widths = []
+    for i, h in enumerate(headers):
+        max_cell = max(len(row[i]) for row in rows)
+        col_widths.append(max(len(h), max_cell))
+
+    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+    inner_width = len(header_line) + 2
+
+    print("+" + "-" * inner_width + "+")  # top
+    print(f"| {header_line} |")
+    print("|" + "-" * inner_width + "|")
+
+    for row in rows:
+        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
+        print(f"| {row_line} |")
+
+    print("+" + "-" * inner_width + "+")  # bottom
+
+
+# * Level Selection and Launching Functions
+
+
+def choose_level(levels):
+    """
+    Displays Level Select menu and returns chosen level dict or None on quit.
+    """
+
+    # if no levels
+    clear_terminal()
+    if not levels:
+        print("No levels found in Levels/")
+        return None
+
+    # if there is levels
+    print("""
++-------------------------+
+|      LEVEL SELECT       |
++-------------------------+
+""")
+    while True:
+        print_levels_table(levels)
+        choice = input("Select level ID or number (or 'q' to quit): ").strip()
+        if choice == "q":
+            return "q"
+        if choice.isdigit():
+            n = int(choice)
+            for lvl in levels:
+                if lvl.get("id") == n:
+                    return lvl
+            if 1 <= n <= len(levels):
+                return levels[n - 1]
+
+        print("Invalid choice.")
+        wait(1)
+        clear_terminal()
+
+
+def make_stage_file_from_grid(grid_text):
+    """
+    Creates: the file to send to shroom_raider.py from grid_text.
+    Returns: path to this temporary file, for sending to shroom_raider.py
+    """
+    if not grid_text.strip():
+        raise ValueError("Empty grid")
+
+    content = grid_text.strip() + "\n"
+    fd, path = tempfile.mkstemp(prefix="stage_", suffix=".txt", dir=HERE)
+    os.close(fd)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    return path
+
+
+def launch_game_with_level(level):
+    """
+    Send the level to shroom_raider.py
+    """
+    # create temp files to store level
+    stage_path = make_stage_file_from_grid(level["grid"])
+    report_fd, report_path = tempfile.mkstemp(
+        prefix="shroom_report_", suffix=".json", dir=HERE
+    )
+    os.close(report_fd)
+
     try:
-        payload = {
-            "mushrooms_collected": P.get_mushroom_count(),
-            "moves_made": MOVES_MADE,
-            "win": bool(win),
-            "dead": bool(dead),
-        }
-        tmp = REPORT_FILE + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(payload, f)
-            f.flush()
-            os.fsync(f.fileno())
-        try:
-            os.replace(tmp, REPORT_FILE)
-        except Exception:
-            with open(REPORT_FILE, "w", encoding="utf-8") as f:
-                json.dump(payload, f)
-    except Exception as e:
-        print(f"Failed to write report file {REPORT_FILE}: {e}")
+        # run game
+        cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
 
+        # optional dark mode parameter
+        if "dark_radius" in level:
+            cmd += ["-d", str(level["dark_radius"])]
 
-"""
-NOTE: 
+        print(f"\nRunning: {' '.join(cmd)}\n")
+        return_code = subprocess.call(cmd)
 
-Since shroom_raider.py here cannot be run (by the player) without MainMenu.py, I removed some unnecessary code (like having the args as its own if-statement, because now that is the default).
+        # load report
+        report = None
+        if os.path.getsize(report_path) > 0:
+            with open(report_path, "r", encoding="utf-8") as f:
+                report = json.load(f)
+        return return_code, report
+    finally:
+        # cleans up temp files
+        for path in (stage_path, report_path):
+            if os.path.exists(path):
+                os.remove(path)
 
-args will always be used by default
-
--R to assist in storing session statistics
--dark-radius to darken if there is a provided 'dark' param in the sheet
-"""
-
-
+# gameplay start + loop
 def main():
-    global G, P, REPORT_FILE, MOVES_MADE
+    print("""
++------------------------+
+|WELCOME TO SHROOM RAIDER|
++------------------------+
+          """)
 
+    username = (
+        input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
+    )
+    pdata = Data(username)
+
+    while True:
+        levels = LevelManager.load_levels()
+        lvl = choose_level(levels)
+
+        if lvl == "q":
+            print("Quitting launcher.")
+            exit(EXIT_CODES["quit"])
+
+        while True:
+            # session start
+            start_time = time.time()
+            return_code, report = launch_game_with_level(lvl)
+            end_time = time.time()
+            wait(1.25)
+            clear_terminal()
+            # session end
+
+            # process session data
+            if report:
+                elapsed_time = float(end_time - start_time)
+                pdata.apply_report_dict(
+                    report,
+                    return_code=return_code,
+                    level_id=lvl["id"],
+                    elapsed_time=elapsed_time,
+                )
+
+            while True:
+                # the gameloop
+                print("""
+            +---------------------------+
+            |      LEVEL PROCESSED      |
+            +---------------------------+
+            | r - Replay Level          |
+            | m - Return to Main Menu   |
+            | s - View Statistics       |
+            | p - Personal Leaderboard  |
+            | g - General Leaderboard   |
+            | l - Level Leaderboard     |
+            | q - Quit Launcher         |
+            +---------------------------+
+            """)
+
+                choice = input("Choose your option: ").strip().lower()
+                clear_terminal()
+                match choice:
+                    case "r" | "m":
+                        break
+                    case "s":
+                        show_statistics(pdata)
+                        continue
+                    case "q":
+                        print("Quitting launcher.")
+                        exit(EXIT_CODES["quit"])
+                    case "p":
+                        show_personal_leaderboard(pdata)
+                        continue
+                    case "g":
+                        show_general_leaderboard()
+                        continue
+                    case "l":
+                        show_level_leaderboard(lvl["id"])
+                        continue
+                    case _:
+                        print("Invalid choice, try again.")
+
+            if choice in ("r", "replay"):
+                continue  # continue playing the level
+            if choice in ("m", "menu"):  # stop and go back to menu
+                clear_terminal()
+                break
+
+
+if __name__ == "__main__":
     argument_parser = ap()
     argument_parser.add_argument("-f", "--stage_file")
     argument_parser.add_argument("-d", "--darkness_radius", default=None)
     argument_parser.add_argument("-R", "--report_file", default=None)
     args = argument_parser.parse_args()
 
-    # optional args
-    REPORT_FILE = args.report_file
-    try:
-        dark_radius = int(args.darkness_radius)
-    except Exception:
-        dark_radius = None
-
-    m.block_keys()
-
-    if args.stage_file is None:  # default interactive mode
-        with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
-            first_line = lvl_file.readline().lstrip("\ufeff")
-            r, c = map(int, first_line.split())
-            level = lvl_file.read()
-
-        G = Grid(LEVEL_NAME, level)
-        P = G.get_player()
-
-        check_win_condition(P, G)
-
-        stop_or_reset_only = render_and_flush(G, P)
-
-        while True:
-            key_input = m.check_movement()
-            if key_input is not None:
-                parser(key_input, P, G, level, stop_or_reset_only)
-                try:
-                    stop_or_reset_only = render_and_flush(G, P)
-                except Exception:
-                    stop_or_reset_only = False
-
-                if G.get_is_cleared():
-                    print("CLEAR")
-                    write_report(G, P, True, False)
-                    sys.exit(EXIT_CODES["victory"])
-                if P.get_is_dead():
-                    print("DEAD")
-                    write_report(G, P, False, True)
-                    sys.exit(EXIT_CODES["defeat"])
-
-    # file-based
     if args.stage_file is not None:
-        with open(args.stage_file, encoding="utf-8") as lvl_file:
-            first_line = lvl_file.readline().lstrip("\ufeff")
-            r, c = map(int, first_line.split())
-            level = lvl_file.read()
 
-        G = Grid(args.stage_file, level, dark_radius)
-        P = G.get_player()
-        check_win_condition(P, G)
+        cmd = [sys.executable, SHROOM_SCRIPT, "-f", args.stage_file]
 
-        stop_or_reset_only = render_and_flush(G, P)
+        # optional dark mode parameter
+        if args.darkness_radius is not None:
+            cmd += ["-d", str(args.darkness_radius)]
 
-        while True:
-            key_input = m.check_movement()
-            if key_input is not None:
-                parser(key_input, P, G, level, stop_or_reset_only)
-                try:
-                    stop_or_reset_only = render_and_flush(G, P)
-                except Exception:
-                    stop_or_reset_only = False
+        # optional report parameter
+        if args.report_file is not None:
+            cmd += ["-R", str(args.report_file)]
 
-                if G.get_is_cleared():
-                    print("CLEAR")
-                    write_report(G, P, True, False)
-                    sys.exit(EXIT_CODES["victory"])
-                if P.get_is_dead():
-                    print("DEAD")
-                    write_report(G, P, False, True)
-                    sys.exit(EXIT_CODES["defeat"])
+        print(f"\nRunning: {' '.join(cmd)}\n")
+        return_code = subprocess.call(cmd)
 
-
-if __name__ == "__main__":
-    s.initAll()
-
-    P, G = None, None
-    if ENABLE_TEST_MODE:
-        # test-mode logging setup (unchanged)
-        os.makedirs("Logs", exist_ok=True)
-    main()
+    else:
+        main()
