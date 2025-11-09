@@ -12,7 +12,20 @@ def block_keys():
 def check_movement():
     global ACTIVE
 
+<<<<<<< HEAD
     keys = (p('w'), p('s'), p('a'), p('d'), p('p'), p('f'), p('shift+!'), p('shift+q'))
+=======
+    keys = (
+        p("w"),
+        p("s"),
+        p("a"),
+        p("d"),
+        p("p"),
+        p("f"),
+        p("shift+!"),
+        p("shift + q"),
+    )
+>>>>>>> 8d8cd90d9b064483b7bec962c82d862a0135c935
 
     keys_pressed = keys.count(True)
 
