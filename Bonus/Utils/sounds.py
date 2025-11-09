@@ -51,13 +51,13 @@ def initialize_walk_sounds():
     for a in paved_walk_filenames:
         PAVEDWALK.append(m.Sound(path(a)))
 
-    ONITEM = m.Sound('on_item.ogg')
+    ONITEM = m.Sound("on_item.ogg")
 
     for p in push_filenames:
         PUSH.append(m.Sound(path(p)))
 
     FAILPUSH = m.Sound(path("push_not_successful.mp3"))
-    DEATH = m.Sound(path('death.ogg'))
+    DEATH = m.Sound(path("death.ogg"))
 
 
 def initialize_item_usages():
@@ -72,13 +72,14 @@ def initialize_item_usages():
 def initialize_bonus():
     global FAE, ICE, LOG, BOMB
     FAE = m.Sound(path("fae_circle_enter.mp3"))
-    ICE = m.Sound(path('ice.off'))
-    LOG = m.Sound(path('move_log.ogg'))
-    BOMB = m.Sound(path('bomb.ogg'))
+    ICE = m.Sound(path("ice.off"))
+    LOG = m.Sound(path("move_log.ogg"))
+    BOMB = m.Sound(path("bomb.ogg"))
+
 
 def initialize_menu():
     global MENU
-    MENU = m.Sound(path('main_menu_click.mp3'))
+    MENU = m.Sound(path("main_menu_click.mp3"))
 
 
 def initAll():
@@ -101,10 +102,13 @@ def paved_walk():
 
     PAVEDWALK[i].play()
 
+
 def on_item_sound():
     global ONITEM
     if ONITEM:
         ONITEM.play()
+
+
 # the following code was made using AI:
 # prompt: make me functions to play all the rest of the sounds that I defined above. if there are multiple variants, then use the format I showed in walk_sound(), else, just play the sound from the global variable
 
@@ -146,34 +150,40 @@ def failpush_sound():
     if FAILPUSH:
         FAILPUSH.play()
 
+
 def death_sound():
     global DEATH
     if DEATH:
         DEATH.play()
 
-    
 
 # bonus
+
 
 def fae_sound():
     global FAE
     if FAE:
         FAE.play()
 
+
 def ice_sound():
     global ICE
     if ICE:
         ICE.play()
-    
+
+
 def log_sound():
     global LOG
     if LOG:
         LOG.play()
 
+
 def bomb_sound():
     global BOMB
     if BOMB:
         BOMB.play()
+
+
 # menu
 def menu_sound():
     global MENU
