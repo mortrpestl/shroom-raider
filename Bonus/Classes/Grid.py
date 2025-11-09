@@ -243,6 +243,6 @@ class Grid:
 
 What will you do? """
             print(terminal_gui, end="")
-            sys.stdout.flush() 
+            sys.stdout.flush()
 
         return win or lose

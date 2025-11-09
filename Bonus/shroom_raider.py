@@ -10,9 +10,6 @@ from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 from exit_codes import EXIT_CODES
 
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
-
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -21,8 +18,8 @@ ENABLE_TEST_MODE = False
 LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
 MOVES_MADE = 0
-
 ACTIVE = False
+
 
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
