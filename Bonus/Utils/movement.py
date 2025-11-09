@@ -3,9 +3,11 @@ from keyboard import block_key as b
 
 ACTIVE = False
 
+
 def block_keys():
     for _ in range(1, 84):
         b(_)
+
 
 def check_movement():
     global ACTIVE

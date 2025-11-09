@@ -2,8 +2,8 @@ from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 
+
 class Ice(Entity):
-    
     # * Attributes
     _is_pushable = True
     _is_collideable = True
@@ -21,19 +21,23 @@ class Ice(Entity):
             return False
 
     def get_movement_validity(self, direction: str, r: int, c: int):
-        if not self.in_bounds(r, c): return False
+        if not self.in_bounds(r, c):
+            return False
 
         # get the object
         target_obj = self.get_obj_in_coord(r, c)
-        
+
         # Is there nothing? then you are free to move
-        if target_obj == None: return True
-            
+        if target_obj is None:
+            return True
+
         # Is the object collideable, otherwise? then you cannot move to that.
-        elif target_obj.get_collideable(): return False
+        elif target_obj.get_collideable():
+            return False
 
         # Ice cannot move to collectables
-        elif target_obj.get_collectable(): return False
+        elif target_obj.get_collectable():
+            return False
 
         return super().get_movement_validity(direction, r, c)
 

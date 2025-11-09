@@ -22,9 +22,10 @@ MOVES_MADE = 0
 
 ACTIVE = False
 
-def render_and_flush(G, P): 
-    result = G.render(P, test_mode=ENABLE_TEST_MODE) 
-    sys.stdout.flush() 
+
+def render_and_flush(G, P):
+    result = G.render(P, test_mode=ENABLE_TEST_MODE)
+    sys.stdout.flush()
     return result
 
 
@@ -39,12 +40,13 @@ def reset(level, dark_radius=None):
     P = G.get_player()
     return G, P
 
+
 def parser(inst, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
 
     if ENABLE_TEST_MODE and inst == "?":
         # write some debug outputs and exit
-        with open("output_debug.txt","w",encoding="utf-8") as f:
+        with open("output_debug.txt", "w", encoding="utf-8") as f:
             f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
             f.write(G.get_vis_map_as_str())
         exit(EXIT_CODES["quit"])
@@ -132,7 +134,7 @@ def main():
 
     m.block_keys()
 
-    if args.stage_file is None: # default interactive mode
+    if args.stage_file is None:  # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -147,7 +149,7 @@ def main():
 
         while True:
             key_input = m.check_movement()
-            if key_input != None:
+            if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
                     stop_or_reset_only = render_and_flush(G, P)
@@ -178,7 +180,7 @@ def main():
 
         while True:
             key_input = m.check_movement()
-            if key_input != None:
+            if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
                     stop_or_reset_only = render_and_flush(G, P)
