@@ -51,7 +51,7 @@ def initialize_walk_sounds():
     for a in paved_walk_filenames:
         PAVEDWALK.append(m.Sound(path(a)))
 
-    ONITEM = m.Sound("on_item.ogg")
+    ONITEM = m.Sound(path('on_item.ogg'))
 
     for p in push_filenames:
         PUSH.append(m.Sound(path(p)))
@@ -72,7 +72,7 @@ def initialize_item_usages():
 def initialize_bonus():
     global FAE, ICE, LOG, BOMB
     FAE = m.Sound(path("fae_circle_enter.mp3"))
-    ICE = m.Sound(path("ice.off"))
+    ICE = m.Sound(path("ice.ogg"))
     LOG = m.Sound(path("move_log.ogg"))
     BOMB = m.Sound(path("bomb.ogg"))
 
