@@ -24,6 +24,7 @@ def cleanup_unit_tests():
     if os.path.exists(TEMP_DIR):
         shutil.rmtree(TEMP_DIR)
 
+
 """
 Integrated Testing
 
@@ -41,7 +42,8 @@ df.fillna("", inplace=True)
 # Ensure required columns exist in the Excel sheet
 required = {"Category", "ID", "Description", "Input Grid", "Input String", "Output"}
 missing = required - set(df.columns)
-if missing: raise ValueError(f"Missing columns in Excel file: {missing}")
+if missing:
+    raise ValueError(f"Missing columns in Excel file: {missing}")
 
 
 def extract_short_date(date_val):
@@ -51,8 +53,9 @@ def extract_short_date(date_val):
     Returns an empty string if the conversion fails or the value is invalid.
     """
     try:
-        dt = pd.to_datetime(date_val, errors='coerce')
-        if pd.isna(dt): return ""
+        dt = pd.to_datetime(date_val, errors="coerce")
+        if pd.isna(dt):
+            return ""
         return dt.strftime("%y-%m-%d")
     except Exception:
         return ""
@@ -76,9 +79,13 @@ def run_game_case(testcase):
     category = testcase["Category"]
     desc = testcase["Description"].strip()
     date = testcase.get("Day Added", "").strip()
-    grid_raw = testcase["Input Grid"].replace('\r\n', '\n').replace('\r', '\n').strip()
-    moves_raw = testcase["Input String"].replace('\r\n', '\n').replace('\r', '\n').rstrip("\n")
-    expected_output = testcase["Output"].replace('\r\n', '\n').replace('\r', '\n').strip()
+    grid_raw = testcase["Input Grid"].replace("\r\n", "\n").replace("\r", "\n").strip()
+    moves_raw = (
+        testcase["Input String"].replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
+    )
+    expected_output = (
+        testcase["Output"].replace("\r\n", "\n").replace("\r", "\n").strip()
+    )
 
     # Skip if input grid or expected output is missing
     if not grid_raw:
@@ -132,7 +139,9 @@ def run_game_case(testcase):
 
     # Raise error if output file is not created
     if not os.path.exists(tmp_out_path):
-        raise AssertionError(f"Expected output file not created by script for test {test_id}")
+        raise AssertionError(
+            f"Expected output file not created by script for test {test_id}"
+        )
 
     # Read the output
     with open(tmp_out_path, "r", encoding="utf-8", errors="ignore") as f:
@@ -141,7 +150,7 @@ def run_game_case(testcase):
     # Clean up temporary files
     os.remove(tmp_out_path)
     os.remove(level_path)
-    
+
     return expected_output, actual_output, desc, date, category
 
 
@@ -149,7 +158,7 @@ def run_game_case(testcase):
 params = [
     pytest.param(
         tc,
-        id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:24]:^24} | {tc['Description']:<90}"
+        id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:24]:^24} | {tc['Description']:<90}",
     )
     for tc in df.to_dict("records")
 ]
@@ -159,6 +168,7 @@ params = [
 #     pytest.param(tc, id=f"Integrated Test {tc['ID'].zfill(3)} | {tc['Category'][:12]:^24} | {tc['Description'][:50]:^50} | {tc.get('Day Added','')[:8]:^8}")
 #     for tc in df.to_dict("records")
 # ]
+
 
 @pytest.mark.parametrize("testcase", params)
 def test_shroom_case(testcase):
@@ -185,7 +195,9 @@ def test_shroom_case(testcase):
         for i in range(max_lines):
             exp = expected_lines[i] if i < len(expected_lines) else ""
             act = actual_lines[i] if i < len(actual_lines) else ""
-            comparison.append(f"{str(i+1):^{max_line_no_width}} | {exp:^40} | {act:^40}")
+            comparison.append(
+                f"{str(i + 1):^{max_line_no_width}} | {exp:^40} | {act:^40}"
+            )
 
         pretty_output = "\n".join(comparison)
         raise AssertionError(
@@ -195,4 +207,5 @@ def test_shroom_case(testcase):
             f"Test Case Added at Date: {date}\n"
             f"Description: {desc}\n"
             f"Moves:\n{moves}\n\n"
-            f"\n{pretty_output}\n")
+            f"\n{pretty_output}\n"
+        )

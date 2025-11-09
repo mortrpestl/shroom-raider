@@ -2,7 +2,11 @@ import os, sys, subprocess, tempfile, json, time
 import LevelManager
 
 from Bonus_Classes.PlayerData import Data
-from Bonus_Classes.Leaderboard import show_personal_leaderboard, show_general_leaderboard, show_level_leaderboard
+from Bonus_Classes.Leaderboard import (
+    show_personal_leaderboard,
+    show_general_leaderboard,
+    show_level_leaderboard,
+)
 from exit_codes import EXIT_CODES
 
 HERE = os.path.dirname(__file__)
@@ -10,19 +14,34 @@ SHROOM_SCRIPT = os.path.join(HERE, "shroom_raider.py")
 
 # * Helper Functions
 
-def clear_terminal(): os.system('cls' if os.name=='nt' else 'clear')
-def wait(seconds): time.sleep(seconds)
-def print_and_wait(message, seconds=1): print(message); wait(seconds); clear_terminal()
+
+def clear_terminal():
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def wait(seconds):
+    time.sleep(seconds)
+
+
+def print_and_wait(message, seconds=1):
+    print(message)
+    wait(seconds)
+    clear_terminal()
+
 
 # * Advanced Helper Functions
 
+
 def show_statistics(pdata):
-    if pdata == None: print("No statistics available.")
+    if pdata == None:
+        print("No statistics available.")
     else:
         print("\nPlayer statistics:")
         print(pdata)
 
+
 # * Level List Helper Functions
+
 
 def print_levels_table(levels):
     """
@@ -32,12 +51,14 @@ def print_levels_table(levels):
     headers = ["ID", "Title", "Description", "Difficulty"]
     rows = []
     for lvl in levels:
-        rows.append([
-            str(lvl.get("id", "")),
-            str(lvl.get("title", "")),
-            str(lvl.get("description", "")).replace("\n", " "),
-            str(lvl.get("difficulty", "Normal"))
-        ])
+        rows.append(
+            [
+                str(lvl.get("id", "")),
+                str(lvl.get("title", "")),
+                str(lvl.get("description", "")).replace("\n", " "),
+                str(lvl.get("difficulty", "Normal")),
+            ]
+        )
 
     col_widths = []
     for i, h in enumerate(headers):
@@ -47,7 +68,7 @@ def print_levels_table(levels):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+") # top
+    print("+" + "-" * inner_width + "+")  # top
     print(f"| {header_line} |")
     print("|" + "-" * inner_width + "|")
 
@@ -55,15 +76,17 @@ def print_levels_table(levels):
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
         print(f"| {row_line} |")
 
-    print("+" + "-" * inner_width + "+") # bottom
+    print("+" + "-" * inner_width + "+")  # bottom
+
 
 # * Level Selection and Launching Functions
+
 
 def choose_level(levels):
     """
     Displays Level Select menu and returns chosen level dict or None on quit.
     """
-    
+
     # if no levels
     clear_terminal()
     if not levels:
@@ -79,15 +102,21 @@ def choose_level(levels):
     while True:
         print_levels_table(levels)
         choice = input("Select level ID or number (or 'q' to quit): ").strip()
-        if choice == 'q': return 'q'
+        if choice == "q":
+            return "q"
         if choice.isdigit():
             n = int(choice)
             for lvl in levels:
-                if lvl.get("id") == n: return lvl
-            if 1<=n<=len(levels): return levels[n-1]
-            
-        print("Invalid choice."); wait(1); clear_terminal()
-        
+                if lvl.get("id") == n:
+                    return lvl
+            if 1 <= n <= len(levels):
+                return levels[n - 1]
+
+        print("Invalid choice.")
+        wait(1)
+        clear_terminal()
+
+
 def make_stage_file_from_grid(grid_text):
     """
     Creates: the file to send to shroom_raider.py from grid_text.
@@ -103,13 +132,16 @@ def make_stage_file_from_grid(grid_text):
         f.write(content)
     return path
 
+
 def launch_game_with_level(level):
     """
     Send the level to shroom_raider.py
     """
     # create temp files to store level
     stage_path = make_stage_file_from_grid(level["grid"])
-    report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
+    report_fd, report_path = tempfile.mkstemp(
+        prefix="shroom_report_", suffix=".json", dir=HERE
+    )
     os.close(report_fd)
 
     try:
@@ -135,6 +167,7 @@ def launch_game_with_level(level):
             if os.path.exists(path):
                 os.remove(path)
 
+
 # gameplay start + loop
 def main():
     print("""
@@ -142,36 +175,37 @@ def main():
 |WELCOME TO SHROOM RAIDER|
 +------------------------+
           """)
-    
-    username = input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
+
+    username = (
+        input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
+    )
     pdata = Data(username)
 
     while True:
         levels = LevelManager.load_levels()
         lvl = choose_level(levels)
 
-        if lvl=='q': 
-            print("Quitting launcher."); 
+        if lvl == "q":
+            print("Quitting launcher.")
             exit(EXIT_CODES["quit"])
 
         while True:
-
-            #session start
+            # session start
             start_time = time.time()
             return_code, report = launch_game_with_level(lvl)
             end_time = time.time()
             wait(1.25)
             clear_terminal()
-            #session end
+            # session end
 
-            #process session data
+            # process session data
             if report:
                 elapsed_time = float(end_time - start_time)
                 pdata.apply_report_dict(
                     report,
                     return_code=return_code,
                     level_id=lvl["id"],
-                    elapsed_time=elapsed_time
+                    elapsed_time=elapsed_time,
                 )
 
             while True:
@@ -199,7 +233,7 @@ def main():
                         show_statistics(pdata)
                         continue
                     case "q":
-                        print("Quitting launcher.")  
+                        print("Quitting launcher.")
                         exit(EXIT_CODES["quit"])
                     case "p":
                         show_personal_leaderboard(pdata)
@@ -213,11 +247,12 @@ def main():
                     case _:
                         print("Invalid choice, try again.")
 
-
-            if choice in ("r", "replay"): continue #continue playing the level
-            if choice in ("m", "menu"): #stop and go back to menu
+            if choice in ("r", "replay"):
+                continue  # continue playing the level
+            if choice in ("m", "menu"):  # stop and go back to menu
                 clear_terminal()
                 break
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

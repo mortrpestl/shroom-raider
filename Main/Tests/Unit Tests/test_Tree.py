@@ -1,12 +1,15 @@
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
 
-ENTITIES = import_entities({"Player","Tree","Mushroom","Rock","Water","PavedTile","Axe","Flamethrower"})
+ENTITIES = import_entities(
+    {"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"}
+)
 
 
 @pytest.fixture
@@ -23,6 +26,7 @@ def large_grid():
 """
     return Grid("large_tree_grid", map_data)
 
+
 def test_initialization_stores_position_and_flags(large_grid):
     """
     Verify tree construction and basic attributes.
@@ -32,13 +36,14 @@ def test_initialization_stores_position_and_flags(large_grid):
     - Assert Tree flags (_is_collideable, _is_burnable) are set.
     """
     g = large_grid
-    tree = ENTITIES["Tree"]((0,1), g)
-    g.add_layer_to_coord(0,1, tree)
+    tree = ENTITIES["Tree"]((0, 1), g)
+    g.add_layer_to_coord(0, 1, tree)
 
-    assert tree.get_pos() == [0,1]
+    assert tree.get_pos() == [0, 1]
     assert tree.get_on_grid() == g
     assert tree._is_collideable
     assert tree._is_burnable
+
 
 def test_tree_chop_removes_tree_from_grid(large_grid):
     """
@@ -49,12 +54,13 @@ def test_tree_chop_removes_tree_from_grid(large_grid):
     - Call chop() and confirm the cell is cleared (None).
     """
     g = large_grid
-    tree = ENTITIES["Tree"]((0,1), g)
-    g.add_layer_to_coord(0,1, tree)
+    tree = ENTITIES["Tree"]((0, 1), g)
+    g.add_layer_to_coord(0, 1, tree)
 
-    assert g.get_obj_in_coord(0,1) == tree
+    assert g.get_obj_in_coord(0, 1) == tree
     tree.chop()
-    assert g.get_obj_in_coord(0,1) is None
+    assert g.get_obj_in_coord(0, 1) is None
+
 
 def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
     """
@@ -68,17 +74,22 @@ def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
       * Distant Tree remains.
     """
     g = large_grid
-    tree1 = ENTITIES["Tree"]((0,1), g); g.add_layer_to_coord(0,1, tree1)
-    tree2 = ENTITIES["Tree"]((1,1), g); g.add_layer_to_coord(1,1, tree2)
-    tree3 = ENTITIES["Tree"]((1,3), g); g.add_layer_to_coord(1,3, tree3)
-    tree4 = ENTITIES["Tree"]((3,3), g); g.add_layer_to_coord(3,3, tree4)
+    tree1 = ENTITIES["Tree"]((0, 1), g)
+    g.add_layer_to_coord(0, 1, tree1)
+    tree2 = ENTITIES["Tree"]((1, 1), g)
+    g.add_layer_to_coord(1, 1, tree2)
+    tree3 = ENTITIES["Tree"]((1, 3), g)
+    g.add_layer_to_coord(1, 3, tree3)
+    tree4 = ENTITIES["Tree"]((3, 3), g)
+    g.add_layer_to_coord(3, 3, tree4)
 
     tree1.burn_connected()
 
-    assert g.get_obj_in_coord(0,1) is None
-    assert g.get_obj_in_coord(1,1) is None
-    assert g.get_obj_in_coord(1,3) == tree3
-    assert g.get_obj_in_coord(3,3) == tree4
+    assert g.get_obj_in_coord(0, 1) is None
+    assert g.get_obj_in_coord(1, 1) is None
+    assert g.get_obj_in_coord(1, 3) == tree3
+    assert g.get_obj_in_coord(3, 3) == tree4
+
 
 def test_tree_burn_following_orthogonal_chain_only(large_grid):
     """
@@ -91,16 +102,16 @@ def test_tree_burn_following_orthogonal_chain_only(large_grid):
       * Diagonally positioned Trees remain.
     """
     g = large_grid
-    positions = [(0,1),(1,1),(2,2),(3,3)]
+    positions = [(0, 1), (1, 1), (2, 2), (3, 3)]
     trees = []
-    for r,c in positions:
-        t = ENTITIES["Tree"]((r,c), g)
-        g.add_layer_to_coord(r,c, t)
+    for r, c in positions:
+        t = ENTITIES["Tree"]((r, c), g)
+        g.add_layer_to_coord(r, c, t)
         trees.append(t)
 
     trees[0].burn_connected()
 
-    assert g.get_obj_in_coord(0,1) is None
-    assert g.get_obj_in_coord(1,1) is None
-    assert g.get_obj_in_coord(2,2) == trees[2]
-    assert g.get_obj_in_coord(3,3) == trees[3]
+    assert g.get_obj_in_coord(0, 1) is None
+    assert g.get_obj_in_coord(1, 1) is None
+    assert g.get_obj_in_coord(2, 2) == trees[2]
+    assert g.get_obj_in_coord(3, 3) == trees[3]

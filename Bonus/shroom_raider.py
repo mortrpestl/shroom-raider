@@ -15,9 +15,11 @@ LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
 MOVES_MADE = 0
 
+
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
+
 
 def reset(level, dark_radius=None):
     global G, P
@@ -25,10 +27,12 @@ def reset(level, dark_radius=None):
     P = G.get_player()
     return G, P
 
+
 def parser(instructions, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
 
-    if instructions is None: return
+    if instructions is None:
+        return
 
     if isinstance(instructions, str):
         lines = instructions.splitlines() if "\n" in instructions else [instructions]
@@ -41,7 +45,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
 
             if ENABLE_TEST_MODE and inst == "?":
                 # write some debug outputs and exit
-                with open("output_debug.txt","w",encoding="utf-8") as f:
+                with open("output_debug.txt", "w", encoding="utf-8") as f:
                     f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
                     f.write(G.get_vis_map_as_str())
                 exit(EXIT_CODES["quit"])
@@ -61,9 +65,12 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             # WASDP inputs
             if inst in "wasd":
                 moved = P.set_pos(inst)
-                if moved: MOVES_MADE += 1
-            elif inst == "p": P.collect_item()
-            elif inst == "f": P.use_item()
+                if moved:
+                    MOVES_MADE += 1
+            elif inst == "p":
+                P.collect_item()
+            elif inst == "f":
+                P.use_item()
 
             # mushroom collection
             P.collect_shroom()
@@ -72,6 +79,7 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
             check_win_condition(P, G)
             if G.get_is_cleared() or P.get_is_dead():
                 break
+
 
 def write_report(G, P, win: bool, dead: bool):
     global REPORT_FILE, MOVES_MADE
@@ -82,19 +90,21 @@ def write_report(G, P, win: bool, dead: bool):
             "mushrooms_collected": P.get_mushroom_count(),
             "moves_made": MOVES_MADE,
             "win": bool(win),
-            "dead": bool(dead)
+            "dead": bool(dead),
         }
         tmp = REPORT_FILE + ".tmp"
-        with open(tmp,"w",encoding="utf-8") as f:
-            json.dump(payload,f)
-            f.flush(); os.fsync(f.fileno())
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f)
+            f.flush()
+            os.fsync(f.fileno())
         try:
             os.replace(tmp, REPORT_FILE)
         except Exception:
-            with open(REPORT_FILE,"w",encoding="utf-8") as f:
-                json.dump(payload,f)
+            with open(REPORT_FILE, "w", encoding="utf-8") as f:
+                json.dump(payload, f)
     except Exception as e:
         print(f"Failed to write report file {REPORT_FILE}: {e}")
+
 
 """
 NOTE: 
@@ -112,9 +122,9 @@ def main():
     global G, P, REPORT_FILE, MOVES_MADE
 
     argument_parser = ap()
-    argument_parser.add_argument('-f', '--stage_file')
-    argument_parser.add_argument('-d', '--darkness_radius', default=None)
-    argument_parser.add_argument('-R', '--report_file', default=None)
+    argument_parser.add_argument("-f", "--stage_file")
+    argument_parser.add_argument("-d", "--darkness_radius", default=None)
+    argument_parser.add_argument("-R", "--report_file", default=None)
     args = argument_parser.parse_args()
 
     # optional args
@@ -124,10 +134,10 @@ def main():
     except Exception:
         dark_radius = None
 
-    if args.stage_file == None: # default interactive mode
+    if args.stage_file == None:  # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
-            r,c = map(int, first_line.split())
+            r, c = map(int, first_line.split())
             level = lvl_file.read()
 
         G = Grid(LEVEL_NAME, level)
@@ -154,10 +164,9 @@ def main():
 
     # file-based
     if args.stage_file != None:
-
         with open(args.stage_file, encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
-            r,c = map(int, first_line.split())
+            r, c = map(int, first_line.split())
             level = lvl_file.read()
 
         G = Grid(args.stage_file, level, dark_radius)
@@ -179,11 +188,12 @@ def main():
                 write_report(G, P, False, True)
                 sys.exit(EXIT_CODES["defeat"])
 
+
 if __name__ == "__main__":
     s.initAll()
 
-    P,G = None,None
+    P, G = None, None
     if ENABLE_TEST_MODE:
         # test-mode logging setup (unchanged)
-        os.makedirs("Logs",exist_ok=True)
+        os.makedirs("Logs", exist_ok=True)
     main()

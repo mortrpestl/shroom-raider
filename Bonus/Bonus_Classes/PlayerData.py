@@ -7,7 +7,16 @@ from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
-HEADERS = ["username","total_mushrooms_collected","total_tiles_walked","total_wins","total_times","total_seconds_played","completed_data"]
+HEADERS = [
+    "username",
+    "total_mushrooms_collected",
+    "total_tiles_walked",
+    "total_wins",
+    "total_times",
+    "total_seconds_played",
+    "completed_data",
+]
+
 
 # * Pandas helpers
 def read_all_rows():
@@ -19,13 +28,19 @@ def read_all_rows():
             r["completed_data"] = "{}"
     return rows
 
+
 def write_all_rows(rows):
-    pd.DataFrame(rows, columns=HEADERS).to_excel(EXCEL_FILE, index=False, engine="openpyxl")
+    pd.DataFrame(rows, columns=HEADERS).to_excel(
+        EXCEL_FILE, index=False, engine="openpyxl"
+    )
+
 
 def safe_int(value):
     # important, or we will run into errors with empty cells (from experience)
-    if value is None or (isinstance(value, float) and pd.isna(value)): return 0
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return 0
     return int(value)
+
 
 class Data:
     def __init__(self, name):
@@ -64,13 +79,17 @@ class Data:
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
-                self.total_mushrooms_collected = safe_int(row.get("total_mushrooms_collected"))
+                self.total_mushrooms_collected = safe_int(
+                    row.get("total_mushrooms_collected")
+                )
                 self.total_tiles_walked = safe_int(row.get("total_tiles_walked"))
                 self.total_wins = safe_int(row.get("total_wins"))
                 self.total_times = safe_int(row.get("total_times"))
                 self.total_seconds_played = safe_int(row.get("total_seconds_played"))
 
-                self.completed_data = row.get("completed_data", "{}") or "{}" #the {} is the create part
+                self.completed_data = (
+                    row.get("completed_data", "{}") or "{}"
+                )  # the {} is the create part
                 try:
                     self.completed_levels = json.loads(self.completed_data)
                 except Exception:
@@ -127,10 +146,12 @@ class Data:
             "total_wins": self.total_wins,
             "total_times": self.total_times,
             "total_seconds_played": self.total_seconds_played,
-            "completed_data": self.completed_data
+            "completed_data": self.completed_data,
         }
 
-    def apply_report_dict(self, report, return_code=None, level_id=None, elapsed_time=0):
+    def apply_report_dict(
+        self, report, return_code=None, level_id=None, elapsed_time=0
+    ):
         # this updates regardless if you won, lost, or quit the game (aggregate stats)
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])

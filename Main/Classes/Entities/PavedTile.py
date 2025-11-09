@@ -1,5 +1,7 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
+
+
 class PavedTile(Entity):
-    def __init__(self, pos: list, on_grid: Grid, ascii: str ='_'):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str = "_"):
         super().__init__(pos, on_grid, ascii)
