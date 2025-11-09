@@ -5,10 +5,10 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 excel_path = os.path.join(base_dir, "shroom-raider-tests-jugemu-jugemu.xlsx")
 
-logs_dir = os.path.join(base_dir, "..","..","Logs")
+logs_dir = os.path.join(base_dir, "..", "..", "Logs")
 logs_dir = os.path.abspath(logs_dir)
 
-df = pd.read_excel(excel_path,dtype=str)
+df = pd.read_excel(excel_path, dtype=str)
 df["ID"] = df["ID"].astype(str)
 
 for folder in os.listdir(logs_dir):

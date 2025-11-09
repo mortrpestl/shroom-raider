@@ -5,6 +5,7 @@ HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
+
 def read_xlsx_levels():
     if not os.path.exists(LEVELS_XLSX):
         return []
@@ -22,23 +23,38 @@ def read_xlsx_levels():
     dark_col = cols.get("dark")
 
     for _, row in df.iterrows():
-        raw_grid = str(row[grid_col]).replace("\\n", "\n") if grid_col and not pd.isna(row[grid_col]) else ""
+        raw_grid = (
+            str(row[grid_col]).replace("\\n", "\n")
+            if grid_col and not pd.isna(row[grid_col])
+            else ""
+        )
 
-        difficulty = str(row[diff_col]).strip().title() if diff_col and not pd.isna(row[diff_col]) else "Normal"
+        difficulty = (
+            str(row[diff_col]).strip().title()
+            if diff_col and not pd.isna(row[diff_col])
+            else "Normal"
+        )
 
         # handle empty or missing dark radius
         dark_val = row[dark_col] if dark_col and not pd.isna(row[dark_col]) else None
         dark_radius = int(dark_val) if dark_val is not None else None
 
-        levels.append({
-            "id": int(row[id_col]) if id_col and not pd.isna(row[id_col]) else None,
-            "title": str(row[title_col]).strip() if title_col and not pd.isna(row[title_col]) else "UNTITLED",
-            "description": str(row[desc_col]).strip() if desc_col and not pd.isna(row[desc_col]) else "",
-            "difficulty": difficulty,
-            "grid": raw_grid,
-            "dark_radius": dark_radius
-        })
+        levels.append(
+            {
+                "id": int(row[id_col]) if id_col and not pd.isna(row[id_col]) else None,
+                "title": str(row[title_col]).strip()
+                if title_col and not pd.isna(row[title_col])
+                else "UNTITLED",
+                "description": str(row[desc_col]).strip()
+                if desc_col and not pd.isna(row[desc_col])
+                else "",
+                "difficulty": difficulty,
+                "grid": raw_grid,
+                "dark_radius": dark_radius,
+            }
+        )
     return levels
+
 
 def load_levels():
     """Returns a list of level dicts: {"id","title","description","difficulty","grid","dark_radius"}"""
@@ -48,22 +64,17 @@ def load_levels():
             lvl["id"] = idx
     return levels
 
-def list_level_titles(include_difficulty=False):
-    """Returns [(id, title)] or [(id, title, difficulty)]"""
-    levels = load_levels()
-    if include_difficulty:
-        return [(lvl["id"], lvl["title"], lvl.get("difficulty", "Normal")) for lvl in levels]
-    return [(lvl["id"], lvl["title"]) for lvl in levels]
-
-def get_level_by_index(index: int):
-    """0-based index into load_levels()"""
-    levels = load_levels()
-    if 0 <= index < len(levels):
-        return levels[index]
-    return None
 
 def get_level_by_id(level_id: int):
+    """Lookup a level by id."""
+
     for lvl in load_levels():
         if lvl.get("id") == level_id:
             return lvl
     return None
+
+
+def get_level_title(level_id: int):
+    """Return the title for a level id or None if not found."""
+    lvl = get_level_by_id(level_id)
+    return lvl["title"] if lvl else None

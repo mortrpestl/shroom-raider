@@ -1,14 +1,14 @@
 from Classes.Entity import Entity
 
-class Flash(Entity):
 
+class Flash(Entity):
     # * Attributes
     _is_collectable = True
     _is_storable = True
     _is_passive = True
 
-    leeway = 5 
-    
+    leeway = 5
+
     def __init__(self, pos, on_grid, ascii="?"):
         super().__init__(pos, on_grid, ascii)
         self._active = False
@@ -17,7 +17,7 @@ class Flash(Entity):
         grid = self.get_on_grid()
         rows = len(grid.get_grid_obj_map())
         cols = len(grid.get_grid_obj_map()[0])
-        self._max_radius = (cols + rows)//2
+        self._max_radius = (cols + rows) // 2
 
     # * Complex Functions
 
@@ -39,7 +39,7 @@ class Flash(Entity):
 
     def get_pos(self):
         return self._placed_pos if self._active else super().get_pos()
-    
+
     # * Simple Setters
     def update_radius(self):
         """

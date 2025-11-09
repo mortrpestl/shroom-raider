@@ -1,5 +1,6 @@
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pytest
@@ -62,7 +63,7 @@ def test_player_moves_over_and_off_pavedtile(test_grid):
     paved = g.get_obj_in_coord(3, 2)
 
     # path (r,c): (1,2) → (1,3) → (2,3) → (3,3) → (3,2)
-    #moved = player.set_pos(["d", "s", "s", "a"])
+    # moved = player.set_pos(["d", "s", "s", "a"])
     moved = False
     for inst in "dssa":
         moved = player.set_pos(inst)
