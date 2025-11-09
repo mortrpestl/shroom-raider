@@ -19,15 +19,7 @@ ENABLE_TEST_MODE = False
 LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
 MOVES_MADE = 0
-
 ACTIVE = False
-
-
-def render_and_flush(G, P):
-    result = G.render(P, test_mode=ENABLE_TEST_MODE)
-    sys.stdout.flush()
-    return result
-
 
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
@@ -146,14 +138,14 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        stop_or_reset_only = render_and_flush(G, P)
+        stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
             key_input = m.check_movement()
             if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
-                    stop_or_reset_only = render_and_flush(G, P)
+                    stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
                 except Exception:
                     stop_or_reset_only = False
 
