@@ -5,8 +5,7 @@ import json
 import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
+import Utils.movement as m
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -17,6 +16,13 @@ ENABLE_TEST_MODE = False
 LEVEL_NAME = "Levels/TEST"
 REPORT_FILE = None
 MOVES_MADE = 0
+
+ACTIVE = False
+
+def render_and_flush(G, P): 
+    result = G.render(P, test_mode=ENABLE_TEST_MODE) 
+    sys.stdout.flush() 
+    return result
 
 
 def check_win_condition(P, G):
@@ -30,58 +36,42 @@ def reset(level, dark_radius=None):
     P = G.get_player()
     return G, P
 
-
-def parser(instructions, P: Player, G: Grid, level, reset_only):
+def parser(inst, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
 
-    if instructions is None:
+    if ENABLE_TEST_MODE and inst == "?":
+        # write some debug outputs and exit
+        with open("output_debug.txt","w",encoding="utf-8") as f:
+            f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
+            f.write(G.get_vis_map_as_str())
+        exit(EXIT_CODES["quit"])
+
+    # non-WASDP inputs
+    if inst == "Q":
+        print("Quitting to main menu...", flush=True)
+        time.sleep(1.5)
+        exit(EXIT_CODES["quit"])
+
+    if inst == "!":
+        G, P = reset(level, dark_radius=G.get_dark_radius())
+
+    if reset_only:
         return
 
-    if isinstance(instructions, str):
-        lines = instructions.splitlines() if "\n" in instructions else [instructions]
-    else:
-        lines = list(instructions)
+    # WASDP inputs
+    if inst in "wasd":
+        moved = P.set_pos(inst)
+        if moved: MOVES_MADE += 1
+    elif inst == "p": P.collect_item()
+    elif inst == "f": P.use_item()
 
-    for line in lines:
-        for inst in line:
-            inst = inst.lower()
+    # mushroom collection
+    P.collect_shroom()
 
-            if ENABLE_TEST_MODE and inst == "?":
-                # write some debug outputs and exit
-                with open("output_debug.txt", "w", encoding="utf-8") as f:
-                    f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
-                    f.write(G.get_vis_map_as_str())
-                exit(EXIT_CODES["quit"])
-
-            # non-WASDP inputs
-            if inst == "q":
-                print("Quitting to main menu...", flush=True)
-                time.sleep(1.5)
-                exit(EXIT_CODES["quit"])
-            if inst == "!":
-                G, P = reset(level, dark_radius=G.get_dark_radius())
-            if reset_only:
-                break
-            if inst not in "wasdpf!":
-                break
-
-            # WASDP inputs
-            if inst in "wasd":
-                moved = P.set_pos(inst)
-                if moved:
-                    MOVES_MADE += 1
-            elif inst == "p":
-                P.collect_item()
-            elif inst == "f":
-                P.use_item()
-
-            # mushroom collection
-            P.collect_shroom()
-
-            # win/loss check
-            check_win_condition(P, G)
-            if G.get_is_cleared() or P.get_is_dead():
-                break
+    # win/loss check
+    check_win_condition(P, G)
+    if G.get_is_cleared() or P.get_is_dead():
+        return
 
 
 def write_report(G, P, win: bool, dead: bool):
@@ -137,7 +127,9 @@ def main():
     except Exception:
         dark_radius = None
 
-    if args.stage_file is None:  # default interactive mode
+    m.block_keys()
+
+    if args.stage_file is None: # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -148,22 +140,25 @@ def main():
 
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = render_and_flush(G, P)
 
         while True:
-            parser(input(), P, G, level, stop_or_reset_only)
-            try:
-                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
-            except Exception:
-                stop_or_reset_only = False
-            if G.get_is_cleared():
-                print("CLEAR")
-                write_report(G, P, True, False)
-                sys.exit(EXIT_CODES["victory"])
-            if P.get_is_dead():
-                print("DEAD")
-                write_report(G, P, False, True)
-                sys.exit(EXIT_CODES["defeat"])
+            key_input = m.check_movement()
+            if key_input != None:
+                parser(key_input, P, G, level, stop_or_reset_only)
+                try:
+                    stop_or_reset_only = render_and_flush(G, P)
+                except Exception:
+                    stop_or_reset_only = False
+
+                if G.get_is_cleared():
+                    print("CLEAR")
+                    write_report(G, P, True, False)
+                    sys.exit(EXIT_CODES["victory"])
+                if P.get_is_dead():
+                    print("DEAD")
+                    write_report(G, P, False, True)
+                    sys.exit(EXIT_CODES["defeat"])
 
     # file-based
     if args.stage_file is not None:
@@ -176,20 +171,25 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = render_and_flush(G, P)
 
         while True:
-            parser(input(), P, G, level, stop_or_reset_only)
-            try:
-                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
-            except Exception:
-                stop_or_reset_only = False
-            if G.get_is_cleared():
-                write_report(G, P, True, False)
-                sys.exit(EXIT_CODES["victory"])
-            if P.get_is_dead():
-                write_report(G, P, False, True)
-                sys.exit(EXIT_CODES["defeat"])
+            key_input = m.check_movement()
+            if key_input != None:
+                parser(key_input, P, G, level, stop_or_reset_only)
+                try:
+                    stop_or_reset_only = render_and_flush(G, P)
+                except Exception:
+                    stop_or_reset_only = False
+
+                if G.get_is_cleared():
+                    print("CLEAR")
+                    write_report(G, P, True, False)
+                    sys.exit(EXIT_CODES["victory"])
+                if P.get_is_dead():
+                    print("DEAD")
+                    write_report(G, P, False, True)
+                    sys.exit(EXIT_CODES["defeat"])
 
 
 if __name__ == "__main__":

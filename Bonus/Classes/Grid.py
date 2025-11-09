@@ -225,10 +225,10 @@ class Grid:
 
         if not win and not lose:
             terminal_gui = f"""
-[W] Move up
-[A] Move left
-[S] Move down
-[D] Move right
+[w] Move up
+[a] Move left
+[s] Move down
+[d] Move right
 [Q] Quit level{display_use_item}
 [!] Reset
 
