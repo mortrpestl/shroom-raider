@@ -29,8 +29,8 @@ def test_initialization_stores_position_and_flags(test_grid):
     * Verify: Water is not collideable, not collectable, and deadly
     """
     water = ENTITIES["Water"]([0, 0], test_grid)
-    assert not water.get_collideable() 
-    assert not water.get_collectable() 
+    assert not water.get_collideable()
+    assert not water.get_collectable()
     assert water._is_deadly
 
 

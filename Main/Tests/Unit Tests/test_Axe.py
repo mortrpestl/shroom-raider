@@ -90,6 +90,6 @@ def test_player_tries_to_use_axe_on_two_trees(test_grid):
 
     # Attempt to move right to second tree without another Axe
     result2 = player.set_pos("d")
-    assert not result2 
+    assert not result2
     # Tree2 should remain
     assert g.get_obj_in_coord(2, 4) == tree2
