@@ -12,7 +12,6 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignor
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 
-
 ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = "TEST"
 
