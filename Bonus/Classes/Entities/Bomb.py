@@ -1,5 +1,6 @@
 from Classes.Entity import Entity
 
+
 class Bomb(Entity):
     _is_collectable = True
     _is_storable = True
@@ -12,14 +13,14 @@ class Bomb(Entity):
         self._placed_pos = None
 
     def __repr__(self):
-        return f'{super().__repr__()} (with detonation radius: {self.get_radius()})'
+        return f"{super().__repr__()} (with detonation radius: {self.get_radius()})"
 
     def get_radius(self):
         return self._bomb_radius
 
     def increment_radius(self):
         self._bomb_radius += 3
-        
+
     def use(self):
         """
         Activates the bomb at the player's position and destroys nearby entities.
@@ -49,4 +50,3 @@ class Bomb(Entity):
         self._active = False
         self._placed_pos = None
         self.destroy()
-    

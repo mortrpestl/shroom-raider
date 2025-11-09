@@ -1,5 +1,6 @@
 import Utils.sounds as s
 
+
 class Entity:
     # * Attributes
     _is_collideable = (

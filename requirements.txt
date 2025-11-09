@@ -3,3 +3,4 @@ pandas
 openpyxl
 pygame 
 keyboard
+emoji

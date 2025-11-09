@@ -3,7 +3,7 @@ from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 import Utils.sounds as s
 
-needed = {"Flamethrower", "Axe", "Mushroom", "PavedTile","Bomb"}
+needed = {"Flamethrower", "Axe", "Mushroom", "PavedTile", "Bomb"}
 items = import_entities(needed)
 
 FLAMETHROWER = items["Flamethrower"]
@@ -32,7 +32,7 @@ class Player(Entity):
         return self.__item
 
     def set_item(self, item: Entity | None):
-        #specific check for bomb:
+        # specific check for bomb:
 
         if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
             self.get_item().increment_radius()

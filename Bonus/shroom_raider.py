@@ -173,6 +173,7 @@ def launch_game_with_level(level):
             if os.path.exists(path):
                 os.remove(path)
 
+
 # gameplay start + loop
 def main():
     print("""
@@ -267,7 +268,6 @@ if __name__ == "__main__":
     args = argument_parser.parse_args()
 
     if args.stage_file is not None:
-
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", args.stage_file]
 
         # optional dark mode parameter

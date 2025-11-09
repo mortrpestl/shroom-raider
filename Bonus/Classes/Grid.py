@@ -218,7 +218,9 @@ class Grid:
         for row in self.__grid_user_display:
             display.append("".join(row))
 
-        display.append(f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected")
+        display.append(
+            f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected"
+        )
         if win:
             display.append("You win!")
         if lose:
@@ -244,9 +246,9 @@ class Grid:
 
 What will you do? """
             display.append(terminal_gui)
-            if f: # if it is the FIRST time render is called, then animate the loading!
+            if f:  # if it is the FIRST time render is called, then animate the loading!
                 load_in("\n".join(display))
-            else: 
+            else:
                 print(("\n".join(display)))
             sys.stdout.flush()
 

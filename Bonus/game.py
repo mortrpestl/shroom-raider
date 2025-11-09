@@ -21,6 +21,7 @@ REPORT_FILE = None
 MOVES_MADE = 0
 ACTIVE = False
 
+
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
@@ -159,6 +160,7 @@ def main():
                     write_report(G, P, False, True)
                     time.sleep(1)
                     sys.exit(EXIT_CODES["defeat"])
+
 
 if __name__ == "__main__":
     s.initAll()

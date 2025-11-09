@@ -51,7 +51,7 @@ def initialize_walk_sounds():
     for a in paved_walk_filenames:
         PAVEDWALK.append(m.Sound(path(a)))
 
-    ONITEM = m.Sound(path('on_item.ogg'))
+    ONITEM = m.Sound(path("on_item.ogg"))
 
     for p in push_filenames:
         PUSH.append(m.Sound(path(p)))

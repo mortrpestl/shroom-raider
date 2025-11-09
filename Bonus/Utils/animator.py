@@ -1,5 +1,5 @@
 import os
-import time 
+import time
 import sys
 from emoji import is_emoji
 
@@ -29,7 +29,7 @@ def load_in(input_str):
 
     for i in range(height):
         __clear_terminal()
-        for j in range(i+1):
+        for j in range(i + 1):
             print(input_str[j])
             sys.stdout.flush()
         k = 0
@@ -45,4 +45,4 @@ def load_in(input_str):
                     print(wave[line].replace("=", "."))
                     sys.stdout.flush()
             k += 1
-        __wait(0.15) # delay for animation
+        __wait(0.15)  # delay for animation
