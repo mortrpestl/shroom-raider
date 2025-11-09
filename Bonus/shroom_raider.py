@@ -18,6 +18,8 @@ MOVES_MADE = 0
 
 ACTIVE = False
 
+def render_and_flush(G, P): result = G.render(P, test_mode=ENABLE_TEST_MODE); sys.stdout.flush(); return result
+
 def check_movement():
     global ACTIVE
 
@@ -162,15 +164,14 @@ def main():
 
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = render_and_flush(G, P)
 
         while True:
-            input = check_movement()
-            if input != None:
-                parser(input, P, G, level, stop_or_reset_only)
-                G.render(P, test_mode=ENABLE_TEST_MODE)
+            key_input = check_movement()
+            if key_input != None:
+                parser(key_input, P, G, level, stop_or_reset_only)
                 try:
-                    stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                    stop_or_reset_only = render_and_flush(G, P)
                 except Exception:
                     stop_or_reset_only = False
                 if G.get_is_cleared():
@@ -194,15 +195,14 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = render_and_flush(G, P)
 
         while True:
-            input = check_movement()
-            G.render(P, test_mode=ENABLE_TEST_MODE)
-            if input != None:
-                parser(input, P, G, level, stop_or_reset_only)
+            key_input = check_movement()
+            if key_input != None:
+                parser(key_input, P, G, level, stop_or_reset_only)
                 try:
-                    stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                    stop_or_reset_only = render_and_flush(G, P)
                 except Exception:
                     stop_or_reset_only = False
                 if G.get_is_cleared():
