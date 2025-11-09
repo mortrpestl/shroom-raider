@@ -6,6 +6,8 @@ import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 import Utils.movement as m
+from Classes.Entities.Player import Player
+from Classes.Grid import Grid
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
@@ -18,12 +20,6 @@ REPORT_FILE = None
 MOVES_MADE = 0
 
 ACTIVE = False
-
-def render_and_flush(G, P): 
-    result = G.render(P, test_mode=ENABLE_TEST_MODE) 
-    sys.stdout.flush() 
-    return result
-
 
 def check_win_condition(P, G):
     if P.get_mushroom_count() == G.get_total_mushrooms():
@@ -140,14 +136,14 @@ def main():
 
         check_win_condition(P, G)
 
-        stop_or_reset_only = render_and_flush(G, P)
+        stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
 
         while True:
             key_input = m.check_movement()
             if key_input != None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
-                    stop_or_reset_only = render_and_flush(G, P)
+                    stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
                 except Exception:
                     stop_or_reset_only = False
 
@@ -171,14 +167,14 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        stop_or_reset_only = render_and_flush(G, P)
+        stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
 
         while True:
             key_input = m.check_movement()
             if key_input != None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
-                    stop_or_reset_only = render_and_flush(G, P)
+                    stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
                 except Exception:
                     stop_or_reset_only = False
 

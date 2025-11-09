@@ -1,4 +1,4 @@
-import os
+import os, sys
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 
@@ -67,9 +67,6 @@ class Grid:
 
     # * Simple Getters
 
-    def get_player(self):
-        return self.get_obj_in_coord(*self.__player_pos)
-
     def get_player_pos(self):
         return self.__player_pos
 
@@ -101,6 +98,14 @@ class Grid:
         return Grid.GRID_LIST[name]
 
     # * Complex Getters
+    def get_player(self):
+        entity = self.get_obj_in_coord(*self.__player_pos)
+
+        if isinstance(entity, self.ENTITIES["Player"]):
+            return entity
+        else:
+            return None
+
     def pop_layer_from_coord(self, r: int, c: int, layer: int = -1):
         return self.get_grid_obj_map()[r][c].pop(layer)
 
@@ -196,7 +201,8 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity, test_mode: bool = False):
+    def render(self, test_mode: bool = False):
+        p = self.get_player()
         self.update_all_flashes()
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
@@ -237,5 +243,6 @@ class Grid:
 
 What will you do? """
             print(terminal_gui, end="")
+            sys.stdout.flush() 
 
         return win or lose
