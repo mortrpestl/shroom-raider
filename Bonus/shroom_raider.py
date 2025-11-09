@@ -1,14 +1,17 @@
-import sys, io, os, json, time
+import sys
+import io
+import os
+import json
+import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
+from Classes.Grid import Grid
+from Classes.Entities.Player import Player
 from exit_codes import EXIT_CODES
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
-
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
 
 ENABLE_TEST_MODE = False
 LEVEL_NAME = "Levels/TEST"
@@ -134,7 +137,7 @@ def main():
     except Exception:
         dark_radius = None
 
-    if args.stage_file == None:  # default interactive mode
+    if args.stage_file is None:  # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -163,7 +166,7 @@ def main():
                 sys.exit(EXIT_CODES["defeat"])
 
     # file-based
-    if args.stage_file != None:
+    if args.stage_file is not None:
         with open(args.stage_file, encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())

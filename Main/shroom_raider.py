@@ -3,14 +3,15 @@ import sys
 import io
 import os
 from argparse import ArgumentParser as ap
+from Classes.Grid import Grid
+from Classes.Entities.Player import Player
 
 # ! the 2 lines of code below were written with AI assistance
 # ! Prompt: {diogn insert it here}
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
+
 
 ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = "TEST"
@@ -101,7 +102,7 @@ def main():
     argument_parser.add_argument("-o", "--output_file")
     args = argument_parser.parse_args()
 
-    if args.stage_file == None:
+    if args.stage_file is None:
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -119,7 +120,7 @@ def main():
             # each input() returns one line; parser will process that line
             parser(input(), P, G, level, stop_or_reset_only)
 
-    elif args.stage_file != None:
+    elif args.stage_file is not None:
         with open(args.stage_file, encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -130,14 +131,14 @@ def main():
 
         check_win_condition(P, G)
 
-        if args.movement_file == None or args.output_file == None:
+        if args.movement_file is None or args.output_file is None:
             while True:
                 stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
                 if stop_or_reset_only:
                     exit()
                 parser(input(), P, G, level, stop_or_reset_only)
 
-        elif args.movement_file != None and args.output_file != None:
+        elif args.movement_file is not None and args.output_file is not None:
             parser(args.movement_file, P, G, level, reset_only=False)
 
             with open(args.output_file, "w", encoding="utf-8") as f:

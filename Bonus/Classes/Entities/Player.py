@@ -50,7 +50,7 @@ class Player(Entity):
 
         target_obj = self.get_obj_in_coord(r, c)
 
-        if target_obj == None:
+        if target_obj is None:
             return True
 
         if target_obj.get_burnable():

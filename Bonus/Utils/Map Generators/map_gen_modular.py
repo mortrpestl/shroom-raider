@@ -12,10 +12,10 @@ element_probabilities = {
 }
 
 elements = [
-    l
+    tile
     for (element, prob) in element_probabilities.items()
-    for a in list(prob * element)
-    for l in a
+    for generated_tiles in list(prob * element)
+    for tile in generated_tiles
 ]
 
 

@@ -1,15 +1,15 @@
 import sys
 import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
+from helper_classes import DummyPlayer
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
 
-from helper_classes import DummyPlayer, WinPlayer, LosePlayer
+
 
 
 @pytest.fixture
@@ -40,9 +40,9 @@ def test_initialization_stores_position_and_flags(test_grid):
 
     assert rock.get_pos() == [1, 1]
     assert rock.get_on_grid() == g
-    assert rock.get_collideable() == True
-    assert rock.get_pushable(DummyPlayer()) == True
-    assert rock.get_collectable() == False
+    assert rock.get_collideable()
+    assert rock.get_pushable(DummyPlayer())
+    assert not rock.get_collectable()
 
 
 def test_rock_push_into_empty_space_succeeds(test_grid):
@@ -58,7 +58,7 @@ def test_rock_push_into_empty_space_succeeds(test_grid):
     g.add_layer_to_coord(1, 1, rock)
 
     moved = rock.set_pos("s")
-    assert moved == True
+    assert moved
     assert g.get_obj_in_coord(2, 1) == rock
     assert g.get_obj_in_coord(1, 1) is None
 
@@ -76,11 +76,11 @@ def test_rock_cannot_move_outside_grid(test_grid):
     g.add_layer_to_coord(0, 0, rock)
 
     moved = rock.set_pos("w")
-    assert moved == False
+    assert not moved
     assert rock.get_pos() == [0, 0]
 
     moved = rock.set_pos("a")
-    assert moved == False
+    assert not moved
     assert rock.get_pos() == [0, 0]
 
 
@@ -101,7 +101,7 @@ def test_rock_push_into_water_converts_to_paved_tile(test_grid):
     g.add_layer_to_coord(2, 1, water)
 
     moved = rock.set_pos("s")
-    assert moved == True
+    assert moved
     target_obj = g.get_obj_in_coord(2, 1)
     assert target_obj is not None
     assert target_obj.__class__.__name__ == "PavedTile"
@@ -124,6 +124,6 @@ def test_rock_push_invalid_blocked_by_collectable(test_grid):
     g.add_layer_to_coord(2, 1, collectable)
 
     moved = rock.set_pos("s")
-    assert moved == False
+    assert not moved
     assert g.get_obj_in_coord(1, 1) == rock
     assert g.get_obj_in_coord(2, 1) == collectable

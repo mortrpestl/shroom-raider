@@ -1,4 +1,3 @@
-from Classes.Entities.import_entities import import_entities
 
 
 class Entity:
@@ -80,7 +79,7 @@ class Entity:
         target_obj = self.get_obj_in_coord(r, c)
 
         # Is there nothing? then you are free to move
-        if target_obj == None:
+        if target_obj is None:
             return True
 
         # Is the object pushable? then TRY to push that object.

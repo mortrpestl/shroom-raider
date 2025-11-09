@@ -1,17 +1,16 @@
 import sys
 import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
+from helper_classes import DummyPlayer, WinPlayer, LosePlayer
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 
 ENTITIES = import_entities(
     {"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"}
 )
-
-from helper_classes import DummyPlayer, WinPlayer, LosePlayer
 
 
 @pytest.fixture
@@ -124,9 +123,9 @@ def test_get_grid_by_name_returns_correct_instance_or_raises_keyerror(small_grid
 def test_render_behavior_returns_expected_values(small_grid):
     """Verify render output for dummy, winning, and losing players."""
     g = small_grid
-    assert g.render(DummyPlayer(), test_mode=True) == False
-    assert g.render(WinPlayer(g), test_mode=True) == True
-    assert g.render(LosePlayer(), test_mode=True) == True
+    assert not g.render(DummyPlayer(), test_mode=True)
+    assert g.render(WinPlayer(g), test_mode=True)
+    assert g.render(LosePlayer(), test_mode=True)
 
 
 def test_top_layer_object_returns_correct_layer_after_pop(small_grid):

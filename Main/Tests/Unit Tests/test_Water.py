@@ -29,29 +29,9 @@ def test_initialization_stores_position_and_flags(test_grid):
     * Verify: Water is not collideable, not collectable, and deadly
     """
     water = ENTITIES["Water"]([0, 0], test_grid)
-    assert water.get_collideable() == False
-    assert water.get_collectable() == False
-    assert water._is_deadly == True
-
-
-# def test_player_detects_water_above(test_grid):
-#     """
-#     * Verify: Player.get_above_water() returns True when Water is beneath Player
-#     """
-#     g = test_grid
-#     player = g.get_player()
-#     water = ENTITIES["Water"](player.get_pos(), g)
-#     g.add_layer_to_coord(*player.get_pos(), water)
-#     g.add_layer_to_coord(*player.get_pos(), player)
-#     assert player.get_above_water() == True
-
-# def test_player_no_water_above_returns_false(test_grid):
-#     """
-#     * Verify: Player.get_above_water() returns False when no Water beneath Player
-#     """
-#     g = test_grid
-#     player = g.get_player()
-#     assert player.get_above_water() == False
+    assert not water.get_collideable() 
+    assert not water.get_collectable() 
+    assert water._is_deadly
 
 
 def test_player_moving_into_water_is_deadly(test_grid):
@@ -68,6 +48,6 @@ def test_player_moving_into_water_is_deadly(test_grid):
     result = player.set_pos("d")
 
     # Player should have moved but is now dead
-    assert result == True
+    assert result
     assert player.get_pos() == [2, 3]  # matches Water's location
-    assert player.get_is_dead() == True
+    assert player.get_is_dead()

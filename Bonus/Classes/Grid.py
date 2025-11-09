@@ -1,5 +1,4 @@
 import os
-from pygame import mixer as m
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 
@@ -167,7 +166,7 @@ class Grid:
         dark_radius = self.get_dark_radius()
 
         # skip darkness logic if no dark_radius
-        if dark_radius == None:
+        if dark_radius is None:
             return display
 
         # * DARKNESS LOGIC
@@ -220,7 +219,7 @@ class Grid:
 
         # additional options
         display_use_item = ""
-        if p.get_item() != None:
+        if p.get_item() is not None:
             if p.get_item().get_passive():
                 display_use_item = f"\n[F] Use passive item {p.get_item()}"
 

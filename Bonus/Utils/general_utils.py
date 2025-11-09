@@ -38,11 +38,11 @@ def tabulate(headers, table, sep="|", lborder="|", rborder="|", max_width=20):
     final_lines = []
     for line in lines:
         if line.startswith("+"):
-            l = list(line)
-            for j in range(1, len(l) - 1):
-                if l[j] == "-" and l[j - 1] in "+|" and l[j + 1] in "+|":
-                    l[j] = "+"  # intersection points
-            final_lines.append("".join(l))
+            currLine = list(line)
+            for j in range(1, len(currLine) - 1):
+                if currLine[j] == "-" and currLine[j - 1] in "+|" and currLine[j + 1] in "+|":
+                    currLine[j] = "+"  # intersection points
+            final_lines.append("".join(currLine))
         else:
             final_lines.append(line)
     print("\n".join(final_lines) + "\n")

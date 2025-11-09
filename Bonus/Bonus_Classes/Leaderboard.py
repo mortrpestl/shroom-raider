@@ -1,4 +1,5 @@
-import os, json
+import os
+import json
 
 from Bonus_Classes.PlayerData import read_all_rows
 from Utils.general_utils import format_time, tabulate
@@ -37,7 +38,7 @@ def show_general_leaderboard():
     for p in players:
         try:
             p["completed_levels"] = json.loads(p.get("completed_data", "{}"))
-        except:
+        except Exception:
             p["completed_levels"] = {}
 
     players.sort(
@@ -85,7 +86,7 @@ def show_level_leaderboard(level_id):
     for p in players:
         try:
             completed = json.loads(p.get("completed_data", "{}"))
-        except:
+        except Exception:
             completed = {}
         if str(level_id) in completed:
             level_rows.append((p.get("username", ""), completed[str(level_id)]))

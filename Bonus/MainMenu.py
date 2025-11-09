@@ -1,4 +1,9 @@
-import os, sys, subprocess, tempfile, json, time
+import os
+import sys
+import subprocess
+import tempfile
+import json
+import time
 import LevelManager
 
 from Bonus_Classes.PlayerData import Data
@@ -33,7 +38,7 @@ def print_and_wait(message, seconds=1):
 
 
 def show_statistics(pdata):
-    if pdata == None:
+    if pdata is None:
         print("No statistics available.")
     else:
         print("\nPlayer statistics:")
@@ -210,7 +215,7 @@ def main():
 
             while True:
                 # the gameloop
-                print(f"""
+                print("""
             +---------------------------+
             |      LEVEL PROCESSED      |
             +---------------------------+

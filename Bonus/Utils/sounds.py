@@ -1,6 +1,5 @@
 from pygame import mixer as m
 from random import randint
-from time import sleep
 
 WALK = []
 PAVEDWALK = []

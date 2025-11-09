@@ -12,10 +12,10 @@ element_probabilities = {
 }
 
 elements = [
-    l
+    tile
     for (element, prob) in element_probabilities.items()
-    for a in list(prob * element)
-    for l in a
+    for generated_tiles in list(prob * element)
+    for tile in generated_tiles
 ]
 
 
@@ -38,7 +38,7 @@ def map_gen(R, C):
 def generate_n_maps(
     lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None, highest_C=None
 ):
-    if highest_R == None and highest_C == None:
+    if highest_R is None and highest_C is None:
         highest_R = lowest_R
         highest_C = lowest_C
     maps = []
