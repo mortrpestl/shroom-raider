@@ -2,8 +2,8 @@ from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 
+
 class Log(Entity):
-    
     # * Attributes
     _is_pushable = True
     _is_collideable = True
@@ -14,17 +14,19 @@ class Log(Entity):
     # * Complex Getters
 
     def get_movement_validity(self, direction: str, r: int, c: int):
-        if not self.in_bounds(r, c): return False
+        if not self.in_bounds(r, c):
+            return False
 
         target_obj = self.get_obj_in_coord(r, c)
 
-        if target_obj == None: return True
-        
+        if target_obj is None:
+            return True
+
         if target_obj.get_collectable():
-            return False # cannot move on collectables.
-        
+            return False  # cannot move on collectables.
+
         return super().get_movement_validity(direction, r, c)
-    
+
     def get_pushable(self, pusher: Entity):
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Log)):

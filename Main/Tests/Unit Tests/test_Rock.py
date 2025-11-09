@@ -10,8 +10,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
 
 
-
-
 @pytest.fixture
 def test_grid():
     """

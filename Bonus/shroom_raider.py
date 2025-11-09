@@ -10,6 +10,9 @@ from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 from exit_codes import EXIT_CODES
 
+from Classes.Grid import Grid
+from Classes.Entities.Player import Player
+
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -32,12 +35,13 @@ def reset(level, dark_radius=None):
     P = G.get_player()
     return G, P
 
+
 def parser(inst, P: Player, G: Grid, level, reset_only):
     global MOVES_MADE
 
     if ENABLE_TEST_MODE and inst == "?":
         # write some debug outputs and exit
-        with open("output_debug.txt","w",encoding="utf-8") as f:
+        with open("output_debug.txt", "w", encoding="utf-8") as f:
             f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
             f.write(G.get_vis_map_as_str())
         exit(EXIT_CODES["quit"])
@@ -57,9 +61,12 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     # WASDP inputs
     if inst in "wasd":
         moved = P.set_pos(inst)
-        if moved: MOVES_MADE += 1
-    elif inst == "p": P.collect_item()
-    elif inst == "f": P.use_item()
+        if moved:
+            MOVES_MADE += 1
+    elif inst == "p":
+        P.collect_item()
+    elif inst == "f":
+        P.use_item()
 
     # mushroom collection
     P.collect_shroom()
@@ -125,7 +132,7 @@ def main():
 
     m.block_keys()
 
-    if args.stage_file is None: # default interactive mode
+    if args.stage_file is None:  # default interactive mode
         with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
             first_line = lvl_file.readline().lstrip("\ufeff")
             r, c = map(int, first_line.split())
@@ -140,7 +147,7 @@ def main():
 
         while True:
             key_input = m.check_movement()
-            if key_input != None:
+            if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
                     stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)
@@ -171,7 +178,7 @@ def main():
 
         while True:
             key_input = m.check_movement()
-            if key_input != None:
+            if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
                 try:
                     stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE)

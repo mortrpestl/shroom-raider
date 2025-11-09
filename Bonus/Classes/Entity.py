@@ -1,5 +1,3 @@
-
-
 class Entity:
     # * Attributes
     _is_collideable = (
