@@ -35,46 +35,7 @@ def print_and_wait(message, seconds=1):
     clear_terminal()
 
 
-<<<<<<< HEAD
-def parser(inst, P: Player, G: Grid, level, reset_only):
-    global MOVES_MADE
-
-    if ENABLE_TEST_MODE and inst == "?":
-        # write some debug outputs and exit
-        with open("output_debug.txt", "w", encoding="utf-8") as f:
-            f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
-            f.write(G.get_vis_map_as_str())
-        exit(EXIT_CODES["quit"])
-
-    # non-WASDP inputs
-    if inst == "Q":
-        print("Quitting to main menu...", flush=True)
-        time.sleep(1.5)
-        exit(EXIT_CODES["quit"])
-
-    if inst == "!":
-        G, P = reset(level, dark_radius=G.get_dark_radius())
-
-    if reset_only:
-        return
-
-    # WASDP inputs
-    if inst in "wasd":
-        moved = P.set_pos(inst)
-        if moved: MOVES_MADE += 1
-    elif inst == "p" and P.get_item() is None: P.collect_item()
-    elif inst == "f": P.use_item()
-
-    # mushroom collection
-    P.collect_shroom()
-
-    # win/loss check
-    check_win_condition(P, G)
-    if G.get_is_cleared() or P.get_is_dead():
-        return
-=======
 # * Advanced Helper Functions
->>>>>>> 8d8cd90d9b064483b7bec962c82d862a0135c935
 
 
 def show_statistics(pdata):
