@@ -45,4 +45,4 @@ def load_in(input_str):
                     print(wave[line].replace("=", "."))
                     sys.stdout.flush()
             k += 1
-        __wait(0.15)
+        __wait(0.15) # delay for animation

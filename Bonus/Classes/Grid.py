@@ -1,4 +1,5 @@
 import os
+import sys
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
@@ -199,7 +200,8 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity, test_mode: bool = False, f=False):
+    def render(self, test_mode: bool = False, f=False):
+        p = self.get_player()
         self.update_all_flashes()
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
@@ -246,5 +248,6 @@ What will you do? """
                 load_in("\n".join(display))
             else: 
                 print(("\n".join(display)))
+            sys.stdout.flush()
 
         return win or lose
