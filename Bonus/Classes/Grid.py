@@ -1,6 +1,7 @@
 import os
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
+from Utils.animator import load_in
 
 
 class Grid:
@@ -196,7 +197,7 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity, test_mode: bool = False):
+    def render(self, p: Entity, test_mode: bool = False, f=False):
         self.update_all_flashes()
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
@@ -207,15 +208,17 @@ class Grid:
 
         self.visualize_map()
 
+        display = []
+
         os.system("cls" if os.name == "nt" else "clear")
         for row in self.__grid_user_display:
-            print("".join(row))
+            display.append("".join(row))
 
-        print(f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected")
+        display.append(f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected")
         if win:
-            print("You win!")
+            display.append("You win!")
         if lose:
-            print("You lose...")
+            display.append("You lose...")
 
         # additional options
         display_use_item = ""
@@ -236,6 +239,10 @@ class Grid:
 {f"Holding item {held_item}" if held_item != "NoneType" else "Not holding anything"}
 
 What will you do? """
-            print(terminal_gui, end="")
+            display.append(terminal_gui)
+            if f: # if it is the FIRST time render is called, then animate the loading!
+                load_in("\n".join(display))
+            else: 
+                print(("\n".join(display)))
 
         return win or lose

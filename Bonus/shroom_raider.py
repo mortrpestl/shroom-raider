@@ -148,7 +148,7 @@ def main():
 
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
             parser(input(), P, G, level, stop_or_reset_only)
@@ -176,7 +176,7 @@ def main():
         P = G.get_player()
         check_win_condition(P, G)
 
-        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+        stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
             parser(input(), P, G, level, stop_or_reset_only)
@@ -185,9 +185,11 @@ def main():
             except Exception:
                 stop_or_reset_only = False
             if G.get_is_cleared():
+                print("CLEAR")
                 write_report(G, P, True, False)
                 sys.exit(EXIT_CODES["victory"])
             if P.get_is_dead():
+                print("DEAD")
                 write_report(G, P, False, True)
                 sys.exit(EXIT_CODES["defeat"])
 
