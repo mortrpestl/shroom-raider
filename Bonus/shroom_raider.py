@@ -66,12 +66,9 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     # WASDP inputs
     if inst in "wasd":
         moved = P.set_pos(inst)
-        if moved:
-            MOVES_MADE += 1
-    elif inst == "p":
-        P.collect_item()
-    elif inst == "f":
-        P.use_item()
+        if moved: MOVES_MADE += 1
+    elif inst == "p" and P.get_item() is None: P.collect_item()
+    elif inst == "f": P.use_item()
 
     # mushroom collection
     P.collect_shroom()

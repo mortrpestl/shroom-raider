@@ -37,6 +37,7 @@ class Grid:
                 "Axe",
                 "Flamethrower",
                 "Flash",
+                "Bomb",
             }
         )
         self.character_mapping = {  # for display
@@ -48,7 +49,8 @@ class Grid:
             self.ENTITIES["PavedTile"]: ("⬜", "_"),
             self.ENTITIES["Axe"]: ("🪓", "x"),
             self.ENTITIES["Flamethrower"]: ("🔥", "*"),
-            self.ENTITIES["Flash"]: ("💡", "?"),
+            self.ENTITIES["Flash"]: ("✨", "?"),
+            self.ENTITIES["Bomb"]: ("💣", "!"),
         }
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
