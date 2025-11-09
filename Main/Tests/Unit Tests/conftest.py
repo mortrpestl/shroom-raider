@@ -2,6 +2,7 @@ import os
 
 COUNTER = 1
 
+
 def pytest_itemcollected(item):
     """
     Converts test display to a numbered, human-readable format.
@@ -14,7 +15,6 @@ def pytest_itemcollected(item):
 
         readable_name = item.name[5:].replace("_", " ").capitalize()
 
-        item._nodeid = f"{'Unit Test '+str(COUNTER).zfill(3):^19} | {file_base:^24} | {readable_name:<90}"
+        item._nodeid = f"{'Unit Test ' + str(COUNTER).zfill(3):^19} | {file_base:^24} | {readable_name:<90}"
 
-        
         COUNTER += 1

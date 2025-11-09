@@ -15,8 +15,9 @@ MUSHROOM = items["Mushroom"]
 
 
 class Player(Entity):
-
-    def __init__(self, pos: list, on_grid: Grid, ascii: str = 'L',item: Entity | None = None):
+    def __init__(
+        self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None
+    ):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
@@ -24,47 +25,57 @@ class Player(Entity):
 
     # * Simple Getters, AI generated with minor edits
 
-    def get_item(self): return self.__item
+    def get_item(self):
+        return self.__item
 
-    def set_item(self, item: Entity | None): self.__item = item
-    
-    def use_item(self): self.__item = None
+    def set_item(self, item: Entity | None):
+        self.__item = item
 
-    def get_mushroom_count(self): return self.__mushroom_count
+    def use_item(self):
+        self.__item = None
 
-    def increment_mushroom_count(self): self.__mushroom_count += 1
+    def get_mushroom_count(self):
+        return self.__mushroom_count
 
-    def get_is_dead(self): return self.__is_dead
+    def increment_mushroom_count(self):
+        self.__mushroom_count += 1
+
+    def get_is_dead(self):
+        return self.__is_dead
 
     # * Complex Getters
 
-    def get_movement_validity(self, direction : str, r : int, c : int):
-        if not self.in_bounds(r, c): return False
-        
+    def get_movement_validity(self, direction: str, r: int, c: int):
+        if not self.in_bounds(r, c):
+            return False
+
         target_obj = self.get_obj_in_coord(r, c)
 
-        if target_obj == None: return True
+        if target_obj is None:
+            return True
 
         if target_obj.get_burnable():
-            if isinstance(self.get_item(),FLAMETHROWER):
+            if isinstance(self.get_item(), FLAMETHROWER):
                 target_obj.burn_connected()
-                self.set_item(None)  
-            if isinstance(self.get_item(),AXE):
+                self.set_item(None)
+            if isinstance(self.get_item(), AXE):
                 target_obj.chop()
                 self.set_item(None)
-                
-        return super().get_movement_validity(direction, r, c)  
-    
+
+        return super().get_movement_validity(direction, r, c)
+
     # * Simple Setters
 
-    def kill(self): self.__is_dead = True
+    def kill(self):
+        self.__is_dead = True
 
     # * Complex Setters
 
     def collect_item(self):
         item = self.get_entity_below()
 
-        if not item: return
+        if not item:
+            return
 
         if item.get_storable():
             self.set_item(item)
@@ -73,25 +84,21 @@ class Player(Entity):
     def collect_shroom(self):
         shroom = self.get_entity_below()
 
-        if not shroom: return
+        if not shroom:
+            return
 
         if isinstance(shroom, MUSHROOM):
             self.increment_mushroom_count()
             shroom.destroy()
 
-    def set_pos(self, direction : str):
+    def set_pos(self, direction: str):
         if super().set_pos(direction):
             entity_below = self.get_entity_below()
-            if not entity_below: return True
+            if not entity_below:
+                return True
             elif entity_below.get_deadly():
                 self.kill()
                 self.destroy()
             return True
         else:
             return False
-
-        
-
-
-
-
