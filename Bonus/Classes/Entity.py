@@ -1,3 +1,5 @@
+import Utils.sounds as s
+
 class Entity:
     # * Attributes
     _is_collideable = (
@@ -121,6 +123,7 @@ class Entity:
             on_grid.add_layer_to_coord(r, c, self)
             self.set_coordinate(r, c)
         else:
+            s.failpush_sound()
             return False  # The Entity failed to move (important for push logic)
         return True  # The Entity has moved
 

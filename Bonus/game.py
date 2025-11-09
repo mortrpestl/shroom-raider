@@ -152,10 +152,12 @@ def main():
                 if G.get_is_cleared():
                     print("CLEAR")
                     write_report(G, P, True, False)
+                    time.sleep(1)
                     sys.exit(EXIT_CODES["victory"])
                 if P.get_is_dead():
                     print("DEAD")
                     write_report(G, P, False, True)
+                    time.sleep(1)
                     sys.exit(EXIT_CODES["defeat"])
 
 if __name__ == "__main__":

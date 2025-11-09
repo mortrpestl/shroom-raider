@@ -66,6 +66,7 @@ class Player(Entity):
                 self.set_item(None)
             if isinstance(self.get_item(), AXE):
                 target_obj.chop()
+                s.axe_sound()
                 self.set_item(None)
 
         return super().get_movement_validity(direction, r, c)
@@ -73,6 +74,7 @@ class Player(Entity):
     # * Simple Setters
 
     def kill(self):
+        s.death_sound()
         self.__is_dead = True
 
     # * Complex Setters
@@ -117,8 +119,8 @@ class Player(Entity):
                     self.destroy()
                 elif isinstance(entity_below, PAVEDTILE):
                     s.paved_walk()
-                else:
-                    s.walk_sound()
+                elif entity_below is not None:
+                    s.on_item_sound()
             else:
                 s.walk_sound()
 
