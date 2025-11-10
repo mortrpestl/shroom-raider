@@ -9,6 +9,7 @@ class Rock(Entity):
     _is_collectable = False
     _is_collideable = True
     _is_pushable = True
+    _is_explodable = True
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "R"):
         super().__init__(pos, on_grid, ascii)

@@ -44,7 +44,7 @@ class Bomb(Entity):
                     continue
                 if target.__class__.__name__ == "Player":
                     continue
-                if target.get_collideable() or target.get_collectable():
+                if target.get_explodable():
                     target.destroy()
 
         self._active = False

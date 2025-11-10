@@ -114,6 +114,9 @@ class Player(Entity):
         if super().set_pos(direction):
             entity_below = self.get_entity_below()
             if entity_below:
+                if entity_below.get_tile_trigger():
+                    entity_below.trigger(self)
+                    
                 if entity_below.get_deadly():
                     self.kill()
                     self.destroy()
