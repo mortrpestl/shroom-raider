@@ -8,8 +8,9 @@ class Ice(Entity):
     # * Attributes
     _is_pushable = True
     _is_collideable = True
+    _is_explodable = True
 
-    def __init__(self, pos: list[int], on_grid: Grid, ascii="o"):
+    def __init__(self, pos: list[int], on_grid: Grid, ascii="0"):
         super().__init__(pos, on_grid, ascii)
 
     # * Complex Getters

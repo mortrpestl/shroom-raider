@@ -1,5 +1,5 @@
 import Utils.sounds as s
-
+from Classes.Entities.import_entities import import_entities
 
 class Entity:
     # * Attributes
@@ -12,11 +12,31 @@ class Entity:
     _is_deadly = False  # If True, Player gets game over'd when on it.
     _is_burnable = False  # If True, triggers burning of Tree
     _is_passive = False  # If True, affects the map in some way without having to be directly used on another object
+    _is_tile_trigger = False # If True, entity triggers game event when stepped on
+    _is_explodable = False # If True, can be exploded with bomb
 
     def __init__(self, pos: list, on_grid, ascii: str):
         self.__pos = list(pos)
         self.__on_grid = on_grid
         self.__ascii = ascii
+        self.ENTITIES = import_entities(
+            {
+                "Player",
+                "Tree",
+                "Rock",
+                "Mushroom",
+                "Water",
+                "PavedTile",
+                "Axe",
+                "Flamethrower",
+                "Flash",
+                "Bomb",
+                "Beehive",
+                "Bee",
+                "Ice",
+                "Log"
+            }
+        )
 
     # * Simple Getters
 
@@ -51,6 +71,12 @@ class Entity:
     def get_storable(self):
         return self._is_storable
 
+    def get_tile_trigger(self):
+        return self._is_tile_trigger
+    
+    def get_explodable(self):
+        return self._is_explodable
+    
     def get_deadly(self):
         return self._is_deadly
 
@@ -83,14 +109,23 @@ class Entity:
         if target_obj is None:
             return True
 
+        is_player = owns_flamethrower = target_is_log = False
+        target_is_log = isinstance(target_obj, self.ENTITIES['Log'])
+        is_player = isinstance(self, self.ENTITIES['Player'])
+
+        if is_player:
+            owns_flamethrower = isinstance(self.get_item(), self.ENTITIES['Flamethrower'])
+
+        burn_log = (target_is_log and owns_flamethrower)
+
         # Is the object pushable? then TRY to push that object.
-        if target_obj.get_pushable(self):
+        if target_obj.get_pushable(self) and not burn_log:
             return target_obj.set_pos(
                 direction
             )  # If the target entity cannot move, then the current entity cannot too.
 
         # Is the object collideable, otherwise? then you cannot move to that.
-        elif target_obj.get_collideable():
+        elif target_obj.get_collideable() and not burn_log:
             return False
 
         return True
@@ -134,5 +169,29 @@ class Entity:
             if on_grid_stck[i] == self:
                 self.get_on_grid().pop_layer_from_coord(*self.get_pos(), i)
                 break
+
+    def burn_connected(self, visited: set | None = None):
+        if visited is None:
+            visited = set()
+
+        grid = self.get_on_grid()
+        obj_map = grid.get_grid_obj_map()
+
+        r, c = self.get_pos()
+        visited.add((r, c))
+        self.destroy()
+        grid.set_display_in_coord(*self.get_pos(), "🔥" if grid.get_display_mode() == "emoji" else "&")
+        grid.render()
+        wait(0.075)
+        grid.add_active_flame(*self.get_pos())
+        wait(0.075)
+
+        for delta_row, delta_column in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            new_row, new_column = r + delta_row, c + delta_column
+
+            if 0 <= new_row < len(obj_map) and 0 <= new_column < len(obj_map[0]):
+                neighbor = obj_map[new_row][new_column][-1]
+                if isinstance(neighbor, (self.ENTITIES['Tree'],self.ENTITIES['Log'])) and (new_row, new_column) not in visited:
+                    neighbor.burn_connected(visited)
 
     # * Misc functions

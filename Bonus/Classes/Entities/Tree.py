@@ -9,6 +9,7 @@ class Tree(Entity):
     # * Attributes
     _is_collideable = True
     _is_burnable = True
+    _is_explodable = True
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "T"):
         super().__init__(pos, on_grid, ascii)
@@ -17,6 +18,7 @@ class Tree(Entity):
     def chop(self):
         s.axe_sound()
         self.destroy()
+<<<<<<< HEAD
 
     # * Complex Setter
     def burn_connected(self, visited: set | None = None):
@@ -45,3 +47,5 @@ class Tree(Entity):
                     neighbor.burn_connected(visited)
 
                     
+=======
+>>>>>>> origin
