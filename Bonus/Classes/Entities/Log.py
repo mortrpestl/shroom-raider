@@ -8,6 +8,7 @@ class Log(Entity):
     _is_pushable = True
     _is_collideable = True
     _is_explodable = True
+    _is_burnable = True
 
     def __init__(self, pos: list[int], on_grid: Grid, ascii="o"):
         super().__init__(pos, on_grid, ascii)
