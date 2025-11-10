@@ -1,5 +1,6 @@
 import Utils.sounds as s
 from Classes.Entities.import_entities import import_entities
+from Utils.general_utils import wait
 
 class Entity:
     # * Attributes
