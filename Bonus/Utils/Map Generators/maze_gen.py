@@ -11,7 +11,7 @@ def maze_gen(R, C):
             if r in (0, R - 1) or c in (0, C - 1):
                 T.append("T")
             elif r % 2 == 1 and c % 2 == 1:
-                T.append(choice(".............+++???"))
+                T.append(choice(".............+++?&"))
             elif r % 2 == 0 and c % 2 == 0:
                 T.append("T")
             else:
@@ -22,6 +22,6 @@ def maze_gen(R, C):
         print("".join(r))
 
 
-a = 11
-print(2 * a + 1, 2 * a + 1)
+a = 8
+print(2* a + 1, 2 * a + 1)
 maze_gen(a, a)
