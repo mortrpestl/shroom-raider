@@ -38,7 +38,7 @@ class Player(Entity):
         if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
             self.get_item().increment_radius()
             return
-        
+
         self.__item = item
 
     def get_mushroom_count(self):

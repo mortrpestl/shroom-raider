@@ -1,6 +1,7 @@
 from collections import deque
 from Classes.Entity import Entity
 
+
 class Bee(Entity):
     _all_bees = []
 
@@ -8,7 +9,7 @@ class Bee(Entity):
         super().__init__(pos, on_grid, ascii)
         self._is_deadly = True
         self._lag = int(lag)
-        self._buffer = deque() #cells for player
+        self._buffer = deque()  # cells for player
         self._is_explodable = True
 
         Bee._all_bees.append(self)
@@ -37,7 +38,7 @@ class Bee(Entity):
         target_layers = grid.get_layers_from_coord(*target)
         if player in target_layers:
             player.kill()
-        
+
     @staticmethod
     def update_all():
         for bee in Bee._all_bees:
@@ -51,4 +52,3 @@ class Bee(Entity):
     def destroy(self):
         super().destroy()
         Bee.remove_bee(self)
-    

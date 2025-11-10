@@ -2,6 +2,7 @@ import sys
 from emoji import is_emoji
 from Utils.general_utils import wait, clear_terminal
 
+
 def load_in(input_str):
     input_str = input_str.split("\n")
     height = len(input_str)
@@ -23,7 +24,7 @@ def load_in(input_str):
             print(input_str[j])
             sys.stdout.flush()
         k = 0
-        for line in range(i+1, min(height - 1, i + 3)):
+        for line in range(i + 1, min(height - 1, i + 3)):
             match k:
                 case 0:
                     print(wave[line])
