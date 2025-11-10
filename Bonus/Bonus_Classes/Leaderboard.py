@@ -28,7 +28,7 @@ def show_personal_leaderboard(pdata):
 
 def show_general_leaderboard():
     """
-    Compares player to other players. Ranked by levels beaten and total of minimum time taken for each completed level
+    Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
     """
     players = read_all_rows()
     if not players:
@@ -37,34 +37,35 @@ def show_general_leaderboard():
 
     for p in players:
         try:
-            p["completed_levels"] = json.loads(p.get("completed_data", "{}"))
+            completed = json.loads(p.get("completed_data", "{}"))
         except Exception:
-            p["completed_levels"] = {}
+            completed = {}
 
-    players.sort(
-        key=lambda p: (
-            -len(p["completed_levels"]),
-            float(p.get("total_seconds_played") or 0),
-        )
-    )
+        # Sum of best times (in ms, then convert to formatted)
+        total_ms = sum(completed.values())
+        p["completed_levels"] = completed
+        p["sum_best_ms"] = total_ms
+
+    # Sort by levels completed, then by total ms (lower = better)
+    players.sort(key=lambda p: (-len(p["completed_levels"]), p["sum_best_ms"]))
+
     rows = [
         [
             i + 1,
             p.get("username", ""),
-            len(p["completed_levels"]),
-            p.get("total_times", 0),
-            round(float(p.get("total_seconds_played") or 0), 3),
+            len(p.get("completed_levels", {})),
+            format_time(p["sum_best_ms"]),
             p.get("total_mushrooms_collected", 0),
             p.get("total_tiles_walked", 0),
         ]
         for i, p in enumerate(players)
     ]
+
     headers = [
         "Rank",
         "Username",
-        "Levels Completed",
         "Runs Played",
-        "Total Time",
+        "Sum of Best Times",
         "Mushrooms Collected",
         "Tiles Walked",
     ]
