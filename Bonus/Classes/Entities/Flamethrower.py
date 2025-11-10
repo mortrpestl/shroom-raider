@@ -3,7 +3,7 @@ from Classes.Grid import Grid
 
 
 class Flamethrower(Entity):
-    # * Attribues
+    # * Attributes
     _is_collectable = True
     _is_storable = True
 

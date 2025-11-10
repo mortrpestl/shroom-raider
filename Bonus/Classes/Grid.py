@@ -41,7 +41,9 @@ class Grid:
                 "Flash",
                 "Bomb",
                 "Beehive",
-                "Bee"
+                "Bee",
+                "Ice",
+                "Log"
             }
         )
         self.character_mapping = {  # for display
@@ -56,7 +58,9 @@ class Grid:
             self.ENTITIES["Flash"]: ("✨", "?"),
             self.ENTITIES["Bomb"]: ("💣", "!"),
             self.ENTITIES["Beehive"]: ("🍯","&"),
-            self.ENTITIES["Bee"]: ("🐝",">")
+            self.ENTITIES["Bee"]: ("🐝",">"),
+            self.ENTITIES["Ice"]: ("🧊","0"),
+            self.ENTITIES["Log"]: ("📦","o")
         }
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()

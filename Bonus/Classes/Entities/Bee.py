@@ -4,7 +4,7 @@ from Classes.Entity import Entity
 class Bee(Entity):
     _all_bees = []
 
-    def __init__(self, pos, on_grid, lag: int = 3, ascii=">"):
+    def __init__(self, pos, on_grid, lag, ascii=">"):
         super().__init__(pos, on_grid, ascii)
         self._is_deadly = True
         self._lag = int(lag)
