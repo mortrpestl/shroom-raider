@@ -1,4 +1,5 @@
 from Classes.Entity import Entity
+import Utils.sounds as s
 
 
 class Bomb(Entity):
@@ -30,6 +31,8 @@ class Bomb(Entity):
 
         self._active = True
         self._placed_pos = (pr, pc)
+
+        s.bomb_sound()
 
         for r in range(pr - self.get_radius(), pr + self.get_radius() + 1):
             for c in range(pc - self.get_radius(), pc + self.get_radius() + 1):
