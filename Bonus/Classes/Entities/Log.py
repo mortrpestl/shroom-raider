@@ -1,6 +1,7 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
+import Utils.sounds as s
 
 
 class Log(Entity):

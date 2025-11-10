@@ -189,6 +189,7 @@ class Entity:
         )
         grid.render()
         wait(0.075)
+        s.flamethrower_sound()
         grid.add_active_flame(*self.get_pos())
         wait(0.075)
 

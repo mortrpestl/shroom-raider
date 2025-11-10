@@ -64,7 +64,6 @@ class Player(Entity):
         if target_obj.get_burnable():
             if isinstance(self.get_item(), FLAMETHROWER):
                 target_obj.burn_connected()
-                s.flamethrower_sound()
                 self.set_item(None)
             if isinstance(self.get_item(), AXE):
                 target_obj.chop()
