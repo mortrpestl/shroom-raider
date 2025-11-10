@@ -13,7 +13,7 @@ from Bonus_Classes.Leaderboard import (
     show_general_leaderboard,
     show_level_leaderboard,
 )
-from exit_codes import EXIT_CODES
+from Utils.exit_codes import EXIT_CODES
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")

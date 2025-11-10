@@ -2,6 +2,7 @@ import Utils.sounds as s
 from Classes.Entities.import_entities import import_entities
 from Utils.general_utils import wait
 
+
 class Entity:
     # * Attributes
     _is_collideable = (
@@ -13,8 +14,8 @@ class Entity:
     _is_deadly = False  # If True, Player gets game over'd when on it.
     _is_burnable = False  # If True, triggers burning of Tree
     _is_passive = False  # If True, affects the map in some way without having to be directly used on another object
-    _is_tile_trigger = False # If True, entity triggers game event when stepped on
-    _is_explodable = False # If True, can be exploded with bomb
+    _is_tile_trigger = False  # If True, entity triggers game event when stepped on
+    _is_explodable = False  # If True, can be exploded with bomb
 
     def __init__(self, pos: list, on_grid, ascii: str):
         self.__pos = list(pos)
@@ -35,7 +36,7 @@ class Entity:
                 "Beehive",
                 "Bee",
                 "Ice",
-                "Log"
+                "Log",
             }
         )
 
@@ -74,10 +75,10 @@ class Entity:
 
     def get_tile_trigger(self):
         return self._is_tile_trigger
-    
+
     def get_explodable(self):
         return self._is_explodable
-    
+
     def get_deadly(self):
         return self._is_deadly
 
@@ -111,13 +112,15 @@ class Entity:
             return True
 
         is_player = owns_flamethrower = target_is_log = False
-        target_is_log = isinstance(target_obj, self.ENTITIES['Log'])
-        is_player = isinstance(self, self.ENTITIES['Player'])
+        target_is_log = isinstance(target_obj, self.ENTITIES["Log"])
+        is_player = isinstance(self, self.ENTITIES["Player"])
 
         if is_player:
-            owns_flamethrower = isinstance(self.get_item(), self.ENTITIES['Flamethrower'])
+            owns_flamethrower = isinstance(
+                self.get_item(), self.ENTITIES["Flamethrower"]
+            )
 
-        burn_log = (target_is_log and owns_flamethrower)
+        burn_log = target_is_log and owns_flamethrower
 
         # Is the object pushable? then TRY to push that object.
         if target_obj.get_pushable(self) and not burn_log:
@@ -181,7 +184,9 @@ class Entity:
         r, c = self.get_pos()
         visited.add((r, c))
         self.destroy()
-        grid.set_display_in_coord(*self.get_pos(), "🔥" if grid.get_display_mode() == "emoji" else "&")
+        grid.set_display_in_coord(
+            *self.get_pos(), "🔥" if grid.get_display_mode() == "emoji" else "&"
+        )
         grid.render()
         wait(0.075)
         grid.add_active_flame(*self.get_pos())
@@ -192,7 +197,10 @@ class Entity:
 
             if 0 <= new_row < len(obj_map) and 0 <= new_column < len(obj_map[0]):
                 neighbor = obj_map[new_row][new_column][-1]
-                if isinstance(neighbor, (self.ENTITIES['Tree'],self.ENTITIES['Log'])) and (new_row, new_column) not in visited:
+                if (
+                    isinstance(neighbor, (self.ENTITIES["Tree"], self.ENTITIES["Log"]))
+                    and (new_row, new_column) not in visited
+                ):
                     neighbor.burn_connected(visited)
 
     # * Misc functions

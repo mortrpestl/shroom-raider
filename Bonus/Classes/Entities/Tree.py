@@ -4,7 +4,6 @@ from Utils.general_utils import wait
 import Utils.sounds as s
 
 
-
 class Tree(Entity):
     # * Attributes
     _is_collideable = True

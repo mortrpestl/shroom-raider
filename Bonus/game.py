@@ -6,7 +6,7 @@ import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 import Utils.movement as m
-from exit_codes import EXIT_CODES
+from Utils.exit_codes import EXIT_CODES
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player

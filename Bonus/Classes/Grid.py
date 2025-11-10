@@ -10,7 +10,13 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: str = "emoji"):
+    def __init__(
+        self,
+        name: str,
+        map_data: str,
+        dark_radius: int | None = None,
+        mode: str = "emoji",
+    ):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
@@ -44,7 +50,7 @@ class Grid:
                 "Beehive",
                 "Bee",
                 "Ice",
-                "Log"
+                "Log",
             }
         )
         self.character_mapping = {  # for display
@@ -58,10 +64,10 @@ class Grid:
             self.ENTITIES["Flamethrower"]: ("🔥", "*"),
             self.ENTITIES["Flash"]: ("✨", "?"),
             self.ENTITIES["Bomb"]: ("💣", "!"),
-            self.ENTITIES["Beehive"]: ("🍯","&"),
-            self.ENTITIES["Bee"]: ("🐝",">"),
-            self.ENTITIES["Ice"]: ("🧊","#"),
-            self.ENTITIES["Log"]: ("📦","o")
+            self.ENTITIES["Beehive"]: ("🍯", "&"),
+            self.ENTITIES["Bee"]: ("🐝", ">"),
+            self.ENTITIES["Ice"]: ("🧊", "#"),
+            self.ENTITIES["Log"]: ("📦", "o"),
         }
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
@@ -89,7 +95,7 @@ class Grid:
 
     def get_grid_obj_map(self):
         return self.__grid_obj_map
-    
+
     def get_grid_user_display(self, r: int, c: int):
         return self.__grid_user_display[r][c]
 
@@ -110,10 +116,10 @@ class Grid:
 
     def get_active_flashes(self):
         return self.__active_flashes
-    
+
     def get_active_flames(self):
         return self.__active_flames
-    
+
     def get_display_mode(self):
         return self.__display_mode
 
@@ -199,8 +205,8 @@ class Grid:
     # * Bee Updaters
 
     def update_all_bees(self):
-         BEE = self.ENTITIES['Bee']
-         BEE.update_all()
+        BEE = self.ENTITIES["Bee"]
+        BEE.update_all()
 
     # * Visualization Helpers
     def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None):
@@ -210,13 +216,13 @@ class Grid:
 
         # * SNUFFING OUT FLAMES LOGIC
         # Note that whenever tree burns: 1.) it adds an active flame pos; 2.) sets its former pos to flame.
-        if (r,c) in self.get_active_flames():
+        if (r, c) in self.get_active_flames():
             display = "🔥" if self.get_display_mode() == "emoji" else "0"
 
         # skip darkness logic if no dark_radius
         if dark_radius is None:
             return display
-        
+
         # * DARKNESS LOGIC
         # lit by flash? then display object
         if any(
@@ -229,8 +235,6 @@ class Grid:
         distance = abs(self.get_player_pos()[0] - r) + abs(self.get_player_pos()[1] - c)
         if distance > dark_radius:
             display = "⬛" if self.get_display_mode() == "emoji" else "#"
-
-
 
         return display
 
