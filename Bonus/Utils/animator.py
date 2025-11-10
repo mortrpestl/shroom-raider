@@ -1,16 +1,6 @@
-import os
-import time
 import sys
 from emoji import is_emoji
-
-
-def __clear_terminal():
-    os.system("cls" if os.name == "nt" else "clear")
-
-
-def __wait(seconds):
-    time.sleep(seconds)
-
+from Utils.general_utils import wait, clear_terminal
 
 def load_in(input_str):
     input_str = input_str.split("\n")
@@ -28,12 +18,12 @@ def load_in(input_str):
         wave.append("".join(temp))
 
     for i in range(height):
-        __clear_terminal()
+        clear_terminal()
         for j in range(i + 1):
             print(input_str[j])
             sys.stdout.flush()
         k = 0
-        for line in range(i, min(height - 1, i + 3)):
+        for line in range(i+1, min(height - 1, i + 3)):
             match k:
                 case 0:
                     print(wave[line])
@@ -45,4 +35,4 @@ def load_in(input_str):
                     print(wave[line].replace("=", "."))
                     sys.stdout.flush()
             k += 1
-        __wait(0.15)  # delay for animation
+        wait(0.15)  # delay for animation

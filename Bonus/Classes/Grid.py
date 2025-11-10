@@ -10,12 +10,13 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, dark_radius: int | None = None):
+    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: str = "emoji"):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
         self.__is_cleared = False
         self.__dark_radius = dark_radius
+        self.__display_mode = mode
 
         # convert string to grid
         self.__grid_vis_map = [list(row) for row in map_data.strip().split("\n")]
@@ -59,7 +60,7 @@ class Grid:
             self.ENTITIES["Bomb"]: ("💣", "!"),
             self.ENTITIES["Beehive"]: ("🍯","&"),
             self.ENTITIES["Bee"]: ("🐝",">"),
-            self.ENTITIES["Ice"]: ("🧊","0"),
+            self.ENTITIES["Ice"]: ("🧊","#"),
             self.ENTITIES["Log"]: ("📦","o")
         }
         self.initialization_map = {
@@ -67,6 +68,7 @@ class Grid:
         }
 
         self.__active_flashes = []  # flashes affect darkness only
+        self.__active_flames = set()
 
         # initialize objects in grid
         for r in range(self.__map_rows):
@@ -87,6 +89,9 @@ class Grid:
 
     def get_grid_obj_map(self):
         return self.__grid_obj_map
+    
+    def get_grid_user_display(self, r: int, c: int):
+        return self.__grid_user_display[r][c]
 
     def get_layers_from_coord(self, r: int, c: int):
         return self.__grid_obj_map[r][c]
@@ -105,6 +110,12 @@ class Grid:
 
     def get_active_flashes(self):
         return self.__active_flashes
+    
+    def get_active_flames(self):
+        return self.__active_flames
+    
+    def get_display_mode(self):
+        return self.__display_mode
 
     @staticmethod
     def get_grid_by_name(name: str):
@@ -126,8 +137,8 @@ class Grid:
 
         return self.__grid_obj_map[r][c][layer]
 
-    def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji"):
-        if mode == "emoji":
+    def get_display_symbol_of_obj(self, obj: Entity | None):
+        if self.get_display_mode() == "emoji":
             offset = 0
         else:
             offset = 1
@@ -140,8 +151,17 @@ class Grid:
     def level_clear(self):
         self.__is_cleared = True
 
+    def add_active_flame(self, r, c):
+        self.__active_flames.add((r, c))
+
+    def clear_active_flames(self):
+        self.__active_flames = set()
+
     def set_player_pos(self, pos: list[int]):
         self.__player_pos = pos
+
+    def set_display_in_coord(self, r: int, c: int, symbol: str):
+        self.__grid_user_display[r][c] = symbol
 
     # * Complex Setters
     def add_layer_to_coord(self, r: int, c: int, entity: Entity):
@@ -183,14 +203,20 @@ class Grid:
          BEE.update_all()
 
     # * Visualization Helpers
-    def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None, mode: str):
-        display = self.get_display_symbol_of_obj(obj, mode) if obj else "　"
+    def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None):
+        display = self.get_display_symbol_of_obj(obj) if obj else "　"
+
         dark_radius = self.get_dark_radius()
+
+        # * SNUFFING OUT FLAMES LOGIC
+        # Note that whenever tree burns: 1.) it adds an active flame pos; 2.) sets its former pos to flame.
+        if (r,c) in self.get_active_flames():
+            display = "🔥" if self.get_display_mode() == "emoji" else "0"
 
         # skip darkness logic if no dark_radius
         if dark_radius is None:
             return display
-
+        
         # * DARKNESS LOGIC
         # lit by flash? then display object
         if any(
@@ -202,20 +228,22 @@ class Grid:
         # darken if dark_radius is set and outside radius
         distance = abs(self.get_player_pos()[0] - r) + abs(self.get_player_pos()[1] - c)
         if distance > dark_radius:
-            display = "⬛" if mode == "emoji" else "#"
+            display = "⬛" if self.get_display_mode() == "emoji" else "#"
+
+
 
         return display
 
-    def visualize_map(self, mode: str = "emoji"):
+    def visualize_map(self):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj = self.get_obj_in_coord(r, c)
                 self.__grid_user_display[r][c] = self.__compute_display_for_cell(
-                    r, c, obj, mode
+                    r, c, obj
                 )
 
-    def get_vis_map_as_str(self, mode: str = "ascii"):
-        self.visualize_map(mode)
+    def get_vis_map_as_str(self):
+        self.visualize_map()
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
     def render(self, test_mode: bool = False, f=False):

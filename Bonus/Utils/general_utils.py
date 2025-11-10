@@ -1,3 +1,15 @@
+import time
+import os
+
+
+def clear_terminal():
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def wait(seconds):
+    time.sleep(seconds)
+
+
 def format_time(seconds: float) -> str:
     m, s = divmod(seconds, 60)
     return f"{int(m):02}:{s:06.3f}"
