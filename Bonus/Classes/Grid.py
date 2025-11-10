@@ -40,6 +40,8 @@ class Grid:
                 "Flamethrower",
                 "Flash",
                 "Bomb",
+                "Beehive",
+                "Bee"
             }
         )
         self.character_mapping = {  # for display
@@ -53,6 +55,8 @@ class Grid:
             self.ENTITIES["Flamethrower"]: ("🔥", "*"),
             self.ENTITIES["Flash"]: ("✨", "?"),
             self.ENTITIES["Bomb"]: ("💣", "!"),
+            self.ENTITIES["Beehive"]: ("🍯","&"),
+            self.ENTITIES["Bee"]: ("🐝",">")
         }
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
@@ -107,6 +111,10 @@ class Grid:
     # * Complex Getters
     def pop_layer_from_coord(self, r: int, c: int, layer: int = -1):
         return self.get_grid_obj_map()[r][c].pop(layer)
+
+    # use sparingly
+    def push_layer_to_coord(self, r: int, c: int, entity: Entity, layer: int = -1):
+        return self.get_grid_obj_map()[r][c].append(entity)
 
     def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
         if not (0 <= r < self.__map_rows and 0 <= c < self.__map_cols):
@@ -164,6 +172,12 @@ class Grid:
             if flash.get_radius() <= 0:
                 self.__active_flashes.remove(flash)
 
+    # * Bee Updaters
+
+    def update_all_bees(self):
+         BEE = self.ENTITIES['Bee']
+         BEE.update_all()
+
     # * Visualization Helpers
     def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None, mode: str):
         display = self.get_display_symbol_of_obj(obj, mode) if obj else "　"
@@ -203,6 +217,8 @@ class Grid:
     def render(self, test_mode: bool = False, f=False):
         p = self.get_player()
         self.update_all_flashes()
+        self.update_all_bees()
+
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
         item_here = p.get_entity_below().__class__.__name__  # element below player

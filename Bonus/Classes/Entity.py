@@ -12,6 +12,8 @@ class Entity:
     _is_deadly = False  # If True, Player gets game over'd when on it.
     _is_burnable = False  # If True, triggers burning of Tree
     _is_passive = False  # If True, affects the map in some way without having to be directly used on another object
+    _is_tile_trigger = False # If True, entity triggers game event when stepped on
+    _is_explodable = False # If True, can be exploded with bomb
 
     def __init__(self, pos: list, on_grid, ascii: str):
         self.__pos = list(pos)
@@ -51,6 +53,12 @@ class Entity:
     def get_storable(self):
         return self._is_storable
 
+    def get_tile_trigger(self):
+        return self._is_tile_trigger
+    
+    def get_explodable(self):
+        return self._is_explodable
+    
     def get_deadly(self):
         return self._is_deadly
 
