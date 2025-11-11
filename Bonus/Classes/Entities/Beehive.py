@@ -23,7 +23,7 @@ class Beehive(Entity):
         """
         grid = self.get_on_grid()
         for i in range(self._bee_count):
-            bee = Bee(
+            Bee(
                 player.get_pos().copy(),
                 grid,
                 lag=self._bee_lag * (1 + Beehive.counter) + i,
