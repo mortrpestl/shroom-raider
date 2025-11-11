@@ -13,7 +13,7 @@ from Bonus_Classes.Leaderboard import (
     show_general_leaderboard,
     show_level_leaderboard,
 )
-from Utils.exit_codes import EXIT_CODES
+from Utils.Enums import ExitCodes
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
@@ -254,7 +254,7 @@ def main():
 
         if folder_choice == "q":
             print("Quitting launcher.")
-            exit(EXIT_CODES["quit"])
+            exit(ExitCodes.QUIT.value)
 
         while True:
             levels = LevelManager.load_levels(folder_choice)
@@ -262,7 +262,7 @@ def main():
 
             if level_choice == 'q':
                 print("Quitting launcher.")
-                exit(EXIT_CODES["quit"])
+                exit(ExitCodes.QUIT)
             elif level_choice == '!':
                 break
 

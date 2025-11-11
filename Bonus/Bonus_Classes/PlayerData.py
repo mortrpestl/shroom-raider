@@ -3,7 +3,7 @@ import json
 import time
 import pandas as pd
 
-from Utils.exit_codes import EXIT_CODES
+from Utils.Enums import ExitCodes
 from Utils.general_utils import format_time, tabulate
 from LevelManager import get_level_title
 
@@ -163,8 +163,8 @@ class Data:
         if self.session_win and level_id is not None:
             self.record_level_completion(level_id, elapsed_time)
 
-        if return_code in (EXIT_CODES["victory"], EXIT_CODES["defeat"]):
-            if return_code == EXIT_CODES["victory"]:
+        if return_code in (ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value):
+            if return_code == ExitCodes.VICTORY.value:
                 self.record_win()
             self.commit_session(elapsed_time)
             return
