@@ -6,7 +6,7 @@ import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 import Utils.movement as m
-from exit_codes import EXIT_CODES
+from Utils.Enums import ExitCodes
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
@@ -42,13 +42,13 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
         with open("output_debug.txt", "w", encoding="utf-8") as f:
             f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
             f.write(G.get_vis_map_as_str())
-        exit(EXIT_CODES["quit"])
+        exit(ExitCodes.QUIT.value)
 
     # non-WASDP inputs
     if inst == "Q":
         print("Quitting to main menu...", flush=True)
         time.sleep(1.5)
-        exit(EXIT_CODES["quit"])
+        exit(ExitCodes.QUIT.value)
 
     if inst == "!":
         G, P = reset(level, dark_radius=G.get_dark_radius())
@@ -142,6 +142,7 @@ def main():
         stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
+            time.sleep(0.016)
             key_input = m.check_movement()
             if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
@@ -154,12 +155,12 @@ def main():
                     print("CLEAR")
                     write_report(G, P, True, False)
                     time.sleep(1)
-                    sys.exit(EXIT_CODES["victory"])
+                    sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
                     print("DEAD")
                     write_report(G, P, False, True)
                     time.sleep(1)
-                    sys.exit(EXIT_CODES["defeat"])
+                    sys.exit(ExitCodes.DEFEAT.value)
 
 
 if __name__ == "__main__":

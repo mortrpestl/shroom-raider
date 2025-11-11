@@ -2,19 +2,18 @@ import Utils.sounds as s
 from Classes.Entities.import_entities import import_entities
 from Utils.general_utils import wait
 
+
 class Entity:
     # * Attributes
-    _is_collideable = (
-        False  # If True, any other collideable object cannot occupy this Entity's space
-    )
+    _is_collideable = False  # If True, any other collideable object cannot occupy this Entity's space
     _is_collectable = False  # If True, Player can collect this Entity
     _is_storable = False  # If True, then Player can keep this in inventory
     _is_pushable = False  # If True, Player can push this Entity
     _is_deadly = False  # If True, Player gets game over'd when on it.
     _is_burnable = False  # If True, triggers burning of Tree
     _is_passive = False  # If True, affects the map in some way without having to be directly used on another object
-    _is_tile_trigger = False # If True, entity triggers game event when stepped on
-    _is_explodable = False # If True, can be exploded with bomb
+    _is_tile_trigger = False  # If True, entity triggers game event when stepped on
+    _is_explodable = False  # If True, can be exploded with bomb
 
     def __init__(self, pos: list, on_grid, ascii: str):
         self.__pos = list(pos)
@@ -35,7 +34,7 @@ class Entity:
                 "Beehive",
                 "Bee",
                 "Ice",
-                "Log"
+                "Log",
             }
         )
 
@@ -74,10 +73,10 @@ class Entity:
 
     def get_tile_trigger(self):
         return self._is_tile_trigger
-    
+
     def get_explodable(self):
         return self._is_explodable
-    
+
     def get_deadly(self):
         return self._is_deadly
 
@@ -110,23 +109,14 @@ class Entity:
         if target_obj is None:
             return True
 
-        is_player = owns_flamethrower = target_is_log = False
-        target_is_log = isinstance(target_obj, self.ENTITIES['Log'])
-        is_player = isinstance(self, self.ENTITIES['Player'])
-
-        if is_player:
-            owns_flamethrower = isinstance(self.get_item(), self.ENTITIES['Flamethrower'])
-
-        burn_log = (target_is_log and owns_flamethrower)
-
         # Is the object pushable? then TRY to push that object.
-        if target_obj.get_pushable(self) and not burn_log:
+        if target_obj.get_pushable(self):
             return target_obj.set_pos(
                 direction
             )  # If the target entity cannot move, then the current entity cannot too.
 
         # Is the object collideable, otherwise? then you cannot move to that.
-        elif target_obj.get_collideable() and not burn_log:
+        elif target_obj.get_collideable():
             return False
 
         return True
@@ -172,27 +162,45 @@ class Entity:
                 break
 
     def burn_connected(self, visited: set | None = None):
-        if visited is None:
-            visited = set()
-
+        if not self.get_burnable():
+            raise AttributeError(f"Tried to burn unburnable object! Please implement appropriate checker")
+        
+        # initialization
         grid = self.get_on_grid()
-        obj_map = grid.get_grid_obj_map()
+        visited = set()
+        curr_burn_queue = [tuple(self.get_pos())]
 
+        # first set fire to the root node (do this, then while..)
         r, c = self.get_pos()
-        visited.add((r, c))
         self.destroy()
-        grid.set_display_in_coord(*self.get_pos(), "🔥" if grid.get_display_mode() == "emoji" else "&")
+        visited.add((r, c))
+        grid.add_active_flame(r, c)
         grid.render()
-        wait(0.075)
-        grid.add_active_flame(*self.get_pos())
-        wait(0.075)
+        grid.smother_active_flames()
+        wait(0.125)
 
-        for delta_row, delta_column in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            new_row, new_column = r + delta_row, c + delta_column
+        # continue setting fire to the connections
+        while curr_burn_queue:
+            next_burn_queue = []
+            for node_pos in curr_burn_queue:
+                r, c = node_pos
+                for delta_row, delta_column in [(1, 0), (-1, 0), (0, 1), (0, -1)]:    
+                    new_row, new_column = r + delta_row, c + delta_column
+                    try:
+                        neighbor = grid.get_obj_in_coord(new_row, new_column)
+                    except IndexError:
+                        neighbor = None
+                    if neighbor is not None:
+                        if neighbor.get_burnable() and (new_row, new_column) not in visited:
+                            next_burn_queue.append((new_row, new_column))
+                            grid.add_active_flame(new_row, new_column)
+                            neighbor.destroy()
+                visited.add((r, c)) 
+            grid.render() # only renders after the first layer is burnt
+            grid.smother_active_flames() # turn active flames to smoke
+            wait(0.125)
 
-            if 0 <= new_row < len(obj_map) and 0 <= new_column < len(obj_map[0]):
-                neighbor = obj_map[new_row][new_column][-1]
-                if isinstance(neighbor, (self.ENTITIES['Tree'],self.ENTITIES['Log'])) and (new_row, new_column) not in visited:
-                    neighbor.burn_connected(visited)
+            curr_burn_queue = list(next_burn_queue) # next LAYER to burn
+        grid.clear_all_flames() # reset display
 
     # * Misc functions

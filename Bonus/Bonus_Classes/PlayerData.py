@@ -3,8 +3,8 @@ import json
 import time
 import pandas as pd
 
-from exit_codes import EXIT_CODES
-from Utils.general_utils import format_time, tabulate
+from Utils.Enums import ExitCodes
+from Utils.general_utils import format_time, tabulate, debug_wait
 from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
@@ -118,6 +118,7 @@ class Data:
         self.completed_levels = completed
         self.completed_data = json.dumps(completed)
 
+
     # * Excel-Interaction Methods
     def commit_session(self, time_elapsed_ms: float):
         self.total_mushrooms_collected += self.session_mushrooms
@@ -163,8 +164,8 @@ class Data:
         if self.session_win and level_id is not None:
             self.record_level_completion(level_id, elapsed_time)
 
-        if return_code in (EXIT_CODES["victory"], EXIT_CODES["defeat"]):
-            if return_code == EXIT_CODES["victory"]:
+        if return_code in (ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value):
+            if return_code == ExitCodes.VICTORY.value:
                 self.record_win()
             self.commit_session(elapsed_time)
             return
@@ -183,10 +184,17 @@ class Data:
             completed_rows = [["None"]]
             completed_headers = ["Completed Levels"]
         else:
-            sorted_levels = sorted(completed_levels.items(), key=lambda x: int(x[0]))
+            def sort_key(item):
+                try:
+                    folder, level = item[0].split("/")
+                    return int(folder), int(level)
+                except Exception:
+                    return (0, 0)
+
+            sorted_levels = sorted(completed_levels.items(), key=sort_key)
             completed_rows = [
-                [int(lvl_id), get_level_title(int(lvl_id)) or "-", format_time(ms)]
-                for lvl_id, ms in sorted_levels
+                [level_id, get_level_title(*level_id.split('/')) or "-", format_time(ms)]
+                for level_id, ms in sorted_levels
             ]
             completed_headers = ["ID", "Title", "Best Time"]
 
@@ -201,4 +209,6 @@ class Data:
 
         tabulate(["Stat", "Value"], stats_rows, max_width=30)
         tabulate(completed_headers, completed_rows, max_width=30)
+        debug_wait()
+
         return ""

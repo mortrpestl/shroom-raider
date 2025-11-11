@@ -1,10 +1,12 @@
 import sys
 from emoji import is_emoji
-from Utils.general_utils import wait, clear_terminal
+from Utils.general_utils import wait, clear_terminal, clear_prev_n_lines
 
-def load_in(input_str):
+def load_in(input_str, total_time = 1.5):
     input_str = input_str.split("\n")
     height = len(input_str)
+    delta_time = total_time / height 
+
     wave = []
     for i in range(height):
         temp = []
@@ -18,12 +20,10 @@ def load_in(input_str):
         wave.append("".join(temp))
 
     for i in range(height):
-        clear_terminal()
-        for j in range(i + 1):
-            print(input_str[j])
-            sys.stdout.flush()
+        print(input_str[i])
+        sys.stdout.flush()
         k = 0
-        for line in range(i+1, min(height - 1, i + 3)):
+        for line in range(i+1, min(height - 1, i + 4)):
             match k:
                 case 0:
                     print(wave[line])
@@ -35,4 +35,5 @@ def load_in(input_str):
                     print(wave[line].replace("=", "."))
                     sys.stdout.flush()
             k += 1
-        wait(0.15)  # delay for animation
+        wait(delta_time)  # delay for animation
+        clear_prev_n_lines(k) 

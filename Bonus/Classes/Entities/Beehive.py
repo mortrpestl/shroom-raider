@@ -1,11 +1,12 @@
 from Classes.Entity import Entity
 from Classes.Entities.Bee import Bee
 
+
 class Beehive(Entity):
     counter = 0
 
     def __init__(self, pos, on_grid, ascii="&", bee_count: int = 3, bee_lag: int = 3):
-        #if you want to make a bee chain, make bee_count and bee_lag the same
+        # if you want to make a bee chain, make bee_count and bee_lag the same
 
         super().__init__(pos, on_grid, ascii)
         self._is_tile_trigger = True
@@ -22,8 +23,12 @@ class Beehive(Entity):
         """
         grid = self.get_on_grid()
         for i in range(self._bee_count):
-            bee = Bee(player.get_pos().copy(), grid, lag=self._bee_lag*(1+Beehive.counter)+i)
+            Bee(
+                player.get_pos().copy(),
+                grid,
+                lag=self._bee_lag * (1 + Beehive.counter) + i,
+            )
 
         Beehive.counter += 1
-            
+
         self.destroy()
