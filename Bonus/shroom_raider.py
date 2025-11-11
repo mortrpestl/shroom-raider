@@ -192,7 +192,7 @@ def choose_level(levels):
             if choice == '!':
                 return '!'
             if choice == 'enter':
-                return levels[selected - 1]
+                return (selected, levels[selected - 1])
             if choice == 'w':
                 if selected > 1:
                     selected -= 1
@@ -322,12 +322,15 @@ def main():
 
     b()
     while True: # folders muna tayo
+        path = []
         folders = LevelManager.load_folders()
         folder_choice = choose_folder(folders)
 
         if folder_choice == "q":
             print("Quitting launcher.")
             exit(ExitCodes.QUIT.value)
+
+        path.append(folder_choice)
 
         while True:
             levels = LevelManager.load_levels(folder_choice)
@@ -339,10 +342,12 @@ def main():
             elif level_choice == '!':
                 break
 
+            path.append(level_choice[0])
+
             while True: 
                 #session start
                 start_time = time.time()
-                return_code, report = launch_game_with_level(level_choice)
+                return_code, report = launch_game_with_level(level_choice[1])
                 end_time = time.time()
                 wait(1.25)
                 clear_terminal()
