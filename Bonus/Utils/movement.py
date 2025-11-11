@@ -41,3 +41,28 @@ def check_movement():
         return None
     else:
         return None
+
+def menu_movement(): # yes, this doesn't follow the DRY principle, but it makes the code more performant in menus since it counts less things per tick
+    global ACTIVE
+
+    keys = (p("w"), p("s"), p("shift+!"), p("shift+q"))
+
+    keys_pressed = keys.count(True)
+
+    if keys_pressed == 1:
+        if not ACTIVE:
+            ACTIVE = True
+            if keys[0]:
+                return "w"
+            elif keys[1]:
+                return "s"
+            elif keys[2]:
+                return "!"
+            else:
+                return "Q"
+
+    elif keys_pressed == 0:
+        ACTIVE = False
+        return None
+    else:
+        return None
