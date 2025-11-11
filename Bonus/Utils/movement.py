@@ -1,5 +1,6 @@
 from keyboard import is_pressed as p
 from keyboard import block_key as b
+from keyboard import unblock_key as ub
 
 ACTIVE = False
 
@@ -8,6 +9,9 @@ def block_keys():
     for _ in range(1, 84):
         b(_)
 
+def unblock_keys():
+    for _ in range(1, 84):
+        ub(_)
 
 def check_movement():
     global ACTIVE
@@ -45,7 +49,7 @@ def check_movement():
 def menu_movement(): # yes, this doesn't follow the DRY principle, but it makes the code more performant in menus since it counts less things per tick
     global ACTIVE
 
-    keys = (p("w"), p("s"), p("shift+!"), p("shift+q"))
+    keys = (p("w"), p("s"), p('enter'), p("shift+!"), p("shift+q"))
 
     keys_pressed = keys.count(True)
 
@@ -57,6 +61,8 @@ def menu_movement(): # yes, this doesn't follow the DRY principle, but it makes 
             elif keys[1]:
                 return "s"
             elif keys[2]:
+                return 'enter'
+            elif keys[3]:
                 return "!"
             else:
                 return "Q"
