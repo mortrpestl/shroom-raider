@@ -1,4 +1,6 @@
 from Classes.Entity import Entity
+from Classes.Grid import Grid
+from Utils.general_utils import wait
 
 
 class Bomb(Entity):
@@ -6,7 +8,7 @@ class Bomb(Entity):
     _is_storable = True
     _is_passive = True
 
-    def __init__(self, pos, on_grid, ascii="!"):
+    def __init__(self, pos: list[int], on_grid: Grid, ascii: str = "!"):
         super().__init__(pos, on_grid, ascii)
         self._active = False
         self._bomb_radius = 3
@@ -31,21 +33,26 @@ class Bomb(Entity):
         self._active = True
         self._placed_pos = (pr, pc)
 
-        for r in range(pr - self.get_radius(), pr + self.get_radius() + 1):
-            for c in range(pc - self.get_radius(), pc + self.get_radius() + 1):
-                if not self.in_bounds(r, c):
-                    continue
+        for curr_radius in range(1, self.get_radius()):
+            for r in range(pr - curr_radius, pr + curr_radius + 1):
+                for c in range(pc - curr_radius, pc + curr_radius + 1):
+                    if not self.in_bounds(r, c):
+                        continue
+                    if abs(r - pr) + abs(c - pc) != curr_radius:
+                        continue
+                    on_grid.add_active_blast(r, c)
+                    target = self.get_obj_in_coord(r, c)
+                    if target is None or target is self:
+                        continue
+                    if target.__class__.__name__ == "Player":
+                        continue
+                    if target.get_explodable():
+                        target.destroy()
+            on_grid.render()
+            on_grid.smother_active_blasts()
+            wait(0.125)
 
-                if abs(r - pr) + abs(c - pc) > self.get_radius():
-                    continue
-
-                target = self.get_obj_in_coord(r, c)
-                if target is None or target is self:
-                    continue
-                if target.__class__.__name__ == "Player":
-                    continue
-                if target.get_explodable():
-                    target.destroy()
+        on_grid.clear_all_blasts()
 
         self._active = False
         self._placed_pos = None

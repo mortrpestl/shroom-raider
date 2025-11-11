@@ -5,12 +5,19 @@ from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
 from Utils.Enums import DisplayMode
 
+
 class Grid:
     # * Attributes
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: DisplayMode = DisplayMode.EMOJI):
+    def __init__(
+        self,
+        name: str,
+        map_data: str,
+        dark_radius: int | None = None,
+        mode: DisplayMode = DisplayMode.EMOJI,
+    ):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
@@ -44,7 +51,7 @@ class Grid:
                 "Beehive",
                 "Bee",
                 "Ice",
-                "Log"
+                "Log",
             }
         )
         self.character_mapping = {  # for ENTITY display
@@ -58,25 +65,26 @@ class Grid:
             self.ENTITIES["Flamethrower"]: ("🔥", "*"),
             self.ENTITIES["Flash"]: ("✨", "?"),
             self.ENTITIES["Bomb"]: ("💣", "!"),
-            self.ENTITIES["Beehive"]: ("🍯","&"),
-            self.ENTITIES["Bee"]: ("🐝",">"),
-            self.ENTITIES["Ice"]: ("🧊","#"),
-            self.ENTITIES["Log"]: ("📦","o")
+            self.ENTITIES["Beehive"]: ("🍯", "&"),
+            self.ENTITIES["Bee"]: ("🐝", ">"),
+            self.ENTITIES["Ice"]: ("🧊", "#"),
+            self.ENTITIES["Log"]: ("📦", "o"),
         }
-        self.overlay_mapping = { # for NON-ENTITY display, dubbed "overlay"
+        self.overlay_mapping = {  # for NON-ENTITY display, dubbed "overlay"
             "Flame": ("🔥", "&"),
             "Smoke": ("⚫", "0"),
-            "Darkness": ("⬛", "#") 
+            "Darkness": ("⬛", "#"),
+            "Blast": ("💥", "X"),
         }
         # NOTE since non-entity display is separate, these can have the same display string as entity displays
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
         }
 
-
         self.__active_flashes = []  # flashes affect darkness only
-        self.__active_flames = set() # for flamethrower animation
-        self.__smothered_flames = set() # for leftover smoke 
+        self.__active_flames = set()  # for flamethrower animation
+        self.__active_smokes = set()  # for leftover smoke
+        self.__active_blasts = set()  # for bombs
 
         # initialize objects in grid
         for r in range(self.__map_rows):
@@ -97,11 +105,11 @@ class Grid:
 
     def get_grid_obj_map(self):
         return self.__grid_obj_map
-    
+
     def get_grid_user_display(self, r: int, c: int):
         return self.__grid_user_display[r][c]
-    
-    def get_overlay_of_symbol(self, symbol : str):
+
+    def get_overlay_of_symbol(self, symbol: str):
         offset = self.get_display_mode().value
         return self.overlay_mapping[symbol][offset]
 
@@ -122,13 +130,16 @@ class Grid:
 
     def get_active_flashes(self):
         return self.__active_flashes
-    
+
     def get_active_flames(self):
         return self.__active_flames
-    
-    def get_smothered_flames(self):
-        return self.__smothered_flames
-    
+
+    def get_active_smokes(self):
+        return self.__active_smokes
+
+    def get_active_blasts(self):
+        return self.__active_blasts
+
     def get_display_mode(self):
         return self.__display_mode
 
@@ -154,8 +165,6 @@ class Grid:
 
     def get_display_symbol_of_obj(self, obj: Entity | None):
         offset = self.get_display_mode().value
-        # for cm in self.character_mapping:
-        #     if isinstance(obj, cm):
         return self.character_mapping[type(obj)][offset]
 
     # * Simple Setters
@@ -165,12 +174,26 @@ class Grid:
     def add_active_flame(self, r, c):
         self.__active_flames.add((r, c))
 
+    def add_active_blast(self, r, c):
+        self.__active_blasts.add((r, c))
+
     def smother_active_flames(self):
-        self.__smothered_flames = self.__smothered_flames | set(self.get_active_flames())
+        self.__active_smokes = self.__active_smokes | self.__active_flames
         self.__active_flames = set()
 
+    def smother_active_blasts(self):
+        self.__active_smokes = self.__active_smokes | self.__active_blasts
+        self.__active_blasts = set()
+
+    def clear_all_smoke(self):
+        self.__active_smokes = set()
+
+    def clear_all_blasts(self):
+        self.clear_all_smoke()
+        self.__active_blasts = set()
+
     def clear_all_flames(self):
-        self.__smothered_flames = set()
+        self.clear_all_smoke()
         self.__active_flames = set()
 
     def set_player_pos(self, pos: list[int]):
@@ -215,8 +238,8 @@ class Grid:
     # * Bee Updaters
 
     def update_all_bees(self):
-         BEE = self.ENTITIES['Bee']
-         BEE.update_all()
+        BEE = self.ENTITIES["Bee"]
+        BEE.update_all()
 
     # * Visualization Helpers
     def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None):
@@ -226,16 +249,21 @@ class Grid:
 
         # * FLAME LOGIC
         # Note that whenever tree burns: 1.) it adds an active flame pos; 2.) sets its former pos to flame.
-        if (r,c) in self.get_active_flames():
+        if (r, c) in self.get_active_flames():
             display = self.get_overlay_of_symbol("Flame")
 
-        if (r,c) in self.get_smothered_flames():
+        # * BLAST LOGIC
+        if (r, c) in self.get_active_blasts():
+            display = self.get_overlay_of_symbol("Blast")
+
+        # * SMOKE RESIDUE LOGIC
+        if (r, c) in self.get_active_smokes():
             display = self.get_overlay_of_symbol("Smoke")
 
         # skip darkness logic if no dark_radius
         if dark_radius is None:
             return display
-        
+
         # * DARKNESS LOGIC
         # lit by flash? then display object
         if any(
@@ -270,16 +298,18 @@ class Grid:
 
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
-        item_here = p.get_entity_below().__class__.__name__  # element below player
-        held_item = p.get_item().__class__.__name__
+        item_here = p.get_entity_below()  # element below player
+        held_item = p.get_item()
 
         win, lose = (mushrooms_collected == total_mushrooms), p.get_is_dead()
 
         self.visualize_map()
 
-        display = []
+        display = []  # FINAL DISPLAY INITIALIZATION
 
         os.system("cls" if os.name == "nt" else "clear")
+
+        # * GRID DISPLAY
         for row in self.__grid_user_display:
             display.append("".join(row))
 
@@ -291,27 +321,51 @@ class Grid:
         if lose:
             display.append("You lose...")
 
-        # additional options
-        display_use_item = ""
+        # * CONTEXTUAL DISPLAYS
+        item_here_display = "- Nothing Here!"
+        held_item_display = "- Not holding anything..."
+        additional_inputs = []
+
+        if item_here is not None:
+            symbol = self.get_display_symbol_of_obj(item_here)
+            additional_inputs.append(f"\n[p] Pick up [{symbol}{item_here}]?")
+
+            item_here_display = (
+                f"[{self.get_display_symbol_of_obj(item_here)}{item_here}] is here"
+            )
+
         if p.get_item() is not None:
             if p.get_item().get_passive():
-                display_use_item = f"\n[F] Use passive item {p.get_item()}"
+                symbol = self.get_display_symbol_of_obj(p.get_item())
+                additional_inputs.append(
+                    f"\n[F] Use passive item [{symbol}{p.get_item()}]"
+                )
 
+        additional_inputs = "".join(additional_inputs)
+
+        if held_item is not None:
+            held_item_display = (
+                f"Holding item [{self.get_display_symbol_of_obj(held_item)}{held_item}]"
+            )
+
+        # * PLAYER "HUD"
         if not win and not lose:
             terminal_gui = f"""
 [w] Move up
 [a] Move left
 [s] Move down
-[d] Move right
-[Q] Quit level{display_use_item}
+[d] Move right{additional_inputs}
+[Q] Quit level
 [!] Reset
 
-{item_here + " is here" if item_here != "NoneType" else "Nothing Here"}
-{f"Holding item {held_item}" if held_item != "NoneType" else "Not holding anything"}
+{item_here_display}
+{held_item_display}
 
 What will you do? """
             display.append(terminal_gui)
-            if f:  # if it is the FIRST time render is called, then animate the loading!
+            if (
+                f
+            ):  # if it is the FIRST time render is called, then animate the loading in!
                 load_in("\n".join(display))
             else:
                 print(("\n".join(display)))
