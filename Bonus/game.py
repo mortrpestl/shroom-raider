@@ -142,6 +142,7 @@ def main():
         stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
+            time.sleep(0.016)
             key_input = m.check_movement()
             if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
