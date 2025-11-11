@@ -311,7 +311,7 @@ def main():
                             continue
                         case "q":
                             print("Quitting launcher.")
-                            exit(EXIT_CODES["quit"])
+                            exit(ExitCodes.QUIT)
                         case "p":
                             show_personal_leaderboard(pdata)
                             continue
