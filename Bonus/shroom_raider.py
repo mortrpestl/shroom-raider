@@ -84,6 +84,35 @@ def print_levels_table(levels):
 
     print("+" + "-" * inner_width + "+")  # bottom
 
+def print_folders_table(folders):
+    headers = ["ID", "Title", "Description"]
+    rows = []
+    for folder in folders:
+        rows.append(
+            [
+                str(folder.get("id", "")),
+                str(folder.get("title", "")),
+                str(folder.get("description", "")).replace("\n", " "),
+            ]
+        )
+
+    col_widths = []
+    for i, h in enumerate(headers):
+        max_cell = max(len(row[i]) for row in rows)
+        col_widths.append(max(len(h), max_cell))
+
+    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+    inner_width = len(header_line) + 2
+
+    print("+" + "-" * inner_width + "+")  # top
+    print(f"| {header_line} |")
+    print("|" + "-" * inner_width + "|")
+
+    for row in rows:
+        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
+        print(f"| {row_line} |")
+
+    print("+" + "-" * inner_width + "+")
 
 # * Level Selection and Launching Functions
 
@@ -110,6 +139,8 @@ def choose_level(levels):
         choice = input("Select level ID or number (or 'q' to quit): ").strip()
         if choice == "q":
             return "q"
+        if choice == '!':
+            return '!'
         if choice.isdigit():
             n = int(choice)
             for lvl in levels:
@@ -122,6 +153,36 @@ def choose_level(levels):
         wait(1)
         clear_terminal()
 
+def choose_folder(folders):
+    
+    # if no levels
+    clear_terminal()
+    if not folders:
+        print("Walang folders boss")
+        return None
+
+    # if there is levels
+    print("""
++-------------------------+
+|     Folder Select       |
++-------------------------+
+""")
+    while True:
+        print_folders_table(folders)
+        choice = input("Select level ID or number (or 'q' to quit): ").strip()
+        if choice == "q":
+            return "q"
+        if choice.isdigit():
+            n = int(choice)
+            for folder in folders:
+                if folder.get("id") == n:
+                    return n
+            if 1 <= n <= len(folders):
+                return -1
+
+        print("Invalid choice.")
+        wait(1)
+        clear_terminal()
 
 def make_stage_file_from_grid(grid_text):
     """
@@ -187,77 +248,87 @@ def main():
     )
     pdata = Data(username)
 
-    while True:
-        levels = LevelManager.load_levels()
-        lvl = choose_level(levels)
+    while True: # folders muna tayo
+        folders = LevelManager.load_folders()
+        folder_choice = choose_folder(folders)
 
-        if lvl == "q":
+        if folder_choice == "q":
             print("Quitting launcher.")
             exit(EXIT_CODES["quit"])
 
         while True:
-            # session start
-            start_time = time.time()
-            return_code, report = launch_game_with_level(lvl)
-            end_time = time.time()
-            wait(1.25)
-            clear_terminal()
-            # session end
+            levels = LevelManager.load_levels(folder_choice)
+            level_choice = choose_level(levels)
 
-            # process session data
-            if report:
-                elapsed_time = float(end_time - start_time)
-                pdata.apply_report_dict(
-                    report,
-                    return_code=return_code,
-                    level_id=lvl["id"],
-                    elapsed_time=elapsed_time,
-                )
-
-            while True:
-                # the gameloop
-                print("""
-            +---------------------------+
-            |      LEVEL PROCESSED      |
-            +---------------------------+
-            | r - Replay Level          |
-            | m - Return to Main Menu   |
-            | s - View Statistics       |
-            | p - Personal Leaderboard  |
-            | g - General Leaderboard   |
-            | l - Level Leaderboard     |
-            | q - Quit Launcher         |
-            +---------------------------+
-            """)
-
-                choice = input("Choose your option: ").strip().lower()
-                clear_terminal()
-                match choice:
-                    case "r" | "m":
-                        break
-                    case "s":
-                        show_statistics(pdata)
-                        continue
-                    case "q":
-                        print("Quitting launcher.")
-                        exit(EXIT_CODES["quit"])
-                    case "p":
-                        show_personal_leaderboard(pdata)
-                        continue
-                    case "g":
-                        show_general_leaderboard()
-                        continue
-                    case "l":
-                        show_level_leaderboard(lvl["id"])
-                        continue
-                    case _:
-                        print("Invalid choice, try again.")
-
-            if choice in ("r", "replay"):
-                continue  # continue playing the level
-            if choice in ("m", "menu"):  # stop and go back to menu
-                clear_terminal()
+            if level_choice == 'q':
+                print("Quitting launcher.")
+                exit(EXIT_CODES["quit"])
+            elif level_choice == '!':
                 break
+
+            while True: 
+                #session start
+                start_time = time.time()
+                return_code, report = launch_game_with_level(level_choice)
+                end_time = time.time()
+                wait(1.25)
+                clear_terminal()
+                # session end
+
+                # process session data
+                if report:
+                    elapsed_time = float(end_time - start_time)
+                    pdata.apply_report_dict(
+                        report,
+                        return_code=return_code,
+                        level_id=level_choice["id"],
+                        elapsed_time=elapsed_time,
+                    )
+
+                while True:
+                    
+                    print("""
+                +---------------------------+
+                |      LEVEL PROCESSED      |
+                +---------------------------+
+                | r - Replay Level          |
+                | m - Return to Main Menu   |
+                | s - View Statistics       |
+                | p - Personal Leaderboard  |
+                | g - General Leaderboard   |
+                | l - Level Leaderboard     |
+                | q - Quit Launcher         |
+                +---------------------------+
+                """)
+
+                    choice = input("Choose your option: ").strip().lower()
+                    clear_terminal()
+                    match choice:
+                        case "r" | "m":
+                            break
+                        case "s":
+                            show_statistics(pdata)
+                            continue
+                        case "q":
+                            print("Quitting launcher.")
+                            exit(EXIT_CODES["quit"])
+                        case "p":
+                            show_personal_leaderboard(pdata)
+                            continue
+                        case "g":
+                            show_general_leaderboard()
+                            continue
+                        case "l":
+                            show_level_leaderboard(level_choice["id"])
+                            continue
+                        case _:
+                            print("Invalid choice, try again.")
+
+                if choice in ("r", "replay"):
+                    continue  # continue playing the level
+                if choice in ("m", "menu"):  # stop and go back to menu
+                    clear_terminal()
+                    break
 
 
 if __name__ == "__main__":
@@ -267,7 +338,7 @@ if __name__ == "__main__":
     argument_parser.add_argument("-R", "--report_file", default=None)
     args = argument_parser.parse_args()
 
-    if args.stage_file is not None:
+    if args.stage_file is not None: # if they wanna be weird and test just the game out
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", args.stage_file]
 
         # optional dark mode parameter
