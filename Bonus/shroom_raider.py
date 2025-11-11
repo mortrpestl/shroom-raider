@@ -13,7 +13,7 @@ from Bonus_Classes.Leaderboard import (
     show_general_leaderboard,
     show_level_leaderboard,
 )
-from exit_codes import EXIT_CODES
+from Utils.Enums import ExitCodes
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
@@ -193,7 +193,7 @@ def main():
 
         if lvl == "q":
             print("Quitting launcher.")
-            exit(EXIT_CODES["quit"])
+            exit(ExitCodes.QUIT.value)
 
         while True:
             # session start
@@ -240,7 +240,7 @@ def main():
                         continue
                     case "q":
                         print("Quitting launcher.")
-                        exit(EXIT_CODES["quit"])
+                        exit(ExitCodes.QUIT.value)
                     case "p":
                         show_personal_leaderboard(pdata)
                         continue

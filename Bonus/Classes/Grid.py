@@ -3,14 +3,14 @@ import sys
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
-
+from Utils.Enums import DisplayMode
 
 class Grid:
     # * Attributes
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: str = "emoji"):
+    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: DisplayMode = DisplayMode.EMOJI):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
@@ -47,7 +47,7 @@ class Grid:
                 "Log"
             }
         )
-        self.character_mapping = {  # for display
+        self.character_mapping = {  # for ENTITY display
             self.ENTITIES["Player"]: ("🧑", "L"),
             self.ENTITIES["Tree"]: ("🌲", "T"),
             self.ENTITIES["Mushroom"]: ("🍄", "+"),
@@ -63,12 +63,20 @@ class Grid:
             self.ENTITIES["Ice"]: ("🧊","#"),
             self.ENTITIES["Log"]: ("📦","o")
         }
+        self.overlay_mapping = { # for NON-ENTITY display, dubbed "overlay"
+            "Flame": ("🔥", "&"),
+            "Smoke": ("⚫", "0"),
+            "Darkness": ("⬛", "#") 
+        }
+        # NOTE since non-entity display is separate, these can have the same display string as entity displays
         self.initialization_map = {
             k[1]: (v, k[0]) for v, k in self.character_mapping.items()
         }
 
+
         self.__active_flashes = []  # flashes affect darkness only
-        self.__active_flames = set()
+        self.__active_flames = set() # for flamethrower animation
+        self.__smothered_flames = set() # for leftover smoke 
 
         # initialize objects in grid
         for r in range(self.__map_rows):
@@ -92,6 +100,10 @@ class Grid:
     
     def get_grid_user_display(self, r: int, c: int):
         return self.__grid_user_display[r][c]
+    
+    def get_overlay_of_symbol(self, symbol : str):
+        offset = self.get_display_mode().value
+        return self.overlay_mapping[symbol][offset]
 
     def get_layers_from_coord(self, r: int, c: int):
         return self.__grid_obj_map[r][c]
@@ -113,6 +125,9 @@ class Grid:
     
     def get_active_flames(self):
         return self.__active_flames
+    
+    def get_smothered_flames(self):
+        return self.__smothered_flames
     
     def get_display_mode(self):
         return self.__display_mode
@@ -138,14 +153,10 @@ class Grid:
         return self.__grid_obj_map[r][c][layer]
 
     def get_display_symbol_of_obj(self, obj: Entity | None):
-        if self.get_display_mode() == "emoji":
-            offset = 0
-        else:
-            offset = 1
-
-        for cm in self.character_mapping:
-            if isinstance(obj, cm):
-                return self.character_mapping[cm][offset]
+        offset = self.get_display_mode().value
+        # for cm in self.character_mapping:
+        #     if isinstance(obj, cm):
+        return self.character_mapping[type(obj)][offset]
 
     # * Simple Setters
     def level_clear(self):
@@ -154,7 +165,12 @@ class Grid:
     def add_active_flame(self, r, c):
         self.__active_flames.add((r, c))
 
-    def clear_active_flames(self):
+    def smother_active_flames(self):
+        self.__smothered_flames = self.__smothered_flames | set(self.get_active_flames())
+        self.__active_flames = set()
+
+    def clear_all_flames(self):
+        self.__smothered_flames = set()
         self.__active_flames = set()
 
     def set_player_pos(self, pos: list[int]):
@@ -208,10 +224,13 @@ class Grid:
 
         dark_radius = self.get_dark_radius()
 
-        # * SNUFFING OUT FLAMES LOGIC
+        # * FLAME LOGIC
         # Note that whenever tree burns: 1.) it adds an active flame pos; 2.) sets its former pos to flame.
         if (r,c) in self.get_active_flames():
-            display = "🔥" if self.get_display_mode() == "emoji" else "0"
+            display = self.get_overlay_of_symbol("Flame")
+
+        if (r,c) in self.get_smothered_flames():
+            display = self.get_overlay_of_symbol("Smoke")
 
         # skip darkness logic if no dark_radius
         if dark_radius is None:
@@ -228,9 +247,7 @@ class Grid:
         # darken if dark_radius is set and outside radius
         distance = abs(self.get_player_pos()[0] - r) + abs(self.get_player_pos()[1] - c)
         if distance > dark_radius:
-            display = "⬛" if self.get_display_mode() == "emoji" else "#"
-
-
+            display = self.get_overlay_of_symbol("Darkness")
 
         return display
 
