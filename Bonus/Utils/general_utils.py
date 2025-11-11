@@ -1,9 +1,16 @@
 import time
 import os
+import sys
 
 
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
+
+
+def clear_prev_n_lines(n):
+    for _ in range(n):
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
 
 
 def wait(seconds):
