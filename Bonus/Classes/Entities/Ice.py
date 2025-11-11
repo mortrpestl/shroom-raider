@@ -2,6 +2,7 @@ from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 from Utils.general_utils import wait
+import Utils.sounds as s
 
 
 class Ice(Entity):
@@ -51,6 +52,7 @@ class Ice(Entity):
         while super().set_pos(direction):
             moved = True
             self.get_on_grid().render()
+            s.ice_sound()
             wait(0.075)
         else:
             object_below = self.get_entity_below()

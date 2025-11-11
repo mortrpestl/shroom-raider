@@ -1,6 +1,7 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Utils.general_utils import wait
+import Utils.sounds as s
 
 
 class Bomb(Entity):
@@ -53,7 +54,8 @@ class Bomb(Entity):
             wait(0.125)
 
         on_grid.clear_all_blasts()
-
+        s.bomb_sound()
+        
         self._active = False
         self._placed_pos = None
         self.destroy()

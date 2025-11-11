@@ -2,6 +2,7 @@ import Utils.sounds as s
 from Classes.Entities.import_entities import import_entities
 from Utils.general_utils import wait
 
+
 class Entity:
     # * Attributes
     _is_collideable = False  # If True, any other collideable object cannot occupy this Entity's space
@@ -11,8 +12,8 @@ class Entity:
     _is_deadly = False  # If True, Player gets game over'd when on it.
     _is_burnable = False  # If True, triggers burning of Tree
     _is_passive = False  # If True, affects the map in some way without having to be directly used on another object
-    _is_tile_trigger = False # If True, entity triggers game event when stepped on
-    _is_explodable = False # If True, can be exploded with bomb
+    _is_tile_trigger = False  # If True, entity triggers game event when stepped on
+    _is_explodable = False  # If True, can be exploded with bomb
 
     def __init__(self, pos: list, on_grid, ascii: str):
         self.__pos = list(pos)
@@ -33,7 +34,7 @@ class Entity:
                 "Beehive",
                 "Bee",
                 "Ice",
-                "Log"
+                "Log",
             }
         )
 
@@ -72,10 +73,10 @@ class Entity:
 
     def get_tile_trigger(self):
         return self._is_tile_trigger
-    
+
     def get_explodable(self):
         return self._is_explodable
-    
+
     def get_deadly(self):
         return self._is_deadly
 
