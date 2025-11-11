@@ -14,9 +14,22 @@ from Bonus_Classes.Leaderboard import (
     show_level_leaderboard,
 )
 from Utils.Enums import ExitCodes
+from Utils.movement import menu_movement as m
+from Utils.movement import block_keys as b
+from Utils.movement import unblock_keys as ub
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
+AFTER_GAME_OPTIONS = {
+    'q': 'replay level',
+    'm': 'main menu',
+    's': 'View Statistics',
+    'p': 'Personal Leaderboard',
+    'g': 'General Leaderboard',
+    'l': 'Level Leaderboard',
+    'q': 'Quit Launcher'
+}
+OPTIONS_LIST = ['q', 'm', 's', 'p', 'g', 'l', 'q']
 
 # * Helper Functions
 
@@ -49,17 +62,22 @@ def show_statistics(pdata):
 # * Level List Helper Functions
 
 
-def print_levels_table(levels):
+def print_levels_table(levels, selected = 1):
     """
     Print a summary of the levels.
     """
+    print("""
++-------------------------+
+|      LEVEL SELECT       |
++-------------------------+
+""")
 
     headers = ["ID", "Title", "Description", "Difficulty"]
     rows = []
     for lvl in levels:
         rows.append(
             [
-                str(lvl.get("id", "")),
+                str(lvl.get("id", "") if lvl.get('id', '') != selected else '🧑') ,
                 str(lvl.get("title", "")),
                 str(lvl.get("description", "")).replace("\n", " "),
                 str(lvl.get("difficulty", "Normal")),
@@ -84,15 +102,50 @@ def print_levels_table(levels):
 
     print("+" + "-" * inner_width + "+")  # bottom
 
-def print_folders_table(folders):
+def print_folders_table(folders, selected = 1):
+    print("""
++-------------------------+
+|     Folder Select       |
++-------------------------+
+""")
     headers = ["ID", "Title", "Description"]
     rows = []
     for folder in folders:
         rows.append(
             [
-                str(folder.get("id", "")),
+                str(folder.get("id", "") if folder.get('id', '') != selected else '🧑') ,
                 str(folder.get("title", "")),
                 str(folder.get("description", "")).replace("\n", " "),
+            ]
+        )
+
+    col_widths = []
+    for i, h in enumerate(headers):
+        max_cell = max(len(row[i]) for row in rows)
+        col_widths.append(max(len(h), max_cell))
+
+    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+    inner_width = len(header_line) + 2
+
+    print("+" + "-" * inner_width + "+")  # top
+    print(f"| {header_line} |")
+    print("|" + "-" * inner_width + "|")
+
+    for row in rows:
+        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
+        print(f"| {row_line} |")
+
+    print("+" + "-" * inner_width + "+")
+
+def print_after_game_options(selected):
+    option = OPTIONS_LIST[selected]
+    headers = ['option', 'description']
+    rows = []
+    for o in AFTER_GAME_OPTIONS:
+        rows.append(
+            [
+                o if o != option else '🧑', 
+                AFTER_GAME_OPTIONS[o]
             ]
         )
 
@@ -129,29 +182,27 @@ def choose_level(levels):
         return None
 
     # if there is levels
-    print("""
-+-------------------------+
-|      LEVEL SELECT       |
-+-------------------------+
-""")
+    selected = 1
+    print_levels_table(levels, selected)
     while True:
-        print_levels_table(levels)
-        choice = input("Select level ID or number (or 'q' to quit): ").strip()
-        if choice == "q":
-            return "q"
-        if choice == '!':
-            return '!'
-        if choice.isdigit():
-            n = int(choice)
-            for lvl in levels:
-                if lvl.get("id") == n:
-                    return lvl
-            if 1 <= n <= len(levels):
-                return levels[n - 1]
-
-        print("Invalid choice.")
-        wait(1)
-        clear_terminal()
+        choice = m()
+        if choice is not None:
+            if choice == "Q":
+                return "q"
+            if choice == '!':
+                return '!'
+            if choice == 'enter':
+                return levels[selected - 1]
+            if choice == 'w':
+                if selected > 1:
+                    selected -= 1
+                    clear_terminal()
+                    print_levels_table(levels, selected)
+            elif choice == 's':
+                if selected < len(levels):
+                    selected += 1
+                    clear_terminal()
+                    print_levels_table(levels, selected)
 
 def choose_folder(folders):
     
@@ -162,28 +213,49 @@ def choose_folder(folders):
         return None
 
     # if there is levels
-    print("""
-+-------------------------+
-|     Folder Select       |
-+-------------------------+
-""")
+    
+    selected = 1
+    print_levels_table(folders, selected)
     while True:
-        print_folders_table(folders)
-        choice = input("Select level ID or number (or 'q' to quit): ").strip()
-        if choice == "q":
-            return "q"
-        if choice.isdigit():
-            n = int(choice)
-            for folder in folders:
-                if folder.get("id") == n:
-                    return n
-            if 1 <= n <= len(folders):
-                return -1
+        choice = m()
+        if choice is not None:
+            if choice == "Q":
+                return "q"
+            if choice == 'enter':
+                return selected
+            if choice == 'w':
+                if selected > 1:
+                    selected -= 1
+                    clear_terminal()
+                    print_levels_table(folders, selected)
+            elif choice == 's':
+                if selected < len(folders):
+                    selected += 1
+                    clear_terminal()
+                    print_levels_table(folders, selected)
 
-        print("Invalid choice.")
-        wait(1)
-        clear_terminal()
-
+def choose_after_game_option():
+    clear_terminal()
+    
+    selected = 0
+    print_after_game_options(selected)
+    while True:
+        choice = m()
+        if choice is not None:
+            if choice == "Q":
+                return "q"
+            if choice == 'enter':
+                return selected
+            if choice == 'w':
+                if selected > 0:
+                    selected -= 1
+                    clear_terminal()
+                    print_after_game_options(selected)
+            elif choice == 's':
+                if selected < len(OPTIONS_LIST):
+                    selected += 1
+                    clear_terminal()
+                    print_after_game_options(selected)
 def make_stage_file_from_grid(grid_text):
     """
     Creates: the file to send to shroom_raider.py from grid_text.
@@ -248,6 +320,7 @@ def main():
     )
     pdata = Data(username)
 
+    b()
     while True: # folders muna tayo
         folders = LevelManager.load_folders()
         folder_choice = choose_folder(folders)
@@ -286,23 +359,8 @@ def main():
                     )
 
                 while True:
-                    
-                    print("""
-                +---------------------------+
-                |      LEVEL PROCESSED      |
-                +---------------------------+
-                | r - Replay Level          |
-                | m - Return to Main Menu   |
-                | s - View Statistics       |
-                | p - Personal Leaderboard  |
-                | g - General Leaderboard   |
-                | l - Level Leaderboard     |
-                | q - Quit Launcher         |
-                +---------------------------+
-                """)
-
-                    choice = input("Choose your option: ").strip().lower()
-                    clear_terminal()
+                    choice = choose_after_game_option()
+                    choice = OPTIONS_LIST[choice]
                     match choice:
                         case "r" | "m":
                             break
