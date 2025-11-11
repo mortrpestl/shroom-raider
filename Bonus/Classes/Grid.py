@@ -11,13 +11,7 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(
-        self,
-        name: str,
-        map_data: str,
-        dark_radius: int | None = None,
-        mode: DisplayMode = DisplayMode.EMOJI,
-    ):
+    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: DisplayMode = DisplayMode.EMOJI):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
@@ -363,9 +357,7 @@ class Grid:
 
 What will you do? """
             display.append(terminal_gui)
-            if (
-                f
-            ):  # if it is the FIRST time render is called, then animate the loading in!
+            if f:  # if it is the FIRST time render is called, then animate the loading in!
                 load_in("\n".join(display))
             else:
                 print(("\n".join(display)))
