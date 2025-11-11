@@ -6,11 +6,11 @@ LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
 
-def read_xlsx_levels():
+def read_xlsx_levels(folder_id: int):
     if not os.path.exists(LEVELS_XLSX):
         return []
 
-    df = pd.read_excel(LEVELS_XLSX, engine="openpyxl")
+    df = pd.read_excel(LEVELS_XLSX, engine="openpyxl", sheet_name=folder_id)
     levels = []
 
     # Expected columns: ID, Title, Description, Input Grid, Difficulty, Dark (case-insensitive)
@@ -55,26 +55,71 @@ def read_xlsx_levels():
         )
     return levels
 
+def read_xlsx_folders():
+    if not os.path.exists(LEVELS_XLSX):
+        return []
 
-def load_levels():
+    df = pd.read_excel(LEVELS_XLSX, engine="openpyxl", sheet_name='Folders')
+    folders = []
+
+    # Expected columns: ID, Title, Description, Input Grid, Difficulty, Dark (case-insensitive)
+    cols = {c.lower(): c for c in df.columns}
+    id_col = cols.get("id")
+    title_col = cols.get("title")
+    desc_col = cols.get("description")
+
+    for _, row in df.iterrows():
+        folders.append(
+            {
+                "id": int(row[id_col]) if id_col and not pd.isna(row[id_col]) else None,
+                "title": str(row[title_col]).strip()
+                if title_col and not pd.isna(row[title_col])
+                else "UNTITLED",
+                "description": str(row[desc_col]).strip()
+                if desc_col and not pd.isna(row[desc_col])
+                else "",
+            }
+        )
+    return folders
+
+def load_levels(folder_id: int):
     """Returns a list of level dicts: {"id","title","description","difficulty","grid","dark_radius"}"""
-    levels = read_xlsx_levels()
+    levels = read_xlsx_levels(folder_id)
     for idx, lvl in enumerate(levels, 1):
         if lvl.get("id") is None:
             lvl["id"] = idx
     return levels
 
+def load_folders():
+    folders = read_xlsx_folders()
+    for idx, folder in enumerate(folders, 1):
+        if folder.get("id") is None:
+            folder['id'] = idx
+        
+    return folders
 
-def get_level_by_id(level_id: int):
+
+def get_level_by_id(folder_id: int, level_id: int):
     """Lookup a level by id."""
 
-    for lvl in load_levels():
+    for lvl in load_levels(folder_id):
         if lvl.get("id") == level_id:
             return lvl
     return None
 
+def get_folder_by_id(folder_id: int):
+    for folder in load_folders(folder_id):
+        if folder.get('id') == folder_id:
+            return folder
+        
+    return None
 
-def get_level_title(level_id: int):
+def get_folder_title(folder_id: int):
+    folder = get_folder_by_id(folder_id)
+    return folder['title'] if folder else None
+
+def get_level_title(folder_id: int, level_id: int):
     """Return the title for a level id or None if not found."""
-    lvl = get_level_by_id(level_id)
+    lvl = get_level_by_id(folder_id, level_id)
     return lvl["title"] if lvl else None
+

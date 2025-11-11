@@ -38,7 +38,7 @@ class Player(Entity):
         if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
             self.get_item().increment_radius()
             return
-        
+
         self.__item = item
 
     def get_mushroom_count(self):
@@ -63,9 +63,7 @@ class Player(Entity):
 
         if target_obj.get_burnable():
             if isinstance(self.get_item(), FLAMETHROWER):
-                s.flamethrower_sound()
                 target_obj.burn_connected()
-                self.get_on_grid().clear_active_flames()
                 self.set_item(None)
             if isinstance(self.get_item(), AXE):
                 target_obj.chop()

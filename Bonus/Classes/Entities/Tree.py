@@ -1,8 +1,6 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-from Utils.general_utils import wait
 import Utils.sounds as s
-
 
 
 class Tree(Entity):

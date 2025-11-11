@@ -6,7 +6,7 @@ import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 import Utils.movement as m
-from exit_codes import EXIT_CODES
+from Utils.exit_codes import EXIT_CODES
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
@@ -142,6 +142,7 @@ def main():
         stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
+            time.sleep(0.016)
             key_input = m.check_movement()
             if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
