@@ -2,7 +2,7 @@ import time
 import os
 import sys
 
-WAIT_TIME = 2.5
+WAIT_TIME = 5
 DEBUG_MODE = True
 
 def clear_terminal():
