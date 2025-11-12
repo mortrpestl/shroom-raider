@@ -1,5 +1,5 @@
 from Utils.central_imports import *
-
+from colorama import Fore, Style
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
@@ -288,11 +288,10 @@ def launch_game_with_level(level):
 
 # gameplay start + loop
 def main():
-    print("""
-+------------------------+
-|WELCOME TO SHROOM RAIDER|
-+------------------------+
-          """)
+    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+        typewriter(intro.read(), 1)
+    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+        load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 1)
 
     username = (
         input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
@@ -317,7 +316,7 @@ def main():
 
             if level_choice == 'q':
                 print("Quitting launcher.")
-                exit(ExitCodes.QUIT)
+                exit(ExitCodes.QUIT.value)
             elif level_choice == '!':
                 break
 
@@ -355,7 +354,7 @@ def main():
                             continue
                         case "q":
                             print("Quitting launcher.")
-                            exit(ExitCodes.QUIT)
+                            exit(ExitCodes.QUIT.value)
                         case "p":
                             show_personal_leaderboard(player_data)
                             continue

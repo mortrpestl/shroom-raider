@@ -1,0 +1,11 @@
+The boons of the forest is plentiful
+
+Vegetables, herbs, and even the occasional hare.
+
+But, there's one thing that you cannot get your mind off:
+\u001b[0;31m
+MUSHROOMS.
+\u001b[0m
+Can you collect them all?
+
+After all, you are the...

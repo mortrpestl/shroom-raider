@@ -1,6 +1,7 @@
 import time
 import os
 import sys
+from wcwidth import wcswidth
 
 WAIT_TIME = 2.5
 DEBUG_MODE = True
@@ -17,6 +18,20 @@ def clear_prev_n_lines(n):
 
 def wait(seconds):
     time.sleep(seconds)
+
+
+def center_wr_to_terminal_size(input_str: str | list[str]):
+    if isinstance(input_str, str):
+        input_str = input_str.split("\n")
+    # otherwise, its already a list
+    width = os.get_terminal_size()[0]
+    temp = []
+    for line in input_str:
+        txt_width = wcswidth(line)
+        padding_left = (width - txt_width) // 2
+        temp.append(" " * padding_left + line)
+    return "\n".join(temp)
+
 
 #decorator
 def debug_wait(delay=2.5):
