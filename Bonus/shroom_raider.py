@@ -221,7 +221,7 @@ def choose_after_game_option():
                     clear_terminal()
                     print_after_game_options(selected)
             elif choice == 's':
-                if selected < len(OPTIONS_LIST):
+                if selected < len(OPTIONS_LIST)-1:
                     selected += 1
                     clear_terminal()
                     print_after_game_options(selected)
