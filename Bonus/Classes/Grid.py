@@ -4,6 +4,7 @@ from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
 from Utils.Enums import DisplayMode
+from Utils.central_imports import *
 
 
 class Grid:
@@ -360,22 +361,24 @@ class Grid:
         # * PLAYER "HUD"
         if not win and not lose:
             terminal_gui = f"""
-[w] Move up
-[a] Move left
-[s] Move down
+[w] Move up   
+[a] Move left 
+[s] Move down 
 [d] Move right{additional_inputs}
 [Q] Quit level
-[!] Reset
+[!] Reset     
 
 {item_here_display}
 {held_item_display}
 
 What will you do? """
+            
             display.append(terminal_gui)
+            clear_terminal()
             if f:  # if it is the FIRST time render is called, then animate the loading in!
-                load_in("\n".join(display))
+                load_in("\n".join(display), 5)
             else:
-                print(("\n".join(display)))
+                print((center_wr_to_terminal_size("\n".join(display))))
             sys.stdout.flush()
 
         return win or lose
