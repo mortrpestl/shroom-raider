@@ -15,9 +15,9 @@ from Utils.sounds import initAll
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
-    'r': 'replay level',
-    'm': 'main menu',
-    's': 'View Statistics',
+    'r': 'Replay Level',
+    'm': 'Return To Main Menu',
+    's': 'View Player Statistics',
     'p': 'Personal Leaderboard',
     'g': 'General Leaderboard',
     'l': 'Level Leaderboard',
@@ -70,15 +70,15 @@ def print_levels_table(levels, selected = 1):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
-    print("|" + "-" * inner_width + "|")
+    print("🌲" + "-" * inner_width + "🌲")  # top
+    print(f"| {header_line}   |")
+    print("|" + "-" * (inner_width + 2) + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
+        print(f"|  {row_line} |")
 
-    print("+" + "-" * inner_width + "+")  # bottom
+    print("🌲" + "-" * inner_width + "🌲")  # bottom
 
 def print_folders_table(folders, selected = 1):
     print("""
@@ -107,15 +107,15 @@ def print_folders_table(folders, selected = 1):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
-    print("|" + "-" * inner_width + "|")
+    print("🍄" + "-" * inner_width + "🍄")  # top
+    print(f"|  {header_line}   |")
+    print("|" + "-" * (inner_width + 2) + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
         print(f"| {row_line} |")
 
-    print("+" + "-" * inner_width + "+")
+    print("🍄" + "-" * inner_width + "🍄")
 
 def print_after_game_options(selected):
     option = OPTIONS_LIST[selected]
@@ -137,15 +137,15 @@ def print_after_game_options(selected):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
+    print("🔥" + "-" * inner_width + "🔥")  # top
+    print(f"|  {header_line} |")
     print("|" + "-" * inner_width + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
         print(f"| {row_line} |")
 
-    print("+" + "-" * inner_width + "+")
+    print("🔥" + "-" * inner_width + "🔥")
 
 # * Level Selection and Launching Functions
 
