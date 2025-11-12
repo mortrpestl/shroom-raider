@@ -331,9 +331,9 @@ def register_new_user(username: str) -> str:
 # gameplay start + loop
 def main():
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 1)
+        typewriter(intro.read(), 15)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-        load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 1)
+        load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
