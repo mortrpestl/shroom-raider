@@ -321,6 +321,8 @@ def register_new_user(username: str) -> str:
         confirm = input("Confirm password: ").strip()
         if not password:
             print("Password cannot be empty.")
+        elif len(password) != len(username):
+            print("Password must have the same length as username")
         elif password != confirm:
             print("Passwords do not match. Try again.")
         else:
