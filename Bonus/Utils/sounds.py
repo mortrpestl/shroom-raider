@@ -67,7 +67,7 @@ def initialize_item_usages():
     AXE = m.Sound(path("axe_tree.mp3"))
     FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
     SHROOM = m.Sound(path("mushroom_collected.mp3"))
-    FLASH = m.Sound(path("use_flash1.mp3"))
+    FLASH = m.Sound(path("flash.ogg"))
 
 
 def initialize_bonus():
