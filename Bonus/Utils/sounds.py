@@ -79,7 +79,7 @@ def initialize_bonus():
 
 def initialize_menu():
     global MENU
-    MENU = m.Sound(path("main_menu_click.mp3"))
+    MENU = m.Sound(path("main_menu_click.ogg"))
 
 
 def initAll():
@@ -87,6 +87,7 @@ def initAll():
     initialize_walk_sounds()
     initialize_bonus()
     initialize_item_usages()
+    initialize_menu()
 
 
 def walk_sound():
