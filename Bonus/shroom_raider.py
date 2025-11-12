@@ -7,6 +7,8 @@ from Bonus_Classes.Leaderboard import (
     show_level_leaderboard,
 )
 
+# ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
+
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
@@ -245,8 +247,9 @@ def make_stage_file_from_grid(grid_text):
 
 def launch_game_with_level(level):
     """
-    Send the level (including bee_data) to shroom_raider.py
+    Send the level to shroom_raider.py
     """
+    
     # create temp files to store level
     stage_path = make_stage_file_from_grid(level["grid"])
     report_fd, report_path = tempfile.mkstemp(

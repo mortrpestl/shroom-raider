@@ -5,6 +5,7 @@ HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
+#NOTE: This was refactored (cleaned) fairly heavily. Thank goodness for cleaner Pandas syntax!
 
 def read_xlsx_levels(folder_id: int):
     if not os.path.exists(LEVELS_XLSX):
