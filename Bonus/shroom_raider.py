@@ -1,11 +1,12 @@
 from Utils.central_imports import *
-
+from Bonus_Classes.security import findPW, scramble, unscramble
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
     show_general_leaderboard,
     show_level_leaderboard,
 )
+
 
 # ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
 
@@ -284,7 +285,42 @@ def launch_game_with_level(level):
             if os.path.exists(path):
                 os.remove(path)
 
+# * Password Methods
+def verify_existing_user(username: str, encrypted_username: str) -> str:
+    """
+    Prompt for password until correct for existing user.
+    Returns the correct password once verified.
+    """
+    while True:
+        password = input(f"Password for {username}: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+            continue
 
+        # scramble username with password
+        test_encrypted = scramble(username, password)
+        if test_encrypted == encrypted_username:
+            print("Password correct!")
+            return password
+        else:
+            print("Invalid password, try again.")
+
+
+def register_new_user(username: str) -> str:
+    """
+    Prompt for password and confirmation for new user.
+    Returns the confirmed password.
+    """
+    while True:
+        password = input(f"Enter new password for {username}: ").strip()
+        confirm = input("Confirm password: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+        elif password != confirm:
+            print("Passwords do not match. Try again.")
+        else:
+            print("Password confirmed!")
+            return password
 
 # gameplay start + loop
 def main():
@@ -294,10 +330,19 @@ def main():
 +------------------------+
           """)
 
-    username = (
-        input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
-    )
-    player_data = PlayerData(username)
+    username = input("Username (leave blank for guest): ").strip() or "GUEST"
+
+    encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
+
+    if encrypted_username:  # existing user
+        password = verify_existing_user(username, encrypted_username)
+    else:  # new user
+        password = register_new_user(username)
+        # store encrypted username & reference username in Excel
+        encrypted_username = scramble(username, password)
+        PlayerData.store_new_user(username, encrypted_username)
+
+    player_data = PlayerData(username, password) 
 
     b()
     while True: # folders muna tayo

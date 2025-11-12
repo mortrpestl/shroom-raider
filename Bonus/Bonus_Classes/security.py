@@ -1,4 +1,4 @@
-CHARTAPE = r'''0gqbmpWKBfZViX5azxo4RMFsn}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7YP/h{lewE6:G'''
+CHARTAPE = r'''0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G'''
 CHARTAPE_LEN = len(CHARTAPE)
 VALID_LETTERS = set(CHARTAPE)
 
@@ -14,7 +14,9 @@ def check_validity(data: str):
         return True
 
 def shift(letter: str, shiftval: str):
+    print(letter)
     i = CHARTAPE.index(letter)
+
     shiftRight = CHARTAPE.index(shiftval)
     i += shiftRight
 
@@ -40,7 +42,7 @@ def scramble(data: str, key: str):
 
     return res
 
-def unscrable(data: str, key: str):
+def unscramble(data: str, key: str):
     res = r''
 
     for i in range(len(data)):
@@ -48,3 +50,27 @@ def unscrable(data: str, key: str):
     
     return res
 
+def findPW(unencrypted: str, encrypted: str): # we assume that these are the same len
+    pw = r''
+    for i in range(len(unencrypted)):
+        i1 = CHARTAPE.index(unencrypted[i])
+        i2 = CHARTAPE.index(encrypted[i])
+        # find the diff between each letter
+
+        shift = 0
+        if i2 > i1:
+            shift = i2 - i1
+        elif i2 < i1:
+            shift = (i2 + CHARTAPE_LEN) - i1
+        else:
+            shift = 0
+
+        pw += CHARTAPE[shift]
+
+    return pw
+
+STRING = r'''lisXw8S8O/:b2OF u2BtCu2B7y'''
+print(unscramble(STRING,'guest'))
+
+
+#GUEST	0x/No	R	RX	R	R	CbotxgustwTKXg8Dh"	lisXw8S8O/:b2OF u2BtCu2B7y
