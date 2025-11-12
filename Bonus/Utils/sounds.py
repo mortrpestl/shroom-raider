@@ -5,15 +5,17 @@ from random import randint
 WALK = []
 PAVEDWALK = []
 ONITEM = None
-AXE, FLAMETHROWER, SHROOM, FLASH = None, None, None, None
+AXE, FLAMETHROWER, SHROOM = None, None, None, None
 PUSH = []
 FAILPUSH = None
+EQUIP = None
 DEATH = None
 
 # bonus
 ICE = None
 LOG = None
 BOMB = None
+FLASH = None
 BEE = None
 BEE_DEATH = None
 
@@ -62,8 +64,9 @@ def initialize_walk_sounds():
 
 
 def initialize_item_usages():
-    global AXE, FLAMETHROWER, SHROOM, FLASH
+    global AXE, FLAMETHROWER, SHROOM, FLASH, EQUIP
 
+    EQUIP = m.sound(path('equip.ogg'))
     AXE = m.Sound(path("axe_tree.mp3"))
     FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
     SHROOM = m.Sound(path("mushroom_collected.mp3"))
@@ -157,6 +160,11 @@ def death_sound():
     global DEATH
     if DEATH:
         DEATH.play()
+
+def equip_sound():
+    global EQUIP
+    if EQUIP:
+        EQUIP.play()
 
 
 # bonus
