@@ -10,7 +10,7 @@ from Bonus_Classes.Leaderboard import (
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
-    'q': 'replay level',
+    'r': 'replay level',
     'm': 'main menu',
     's': 'View Statistics',
     'p': 'Personal Leaderboard',
@@ -18,7 +18,7 @@ AFTER_GAME_OPTIONS = {
     'l': 'Level Leaderboard',
     'q': 'Quit Launcher'
 }
-OPTIONS_LIST = ['q', 'm', 's', 'p', 'g', 'l', 'q']
+OPTIONS_LIST = ['r', 'm', 's', 'p', 'g', 'l', 'q']
 
 # * Advanced Helper Functions
 
@@ -213,8 +213,6 @@ def choose_after_game_option():
     while True:
         choice = m()
         if choice is not None:
-            if choice == "Q":
-                return "q"
             if choice == 'enter':
                 return selected
             if choice == 'w':
