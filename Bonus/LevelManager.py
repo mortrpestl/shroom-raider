@@ -120,6 +120,6 @@ def get_folder_title(folder_id: int):
 
 def get_level_title(folder_id: int, level_id: int):
     """Return the title for a level id or None if not found."""
-    lvl = get_level_by_id(folder_id, level_id)
+    lvl = get_level_by_id(int(folder_id), int(level_id))
     return lvl["title"] if lvl else None
 

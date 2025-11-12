@@ -2,6 +2,7 @@ import time
 import os
 import sys
 
+DEBUG_MODE = True
 
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
@@ -16,6 +17,15 @@ def clear_prev_n_lines(n):
 def wait(seconds):
     time.sleep(seconds)
 
+def debug_wait():
+    if (DEBUG_MODE): 
+        print('DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils')
+        wait(2.5)
+
+def print_and_wait(message, seconds=1):
+    print(message)
+    wait(seconds)
+    clear_terminal()
 
 def format_time(seconds: float) -> str:
     m, s = divmod(seconds, 60)

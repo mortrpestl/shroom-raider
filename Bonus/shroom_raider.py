@@ -18,6 +18,8 @@ from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
 from Utils.movement import unblock_keys as ub
 
+from Utils.general_utils import wait, clear_terminal, print_and_wait
+
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
@@ -31,25 +33,7 @@ AFTER_GAME_OPTIONS = {
 }
 OPTIONS_LIST = ['q', 'm', 's', 'p', 'g', 'l', 'q']
 
-# * Helper Functions
-
-
-def clear_terminal():
-    os.system("cls" if os.name == "nt" else "clear")
-
-
-def wait(seconds):
-    time.sleep(seconds)
-
-
-def print_and_wait(message, seconds=1):
-    print(message)
-    wait(seconds)
-    clear_terminal()
-
-
 # * Advanced Helper Functions
-
 
 def show_statistics(pdata):
     if pdata is None:
@@ -353,13 +337,14 @@ def main():
                 clear_terminal()
                 # session end
 
+                FULL_ID = '/'.join(str(x) for x in path)
                 # process session data
                 if report:
                     elapsed_time = float(end_time - start_time)
                     pdata.apply_report_dict(
                         report,
                         return_code=return_code,
-                        level_id=level_choice["id"],
+                        level_id=FULL_ID,
                         elapsed_time=elapsed_time,
                     )
 
@@ -382,7 +367,7 @@ def main():
                             show_general_leaderboard()
                             continue
                         case "l":
-                            show_level_leaderboard(level_choice["id"])
+                            show_level_leaderboard(FULL_ID)
                             continue
                         case _:
                             print("Invalid choice, try again.")

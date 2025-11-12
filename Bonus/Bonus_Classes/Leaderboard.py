@@ -1,8 +1,9 @@
 import os
 import json
+import time
 
 from Bonus_Classes.PlayerData import read_all_rows
-from Utils.general_utils import format_time, tabulate
+from Utils.general_utils import format_time, tabulate, debug_wait
 from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
@@ -18,13 +19,12 @@ def show_personal_leaderboard(pdata):
         return
 
     rows = [
-        [i + 1, get_level_title(int(lvl_id)) or "-", format_time(ms)]
-        for i, (lvl_id, ms) in enumerate(
-            sorted(completed.items(), key=lambda x: int(x[0]))
-        )
+        [i + 1, get_level_title(*level_ref.split('/')) or "-", format_time(ms)]
+        for i, (level_ref, ms) in enumerate(sorted(completed.items()))
     ]
     tabulate(["#", "Title", "Best Time"], rows, max_width=30)
-
+    debug_wait()
+    
 
 def show_general_leaderboard():
     """
@@ -70,17 +70,18 @@ def show_general_leaderboard():
         "Tiles Walked",
     ]
     tabulate(headers, rows, max_width=24)
+    debug_wait()    
 
 
-def show_level_leaderboard(level_id):
+def show_level_leaderboard(level_ref):
     """
     Shows players who've beaten a level sorted by time.
     """
     players = read_all_rows()
-    level_title = get_level_title(level_id) or "UNTITLED"
+    level_title = get_level_title(*level_ref.split('/')) or "UNTITLED"
 
     if not players:
-        print(f"No player data for Level {level_id} ({level_title}).\n")
+        print(f"No player data for Level {level_ref} ({level_title}).\n")
         return
 
     level_rows = []
@@ -89,11 +90,11 @@ def show_level_leaderboard(level_id):
             completed = json.loads(p.get("completed_data", "{}"))
         except Exception:
             completed = {}
-        if str(level_id) in completed:
-            level_rows.append((p.get("username", ""), completed[str(level_id)]))
+        if level_ref in completed:
+            level_rows.append((p.get("username", ""), completed[level_ref]))
 
     if not level_rows:
-        print(f"No completed times for Level {level_id} ({level_title}).\n")
+        print(f"No completed times for Level {level_ref} ({level_title}).\n")
         return
 
     level_rows.sort(key=lambda x: x[1])
@@ -102,3 +103,4 @@ def show_level_leaderboard(level_id):
         for i, (username, ms) in enumerate(level_rows)
     ]
     tabulate(["Rank", "Username", "Title", "Time"], rows, max_width=30)
+    debug_wait()
