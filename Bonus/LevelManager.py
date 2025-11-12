@@ -21,36 +21,24 @@ def read_xlsx_levels(folder_id: int):
     grid_col = cols.get("input grid")
     diff_col = cols.get("difficulty")
     dark_col = cols.get("dark")
+    bee_col = cols.get("bee")
 
     for _, row in df.iterrows():
-        raw_grid = (
-            str(row[grid_col]).replace("\\n", "\n")
-            if grid_col and not pd.isna(row[grid_col])
-            else ""
-        )
-
-        difficulty = (
-            str(row[diff_col]).strip().title()
-            if diff_col and not pd.isna(row[diff_col])
-            else "Normal"
-        )
-
-        # handle empty or missing dark radius
-        dark_val = row[dark_col] if dark_col and not pd.isna(row[dark_col]) else None
-        dark_radius = int(dark_val) if dark_val is not None else None
+        raw_grid = str(row.get(grid_col, "")).replace("\\n", "\n")
+        difficulty = str(row.get(diff_col, "Normal")).strip().title()
+        dark_val = row.get(dark_col)
+        dark_radius = int(dark_val) if pd.notna(dark_val) else None
+        bee_data = str(row.get(bee_col)) if bee_col and pd.notna(row.get(bee_col)) else None
 
         levels.append(
             {
-                "id": int(row[id_col]) if id_col and not pd.isna(row[id_col]) else None,
-                "title": str(row[title_col]).strip()
-                if title_col and not pd.isna(row[title_col])
-                else "UNTITLED",
-                "description": str(row[desc_col]).strip()
-                if desc_col and not pd.isna(row[desc_col])
-                else "",
+                "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
+                "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
+                "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
                 "difficulty": difficulty,
                 "grid": raw_grid,
                 "dark_radius": dark_radius,
+                "bee_data": bee_data,
             }
         )
     return levels
@@ -59,10 +47,9 @@ def read_xlsx_folders():
     if not os.path.exists(LEVELS_XLSX):
         return []
 
-    df = pd.read_excel(LEVELS_XLSX, engine="openpyxl", sheet_name='Folders')
+    df = pd.read_excel(LEVELS_XLSX, engine="openpyxl", sheet_name="Folders")
     folders = []
 
-    # Expected columns: ID, Title, Description, Input Grid, Difficulty, Dark (case-insensitive)
     cols = {c.lower(): c for c in df.columns}
     id_col = cols.get("id")
     title_col = cols.get("title")
@@ -71,19 +58,15 @@ def read_xlsx_folders():
     for _, row in df.iterrows():
         folders.append(
             {
-                "id": int(row[id_col]) if id_col and not pd.isna(row[id_col]) else None,
-                "title": str(row[title_col]).strip()
-                if title_col and not pd.isna(row[title_col])
-                else "UNTITLED",
-                "description": str(row[desc_col]).strip()
-                if desc_col and not pd.isna(row[desc_col])
-                else "",
+                "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
+                "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
+                "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
             }
         )
     return folders
 
 def load_levels(folder_id: int):
-    """Returns a list of level dicts: {"id","title","description","difficulty","grid","dark_radius"}"""
+    """Returns a list of level dicts: {"id","title","description","difficulty","grid","dark_radius","bee"}"""
     levels = read_xlsx_levels(folder_id)
     for idx, lvl in enumerate(levels, 1):
         if lvl.get("id") is None:

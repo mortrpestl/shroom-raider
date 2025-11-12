@@ -19,11 +19,20 @@ element_probi = {
     items: 3,
 }
 
+def stringify(grid):
+    return '\n'.join(''.join(g) for g in grid)
+
+def prob_list_from_dict(element_probi):
+    lst = []
+    for char, prob in element_probi.items():
+        lst.extend([char]*prob)
+    return lst
+
 def place_player(R,C,map,offset_from_edge = 0):
     map[randint(0+offset_from_edge, R-1-offset_from_edge)][randint(0+offset_from_edge, C-1-offset_from_edge)] = "L"
 
 # * Probability Determiner Helper Functions
-def get_indiv_probi():
+def get_indiv_probi(element_probi = element_probi):
 
     indiv_element_probi = {}
 
@@ -51,7 +60,7 @@ def get_items_and_probabilities(allowed_to_spawn = None, probabilities_shown = T
             return ''.join(k for k in element_prob.keys() if k in allowed_to_spawn)
 
 # * Primitive Map Generator Functions
-def gen_map(R,C, element_probi = get_indiv_probi()):
+def gen_map(R,C, element_probi = get_indiv_probi(), player_exists=True):
     elements = [
         char
         for char, prob in element_probi.items()
@@ -69,7 +78,7 @@ def gen_map(R,C, element_probi = get_indiv_probi()):
                 row.append(elements[randint(0, len(elements)-1)])
         map.append(row)
 
-    place_player(R,C,map,offset_from_edge=1)
+    if player_exists: place_player(R,C,map,offset_from_edge=1)
 
     return f"{R} {C}\n" + "\n".join("".join(row) for row in map)
 
@@ -116,3 +125,14 @@ def gen_map_with_seeds(R,C,seeds=5):
         new_map[random_R][random_C] = 'X'
 
     return f"{R} {C}\n" + "\n".join("".join(row) for row in new_map)
+
+def place_laro_center(input_map):
+    input_map = input_map.split('\n')
+
+    R,C = map(int,input_map[0].split())
+    grid = [list(r) for r in input_map[1:]]
+
+    grid[R//2][C//2] = 'L'
+    
+    return input_map[0]+'\n'+stringify(grid)
+

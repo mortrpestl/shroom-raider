@@ -27,9 +27,9 @@ def check_win_condition(P, G):
         G.level_clear()
 
 
-def reset(level, dark_radius=None):
+def reset(level, metadata=None):
     global G, P
-    G = Grid("test", level, dark_radius=dark_radius)
+    G = Grid("test", level, metadata=metadata)
     P = G.get_player()
     return G, P
 
@@ -51,7 +51,8 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
         exit(ExitCodes.QUIT.value)
 
     if inst == "!":
-        G, P = reset(level, dark_radius=G.get_dark_radius())
+        G, P = reset(level, metadata=G.get_metadata())
+
 
     if reset_only:
         return
@@ -115,27 +116,36 @@ args will always be used by default
 def main():
     global G, P, REPORT_FILE, MOVES_MADE
 
+    DEFAULT_DARK = 10000
+    DEFAULT_BEE = '3 3'
+    
     argument_parser = ap()
     argument_parser.add_argument("-f", "--stage_file")
-    argument_parser.add_argument("-d", "--darkness_radius", default=None)
     argument_parser.add_argument("-R", "--report_file", default=None)
+    argument_parser.add_argument("-d", "--darkness_radius", default=DEFAULT_DARK)
+    argument_parser.add_argument("-B", "--bee_data", default=DEFAULT_BEE)
     args = argument_parser.parse_args()
 
-    # optional args
     REPORT_FILE = args.report_file
+
     try:
         dark_radius = int(args.darkness_radius)
     except Exception:
         dark_radius = None
 
+    bee_data = args.bee_data
+
     m.block_keys()
+
+    metadata = {'dark_radius': dark_radius, 'bee_data': bee_data}
 
     with open(args.stage_file, encoding="utf-8") as lvl_file:
         first_line = lvl_file.readline().lstrip("\ufeff")
         r, c = map(int, first_line.split())
         level = lvl_file.read()
 
-        G = Grid(args.stage_file, level, dark_radius)
+        print()
+        G = Grid(args.stage_file, level, metadata = metadata)
         P = G.get_player()
         check_win_condition(P, G)
 
@@ -161,7 +171,6 @@ def main():
                     write_report(G, P, False, True)
                     time.sleep(1)
                     sys.exit(ExitCodes.DEFEAT.value)
-
 
 if __name__ == "__main__":
     s.initAll()

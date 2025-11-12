@@ -1,14 +1,11 @@
-import os
-import json
-import time
+from Utils.central_imports import *
 
 from Bonus_Classes.PlayerData import read_all_rows
-from Utils.general_utils import format_time, tabulate, debug_wait
 from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
 
-
+@debug_wait(WAIT_TIME)
 def show_personal_leaderboard(pdata):
     """
     Shows completed levels, etc.
@@ -23,9 +20,8 @@ def show_personal_leaderboard(pdata):
         for i, (level_ref, ms) in enumerate(sorted(completed.items()))
     ]
     tabulate(["#", "Title", "Best Time"], rows, max_width=30)
-    debug_wait()
     
-
+@debug_wait(WAIT_TIME)
 def show_general_leaderboard():
     """
     Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
@@ -70,9 +66,8 @@ def show_general_leaderboard():
         "Tiles Walked",
     ]
     tabulate(headers, rows, max_width=24)
-    debug_wait()    
-
-
+  
+@debug_wait(WAIT_TIME)
 def show_level_leaderboard(level_ref):
     """
     Shows players who've beaten a level sorted by time.
@@ -103,4 +98,3 @@ def show_level_leaderboard(level_ref):
         for i, (username, ms) in enumerate(level_rows)
     ]
     tabulate(["Rank", "Username", "Title", "Time"], rows, max_width=30)
-    debug_wait()
