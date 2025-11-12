@@ -2,6 +2,7 @@ import time
 import os
 import sys
 
+WAIT_TIME = 2.5
 DEBUG_MODE = True
 
 def clear_terminal():
@@ -17,10 +18,19 @@ def clear_prev_n_lines(n):
 def wait(seconds):
     time.sleep(seconds)
 
-def debug_wait():
-    if (DEBUG_MODE): 
-        print('DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils')
-        wait(2.5)
+#decorator
+def debug_wait(delay=2.5):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            answer = func(*args, **kwargs)
+            if DEBUG_MODE:
+                print('DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils')
+                wait(delay)
+            return answer
+            
+        return wrapper
+    return decorator
+    
 
 def print_and_wait(message, seconds=1):
     print(message)

@@ -11,13 +11,16 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, dark_radius: int | None = None, mode: DisplayMode = DisplayMode.EMOJI):
+    def __init__(self, name: str, map_data: str, mode: DisplayMode = DisplayMode.EMOJI, metadata: dict | None = None):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
         self.__is_cleared = False
-        self.__dark_radius = dark_radius
         self.__display_mode = mode
+        self.__metadata = metadata or {}
+
+        self.__dark_radius = self.__metadata.get("dark_radius", None)
+        self.__bee_data = self.__metadata.get("bee_data", "3 3")
 
         # convert string to grid
         self.__grid_vis_map = [list(row) for row in map_data.strip().split("\n")]
@@ -119,6 +122,9 @@ class Grid:
     def get_dark_radius(self):
         return self.__dark_radius
 
+    def get_bee_data(self):
+        return self.__bee_data
+    
     def get_is_cleared(self):
         return self.__is_cleared
 
@@ -137,6 +143,9 @@ class Grid:
     def get_display_mode(self):
         return self.__display_mode
 
+    def get_metadata(self):
+        return self.__metadata
+    
     @staticmethod
     def get_grid_by_name(name: str):
         if name not in Grid.GRID_LIST:
@@ -216,6 +225,12 @@ class Grid:
 
         item_type, item_display_value = item
 
+        # * CHECK METADATA ASSOCIATIONS
+
+        if symbol == "&":
+            bee_lag, bee_count = map(int, self.__bee_data.split())
+            return item_type(coord, self, bee_lag=bee_lag, bee_count=bee_count), item_display_value
+        
         return item_type(coord, self, symbol), item_display_value
 
     # * Flash / Darkness Setters

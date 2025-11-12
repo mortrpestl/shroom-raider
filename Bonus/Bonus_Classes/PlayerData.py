@@ -1,10 +1,4 @@
-import os
-import json
-import time
-import pandas as pd
-
-from Utils.Enums import ExitCodes
-from Utils.general_utils import format_time, tabulate, debug_wait
+from Utils.central_imports import *
 from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
@@ -44,7 +38,7 @@ def safe_int(value):
     return int(value)
 
 
-class Data:
+class PlayerData:
     def __init__(self, name):
         self.name = name
         self.total_mushrooms_collected = 0
@@ -178,6 +172,7 @@ class Data:
         return self.apply_report_dict(report, level_id=level_id)
 
     # * Display
+    @debug_wait(WAIT_TIME)
     def __repr__(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
@@ -209,6 +204,5 @@ class Data:
 
         tabulate(["Stat", "Value"], stats_rows, max_width=30)
         tabulate(completed_headers, completed_rows, max_width=30)
-        debug_wait()
 
         return ""

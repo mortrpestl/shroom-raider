@@ -1,24 +1,13 @@
-import os
-import sys
-import subprocess
-import tempfile
-import json
-import time
-import LevelManager
-from argparse import ArgumentParser as ap
+from Utils.central_imports import *
 
-from Bonus_Classes.PlayerData import Data
+from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
     show_general_leaderboard,
     show_level_leaderboard,
 )
-from Utils.Enums import ExitCodes
-from Utils.movement import menu_movement as m
-from Utils.movement import block_keys as b
-from Utils.movement import unblock_keys as ub
 
-from Utils.general_utils import wait, clear_terminal, print_and_wait
+# ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
@@ -35,12 +24,12 @@ OPTIONS_LIST = ['r', 'm', 's', 'p', 'g', 'l', 'q']
 
 # * Advanced Helper Functions
 
-def show_statistics(pdata):
-    if pdata is None:
+def show_statistics(player_data):
+    if player_data is None:
         print("No statistics available.")
     else:
         print("\nPlayer statistics:")
-        print(pdata)
+        print(player_data)
 
 
 # * Level List Helper Functions
@@ -234,10 +223,12 @@ def choose_after_game_option():
                     clear_terminal()
                     print_after_game_options(selected)
             elif choice == 's':
-                if selected < len(OPTIONS_LIST):
+                if selected < len(OPTIONS_LIST)-1:
                     selected += 1
                     clear_terminal()
                     print_after_game_options(selected)
+
+
 def make_stage_file_from_grid(grid_text):
     """
     Creates: the file to send to shroom_raider.py from grid_text.
@@ -258,11 +249,12 @@ def launch_game_with_level(level):
     """
     Send the level to shroom_raider.py
     """
+    
     # create temp files to store level
     stage_path = make_stage_file_from_grid(level["grid"])
     report_fd, report_path = tempfile.mkstemp(
         prefix="shroom_report_", suffix=".json", dir=HERE
-    )
+        )
     os.close(report_fd)
 
     try:
@@ -270,8 +262,12 @@ def launch_game_with_level(level):
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
 
         # optional dark mode parameter
-        if "dark_radius" in level:
+        if "dark_radius" in level and level["dark_radius"] is not None:
             cmd += ["-d", str(level["dark_radius"])]
+
+        # optional bee_data parameter
+        if "bee_data" in level and level["bee_data"]:
+            cmd += ["--bee_data", str(level["bee_data"])]
 
         print(f"\nRunning: {' '.join(cmd)}\n")
         return_code = subprocess.call(cmd)
@@ -289,6 +285,7 @@ def launch_game_with_level(level):
                 os.remove(path)
 
 
+
 # gameplay start + loop
 def main():
     print("""
@@ -300,7 +297,7 @@ def main():
     username = (
         input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
     )
-    pdata = Data(username)
+    player_data = PlayerData(username)
 
     b()
     while True: # folders muna tayo
@@ -324,6 +321,7 @@ def main():
             elif level_choice == '!':
                 break
 
+            path = [folder_choice]
             path.append(level_choice[0])
 
             while True: 
@@ -339,7 +337,7 @@ def main():
                 # process session data
                 if report:
                     elapsed_time = float(end_time - start_time)
-                    pdata.apply_report_dict(
+                    player_data.apply_report_dict(
                         report,
                         return_code=return_code,
                         level_id=FULL_ID,
@@ -353,13 +351,13 @@ def main():
                         case "r" | "m":
                             break
                         case "s":
-                            show_statistics(pdata)
+                            show_statistics(player_data)
                             continue
                         case "q":
                             print("Quitting launcher.")
                             exit(ExitCodes.QUIT)
                         case "p":
-                            show_personal_leaderboard(pdata)
+                            show_personal_leaderboard(player_data)
                             continue
                         case "g":
                             show_general_leaderboard()
