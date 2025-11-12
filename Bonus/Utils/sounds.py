@@ -5,7 +5,7 @@ from random import randint
 WALK = []
 PAVEDWALK = []
 ONITEM = None
-AXE, FLAMETHROWER, SHROOM = None, None, None, None
+AXE, FLAMETHROWER, SHROOM = None, None, None
 PUSH = []
 FAILPUSH = None
 EQUIP = None
@@ -66,7 +66,7 @@ def initialize_walk_sounds():
 def initialize_item_usages():
     global AXE, FLAMETHROWER, SHROOM, FLASH, EQUIP
 
-    EQUIP = m.sound(path('equip.ogg'))
+    EQUIP = m.Sound(path('equip.ogg'))
     AXE = m.Sound(path("axe_tree.mp3"))
     FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
     SHROOM = m.Sound(path("mushroom_collected.mp3"))
