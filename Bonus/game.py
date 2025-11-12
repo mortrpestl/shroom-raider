@@ -10,6 +10,7 @@ from Utils.Enums import ExitCodes
 
 from Classes.Grid import Grid
 from Classes.Entities.Player import Player
+from Classes.Entities.Bomb import Bomb
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -62,7 +63,12 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
         if moved:
             MOVES_MADE += 1
     elif inst == "p":
-        P.collect_item()
+        if P.get_item() is None:
+            P.collect_item()
+        elif isinstance(P.get_item(), Bomb) and isinstance(P.get_entity_below(), Bomb):
+            P.collect_item()
+        else:
+            return # no overwriting items
     elif inst == "f":
         P.use_item()
 
