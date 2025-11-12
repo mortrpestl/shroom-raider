@@ -1,5 +1,6 @@
 import random
 from random import randint, choice
+import math
 
 empty_tile = '.'
 tiles = 'T'
@@ -18,6 +19,18 @@ element_probi = {
     pushables: 1,
     items: 3,
 }
+
+# * Helper Functions
+
+def parse_map(input_map):
+    input_map = input_map.split('\n')
+    header = input_map[0]
+    R,C = map(int, header.split())
+    grid = [list(r) for r in input_map[1:]]
+    return header, grid, R, C
+
+def build_map(header, grid):
+    return header+'\n'+stringify(grid)
 
 def stringify(grid):
     return '\n'.join(''.join(g) for g in grid)
@@ -60,27 +73,26 @@ def get_items_and_probabilities(allowed_to_spawn = None, probabilities_shown = T
             return ''.join(k for k in element_prob.keys() if k in allowed_to_spawn)
 
 # * Primitive Map Generator Functions
-def gen_map(R,C, element_probi = get_indiv_probi(), player_exists=True):
-    elements = [
-        char
-        for char, prob in element_probi.items()
-        for _ in range(prob)
-    ]
+def gen_map(R,C,element_probi=None,player_exists=True,boost_prob=None):
+    if element_probi is None:
+        element_probi=get_indiv_probi()
 
-    
-    map = []
-    for r in range(R):
-        row = []
-        for c in range(C):
-            if r in (0, R-1) or c in (0, C-1):
-                row.append(".")
-            else:
-                row.append(elements[randint(0, len(elements)-1)])
-        map.append(row)
+    if boost_prob:
+        element_probi=element_probi.copy()
+        for char,mult in boost_prob:
+            if char in element_probi:
+                element_probi[char]=int(element_probi[char]*mult)
 
-    if player_exists: place_player(R,C,map,offset_from_edge=1)
+    elements=[char for char,prob in element_probi.items() for _ in range(prob)]
+    grid=[[random.choice(elements) for c in range(C)] for r in range(R)]
 
-    return f"{R} {C}\n" + "\n".join("".join(row) for row in map)
+    if player_exists:
+        place_player(R,C,grid,offset_from_edge=1)
+
+    return build_map(f"{R} {C}",grid)
+
+def gen_empty_map(R,C):
+    return gen_map(R,C,element_probi={'.':50,'_':1})
 
 def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None, highest_C=None):
     """
@@ -127,12 +139,143 @@ def gen_map_with_seeds(R,C,seeds=5):
     return f"{R} {C}\n" + "\n".join("".join(row) for row in new_map)
 
 def place_laro_center(input_map):
-    input_map = input_map.split('\n')
-
-    R,C = map(int,input_map[0].split())
-    grid = [list(r) for r in input_map[1:]]
-
+    header, grid, R, C = parse_map(input_map)
     grid[R//2][C//2] = 'L'
-    
-    return input_map[0]+'\n'+stringify(grid)
+    return build_map(header, grid)
 
+# * Painting Utilities
+
+def draw_circles(input_map, centers=None, char='R', fill=False, fatness=0.4, use_numbered_cells=False):
+    header, grid, R, C = parse_map(input_map)
+
+    if use_numbered_cells:
+        centers = []
+        for r in range(R):
+            for c in range(C):
+                if grid[r][c].isdigit():
+                    radius = int(grid[r][c])
+                    centers.append((r, c, radius))
+                    grid[r][c] = char
+
+    if not centers:
+        return build_map(header, grid)
+
+    for r in range(R):
+        for c in range(C):
+            for cx, cy, radius in centers:
+                dist = math.sqrt((r - cx)**2 + (c - cy)**2)
+                if fill and dist <= radius:
+                    grid[r][c] = char
+                elif not fill and abs(dist - radius) < fatness:
+                    grid[r][c] = char
+
+    return build_map(header, grid)
+
+
+def draw_lines(input_map, points=None, element_probi=None, thickness=1, use_X_coords=False, canyonize=True):
+
+    header, grid, R, C = parse_map(input_map)
+    
+    if element_probi is None:
+        element_probi = get_indiv_probi()
+    elements = prob_list_from_dict(element_probi)
+
+    if use_X_coords:
+        points = [(r, c) for r in range(R) for c in range(C) if grid[r][c] == 'X']
+        if not points: return input_map
+
+
+    # Bresenham interpolation hehe
+    def draw_segment(r1, c1, r2, c2):
+        steps = round(max(abs(r2-r1), abs(c2-c1)))
+        for i in range(steps+1):  # include endpoint
+            t = i / steps if steps else 0
+            r = int(r1 + (r2-r1)*t) + (choice(range(-1,1)) if canyonize else 0)
+            c = int(c1 + (c2-c1)*t) + (choice(range(-1,1)) if canyonize else 0)
+            # add thickness
+            for dr in range(-thickness, thickness+1):
+                for dc in range(-thickness, thickness+1):
+                    rr, cc = r+dr, c+dc
+                    if 0 <= rr < R and 0 <= cc < C and math.sqrt(dr**2 + dc**2) <= thickness:
+                        grid[rr][cc] = random.choice(elements)
+
+    edges_drawn = set()
+    for p1 in points:
+        nearest = None
+        min_dist = float('inf')
+        for p2 in points:
+            if p1 == p2: continue
+            if (p1, p2) in edges_drawn or (p2, p1) in edges_drawn:
+                continue
+            dist = (p1[0]-p2[0])**2 + (p1[1]-p2[1])**2
+            if dist < min_dist:
+                min_dist = dist
+                nearest = p2
+        if nearest:
+            draw_segment(*p1, *nearest)
+            edges_drawn.add((p1, nearest))
+
+    return build_map(header, grid)
+
+#sidenote: compprog techniques in map generation is kinda crazy LOL
+def draw_polygon_hull(input_map, points, polygon_char='R', thickness=1, canyonize=True):
+    if not points:
+        return input_map
+
+    header, grid, R, C = parse_map(input_map)
+
+    def cross(o, a, b):
+        return (a[1]-o[1])*(b[0]-o[0]) - (a[0]-o[0])*(b[1]-o[1])
+
+    points = sorted(set(points))
+    if len(points) == 1:
+        hull = points
+    else:
+        # lower hull
+        lower = []
+        for p in points:
+            while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+                lower.pop()
+            lower.append(p)
+        # upper hull
+        upper = []
+        for p in reversed(points):
+            while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+                upper.pop()
+            upper.append(p)
+        hull = lower[:-1] + upper[:-1]
+
+    # Bresenham interpolation hehe
+    def draw_segment(r1, c1, r2, c2):
+        steps = round(max(abs(r2-r1), abs(c2-c1)))
+        for i in range(steps+1):
+            t = i / steps if steps else 0
+            r = int(r1 + (r2-r1)*t) + (choice(range(-1,1)) if canyonize else 0)
+            c = int(c1 + (c2-c1)*t) + (choice(range(-1,1)) if canyonize else 0)
+            for dr in range(-thickness, thickness+1):
+                for dc in range(-thickness, thickness+1):
+                    rr, cc = r+dr, c+dc
+                    if 0 <= rr < R and 0 <= cc < C and math.sqrt(dr**2 + dc**2) <= thickness:
+                        grid[rr][cc] = polygon_char
+
+    for i in range(len(hull)):
+        draw_segment(*hull[i], *hull[(i+1)%len(hull)])
+
+    return build_map(header, grid)
+
+# * EXAMPLE USAGE
+
+randR,randC = randint(3,30),randint(3,30)
+
+# 1. Generate map with boosted probabilities for tree
+
+# element_probi = {'T':1, '.':2}
+# print(gen_map(10,20, element_probi=element_probi))
+
+# 2. Draw circles on coordinates
+# print(draw_circles(gen_empty_map(20,25),[(4,4,5),(20,20,7)], fatness=0.7))
+
+# 3. Draw filled circles in coordinates
+# print(draw_circles(gen_empty_map(25,25),[(2,2,2),(20,20,5),(3,18,4),(10,10,7),(22,5,2),(10,23,5),(16,-3,4)], char='T', fatness=2))
+
+# print(draw_circles(gen_empty_map(25,25),[(-3,-3,20)],fatness=3))

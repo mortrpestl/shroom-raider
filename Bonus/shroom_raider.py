@@ -1,11 +1,14 @@
 from Utils.central_imports import *
 from colorama import Fore, Style
+from Bonus_Classes.security import findPW, scramble, unscramble
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
     show_general_leaderboard,
     show_level_leaderboard,
 )
+from Utils.sounds import initAll
+
 
 # ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
 
@@ -39,10 +42,12 @@ def print_levels_table(levels, selected = 1):
     """
     Print a summary of the levels.
     """
-    print("""
-+-------------------------+
-|      LEVEL SELECT       |
-+-------------------------+
+    print(r"""
+⠀⢀⡀⠀⠀⢀⣀⣠⣀⠀⣀⠀⢀⣤⡄⢀⣀⣠⣀⠄⣠⠀⠀⠀⠀⠀⠀⠀⡠⣤⡀⢀⣄⣠⣄⡀⢀⡀⠀⠀⢀⣀⣠⣀⠀⠀⢀⣠⡀⠀⣠⣤⣄⣀⠄
+⠐⢻⡇⠀⠐⢻⡏⠉⠁⠚⣿⡄⠁⢹⡟⢻⡏⠉⠁⠐⢿⡇⠀⠀⠀⠀⢀⣾⡉⠛⠁⢻⡏⠉⠁⠐⢳⡇⠀⠐⢻⡏⠉⠁⠀⣰⠉⠹⡿⠞⠉⣿⠋⠁⠀
+⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⢸⣷⠀⣼⠁⢸⡷⠶⠖⠀⢸⡇⠀⠀⠀⠀⠀⠛⢿⣦⡀⢸⣷⠶⠖⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⣿⠀⠀⠀⠀⠀⣿⠀⠀⠀
+⠀⢸⣇⣀⡀⢸⣧⣀⣀⠀⠀⣿⣶⠇⠀⢸⣧⣀⡠⠀⣼⣇⣀⠄⠀⠀⢠⣢⣀⣹⠇⢸⣧⣀⣀⠄⢸⣧⣀⡀⢸⣧⣀⣀⠀⢿⣧⣀⣀⠄⠀⣿⣀⠀⠀
+⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠀⠘⠁⠀⠀⠊⠙⠛⠁⠀⠋⠛⠃⠀⠀⠀⠈⠛⠋⠁⠀⠘⠙⠓⠁⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠈⠙⠓⠁⠀⠀⠘⠀⠀⠀
 """)
 
     headers = ["ID", "Title", "Description", "Difficulty"]
@@ -50,7 +55,7 @@ def print_levels_table(levels, selected = 1):
     for lvl in levels:
         rows.append(
             [
-                str(lvl.get("id", "") if lvl.get('id', '') != selected else '🧑') ,
+                str('　' if lvl.get('id', '') != selected else '🧑') ,
                 str(lvl.get("title", "")),
                 str(lvl.get("description", "")).replace("\n", " "),
                 str(lvl.get("difficulty", "Normal")),
@@ -77,16 +82,18 @@ def print_levels_table(levels, selected = 1):
 
 def print_folders_table(folders, selected = 1):
     print("""
-+-------------------------+
-|     Folder Select       |
-+-------------------------+
+⠀⣀⣠⣄⡀⠀⢠⣄⠀⠀⡄⠀⠀⢀⡄⢠⣄⠀⢀⣄⣠⣄⠀⣀⠀⣠⡀⠀⠀⠀⠀⡠⣤⡀⢠⣀⠤⡠⢀⡄⠀⠀⢀⣀⠤⡠⠀⠀⡠⣄⠀⣠⣤⣄⡠
+⠈⣿⠉⠉⠀⡔⠉⢿⣷⠚⡇⠀⠀⢹⡏⠉⢿⡇⢹⡏⠉⠁⠈⣿⠊⢻⡇⠀⠀⠀⣼⣍⠙⠀⢹⡏⠉⠀⠛⡇⠀⠀⢹⡏⠉⠀⢀⠎⠘⠿⠋⠈⣿⠉⠀
+⠀⣿⠶⠖⢸⣧⠀⠘⡿⠀⡇⠀⠀⢸⡇⠀⠘⡇⢸⡿⠶⠂⠀⣿⢀⡞⠀⠀⠀⠀⠙⢿⣷⡄⢸⡷⠶⠂⠀⡇⠀⠀⢸⡷⠶⠂⢸⡆⠀⠀⠀⠀⣿⠀⠀
+⠀⣟⡄⠀⠀⢿⢷⠔⠁⠀⣷⣤⡄⢸⣧⣀⡰⠁⢰⣧⡤⡤⠀⣿⡤⢿⢄⠀⠀⠀⣾⣄⣹⠃⢸⣧⣤⠄⢀⣧⣄⠄⢸⢧⣤⠄⠸⣿⣄⣀⠀⠀⣟⠄⠀
+⠀⠈⠀⠀⠀⠀⠁⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠉⠀⠀⠉⠀⠈⠁⠀⠀⠀⠉⠉⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠁⠀⠀⠉⠀⠀
 """)
     headers = ["ID", "Title", "Description"]
     rows = []
     for folder in folders:
         rows.append(
             [
-                str(folder.get("id", "") if folder.get('id', '') != selected else '🧑') ,
+                str('　' if folder.get('id', '') != selected else '🧑') ,
                 str(folder.get("title", "")),
                 str(folder.get("description", "")).replace("\n", " "),
             ]
@@ -117,7 +124,7 @@ def print_after_game_options(selected):
     for o in AFTER_GAME_OPTIONS:
         rows.append(
             [
-                o if o != option else '🧑', 
+                '　' if o != option else '🧑', 
                 AFTER_GAME_OPTIONS[o]
             ]
         )
@@ -188,7 +195,7 @@ def choose_folder(folders):
     # if there is levels
     
     selected = 1
-    print_levels_table(folders, selected)
+    print_folders_table(folders, selected)
     while True:
         choice = m()
         if choice is not None:
@@ -200,12 +207,12 @@ def choose_folder(folders):
                 if selected > 1:
                     selected -= 1
                     clear_terminal()
-                    print_levels_table(folders, selected)
+                    print_folders_table(folders, selected)
             elif choice == 's':
                 if selected < len(folders):
                     selected += 1
                     clear_terminal()
-                    print_levels_table(folders, selected)
+                    print_folders_table(folders, selected)
 
 def choose_after_game_option():
     clear_terminal()
@@ -284,7 +291,42 @@ def launch_game_with_level(level):
             if os.path.exists(path):
                 os.remove(path)
 
+# * Password Methods
+def verify_existing_user(username: str, encrypted_username: str) -> str:
+    """
+    Prompt for password until correct for existing user.
+    Returns the correct password once verified.
+    """
+    while True:
+        password = input(f"Password for {username}: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+            continue
 
+        # scramble username with password
+        test_encrypted = scramble(username, password)
+        if test_encrypted == encrypted_username:
+            print("Password correct!")
+            return password
+        else:
+            print("Invalid password, try again.")
+
+
+def register_new_user(username: str) -> str:
+    """
+    Prompt for password and confirmation for new user.
+    Returns the confirmed password.
+    """
+    while True:
+        password = input(f"Enter new password for {username}: ").strip()
+        confirm = input("Confirm password: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+        elif password != confirm:
+            print("Passwords do not match. Try again.")
+        else:
+            print("Password confirmed!")
+            return password
 
 # gameplay start + loop
 def main():
@@ -293,12 +335,22 @@ def main():
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
         load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 1)
 
-    username = (
-        input("Username (Input nothing to enter as 'guest'): ").strip() or "GUEST"
-    )
-    player_data = PlayerData(username)
+    username = input("Username (leave blank for guest): ").strip() or "GUEST"
+
+    encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
+
+    if encrypted_username:  # existing user
+        password = verify_existing_user(username, encrypted_username)
+    else:  # new user
+        password = register_new_user(username)
+        # store encrypted username & reference username in Excel
+        encrypted_username = scramble(username, password)
+        PlayerData.store_new_user(username, encrypted_username)
+
+    player_data = PlayerData(username, password) 
 
     b()
+    initAll()
     while True: # folders muna tayo
         path = []
         folders = LevelManager.load_folders()

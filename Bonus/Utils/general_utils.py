@@ -3,7 +3,7 @@ import os
 import sys
 from wcwidth import wcswidth
 
-WAIT_TIME = 2.5
+WAIT_TIME = 5
 DEBUG_MODE = True
 
 def clear_terminal():

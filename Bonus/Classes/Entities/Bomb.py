@@ -52,9 +52,9 @@ class Bomb(Entity):
             on_grid.render()
             on_grid.smother_active_blasts()
             wait(0.125)
+            s.bomb_sound()
 
         on_grid.clear_all_blasts()
-        s.bomb_sound()
         
         self._active = False
         self._placed_pos = None
