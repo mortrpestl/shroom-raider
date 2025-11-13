@@ -325,18 +325,17 @@ def main():
 
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
-    if encrypted_username:  # existing user
+    if encrypted_username and username != 'GUEST':  # existing user
+        password = verify_existing_user(username, encrypted_username)
+    else:  
         if username == 'GUEST':
-            password = verify_existing_user(username, '0x/No')
+            player_data = PlayerData('GUEST', 'guest')
         else:
-            password = verify_existing_user(username, encrypted_username)
-    else:  # new user
-        password = register_new_user(username)
-        # store encrypted username & reference username in Excel
-        encrypted_username = scramble(username, password)
-        PlayerData.store_new_user(username, encrypted_username)
-
-    player_data = PlayerData(username, password)
+            password = register_new_user(username)
+            # store encrypted username & reference username in Excel
+            encrypted_username = scramble(username, password)
+            PlayerData.store_new_user(username, encrypted_username)
+            player_data = PlayerData(username, password)
 
     b()
     initAll()
