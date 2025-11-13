@@ -5,6 +5,7 @@ import tempfile
 import json
 import time
 import LevelManager
+
 from argparse import ArgumentParser as ap
 
 from Utils.Enums import ExitCodes
@@ -12,8 +13,10 @@ from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
 
 from Utils.general_utils import clear_terminal, wait
+from Utils.animator import load_in, typewriter
 
 from Bonus_Classes.security import scramble
+
 from colorama import Fore, Style
 
 from Bonus_Classes.PlayerData import PlayerData
@@ -347,10 +350,10 @@ def register_new_user(username: str) -> str:
 
 # gameplay start + loop
 def main():
-    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 15)
-    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-        load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
+    # with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+    #     typewriter(intro.read(), 15)
+    # with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+    #     load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 

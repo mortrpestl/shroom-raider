@@ -1,7 +1,7 @@
 from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
-
+import Utils.sounds as s
 
 class Log(Entity):
     # * Attributes
@@ -32,6 +32,11 @@ class Log(Entity):
     def get_pushable(self, pusher: Entity):
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Log)):
+            s.log_sound()
             return True
         else:
             return False
+        
+    def chop(self):
+        s.axe_sound()
+        self.destroy()
