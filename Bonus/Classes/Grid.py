@@ -244,7 +244,7 @@ class Grid:
     # * Flash / Darkness Setters
     def register_flash(self, flash: Entity):
         if flash not in self.__active_flashes:
-            self.__active_flashes.append(flash)s
+            self.__active_flashes.append(flash)
 
     def update_all_flashes(self):
         for flash in self.__active_flashes:
