@@ -67,3 +67,5 @@ def findPW(unencrypted: str, encrypted: str): # we assume that these are the sam
         pw += CHARTAPE[shift]
 
     return pw
+
+print(scramble('GUEST', 'guest'))
