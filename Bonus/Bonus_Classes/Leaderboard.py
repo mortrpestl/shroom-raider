@@ -1,4 +1,6 @@
-from Utils.central_imports import *
+import os
+import json
+from Utils.general_utils import debug_wait, format_time, tabulate, WAIT_TIME
 
 from Bonus_Classes.PlayerData import read_all_rows
 from LevelManager import get_level_title

@@ -14,7 +14,6 @@ def check_validity(data: str):
         return True
 
 def shift(letter: str, shiftval: str):
-    print(letter)
     i = CHARTAPE.index(letter)
 
     shiftRight = CHARTAPE.index(shiftval)
@@ -69,8 +68,3 @@ def findPW(unencrypted: str, encrypted: str): # we assume that these are the sam
 
     return pw
 
-STRING = r'''lisXw8S8O/:b2OF u2BtCu2B7y'''
-print(unscramble(STRING,'guest'))
-
-
-#GUEST	0x/No	R	RX	R	R	CbotxgustwTKXg8Dh"	lisXw8S8O/:b2OF u2BtCu2B7y

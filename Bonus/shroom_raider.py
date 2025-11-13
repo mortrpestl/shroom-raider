@@ -1,6 +1,21 @@
-from Utils.central_imports import *
+import os
+import sys
+import subprocess
+import tempfile
+import json
+import time
+import LevelManager
+from argparse import ArgumentParser as ap
+
+from Utils.Enums import ExitCodes
+from Utils.movement import menu_movement as m
+from Utils.movement import block_keys as b
+
+from Utils.general_utils import clear_terminal, wait
+
+from Bonus_Classes.security import scramble
 from colorama import Fore, Style
-from Bonus_Classes.security import findPW, scramble, unscramble
+
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
@@ -322,6 +337,8 @@ def register_new_user(username: str) -> str:
         confirm = input("Confirm password: ").strip()
         if not password:
             print("Password cannot be empty.")
+        elif len(password) != len(username):
+            print("Password must have the same length as username")
         elif password != confirm:
             print("Passwords do not match. Try again.")
         else:
