@@ -54,7 +54,7 @@ def show_statistics(player_data):
 
 # * Level List Helper Functions
 
-def print_levels_table(levels, selected=1, f=False):
+def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     """
     Print a summary of the levels.
     """
@@ -68,11 +68,17 @@ def print_levels_table(levels, selected=1, f=False):
     for lvl in levels:
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"> 🧑 {lvl.get("title", "")} <", 
+                center_wr_to_terminal_size(f'<🧑 {lvl.get("title", "")} 🧑>', 
                     colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
+        elif lvl.get("id","") in completed_lvl_ids:
+            display.append(
+                center_wr_to_terminal_size(f'✔  {lvl.get("title", "")}', 
+                    colors=[Fore.GREEN])
+            )
+        
         else:
             display.append(str(lvl.get("title", "")))
     display.append("\n" + spanner)
@@ -95,7 +101,7 @@ def print_folders_table(folders, selected=1, f=False):
     for folder in folders:
         if folder.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"> 🧑 {folder.get("title", "")} <", 
+                center_wr_to_terminal_size(f'<🧑 {folder.get("title", "")} 🧑>', 
                     colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
@@ -119,7 +125,7 @@ def print_after_game_options(selected):
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:
-            display.append(center_wr_to_terminal_size(f"> 🧑 {AFTER_GAME_OPTIONS[o]} <", colors=[Back.GREEN, Fore.BLACK]))
+            display.append(center_wr_to_terminal_size(f'<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>', colors=[Back.GREEN, Fore.BLACK]))
         else:
             display.append(AFTER_GAME_OPTIONS[o])
     display.append("\n" + spanner)
@@ -131,7 +137,7 @@ def print_after_game_options(selected):
 # * Level Selection and Launching Functions
 
 
-def choose_level(levels):
+def choose_level(levels, completed_lvl_ids):
     """
     Displays Level Select menu and returns chosen level dict or None on quit.
     """
@@ -144,7 +150,8 @@ def choose_level(levels):
 
     # if there is levels
     selected = 1
-    print_levels_table(levels, selected)
+
+    print_levels_table(levels, selected, completed_lvl_ids)
     while True:
         choice = m()
         if choice is not None:
@@ -158,12 +165,12 @@ def choose_level(levels):
                 if selected > 1:
                     selected -= 1
                     clear_terminal()
-                    print_levels_table(levels, selected)
+                    print_levels_table(levels, selected, completed_lvl_ids)
             elif choice == "s":
                 if selected < len(levels):
                     selected += 1
                     clear_terminal()
-                    print_levels_table(levels, selected)
+                    print_levels_table(levels, selected, completed_lvl_ids)
 
 
 def choose_folder(folders):
@@ -353,7 +360,7 @@ def main():
 
         while True:
             levels = LevelManager.load_levels(folder_choice)
-            level_choice = choose_level(levels)
+            level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
 
             if level_choice == "q":
                 progress_bar("Quitting launcher.", total_time=2)

@@ -33,9 +33,9 @@ def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[]):
         if txt_width != -1:
             padding_left = (width - txt_width) // 2
             if colors:
-                result.append("".join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
+                result.append(''.join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
             else:
-                result.append("".join([" "] * padding_left + [line]))
+                result.append(''.join([" "] * padding_left + [line]))
         else:
             result.append(line)
     return "\n".join(result)

@@ -4,7 +4,15 @@ from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, 
 from colorama import Fore, Back, Style
 
 
-def load_in(input_str, total_time=1.5, centered=True, colors: list=[], colors2: list=[], fx_map: str="=-.", mode: str="--normal"):
+def load_in(input_str, 
+            total_time=1.5, 
+            centered=True, 
+            colors: list=[], 
+            colors2: list=[], 
+            fx_map: str="=-.", 
+            mode: str="--normal",
+            color_grid: list=[[]]
+            ):
     input_str = input_str.split("\n")
     height = len(input_str)
     delta_time = total_time / height
