@@ -4,7 +4,7 @@ import time
 import pandas as pd
 from Utils.Enums import ExitCodes
 
-from Utils.general_utils import debug_wait, format_time, tabulate
+from Utils.general_utils import debug_wait, format_time, tabulate, WAIT_TIME
 
 from LevelManager import get_level_title
 from .security import scramble, unscramble, findPW
@@ -287,9 +287,7 @@ class PlayerData:
             report = json.load(f)
         return self.apply_report_dict(report, level_id=level_id)
 
-    # * Display
-    # @debug_wait(WAIT_TIME)
-    def __repr__(self):
+    def get_completed_levels_organized(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             completed_rows = [["None"]]
@@ -312,6 +310,19 @@ class PlayerData:
                 ]
                 for level_id, ms in sorted_levels
             ]
+            return completed_rows
+        
+    # * Display
+
+    @debug_wait(WAIT_TIME)
+    def __repr__(self):
+        completed_levels = self.get_completed_levels()
+        if not completed_levels:
+            completed_rows = [["None"]]
+            completed_headers = ["Completed Levels"]
+        else:
+
+            completed_rows = self.get_completed_levels_organized()
             completed_headers = ["ID", "Title", "Best Time"]
 
         stats_rows = [
