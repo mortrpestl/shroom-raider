@@ -1,6 +1,7 @@
 from keyboard import is_pressed as p
 from keyboard import block_key as b
 from keyboard import unblock_key as ub
+from Utils.sounds import menu_sound
 
 ACTIVE = False
 
@@ -55,6 +56,7 @@ def menu_movement(): # yes, this doesn't follow the DRY principle, but it makes 
 
     if keys_pressed == 1:
         if not ACTIVE:
+            menu_sound()
             ACTIVE = True
             if keys[0]:
                 return "w"

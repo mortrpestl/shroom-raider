@@ -1,4 +1,5 @@
 from Classes.Entity import Entity
+import Utils.sounds as s
 
 
 class Flash(Entity):
@@ -25,12 +26,13 @@ class Flash(Entity):
         """
         Activate flash at player position
         """
-
+        s.flash_sound()
         player_pos = self.get_on_grid().get_player_pos()
         self._placed_pos = list(player_pos)
         self._current_radius = self._max_radius
         self._active = True
         # register in grid for visualization only
+
         self.get_on_grid().register_flash(self)
 
     # * Simple Getters

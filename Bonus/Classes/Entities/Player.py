@@ -99,6 +99,7 @@ class Player(Entity):
             return
 
         if item.get_storable():
+            s.equip_sound()
             self.set_item(item)
             item.destroy()
 

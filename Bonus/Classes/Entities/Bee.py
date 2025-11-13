@@ -1,5 +1,6 @@
 from collections import deque
 from Classes.Entity import Entity
+import Utils.sounds as s
 
 
 class Bee(Entity):
@@ -25,6 +26,7 @@ class Bee(Entity):
         if len(self._buffer) <= self._lag:
             return
 
+        s.bee_sound()
         target = self._buffer.popleft()
 
         curr_pos = self.get_pos()
@@ -37,6 +39,7 @@ class Bee(Entity):
 
         target_layers = grid.get_layers_from_coord(*target)
         if player in target_layers:
+            s.bee_death_sound()
             player.kill()
 
     @staticmethod

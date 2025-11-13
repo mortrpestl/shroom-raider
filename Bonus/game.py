@@ -12,6 +12,8 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 from Classes.Entities.Bomb import Bomb
 
+from Utils.general_utils import wait
+
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -47,8 +49,8 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
 
     # non-WASDP inputs
     if inst == "Q":
-        print("Quitting to main menu...", flush=True)
-        time.sleep(1.5)
+        print("Quitting level...", flush=True)
+        wait(2)
         exit(ExitCodes.QUIT.value)
 
     if inst == "!":
@@ -158,7 +160,6 @@ def main():
         stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
 
         while True:
-            time.sleep(0.016)
             key_input = m.check_movement()
             if key_input is not None:
                 parser(key_input, P, G, level, stop_or_reset_only)
@@ -170,12 +171,12 @@ def main():
                 if G.get_is_cleared():
                     print("CLEAR")
                     write_report(G, P, True, False)
-                    time.sleep(1)
+                    wait(1)
                     sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
                     print("DEAD")
                     write_report(G, P, False, True)
-                    time.sleep(1)
+                    wait(1)
                     sys.exit(ExitCodes.DEFEAT.value)
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ from Bonus_Classes.Leaderboard import (
     show_general_leaderboard,
     show_level_leaderboard,
 )
+from Utils.sounds import initAll
 
 
 # ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
@@ -54,10 +55,12 @@ def print_levels_table(levels, selected = 1):
     """
     Print a summary of the levels.
     """
-    print("""
-+-------------------------+
-|      LEVEL SELECT       |
-+-------------------------+
+    print(r"""
+⠀⢀⡀⠀⠀⢀⣀⣠⣀⠀⣀⠀⢀⣤⡄⢀⣀⣠⣀⠄⣠⠀⠀⠀⠀⠀⠀⠀⡠⣤⡀⢀⣄⣠⣄⡀⢀⡀⠀⠀⢀⣀⣠⣀⠀⠀⢀⣠⡀⠀⣠⣤⣄⣀⠄
+⠐⢻⡇⠀⠐⢻⡏⠉⠁⠚⣿⡄⠁⢹⡟⢻⡏⠉⠁⠐⢿⡇⠀⠀⠀⠀⢀⣾⡉⠛⠁⢻⡏⠉⠁⠐⢳⡇⠀⠐⢻⡏⠉⠁⠀⣰⠉⠹⡿⠞⠉⣿⠋⠁⠀
+⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⢸⣷⠀⣼⠁⢸⡷⠶⠖⠀⢸⡇⠀⠀⠀⠀⠀⠛⢿⣦⡀⢸⣷⠶⠖⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⣿⠀⠀⠀⠀⠀⣿⠀⠀⠀
+⠀⢸⣇⣀⡀⢸⣧⣀⣀⠀⠀⣿⣶⠇⠀⢸⣧⣀⡠⠀⣼⣇⣀⠄⠀⠀⢠⣢⣀⣹⠇⢸⣧⣀⣀⠄⢸⣧⣀⡀⢸⣧⣀⣀⠀⢿⣧⣀⣀⠄⠀⣿⣀⠀⠀
+⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠀⠘⠁⠀⠀⠊⠙⠛⠁⠀⠋⠛⠃⠀⠀⠀⠈⠛⠋⠁⠀⠘⠙⠓⠁⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠈⠙⠓⠁⠀⠀⠘⠀⠀⠀
 """)
 
     headers = ["ID", "Title", "Description", "Difficulty"]
@@ -65,7 +68,7 @@ def print_levels_table(levels, selected = 1):
     for lvl in levels:
         rows.append(
             [
-                str(lvl.get("id", "") if lvl.get('id', '') != selected else '🧑') ,
+                str('　' if lvl.get('id', '') != selected else '🧑') ,
                 str(lvl.get("title", "")),
                 str(lvl.get("description", "")).replace("\n", " "),
                 str(lvl.get("difficulty", "Normal")),
@@ -92,16 +95,18 @@ def print_levels_table(levels, selected = 1):
 
 def print_folders_table(folders, selected = 1):
     print("""
-+-------------------------+
-|     Folder Select       |
-+-------------------------+
+⠀⣀⣠⣄⡀⠀⢠⣄⠀⠀⡄⠀⠀⢀⡄⢠⣄⠀⢀⣄⣠⣄⠀⣀⠀⣠⡀⠀⠀⠀⠀⡠⣤⡀⢠⣀⠤⡠⢀⡄⠀⠀⢀⣀⠤⡠⠀⠀⡠⣄⠀⣠⣤⣄⡠
+⠈⣿⠉⠉⠀⡔⠉⢿⣷⠚⡇⠀⠀⢹⡏⠉⢿⡇⢹⡏⠉⠁⠈⣿⠊⢻⡇⠀⠀⠀⣼⣍⠙⠀⢹⡏⠉⠀⠛⡇⠀⠀⢹⡏⠉⠀⢀⠎⠘⠿⠋⠈⣿⠉⠀
+⠀⣿⠶⠖⢸⣧⠀⠘⡿⠀⡇⠀⠀⢸⡇⠀⠘⡇⢸⡿⠶⠂⠀⣿⢀⡞⠀⠀⠀⠀⠙⢿⣷⡄⢸⡷⠶⠂⠀⡇⠀⠀⢸⡷⠶⠂⢸⡆⠀⠀⠀⠀⣿⠀⠀
+⠀⣟⡄⠀⠀⢿⢷⠔⠁⠀⣷⣤⡄⢸⣧⣀⡰⠁⢰⣧⡤⡤⠀⣿⡤⢿⢄⠀⠀⠀⣾⣄⣹⠃⢸⣧⣤⠄⢀⣧⣄⠄⢸⢧⣤⠄⠸⣿⣄⣀⠀⠀⣟⠄⠀
+⠀⠈⠀⠀⠀⠀⠁⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠉⠀⠀⠉⠀⠈⠁⠀⠀⠀⠉⠉⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠁⠀⠀⠉⠀⠀
 """)
     headers = ["ID", "Title", "Description"]
     rows = []
     for folder in folders:
         rows.append(
             [
-                str(folder.get("id", "") if folder.get('id', '') != selected else '🧑') ,
+                str('　' if folder.get('id', '') != selected else '🧑') ,
                 str(folder.get("title", "")),
                 str(folder.get("description", "")).replace("\n", " "),
             ]
@@ -132,7 +137,7 @@ def print_after_game_options(selected):
     for o in AFTER_GAME_OPTIONS:
         rows.append(
             [
-                o if o != option else '🧑', 
+                '　' if o != option else '🧑', 
                 AFTER_GAME_OPTIONS[o]
             ]
         )
@@ -203,7 +208,7 @@ def choose_folder(folders):
     # if there is levels
     
     selected = 1
-    print_levels_table(folders, selected)
+    print_folders_table(folders, selected)
     while True:
         choice = m()
         if choice is not None:
@@ -215,12 +220,12 @@ def choose_folder(folders):
                 if selected > 1:
                     selected -= 1
                     clear_terminal()
-                    print_levels_table(folders, selected)
+                    print_folders_table(folders, selected)
             elif choice == 's':
                 if selected < len(folders):
                     selected += 1
                     clear_terminal()
-                    print_levels_table(folders, selected)
+                    print_folders_table(folders, selected)
 
 def choose_after_game_option():
     clear_terminal()
@@ -330,6 +335,8 @@ def register_new_user(username: str) -> str:
         confirm = input("Confirm password: ").strip()
         if not password:
             print("Password cannot be empty.")
+        elif len(password) != len(username):
+            print("Password must have the same length as username")
         elif password != confirm:
             print("Passwords do not match. Try again.")
         else:
@@ -359,6 +366,7 @@ def main():
     player_data = PlayerData(username, password) 
 
     b()
+    initAll()
     while True: # folders muna tayo
         path = []
         folders = LevelManager.load_folders()
