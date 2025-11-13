@@ -288,7 +288,7 @@ class PlayerData:
         return self.apply_report_dict(report, level_id=level_id)
 
     # * Display
-    @debug_wait(WAIT_TIME)
+    # @debug_wait(WAIT_TIME)
     def __repr__(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
