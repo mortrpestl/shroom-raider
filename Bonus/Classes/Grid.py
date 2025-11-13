@@ -348,7 +348,7 @@ class Grid:
         span = max((wcswidth(self.__grid_user_display[0])-3)//4, 1)
         spanner = f'{Fore.GREEN}\nx{"-"*span}{"="*span}{{🍄}}{"="*span}{"-"*span}x\n{Style.RESET_ALL}'
         with open("Assets/UI/GameProperArt.txt", "r", encoding="utf+8") as art:
-            title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
+            title_display.append(f'{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}')
             title_display.append(spanner)
 
         # * GRID DISPLAY
@@ -380,7 +380,7 @@ class Grid:
 
         if held_item is not None:
             held_item_display = (
-                f"Holding item [{self.get_display_of_obj(held_item)["symbol"]}{held_item}]"
+                f'Holding item [{self.get_display_of_obj(held_item)["symbol"]}{held_item}]'
             )
 
         # * PLAYER "HUD"
