@@ -66,7 +66,6 @@ class Player(Entity):
             if isinstance(self.get_item(), FLAMETHROWER):
                 target_obj.burn_connected()
                 self.set_item(None)
-        if isinstance(target_obj, TREE):
             if isinstance(self.get_item(), AXE):
                 target_obj.chop()
                 s.axe_sound()

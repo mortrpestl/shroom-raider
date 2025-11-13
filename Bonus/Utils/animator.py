@@ -1,6 +1,7 @@
 import sys
 from emoji import is_emoji
-from Utils.general_utils import *
+from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, wait
+
 
 def load_in(input_str, total_time = 1.5, centered = True):
     input_str = input_str.split("\n")
