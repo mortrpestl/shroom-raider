@@ -1,5 +1,5 @@
 from random import randint, choice
-from map_tools import *
+from map_gen import *
 
 empty_tile = '.'
 tiles = 'T'

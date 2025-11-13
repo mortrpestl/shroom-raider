@@ -1,10 +1,14 @@
+import os
+import json
+import time
+import pandas as pd
+from Utils.Enums import ExitCodes
+
+from Utils.general_utils import debug_wait, format_time, tabulate
+
 from Utils.central_imports import *
 from LevelManager import get_level_title
 from .security import scramble, unscramble, findPW
-import pandas as pd
-import json
-import os
-import time
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
@@ -208,22 +212,22 @@ class PlayerData:
         Save player data to Excel, preserving encryption for all rows.
         Read RAW data to avoid double encryption.
         """
-        # Read RAW Excel data WITHOUT decrypting
+        # read RAW Excel data WITHOUT decrypting
         rows = read_raw_rows()
         
-        # Find and update our player's row
+        # find and update our player's row
         found = False
         for r in rows:
             if r["username"] == self.name:
-                r.update(self.to_dict())  # to_dict() handles encryption
+                r.update(self.to_dict())  # to_dict() handles encryption (NOT THIS! PLEASE, PLEASE DONT CHANGE THAT FUNCTIONALITY)
                 found = True
                 break
         
-        # If not found, append new row
+        # if not found, append new row
         if not found:
             rows.append(self.to_dict())
     
-        # Write back to Excel
+        # write back to Excel
         write_all_rows(rows)
 
     def to_dict(self):
