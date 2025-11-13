@@ -7,12 +7,12 @@ import time
 import LevelManager
 
 from argparse import ArgumentParser as ap
-
+from colorama import Fore, Back, Style
 from Utils.Enums import ExitCodes
 from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
-
-from Utils.general_utils import clear_terminal, wait
+from Utils.animator import load_in, typewriter, progress_bar
+from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
 from Bonus_Classes.security import scramble
 
@@ -54,112 +54,78 @@ def show_statistics(player_data):
 
 # * Level List Helper Functions
 
-
-def print_levels_table(levels, selected=1):
+def print_levels_table(levels, selected=1, f=False):
     """
     Print a summary of the levels.
     """
-    print(r"""
-⠀⢀⡀⠀⠀⢀⣀⣠⣀⠀⣀⠀⢀⣤⡄⢀⣀⣠⣀⠄⣠⠀⠀⠀⠀⠀⠀⠀⡠⣤⡀⢀⣄⣠⣄⡀⢀⡀⠀⠀⢀⣀⣠⣀⠀⠀⢀⣠⡀⠀⣠⣤⣄⣀⠄
-⠐⢻⡇⠀⠐⢻⡏⠉⠁⠚⣿⡄⠁⢹⡟⢻⡏⠉⠁⠐⢿⡇⠀⠀⠀⠀⢀⣾⡉⠛⠁⢻⡏⠉⠁⠐⢳⡇⠀⠐⢻⡏⠉⠁⠀⣰⠉⠹⡿⠞⠉⣿⠋⠁⠀
-⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⢸⣷⠀⣼⠁⢸⡷⠶⠖⠀⢸⡇⠀⠀⠀⠀⠀⠛⢿⣦⡀⢸⣷⠶⠖⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⣿⠀⠀⠀⠀⠀⣿⠀⠀⠀
-⠀⢸⣇⣀⡀⢸⣧⣀⣀⠀⠀⣿⣶⠇⠀⢸⣧⣀⡠⠀⣼⣇⣀⠄⠀⠀⢠⣢⣀⣹⠇⢸⣧⣀⣀⠄⢸⣧⣀⡀⢸⣧⣀⣀⠀⢿⣧⣀⣀⠄⠀⣿⣀⠀⠀
-⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠀⠘⠁⠀⠀⠊⠙⠛⠁⠀⠋⠛⠃⠀⠀⠀⠈⠛⠋⠁⠀⠘⠙⠓⠁⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠈⠙⠓⠁⠀⠀⠘⠀⠀⠀
-""")
+    display = []
+    with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
+    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
+    spanner = "--===x{🌲}x===---\n"
 
-    headers = ["ID", "Title", "Description", "Difficulty"]
-    rows = []
+    display.append(spanner)
     for lvl in levels:
-        rows.append(
-            [
-                str("　" if lvl.get("id", "") != selected else "🧑"),
-                str(lvl.get("title", "")),
-                str(lvl.get("description", "")).replace("\n", " "),
-                str(lvl.get("difficulty", "Normal")),
-            ]
-        )
+        if lvl.get("id", "") == selected:
+            display.append(
+                center_wr_to_terminal_size(f"> 🧑 {lvl.get("title", "")} <", 
+                    colors=[Back.GREEN, Fore.BLACK])
+            )
+            desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
+            difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
+        else:
+            display.append(str(lvl.get("title", "")))
+    display.append("\n" + spanner)
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
+    display.append(center_wr_to_terminal_size("Difficulty: " + difficulty, colors=[Fore.RED]))
+    display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🌲" + "-" * inner_width + "🌲")  # top
-    print(f"| {header_line}   |")
-    print("|" + "-" * (inner_width + 2) + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"|  {row_line} |")
-
-    print("🌲" + "-" * inner_width + "🌲")  # bottom
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_folders_table(folders, selected=1):
-    print("""
-⠀⣀⣠⣄⡀⠀⢠⣄⠀⠀⡄⠀⠀⢀⡄⢠⣄⠀⢀⣄⣠⣄⠀⣀⠀⣠⡀⠀⠀⠀⠀⡠⣤⡀⢠⣀⠤⡠⢀⡄⠀⠀⢀⣀⠤⡠⠀⠀⡠⣄⠀⣠⣤⣄⡠
-⠈⣿⠉⠉⠀⡔⠉⢿⣷⠚⡇⠀⠀⢹⡏⠉⢿⡇⢹⡏⠉⠁⠈⣿⠊⢻⡇⠀⠀⠀⣼⣍⠙⠀⢹⡏⠉⠀⠛⡇⠀⠀⢹⡏⠉⠀⢀⠎⠘⠿⠋⠈⣿⠉⠀
-⠀⣿⠶⠖⢸⣧⠀⠘⡿⠀⡇⠀⠀⢸⡇⠀⠘⡇⢸⡿⠶⠂⠀⣿⢀⡞⠀⠀⠀⠀⠙⢿⣷⡄⢸⡷⠶⠂⠀⡇⠀⠀⢸⡷⠶⠂⢸⡆⠀⠀⠀⠀⣿⠀⠀
-⠀⣟⡄⠀⠀⢿⢷⠔⠁⠀⣷⣤⡄⢸⣧⣀⡰⠁⢰⣧⡤⡤⠀⣿⡤⢿⢄⠀⠀⠀⣾⣄⣹⠃⢸⣧⣤⠄⢀⣧⣄⠄⢸⢧⣤⠄⠸⣿⣄⣀⠀⠀⣟⠄⠀
-⠀⠈⠀⠀⠀⠀⠁⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠉⠀⠀⠉⠀⠈⠁⠀⠀⠀⠉⠉⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠁⠀⠀⠉⠀⠀
-""")
-    headers = ["ID", "Title", "Description"]
-    rows = []
+def print_folders_table(folders, selected=1, f=False):
+    display = []
+    with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
+    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
+    spanner = "--===x{🔥}x===---\n"
+
+    display.append(spanner)
     for folder in folders:
-        rows.append(
-            [
-                str("　" if folder.get("id", "") != selected else "🧑"),
-                str(folder.get("title", "")),
-                str(folder.get("description", "")).replace("\n", " "),
-            ]
-        )
+        if folder.get("id", "") == selected:
+            display.append(
+                center_wr_to_terminal_size(f"> 🧑 {folder.get("title", "")} <", 
+                    colors=[Back.GREEN, Fore.BLACK])
+            )
+            desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
+        else:#　
+            display.append(str(folder.get("title", "")))
+    display.append("\n" + spanner)
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
+    display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🍄" + "-" * inner_width + "🍄")  # top
-    print(f"|  {header_line}   |")
-    print("|" + "-" * (inner_width + 2) + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
-
-    print("🍄" + "-" * inner_width + "🍄")
-
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
 def print_after_game_options(selected):
+    display = []
+    with open("Assets/UI/MainMenuArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
+
     option = OPTIONS_LIST[selected]
-    headers = ["option", "description"]
-    rows = []
+    spanner = "--===x{🪓}x===---\n"
+    
+    display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
-        rows.append(["　" if o != option else "🧑", AFTER_GAME_OPTIONS[o]])
+        if o == option:
+            display.append(center_wr_to_terminal_size(f"> 🧑 {AFTER_GAME_OPTIONS[o]} <", colors=[Back.GREEN, Fore.BLACK]))
+        else:
+            display.append(AFTER_GAME_OPTIONS[o])
+    display.append("\n" + spanner)
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
-
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🔥" + "-" * inner_width + "🔥")  # top
-    print(f"|  {header_line} |")
-    print("|" + "-" * inner_width + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
-
-    print("🔥" + "-" * inner_width + "🔥")
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
 
 # * Level Selection and Launching Functions
@@ -350,17 +316,20 @@ def register_new_user(username: str) -> str:
 
 # gameplay start + loop
 def main():
-    # with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-    #     typewriter(intro.read(), 15)
-    # with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-    #     load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
+    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+        typewriter(intro.read(), 1)
+    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+        load_in(art.read(), 1, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
     if encrypted_username:  # existing user
-        password = verify_existing_user(username, encrypted_username)
+        if username == 'GUEST':
+            password = verify_existing_user(username, '0x/No')
+        else:
+            password = verify_existing_user(username, encrypted_username)
     else:  # new user
         password = register_new_user(username)
         # store encrypted username & reference username in Excel
@@ -377,7 +346,7 @@ def main():
         folder_choice = choose_folder(folders)
 
         if folder_choice == "q":
-            print("Quitting launcher.")
+            progress_bar("Quitting launcher.", total_time=2)
             exit(ExitCodes.QUIT.value)
 
         path.append(folder_choice)
@@ -387,7 +356,7 @@ def main():
             level_choice = choose_level(levels)
 
             if level_choice == "q":
-                print("Quitting launcher.")
+                progress_bar("Quitting launcher.", total_time=2)
                 exit(ExitCodes.QUIT.value)
             elif level_choice == "!":
                 break
@@ -425,7 +394,7 @@ def main():
                             show_statistics(player_data)
                             continue
                         case "q":
-                            print("Quitting launcher.")
+                            progress_bar("Quitting launcher.", total_time=2)
                             exit(ExitCodes.QUIT.value)
                         case "p":
                             show_personal_leaderboard(player_data)

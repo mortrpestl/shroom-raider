@@ -2,6 +2,7 @@ import time
 import os
 import sys
 from wcwidth import wcswidth
+from colorama import Style
 
 WAIT_TIME = 5
 DEBUG_MODE = True
@@ -21,17 +22,23 @@ def wait(seconds):
     time.sleep(seconds)
 
 
-def center_wr_to_terminal_size(input_str: str | list[str]):
+def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[]):
     if isinstance(input_str, str):
         input_str = input_str.split("\n")
     # otherwise, its already a list
     width = os.get_terminal_size()[0]
-    temp = []
+    result = []
     for line in input_str:
         txt_width = wcswidth(line)
-        padding_left = (width - txt_width) // 2
-        temp.append(" " * padding_left + line)
-    return "\n".join(temp)
+        if txt_width != -1:
+            padding_left = (width - txt_width) // 2
+            if colors:
+                result.append("".join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
+            else:
+                result.append("".join([" "] * padding_left + [line]))
+        else:
+            result.append(line)
+    return "\n".join(result)
 
 
 # decorator
