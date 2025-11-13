@@ -203,11 +203,13 @@ def choose_folder(folders):
                     print_folders_table(folders, selected)
 
 
-def choose_after_game_option():
+def choose_after_game_option(curr_display):
+    blank = center_wr_to_terminal_size("Nothing to show...", colors=[Fore.BLUE])
     clear_terminal()
 
     selected = 0
     print_after_game_options(selected)
+    print(curr_display if curr_display else blank)
     while True:
         choice = m()
         if choice is not None:
@@ -216,14 +218,14 @@ def choose_after_game_option():
             if choice == "w":
                 if selected > 0:
                     selected -= 1
-                    clear_terminal()
-                    print_after_game_options(selected)
+                    
             elif choice == "s":
                 if selected < len(OPTIONS_LIST) - 1:
                     selected += 1
-                    clear_terminal()
-                    print_after_game_options(selected)
-
+                    
+            clear_terminal()
+            print_after_game_options(selected)
+            print(curr_display if curr_display else blank)
 
 def make_stage_file_from_grid(grid_text):
     """
@@ -324,9 +326,9 @@ def register_new_user(username: str) -> str:
 # gameplay start + loop
 def main():
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 1)
+        typewriter(intro.read(), 15)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-        load_in(art.read(), 1, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
+        load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
@@ -360,8 +362,10 @@ def main():
 
         while True:
             levels = LevelManager.load_levels(folder_choice)
-            level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
-
+            try:
+                level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
+            except:
+                level_choice = choose_level(levels, set())
             if level_choice == "q":
                 progress_bar("Quitting launcher.", total_time=2)
                 exit(ExitCodes.QUIT.value)
@@ -390,30 +394,32 @@ def main():
                         level_id=FULL_ID,
                         elapsed_time=elapsed_time,
                     )
-
+                curr_display = ""
                 while True:
-                    choice = choose_after_game_option()
+                    choice = choose_after_game_option(curr_display)
                     choice = OPTIONS_LIST[choice]
+                    
                     match choice:
                         case "r" | "m":
                             break
                         case "s":
-                            show_statistics(player_data)
+                            curr_display = repr(player_data)
                             continue
                         case "q":
                             progress_bar("Quitting launcher.", total_time=2)
                             exit(ExitCodes.QUIT.value)
                         case "p":
-                            show_personal_leaderboard(player_data)
+                            curr_display = show_personal_leaderboard(player_data)
                             continue
                         case "g":
-                            show_general_leaderboard()
+                            curr_display = show_general_leaderboard()
                             continue
                         case "l":
-                            show_level_leaderboard(FULL_ID)
+                            curr_display = show_level_leaderboard(FULL_ID)
                             continue
                         case _:
                             print("Invalid choice, try again.")
+                    
 
                 if choice in ("r", "replay"):
                     continue  # continue playing the level

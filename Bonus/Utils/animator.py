@@ -11,9 +11,10 @@ def load_in(input_str,
             colors2: list=[], 
             fx_map: str="=-.", 
             mode: str="--normal",
-            color_grid: list=[[]]
             ):
-    input_str = input_str.split("\n")
+    if isinstance(input_str, str):
+        input_str = input_str.split("\n")
+    
     height = len(input_str)
     delta_time = total_time / height
 
@@ -29,10 +30,15 @@ def load_in(input_str,
                 temp.append(fx_map[0])
         wave.append("".join(temp))
 
+    grid_mode = False
+    if mode == "--grid": # transition for every cell
+        mode = "--normal"
+        grid_mode = True
+
     if mode == "--normal": # normal mode: one color per line
         if centered:
-            input_str = center_wr_to_terminal_size(input_str, colors).split("\n")
-            wave = center_wr_to_terminal_size(wave, colors if not colors2 else colors2).split("\n")
+            input_str = center_wr_to_terminal_size(input_str, colors, grid_mode).split("\n")
+            wave = center_wr_to_terminal_size(wave, colors if not colors2 or not grid_mode else colors2).split("\n")
         elif colors:
             input_str = colors + input_str + [Style.RESET_ALL]
             wave = (colors if not colors2 else colors2) + wave + [Style.RESET_ALL]
@@ -46,7 +52,6 @@ def load_in(input_str,
             elif colors:
                 input_str[i] = "".join(using_color + [input_str[i]] + [Style.RESET_ALL])
                 wave[i] = "".join(using_color + [wave[i]] + [Style.RESET_ALL])
-            
     
     for i in range(height):
         print(input_str[i])
@@ -83,8 +88,8 @@ def typewriter(input_str, total_time=1.5, centered=True, colors: list=[]):
             sys.stdout.flush()
             if char not in " 　⠀":
                 wait(delta_time)
-            if char in ".,":
-                wait(delta_time*1.2)
+            if char in ".,?":
+                wait(delta_time*1.5)
         print()
         sys.stdout.flush()
 

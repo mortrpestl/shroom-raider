@@ -327,7 +327,7 @@ class PlayerData:
         
     # * Display
 
-    @debug_wait(WAIT_TIME)
+    #@debug_wait(WAIT_TIME)
     def __repr__(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
@@ -347,7 +347,7 @@ class PlayerData:
             ["Total Time", format_time(self.total_seconds_played)],
         ]
 
-        tabulate(["Stat", "Value"], stats_rows, max_width=30)
-        tabulate(completed_headers, completed_rows, max_width=30)
+        display = tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"
+        display += tabulate(completed_headers, completed_rows, max_width=24)
 
-        return ""
+        return display

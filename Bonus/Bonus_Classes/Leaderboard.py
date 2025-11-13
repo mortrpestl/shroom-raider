@@ -8,7 +8,7 @@ from LevelManager import get_level_title
 HERE = os.path.dirname(__file__)
 
 
-@debug_wait(WAIT_TIME)
+#@debug_wait(WAIT_TIME)
 def show_personal_leaderboard(pdata):
     """
     Shows completed levels, etc.
@@ -22,10 +22,10 @@ def show_personal_leaderboard(pdata):
         [i + 1, get_level_title(*level_ref.split("/")) or "-", format_time(ms)]
         for i, (level_ref, ms) in enumerate(sorted(completed.items()))
     ]
-    tabulate(["#", "Title", "Best Time"], rows, max_width=30)
+    return tabulate(["#", "Title", "Best Time"], rows, max_width=24)
 
 
-@debug_wait(WAIT_TIME)
+#@debug_wait(WAIT_TIME)
 def show_general_leaderboard():
     """
     Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
@@ -73,10 +73,10 @@ def show_general_leaderboard():
         "Mushrooms Collected",
         "Tiles Walked",
     ]
-    tabulate(headers, rows, max_width=24)
+    return tabulate(headers, rows, max_width=24)
 
 
-@debug_wait(WAIT_TIME)
+#@debug_wait(WAIT_TIME)
 def show_level_leaderboard(level_ref):
     """
     Shows players who've beaten a level sorted by time.
@@ -106,4 +106,4 @@ def show_level_leaderboard(level_ref):
         [i + 1, username, level_title, format_time(ms)]
         for i, (username, ms) in enumerate(level_rows)
     ]
-    tabulate(["Rank", "Username", "Title", "Time"], rows, max_width=30)
+    return tabulate(["Rank", "Username", "Title", "Time"], rows, max_width=24)

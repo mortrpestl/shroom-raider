@@ -206,7 +206,7 @@ class Entity:
             grid.render()  # only renders after the first layer is burnt
             grid.smother_active_flames()  # turn active flames to smoke
             s.flamethrower_sound()
-            wait(0.125)
+            wait(0.5)
 
             curr_burn_queue = list(next_burn_queue)  # next LAYER to burn
         grid.clear_all_flames()  # reset display

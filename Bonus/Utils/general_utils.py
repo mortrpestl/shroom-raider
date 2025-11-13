@@ -2,7 +2,7 @@ import time
 import os
 import sys
 from wcwidth import wcswidth
-from colorama import Style
+from colorama import Style, Fore, Back
 
 WAIT_TIME = 5
 DEBUG_MODE = True
@@ -22,24 +22,39 @@ def wait(seconds):
     time.sleep(seconds)
 
 
-def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[]):
+def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[], grid_mode=False):
+    """Centers strings, optionally with color per line."""
     if isinstance(input_str, str):
         input_str = input_str.split("\n")
     # otherwise, its already a list
     width = os.get_terminal_size()[0]
     result = []
-    for line in input_str:
-        txt_width = wcswidth(line)
-        if txt_width != -1:
-            padding_left = (width - txt_width) // 2
-            if colors:
-                result.append(''.join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
-            else:
-                result.append(''.join([" "] * padding_left + [line]))
-        else:
-            result.append(line)
-    return "\n".join(result)
 
+    if not grid_mode: # center a line, then wrap it with color.
+        for line in input_str:
+            txt_width = wcswidth(line)
+            if txt_width != -1:
+                padding_left = (width - txt_width) // 2
+                if colors:
+                    result.append(''.join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
+                else:
+                    result.append(''.join([" "] * padding_left + [line]))
+            else:
+                result.append(line)
+
+    else: # colors must be a list of lists
+        for r in range(len(input_str)):
+            txt_width = wcswidth(input_str[r])
+            if txt_width == -1:
+                result.append(input_str[r])
+                continue
+            padding_left = (width - txt_width) // 2
+            row_result = [" " * padding_left]
+            for c in range(len(input_str[0])):
+                row_result.append("".join(colors[r][c] + input_str[r][c]))
+            result.append("".join(row_result) + Style.RESET_ALL)
+
+    return "\n".join(result)
 
 # decorator
 def debug_wait(delay=2.5):
@@ -70,7 +85,7 @@ def format_time(seconds: float) -> str:
 
 
 # yes, that's my 10G code right there with some modifications
-def tabulate(headers, table, sep="|", lborder="|", rborder="|", max_width=20):
+def tabulate(headers, table, sep=" ", lborder=" ", rborder=" ", tborder="=", joint="+", max_width=20):
     def truncate(text, width):
         text = "" if text is None else str(text)
         # replace NaN with -
@@ -87,7 +102,7 @@ def tabulate(headers, table, sep="|", lborder="|", rborder="|", max_width=20):
     ]
 
     def build_border():
-        return "+" + "+".join("-" * w for w in col_widths) + "+"
+        return joint + joint.join(tborder * w for w in col_widths) + joint
 
     def build_row(row):
         cells = [
@@ -103,16 +118,17 @@ def tabulate(headers, table, sep="|", lborder="|", rborder="|", max_width=20):
     # fix intersections
     final_lines = []
     for line in lines:
-        if line.startswith("+"):
+        if line.startswith(joint):
             currLine = list(line)
             for j in range(1, len(currLine) - 1):
                 if (
-                    currLine[j] == "-"
-                    and currLine[j - 1] in "+|"
-                    and currLine[j + 1] in "+|"
+                    currLine[j] == joint
+                    and currLine[j - 1] in {joint, lborder, rborder,sep}
+                    and currLine[j + 1] in {joint, lborder, rborder,sep}
                 ):
-                    currLine[j] = "+"  # intersection points
+                    currLine[j] = joint  # intersection points
             final_lines.append("".join(currLine))
         else:
             final_lines.append(line)
-    print("\n".join(final_lines) + "\n")
+
+    return center_wr_to_terminal_size("\n".join(final_lines), colors=[Fore.BLUE]) 

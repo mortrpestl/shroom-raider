@@ -1,8 +1,9 @@
-The boons of the forest is plentiful
 
-Vegetables, herbs, and even the occasional hare.
+You know what's the best thing in the world?
 
-But, there's one thing that you cannot get your mind off:
+Something no one can get their minds off?
+
+That's right,
 \u001b[0;31m
 MUSHROOMS.
 \u001b[0m
