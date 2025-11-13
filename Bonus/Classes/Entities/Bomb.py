@@ -55,7 +55,7 @@ class Bomb(Entity):
             s.bomb_sound()
 
         on_grid.clear_all_blasts()
-        
+
         self._active = False
         self._placed_pos = None
         self.destroy()

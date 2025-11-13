@@ -6,7 +6,6 @@ from Utils.Enums import ExitCodes
 
 from Utils.general_utils import debug_wait, format_time, tabulate
 
-from Utils.central_imports import *
 from LevelManager import get_level_title
 from .security import scramble, unscramble, findPW
 
@@ -20,16 +19,20 @@ HEADERS = [
     "total_wins",
     "total_times",
     "total_seconds_played",
-    "completed_data"
+    "completed_data",
 ]
 
+
 def decrypt(dict, key):
-    return {k: unscramble(str(v),key) for k,v in dict.items()}
+    return {k: unscramble(str(v), key) for k, v in dict.items()}
+
 
 def encrypt(dict, key):
-    return {k: scramble(str(v),key) for k,v in dict.items()}
+    return {k: scramble(str(v), key) for k, v in dict.items()}
+
 
 # * Pandas helpers
+
 
 def read_raw_rows():
     """
@@ -38,16 +41,16 @@ def read_raw_rows():
     """
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
     rows = df.to_dict(orient="records")
-    
+
     for r in rows:
         cd = r.get("completed_data", "{}")
         if pd.isna(cd) or not cd or str(cd).strip().lower() == "nan":
             r["completed_data"] = "{}"
-    
+
     return rows
 
 
-def read_all_rows(): 
+def read_all_rows():
     """
     Reads all player rows from Excel and decrypts all fields.
     Use this ONLY for displaying/reading data, NOT for saving.
@@ -62,13 +65,20 @@ def read_all_rows():
         if unencrypted_name and encrypted_name and unencrypted_name != encrypted_name:
             try:
                 pw = findPW(unencrypted_name, encrypted_name)
-                decrypted = decrypt({k: str(v) for k, v in r.items() if k not in ("username", "encrypted_username")}, pw)
+                decrypted = decrypt(
+                    {
+                        k: str(v)
+                        for k, v in r.items()
+                        if k not in ("username", "encrypted_username")
+                    },
+                    pw,
+                )
                 decrypted["username"] = unencrypted_name
                 decrypted["encrypted_username"] = encrypted_name
                 r.update(decrypted)
             except Exception as e:
                 print(f"Failed to decrypt for {unencrypted_name}: {e}")
-    
+
     return rows
 
 
@@ -116,26 +126,28 @@ class PlayerData:
     def store_new_user(username, encrypted_username):
         # Read RAW rows to preserve encryption
         rows = read_raw_rows()
-        rows.append({
-            "username": username,
-            "encrypted_username": encrypted_username,
-            "total_mushrooms_collected": 0,
-            "total_tiles_walked": 0,
-            "total_wins": 0,
-            "total_times": 0,
-            "total_seconds_played": 0,
-            "completed_data": "{}"
-        })
+        rows.append(
+            {
+                "username": username,
+                "encrypted_username": encrypted_username,
+                "total_mushrooms_collected": 0,
+                "total_tiles_walked": 0,
+                "total_wins": 0,
+                "total_times": 0,
+                "total_seconds_played": 0,
+                "completed_data": "{}",
+            }
+        )
         write_all_rows(rows)
 
     # * Getter Methods
     def get_password(self):
         return self.password
-    
+
     # * Setter Methods
     def set_password(self, key):
         self.password = key
-    
+
     # * Session Setter Methods
     def reset_session(self):
         self.session_mushrooms = 0
@@ -161,7 +173,9 @@ class PlayerData:
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
-                self.total_mushrooms_collected = safe_int(row.get("total_mushrooms_collected"))
+                self.total_mushrooms_collected = safe_int(
+                    row.get("total_mushrooms_collected")
+                )
                 self.total_tiles_walked = safe_int(row.get("total_tiles_walked"))
                 self.total_wins = safe_int(row.get("total_wins"))
                 self.total_times = safe_int(row.get("total_times"))
@@ -172,7 +186,7 @@ class PlayerData:
                 except Exception:
                     self.completed_levels = {}
                 return
-        
+
         # User not found - need to create
         # Read RAW rows to preserve encryption of existing users
         raw_rows = read_raw_rows()
@@ -214,19 +228,21 @@ class PlayerData:
         """
         # read RAW Excel data WITHOUT decrypting
         rows = read_raw_rows()
-        
+
         # find and update our player's row
         found = False
         for r in rows:
             if r["username"] == self.name:
-                r.update(self.to_dict())  # to_dict() handles encryption (NOT THIS! PLEASE, PLEASE DONT CHANGE THAT FUNCTIONALITY)
+                r.update(
+                    self.to_dict()
+                )  # to_dict() handles encryption (NOT THIS! PLEASE, PLEASE DONT CHANGE THAT FUNCTIONALITY)
                 found = True
                 break
-        
+
         # if not found, append new row
         if not found:
             rows.append(self.to_dict())
-    
+
         # write back to Excel
         write_all_rows(rows)
 
@@ -237,7 +253,7 @@ class PlayerData:
             "total_wins": self.total_wins,
             "total_times": self.total_times,
             "total_seconds_played": self.total_seconds_played,
-            "completed_data": self.completed_data
+            "completed_data": self.completed_data,
         }
         if self.password:
             data = encrypt(data, self.password)
@@ -247,7 +263,9 @@ class PlayerData:
         data["username"] = self.name
         return data
 
-    def apply_report_dict(self, report, return_code=None, level_id=None, elapsed_time=0):
+    def apply_report_dict(
+        self, report, return_code=None, level_id=None, elapsed_time=0
+    ):
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])
         self.session_win = report["win"]
@@ -277,6 +295,7 @@ class PlayerData:
             completed_rows = [["None"]]
             completed_headers = ["Completed Levels"]
         else:
+
             def sort_key(item):
                 try:
                     folder, level = item[0].split("/")
@@ -286,7 +305,11 @@ class PlayerData:
 
             sorted_levels = sorted(completed_levels.items(), key=sort_key)
             completed_rows = [
-                [level_id, get_level_title(*level_id.split('/')) or "-", format_time(ms)]
+                [
+                    level_id,
+                    get_level_title(*level_id.split("/")) or "-",
+                    format_time(ms),
+                ]
                 for level_id, ms in sorted_levels
             ]
             completed_headers = ["ID", "Title", "Best Time"]

@@ -3,12 +3,10 @@ from emoji import is_emoji
 from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, wait
 
 
-def load_in(input_str, total_time = 1.5, centered = True):
+def load_in(input_str, total_time=1.5, centered=True):
     input_str = input_str.split("\n")
     height = len(input_str)
-    delta_time = total_time / height 
-
-    
+    delta_time = total_time / height
 
     wave = []
     for i in range(height):
@@ -21,7 +19,7 @@ def load_in(input_str, total_time = 1.5, centered = True):
             else:
                 temp.append("=")
         wave.append("".join(temp))
-    
+
     if centered:
         input_str = center_wr_to_terminal_size(input_str).split("\n")
         wave = center_wr_to_terminal_size(wave).split("\n")
@@ -30,7 +28,7 @@ def load_in(input_str, total_time = 1.5, centered = True):
         print(input_str[i])
         sys.stdout.flush()
         k = 0
-        for line in range(i+1, min(height - 1, i + 4)):
+        for line in range(i + 1, min(height - 1, i + 4)):
             match k:
                 case 0:
                     print(wave[line])
@@ -43,9 +41,10 @@ def load_in(input_str, total_time = 1.5, centered = True):
                     sys.stdout.flush()
             k += 1
         wait(delta_time)  # delay for animation
-        clear_prev_n_lines(k) 
+        clear_prev_n_lines(k)
 
-def typewriter(input_str, total_time = 1.5, centered = True):
+
+def typewriter(input_str, total_time=1.5, centered=True):
     delta_time = total_time / len(input_str)
     input_str = input_str.split("\n")
 

@@ -1,4 +1,6 @@
-CHARTAPE = r'''0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G'''
+CHARTAPE = (
+    r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
+)
 CHARTAPE_LEN = len(CHARTAPE)
 VALID_LETTERS = set(CHARTAPE)
 
@@ -6,12 +8,13 @@ VALID_LETTERS = set(CHARTAPE)
 def check_validity(data: str):
     if len(data) > 30:
         return False
-    
+
     for letter in data:
         if letter not in VALID_LETTERS:
             return False
     else:
         return True
+
 
 def shift(letter: str, shiftval: str):
     i = CHARTAPE.index(letter)
@@ -20,7 +23,7 @@ def shift(letter: str, shiftval: str):
     i += shiftRight
 
     return CHARTAPE[i % CHARTAPE_LEN]
-    
+
 
 def unshift(letter: str, shiftval: str):
     i = CHARTAPE.index(letter)
@@ -30,27 +33,30 @@ def unshift(letter: str, shiftval: str):
 
     if i < 0:
         i += CHARTAPE_LEN
-    
+
     return CHARTAPE[i % CHARTAPE_LEN]
 
+
 def scramble(data: str, key: str):
-    res = r''
+    res = r""
 
     for i in range(len(data)):
         res += shift(data[i], key[i % len(key)])
 
     return res
 
+
 def unscramble(data: str, key: str):
-    res = r''
+    res = r""
 
     for i in range(len(data)):
         res += unshift(data[i], key[i % len(key)])
-    
+
     return res
 
-def findPW(unencrypted: str, encrypted: str): # we assume that these are the same len
-    pw = r''
+
+def findPW(unencrypted: str, encrypted: str):  # we assume that these are the same len
+    pw = r""
     for i in range(len(unencrypted)):
         i1 = CHARTAPE.index(unencrypted[i])
         i2 = CHARTAPE.index(encrypted[i])

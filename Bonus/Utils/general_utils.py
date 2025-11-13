@@ -6,6 +6,7 @@ from wcwidth import wcswidth
 WAIT_TIME = 5
 DEBUG_MODE = True
 
+
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
@@ -33,24 +34,28 @@ def center_wr_to_terminal_size(input_str: str | list[str]):
     return "\n".join(temp)
 
 
-#decorator
+# decorator
 def debug_wait(delay=2.5):
     def decorator(func):
         def wrapper(*args, **kwargs):
             answer = func(*args, **kwargs)
             if DEBUG_MODE:
-                print('DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils')
+                print(
+                    "DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils"
+                )
                 wait(delay)
             return answer
-            
+
         return wrapper
+
     return decorator
-    
+
 
 def print_and_wait(message, seconds=1):
     print(message)
     wait(seconds)
     clear_terminal()
+
 
 def format_time(seconds: float) -> str:
     m, s = divmod(seconds, 60)
