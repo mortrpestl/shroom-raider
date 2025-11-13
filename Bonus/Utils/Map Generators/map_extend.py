@@ -42,6 +42,6 @@ directions = {
 for dir_, amt in directions.items():
     grid = extend(dir_, amt, grid)
 
-grid = grid.split('\n')
-print(len(grid),len(grid[0]))
-print(*grid,sep='\n')
+grid = grid.split("\n")
+print(len(grid), len(grid[0]))
+print(*grid, sep="\n")

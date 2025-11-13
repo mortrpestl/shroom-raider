@@ -66,7 +66,7 @@ def initialize_walk_sounds():
 def initialize_item_usages():
     global AXE, FLAMETHROWER, SHROOM, FLASH, EQUIP
 
-    EQUIP = m.Sound(path('equip.ogg'))
+    EQUIP = m.Sound(path("equip.ogg"))
     AXE = m.Sound(path("axe_tree.mp3"))
     FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
     SHROOM = m.Sound(path("mushroom_collected.mp3"))
@@ -78,8 +78,9 @@ def initialize_bonus():
     ICE = m.Sound(path("ice.ogg"))
     LOG = m.Sound(path("move_log.ogg"))
     BOMB = m.Sound(path("bomb.ogg"))
-    BEE = m.Sound(path('bee_move.ogg'))
-    BEE_DEATH = m.Sound(path('bee_death.ogg'))
+    BEE = m.Sound(path("bee_move.ogg"))
+    BEE_DEATH = m.Sound(path("bee_death.ogg"))
+
 
 def initialize_menu():
     global MENU
@@ -161,6 +162,7 @@ def death_sound():
     if DEATH:
         DEATH.play()
 
+
 def equip_sound():
     global EQUIP
     if EQUIP:
@@ -168,6 +170,7 @@ def equip_sound():
 
 
 # bonus
+
 
 def ice_sound():
     global ICE
@@ -186,15 +189,18 @@ def bomb_sound():
     if BOMB:
         BOMB.play()
 
+
 def bee_sound():
     global BEE
     if BEE:
         BEE.play()
 
+
 def bee_death_sound():
     global BEE_DEATH
     if BEE_DEATH:
         BEE_DEATH.play()
+
 
 # menu
 def menu_sound():

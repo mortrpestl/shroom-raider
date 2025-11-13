@@ -5,7 +5,9 @@ from Utils.general_utils import wait
 
 class Entity:
     # * Attributes
-    _is_collideable = False  # If True, any other collideable object cannot occupy this Entity's space
+    _is_collideable = (
+        False  # If True, any other collideable object cannot occupy this Entity's space
+    )
     _is_collectable = False  # If True, Player can collect this Entity
     _is_storable = False  # If True, then Player can keep this in inventory
     _is_pushable = False  # If True, Player can push this Entity
@@ -163,8 +165,10 @@ class Entity:
 
     def burn_connected(self, visited: set | None = None):
         if not self.get_burnable():
-            raise AttributeError(f"Tried to burn unburnable object! Please implement appropriate checker")
-        
+            raise AttributeError(
+                "Tried to burn unburnable object! Please implement appropriate checker"
+            )
+
         # initialization
         grid = self.get_on_grid()
         visited = set()
@@ -184,24 +188,27 @@ class Entity:
             next_burn_queue = []
             for node_pos in curr_burn_queue:
                 r, c = node_pos
-                for delta_row, delta_column in [(1, 0), (-1, 0), (0, 1), (0, -1)]:    
+                for delta_row, delta_column in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
                     new_row, new_column = r + delta_row, c + delta_column
                     try:
                         neighbor = grid.get_obj_in_coord(new_row, new_column)
                     except IndexError:
                         neighbor = None
                     if neighbor is not None:
-                        if neighbor.get_burnable() and (new_row, new_column) not in visited:
+                        if (
+                            neighbor.get_burnable()
+                            and (new_row, new_column) not in visited
+                        ):
                             next_burn_queue.append((new_row, new_column))
                             grid.add_active_flame(new_row, new_column)
                             neighbor.destroy()
-                visited.add((r, c)) 
-            grid.render() # only renders after the first layer is burnt
-            grid.smother_active_flames() # turn active flames to smoke
+                visited.add((r, c))
+            grid.render()  # only renders after the first layer is burnt
+            grid.smother_active_flames()  # turn active flames to smoke
             s.flamethrower_sound()
             wait(0.125)
 
-            curr_burn_queue = list(next_burn_queue) # next LAYER to burn
-        grid.clear_all_flames() # reset display
+            curr_burn_queue = list(next_burn_queue)  # next LAYER to burn
+        grid.clear_all_flames()  # reset display
 
     # * Misc functions

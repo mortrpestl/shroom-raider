@@ -7,6 +7,7 @@ from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
 
+
 @debug_wait(WAIT_TIME)
 def show_personal_leaderboard(pdata):
     """
@@ -18,21 +19,22 @@ def show_personal_leaderboard(pdata):
         return
 
     rows = [
-        [i + 1, get_level_title(*level_ref.split('/')) or "-", format_time(ms)]
+        [i + 1, get_level_title(*level_ref.split("/")) or "-", format_time(ms)]
         for i, (level_ref, ms) in enumerate(sorted(completed.items()))
     ]
     tabulate(["#", "Title", "Best Time"], rows, max_width=30)
-    
+
+
 @debug_wait(WAIT_TIME)
 def show_general_leaderboard():
     """
     Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
     """
     players = read_all_rows()
-    
+
     for p in players:
         print(p)
-        
+
     if not players:
         print("No leaderboard data available.\n")
         return
@@ -72,14 +74,15 @@ def show_general_leaderboard():
         "Tiles Walked",
     ]
     tabulate(headers, rows, max_width=24)
-  
+
+
 @debug_wait(WAIT_TIME)
 def show_level_leaderboard(level_ref):
     """
     Shows players who've beaten a level sorted by time.
     """
     players = read_all_rows()
-    level_title = get_level_title(*level_ref.split('/')) or "UNTITLED"
+    level_title = get_level_title(*level_ref.split("/")) or "UNTITLED"
 
     if not players:
         print(f"No player data for Level {level_ref} ({level_title}).\n")

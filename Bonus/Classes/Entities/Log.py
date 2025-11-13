@@ -3,6 +3,7 @@ from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 import Utils.sounds as s
 
+
 class Log(Entity):
     # * Attributes
     _is_pushable = True
@@ -36,7 +37,7 @@ class Log(Entity):
             return True
         else:
             return False
-        
+
     def chop(self):
         s.axe_sound()
         self.destroy()

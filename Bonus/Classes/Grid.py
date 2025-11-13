@@ -11,7 +11,13 @@ class Grid:
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
-    def __init__(self, name: str, map_data: str, mode: DisplayMode = DisplayMode.EMOJI, metadata: dict | None = None):
+    def __init__(
+        self,
+        name: str,
+        map_data: str,
+        mode: DisplayMode = DisplayMode.EMOJI,
+        metadata: dict | None = None,
+    ):
         self.__name = name
         self.__player_pos = [0, 0]
         self.__total_mushrooms = 0
@@ -124,7 +130,7 @@ class Grid:
 
     def get_bee_data(self):
         return self.__bee_data
-    
+
     def get_is_cleared(self):
         return self.__is_cleared
 
@@ -145,7 +151,7 @@ class Grid:
 
     def get_metadata(self):
         return self.__metadata
-    
+
     @staticmethod
     def get_grid_by_name(name: str):
         if name not in Grid.GRID_LIST:
@@ -229,8 +235,10 @@ class Grid:
 
         if symbol == "&":
             bee_lag, bee_count = map(int, self.__bee_data.split())
-            return item_type(coord, self, bee_lag=bee_lag, bee_count=bee_count), item_display_value
-        
+            return item_type(
+                coord, self, bee_lag=bee_lag, bee_count=bee_count
+            ), item_display_value
+
         return item_type(coord, self, symbol), item_display_value
 
     # * Flash / Darkness Setters
@@ -371,9 +379,13 @@ class Grid:
 {held_item_display}
 
 What will you do? """
+
             display.append(terminal_gui)
-            if f:  # if it is the FIRST time render is called, then animate the loading in!
-                load_in("\n".join(display))
+            clear_terminal()
+            if (
+                f
+            ):  # if it is the FIRST time render is called, then animate the loading in!
+                load_in("\n".join(display), 5)
             else:
                 print(("\n".join(display)))
             sys.stdout.flush()

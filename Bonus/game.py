@@ -2,7 +2,6 @@ import sys
 import io
 import os
 import json
-import time
 from argparse import ArgumentParser as ap
 import Utils.sounds as s
 import Utils.movement as m
@@ -56,7 +55,6 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
     if inst == "!":
         G, P = reset(level, metadata=G.get_metadata())
 
-
     if reset_only:
         return
 
@@ -71,7 +69,7 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
         elif isinstance(P.get_item(), Bomb) and isinstance(P.get_entity_below(), Bomb):
             P.collect_item()
         else:
-            return # no overwriting items
+            return  # no overwriting items
     elif inst == "f":
         P.use_item()
 
@@ -125,8 +123,8 @@ def main():
     global G, P, REPORT_FILE, MOVES_MADE
 
     DEFAULT_DARK = 10000
-    DEFAULT_BEE = '3 3'
-    
+    DEFAULT_BEE = "3 3"
+
     argument_parser = ap()
     argument_parser.add_argument("-f", "--stage_file")
     argument_parser.add_argument("-R", "--report_file", default=None)
@@ -145,7 +143,7 @@ def main():
 
     m.block_keys()
 
-    metadata = {'dark_radius': dark_radius, 'bee_data': bee_data}
+    metadata = {"dark_radius": dark_radius, "bee_data": bee_data}
 
     with open(args.stage_file, encoding="utf-8") as lvl_file:
         first_line = lvl_file.readline().lstrip("\ufeff")
@@ -153,7 +151,7 @@ def main():
         level = lvl_file.read()
 
         print()
-        G = Grid(args.stage_file, level, metadata = metadata)
+        G = Grid(args.stage_file, level, metadata=metadata)
         P = G.get_player()
         check_win_condition(P, G)
 
@@ -178,6 +176,7 @@ def main():
                     write_report(G, P, False, True)
                     wait(1)
                     sys.exit(ExitCodes.DEFEAT.value)
+
 
 if __name__ == "__main__":
     s.initAll()
