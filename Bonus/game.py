@@ -12,7 +12,8 @@ from Classes.Entities.Player import Player
 from Classes.Entities.Bomb import Bomb
 
 from Utils.general_utils import wait
-from Utils.animator import progress_bar
+from Utils.animator import progress_bar, load_in, typewriter
+from colorama import Fore, Back, Style
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -167,14 +168,20 @@ def main():
                     stop_or_reset_only = False
 
                 if G.get_is_cleared():
-                    print("CLEAR")
+                    G.render(test_mode=ENABLE_TEST_MODE)
+                    with open("Assets/UI/ClearText.txt", "r", encoding="utf+8") as text:
+                        load_in(text.read(), 2, colors=[Fore.GREEN])
+                    typewriter("Way to go! Onto the next area...", colors=[Fore.GREEN])
                     write_report(G, P, True, False)
-                    wait(1)
+                    progress_bar("Taking you to main menu...", 2)
                     sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
-                    print("DEAD")
+                    #G.render(test_mode=ENABLE_TEST_MODE)
+                    with open("Assets/UI/DefeatText.txt", "r", encoding="utf+8") as text:
+                        load_in(text.read(), 2, colors=[Fore.RED])
+                    typewriter("Don't give up yet! There're still shrooms to raid...", colors=[Fore.RED])
                     write_report(G, P, False, True)
-                    wait(1)
+                    progress_bar("Taking you to main menu...", 2)
                     sys.exit(ExitCodes.DEFEAT.value)
 
 

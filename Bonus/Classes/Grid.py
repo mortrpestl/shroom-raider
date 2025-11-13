@@ -5,6 +5,8 @@ from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
 from Utils.general_utils import clear_terminal, center_wr_to_terminal_size
 from Utils.Enums import DisplayMode
+from colorama import Fore, Back, Style
+from wcwidth import wcswidth
 
 
 class Grid:
@@ -323,23 +325,25 @@ class Grid:
 
         self.visualize_map()
 
-        display = []  # FINAL DISPLAY INITIALIZATION
+        # * INITIALIZATION OF DISPLAY VALUES
+        title_display = []
+        grid_display = []
+        hud_display = []
+        # NOTE grid_display is separate to "bypass" weirdness from ANSI
 
-        os.system("cls" if os.name == "nt" else "clear")
+        # * TITLE DISPLAY
+        span = max((wcswidth(self.__grid_user_display[0])-3)//4, 1)
+        spanner = f"{Fore.GREEN}\nx{"-"*span}{"="*span}{{🍄}}{"="*span}{"-"*span}x\n{Style.RESET_ALL}"
+        with open("Assets/UI/GameProperArt.txt", "r", encoding="utf+8") as art:
+            title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
+            title_display.append(spanner)
 
         # * GRID DISPLAY
+        grid_display = []
         for row in self.__grid_user_display:
-            display.append("".join(row))
+            grid_display.append("".join(row))
 
-        display.append(
-            f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected"
-        )
-        if win:
-            display.append("You win!")
-        if lose:
-            display.append("You lose...")
-
-        # * CONTEXTUAL DISPLAYS
+        # * CONTEXTUAL DISPLAYS (in HUD)
         item_here_display = "- Nothing Here!"
         held_item_display = "- Not holding anything..."
         additional_inputs = []
@@ -367,8 +371,7 @@ class Grid:
             )
 
         # * PLAYER "HUD"
-        if not win and not lose:
-            terminal_gui = f"""
+        terminal_gui = f"""
 [w] Move up
 [a] Move left
 [s] Move down
@@ -380,15 +383,29 @@ class Grid:
 {held_item_display}
 
 What will you do? """
+        
+        hud_display.append(spanner)
+        hud_display.append(
+            f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected"
+        )
+        if win:
+            hud_display.append("You win!")
+        if lose:
+            hud_display.append("You lose...")
 
-            display.append(terminal_gui)
-            clear_terminal()
-            if (
-                f
-            ):  # if it is the FIRST time render is called, then animate the loading in!
-                load_in("\n".join(display), 5, centered=True)
-            else:
-                print(center_wr_to_terminal_size("\n".join(display)))
-            sys.stdout.flush()
+        hud_display.append(terminal_gui)
+
+        # * PROCESS DISPLAYS
+
+        clear_terminal()
+        if f:  # if it is the FIRST time render is called, then animate the loading in!
+            load_in("\n".join(title_display), 1, centered=True) # colors initialized before
+            load_in("\n".join(grid_display), 2, centered=True, colors=[Back.GREEN, Fore.BLACK], colors2=[Fore.GREEN])
+            load_in("\n".join(hud_display), 2, centered=True)
+        else:
+            print(center_wr_to_terminal_size("\n".join(title_display))) # colors initialized before
+            print(center_wr_to_terminal_size("\n".join(grid_display), colors=[Back.GREEN, Fore.BLACK]))
+            print(center_wr_to_terminal_size("\n".join(hud_display)))
+        sys.stdout.flush()
 
         return win or lose

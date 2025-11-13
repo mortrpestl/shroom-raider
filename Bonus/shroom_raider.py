@@ -61,8 +61,10 @@ def print_levels_table(levels, selected=1, f=False):
     display = []
     with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
-    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
-    display.append("--===x{🌲}x===---\n")
+    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
+    spanner = "--===x{🌲}x===---\n"
+
+    display.append(spanner)
     for lvl in levels:
         if lvl.get("id", "") == selected:
             display.append(
@@ -71,18 +73,15 @@ def print_levels_table(levels, selected=1, f=False):
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
-        else:#　
+        else:
             display.append(str(lvl.get("title", "")))
-            
-    display.append("\n--===x{🌲}x===---\n")
+    display.append("\n" + spanner)
+
     display.append(center_wr_to_terminal_size("Difficulty: " + difficulty, colors=[Fore.RED]))
     display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    if f: # if first time, load animation
-        load_in("\n".join(display), 1.5)
-    else:
-        clear_terminal()
-        print(center_wr_to_terminal_size("\n".join(display)))
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
 
 def print_folders_table(folders, selected=1, f=False):
@@ -90,7 +89,9 @@ def print_folders_table(folders, selected=1, f=False):
     with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
-    display.append("--===x{🍄}x===---\n")
+    spanner = "--===x{🔥}x===---\n"
+
+    display.append(spanner)
     for folder in folders:
         if folder.get("id", "") == selected:
             display.append(
@@ -100,40 +101,31 @@ def print_folders_table(folders, selected=1, f=False):
             desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
         else:#　
             display.append(str(folder.get("title", "")))
-            
-    display.append("\n--===x{🍄}x===---\n")
+    display.append("\n" + spanner)
+
     display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    if f: # if first time, load animation
-        load_in("\n".join(display), 1.5)
-    else:
-        clear_terminal()
-        print(center_wr_to_terminal_size("\n".join(display)))
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
-def print_after_game_options(selected, f=False):
+def print_after_game_options(selected):
+    display = []
+    with open("Assets/UI/MainMenuArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
+
     option = OPTIONS_LIST[selected]
-    headers = ["option", "description"]
-    rows = []
+    spanner = "--===x{🪓}x===---\n"
+    
+    display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
-        rows.append(["　" if o != option else "🧑", AFTER_GAME_OPTIONS[o]])
+        if o == option:
+            display.append(center_wr_to_terminal_size(f"> 🧑 {AFTER_GAME_OPTIONS[o]} <", colors=[Back.GREEN, Fore.BLACK]))
+        else:
+            display.append(AFTER_GAME_OPTIONS[o])
+    display.append("\n" + spanner)
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
-
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🔥" + "-" * inner_width + "🔥")  # top
-    print(f"|  {header_line} |")
-    print("|" + "-" * inner_width + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
-
-    print("🔥" + "-" * inner_width + "🔥")
+    clear_terminal()
+    print(center_wr_to_terminal_size("\n".join(display)))
 
 
 # * Level Selection and Launching Functions
@@ -327,7 +319,7 @@ def main():
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
         typewriter(intro.read(), 1)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-        load_in(Fore.RED + "\n" + art.read() + "\n" + Style.RESET_ALL, 1)
+        load_in(art.read(), 1, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
