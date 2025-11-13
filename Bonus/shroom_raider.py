@@ -334,7 +334,10 @@ def main():
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
     if encrypted_username:  # existing user
-        password = verify_existing_user(username, encrypted_username)
+        if username == 'GUEST':
+            password = verify_existing_user(username, '0x/No')
+        else:
+            password = verify_existing_user(username, encrypted_username)
     else:  # new user
         password = register_new_user(username)
         # store encrypted username & reference username in Excel
