@@ -288,10 +288,13 @@ class PlayerData:
         return self.apply_report_dict(report, level_id=level_id)
 
     def get_completed_levels_organized(self):
+    # * Display
+    # @debug_wait(WAIT_TIME)
+    def __repr__(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
-            completed_rows = [["None"]]
-            completed_headers = ["Completed Levels"]
+            return [["None"]]
+            #completed_headers = ["Completed Levels"]
         else:
 
             def sort_key(item):
@@ -310,19 +313,6 @@ class PlayerData:
                 ]
                 for level_id, ms in sorted_levels
             ]
-            return completed_rows
-        
-    # * Display
-
-    @debug_wait(WAIT_TIME)
-    def __repr__(self):
-        completed_levels = self.get_completed_levels()
-        if not completed_levels:
-            completed_rows = [["None"]]
-            completed_headers = ["Completed Levels"]
-        else:
-
-            completed_rows = self.get_completed_levels_organized()
             completed_headers = ["ID", "Title", "Best Time"]
 
         stats_rows = [
@@ -334,7 +324,7 @@ class PlayerData:
             ["Total Time", format_time(self.total_seconds_played)],
         ]
 
-        tabulate(["Stat", "Value"], stats_rows, max_width=30)
-        tabulate(completed_headers, completed_rows, max_width=30)
+        display = tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"
+        display += tabulate(completed_headers, completed_rows, max_width=24)
 
-        return ""
+        return display

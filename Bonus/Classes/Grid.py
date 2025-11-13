@@ -42,6 +42,7 @@ class Grid:
             [[None] for _ in range(self.__map_cols)] for _ in range(self.__map_rows)
         ]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
+        self.__grid_color_display = [[] for _ in range(self.__map_rows)]
 
         self.ENTITIES = import_entities(
             {
@@ -62,30 +63,30 @@ class Grid:
             }
         )
         self.character_mapping = {  # for ENTITY display
-            self.ENTITIES["Player"]: ("🧑", "L"),
-            self.ENTITIES["Tree"]: ("🌲", "T"),
-            self.ENTITIES["Mushroom"]: ("🍄", "+"),
-            self.ENTITIES["Rock"]: ("🗿", "R"), #"🪨"
-            self.ENTITIES["Water"]: ("🟦", "~"),
-            self.ENTITIES["PavedTile"]: ("⬜", "_"),
-            self.ENTITIES["Axe"]: ("🪓", "x"),
-            self.ENTITIES["Flamethrower"]: ("🔥", "*"),
-            self.ENTITIES["Flash"]: ("✨", "?"),
-            self.ENTITIES["Bomb"]: ("💣", "!"),
-            self.ENTITIES["Beehive"]: ("🍯", "&"),
-            self.ENTITIES["Bee"]: ("🐝", ">"),
-            self.ENTITIES["Ice"]: ("🧊", "#"),
-            self.ENTITIES["Log"]: ("📦", "o"),
+            self.ENTITIES["Player"]: (("🧑", "L"), Back.GREEN),
+            self.ENTITIES["Tree"]: (("🌲", "T"), Back.GREEN),
+            self.ENTITIES["Mushroom"]: (("🍄", "+"), Back.GREEN),
+            self.ENTITIES["Rock"]: (("🗿", "R"), Back.GREEN),
+            self.ENTITIES["Water"]: (("🟦", "~"), Back.BLUE),
+            self.ENTITIES["PavedTile"]: (("⬜", "_"), Back.WHITE + Fore.WHITE),
+            self.ENTITIES["Axe"]: (("🪓", "x"), Back.GREEN),
+            self.ENTITIES["Flamethrower"]: (("🔥", "*"), Back.GREEN),
+            self.ENTITIES["Flash"]: (("✨", "?"), Back.GREEN),
+            self.ENTITIES["Bomb"]: (("💣", "!"), Back.GREEN),
+            self.ENTITIES["Beehive"]: (("🍯", "&"), Back.GREEN),
+            self.ENTITIES["Bee"]: (("🐝", ">"), Back.GREEN),
+            self.ENTITIES["Ice"]: (("🧊", "#"), Back.CYAN),
+            self.ENTITIES["Log"]: (("📦", "o"), Back.GREEN),
         }
         self.overlay_mapping = {  # for NON-ENTITY display, dubbed "overlay"
-            "Flame": ("🔥", "&"),
-            "Smoke": ("⚫", "0"),
-            "Darkness": ("⬛", "#"),
-            "Blast": ("💥", "X"),
+            "Flame": (("🔥", "&"), Back.YELLOW),
+            "Smoke": (("⚫", "0"), Back.BLACK + Fore.BLACK),
+            "Darkness": (("⬛", "#"), Back.BLACK + Fore.BLACK),
+            "Blast": (("💥", "X"), Back.GREEN)
         }
         # NOTE since non-entity display is separate, these can have the same display string as entity displays
         self.initialization_map = {
-            k[1]: (v, k[0]) for v, k in self.character_mapping.items()
+            k[0][1]: (v, k[0][0], k[1]) for v, k in self.character_mapping.items()
         }
 
         self.__active_flashes = []  # flashes affect darkness only
@@ -96,9 +97,10 @@ class Grid:
         # initialize objects in grid
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
-                obj, display = self.init_coord(self.__grid_vis_map[r][c], [r, c])
+                obj, display, color = self.init_coord(self.__grid_vis_map[r][c], [r, c])
                 self.__grid_obj_map[r][c].append(obj)
                 self.__grid_user_display[r].append(display)
+                self.__grid_color_display[r].append(color)
 
         Grid.GRID_LIST[name] = self
 
@@ -115,10 +117,9 @@ class Grid:
 
     def get_grid_user_display(self, r: int, c: int):
         return self.__grid_user_display[r][c]
-
-    def get_overlay_of_symbol(self, symbol: str):
-        offset = self.get_display_mode().value
-        return self.overlay_mapping[symbol][offset]
+    
+    def get_grid_color_map(self):
+        return self.__grid_color_display
 
     def get_layers_from_coord(self, r: int, c: int):
         return self.__grid_obj_map[r][c]
@@ -176,9 +177,17 @@ class Grid:
 
         return self.__grid_obj_map[r][c][layer]
 
-    def get_display_symbol_of_obj(self, obj: Entity | None):
+    def get_display_of_obj(self, obj: Entity | None | str):
         offset = self.get_display_mode().value
-        return self.character_mapping[type(obj)][offset]
+        if isinstance(obj, Entity):
+            values = self.character_mapping[type(obj)]
+        if isinstance(obj, str):
+            values = self.overlay_mapping[obj]
+        # return symbol and color
+        return {
+            "symbol": values[0][offset],
+            "color": values[1]
+        }
 
     # * Simple Setters
     def level_clear(self):
@@ -215,6 +224,9 @@ class Grid:
     def set_display_in_coord(self, r: int, c: int, symbol: str):
         self.__grid_user_display[r][c] = symbol
 
+    def set_color_in_coord(self, r: int, c: int, color: str):
+        self.__grid_color_display[r][c] = color
+
     # * Complex Setters
     def add_layer_to_coord(self, r: int, c: int, entity: Entity):
         self.get_grid_obj_map()[r][c].append(entity)
@@ -222,7 +234,7 @@ class Grid:
     # * Misc
     def init_coord(self, symbol: str, coord: list):
         if symbol in Grid.EMPTY_TILES:
-            return None, "　"
+            return None, "　", Back.GREEN
         if symbol == "L":
             self.set_player_pos(coord)
         if symbol == "+":
@@ -233,7 +245,7 @@ class Grid:
         if not item:
             raise ValueError(f"Unknown type symbol: {symbol}")
 
-        item_type, item_display_value = item
+        item_type, item_display_value, item_color = item
 
         # * CHECK METADATA ASSOCIATIONS
 
@@ -241,9 +253,9 @@ class Grid:
             bee_lag, bee_count = map(int, self.__bee_data.split())
             return item_type(
                 coord, self, bee_lag=bee_lag, bee_count=bee_count
-            ), item_display_value
+            ), item_display_value, item_color
 
-        return item_type(coord, self, symbol), item_display_value
+        return item_type(coord, self, symbol), item_display_value, item_color
 
     # * Flash / Darkness Setters
     def register_flash(self, flash: Entity):
@@ -264,26 +276,26 @@ class Grid:
 
     # * Visualization Helpers
     def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None):
-        display = self.get_display_symbol_of_obj(obj) if obj else "　"
+        display, color = list(self.get_display_of_obj(obj).values()) if obj else ["　", Back.GREEN]
 
         dark_radius = self.get_dark_radius()
 
         # * FLAME LOGIC
         # Note that whenever tree burns: 1.) it adds an active flame pos; 2.) sets its former pos to flame.
         if (r, c) in self.get_active_flames():
-            display = self.get_overlay_of_symbol("Flame")
+            display, color = list(self.get_display_of_obj("Flame").values())
 
         # * BLAST LOGIC
         if (r, c) in self.get_active_blasts():
-            display = self.get_overlay_of_symbol("Blast")
+            display, color = list(self.get_display_of_obj("Blast").values())
 
         # * SMOKE RESIDUE LOGIC
         if (r, c) in self.get_active_smokes():
-            display = self.get_overlay_of_symbol("Smoke")
+            display, color = list(self.get_display_of_obj("Smoke").values())
 
         # skip darkness logic if no dark_radius
         if dark_radius is None:
-            return display
+            return display, color
 
         # * DARKNESS LOGIC
         # lit by flash? then display object
@@ -291,20 +303,20 @@ class Grid:
             abs(fl.get_pos()[0] - r) + abs(fl.get_pos()[1] - c) <= fl.get_radius()
             for fl in self.get_active_flashes()
         ):
-            return display
+            return display, color
 
         # darken if dark_radius is set and outside radius
         distance = abs(self.get_player_pos()[0] - r) + abs(self.get_player_pos()[1] - c)
         if distance > dark_radius:
-            display = self.get_overlay_of_symbol("Darkness")
+            display, color = list(self.get_display_of_obj("Darkness").values())
 
-        return display
+        return display, color
 
     def visualize_map(self):
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj = self.get_obj_in_coord(r, c)
-                self.__grid_user_display[r][c] = self.__compute_display_for_cell(
+                self.__grid_user_display[r][c], self.__grid_color_display[r][c] = self.__compute_display_for_cell(
                     r, c, obj
                 )
 
@@ -334,7 +346,7 @@ class Grid:
 
         # * TITLE DISPLAY
         span = max((wcswidth(self.__grid_user_display[0])-3)//4, 1)
-        spanner = f"{Fore.GREEN}\nx{"-"*span}{"="*span}{{🍄}}{"="*span}{"-"*span}x\n{Style.RESET_ALL}"
+        spanner = f'{Fore.GREEN}\nx{"-"*span}{"="*span}{{🍄}}{"="*span}{"-"*span}x\n{Style.RESET_ALL}'
         with open("Assets/UI/GameProperArt.txt", "r", encoding="utf+8") as art:
             title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
             title_display.append(spanner)
@@ -350,7 +362,7 @@ class Grid:
         additional_inputs = []
 
         if item_here is not None:
-            symbol = self.get_display_symbol_of_obj(item_here)
+            symbol = self.get_display_of_obj(item_here)["symbol"]
             if item_here.get_collectable():
                 additional_inputs.append(f"\n[p] Pick up [{symbol} {item_here}]?")
             item_here_display = (
@@ -359,7 +371,7 @@ class Grid:
 
         if p.get_item() is not None:
             if p.get_item().get_passive():
-                symbol = self.get_display_symbol_of_obj(p.get_item())
+                symbol = self.get_display_of_obj(p.get_item())["symbol"]
                 additional_inputs.append(
                     f"\n[F] Use passive item [{symbol} {p.get_item()}]"
                 )
@@ -368,7 +380,7 @@ class Grid:
 
         if held_item is not None:
             held_item_display = (
-                f"Holding item [{self.get_display_symbol_of_obj(held_item)}{held_item}]"
+                f"Holding item [{self.get_display_of_obj(held_item)["symbol"]}{held_item}]"
             )
 
         # * PLAYER "HUD"
@@ -401,11 +413,11 @@ What will you do? """
         clear_terminal()
         if f:  # if it is the FIRST time render is called, then animate the loading in!
             load_in("\n".join(title_display), 1, centered=True) # colors initialized before
-            load_in("\n".join(grid_display), 2, centered=True, colors=[Back.GREEN, Fore.BLACK], colors2=[Fore.GREEN])
-            load_in("\n".join(hud_display), 2, centered=True)
+            load_in("\n".join(grid_display), 1, centered=True, colors=self.get_grid_color_map(), colors2=[Fore.GREEN], mode="--grid")
+            load_in("\n".join(hud_display), 1, centered=True)
         else:
             print(center_wr_to_terminal_size("\n".join(title_display))) # colors initialized before
-            print(center_wr_to_terminal_size("\n".join(grid_display), colors=[Back.GREEN, Fore.BLACK]))
+            print(center_wr_to_terminal_size("\n".join(grid_display), colors=self.get_grid_color_map(), grid_mode=True))
             print(center_wr_to_terminal_size("\n".join(hud_display)))
         sys.stdout.flush()
 

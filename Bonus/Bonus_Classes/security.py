@@ -6,7 +6,7 @@ VALID_LETTERS = set(CHARTAPE)
 
 
 def check_validity(data: str):
-    if len(data) > 30:
+    if 10 > len(data) > 30:
         return False
 
     for letter in data:
@@ -73,3 +73,55 @@ def findPW(unencrypted: str, encrypted: str):  # we assume that these are the sa
         pw += CHARTAPE[shift]
 
     return pw
+
+def verify_existing_user(username: str, encrypted_username: str):
+    """
+    Prompt for password until correct for existing user.
+    Returns the correct password once verified.
+    """
+    while True:
+        password = input(f"Password for {username}: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+            continue
+
+        # scramble username with password
+        test_encrypted = scramble(username, password)
+        if test_encrypted == encrypted_username:
+            print("Password correct!")
+            return password
+        else:
+            print("Invalid password, try again.")
+
+
+def register_new_user(username: str):
+    """
+    Prompt for password and confirmation for new user.
+    Returns the confirmed password.
+    """
+    while True:
+        password = input(f"Enter new password for {username}: ").strip()
+        confirm = input("Confirm password: ").strip()
+        if not password:
+            print("Password cannot be empty.")
+        elif len(password) != len(username):
+            print("Password must have the same length as username")
+        elif password != confirm:
+            print("Passwords do not match. Try again.")
+        elif not check_validity(password):
+            print('Invalid password. Please only use alphanumeric symbols')
+        else:
+            print("Password confirmed!")
+            return password
+        
+def get_valid_username():
+    username = input('Username (leave blank for guest): [10-30 characters] -> ')
+
+    if not username:
+        return 'GUEST'
+
+    while not check_validity(username):
+        print('Sorry, that is an invalid username...')
+        username = input('Username (leave blank for guest): [10-30 characters] -> ') 
+
+    return username

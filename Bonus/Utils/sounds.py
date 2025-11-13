@@ -1,36 +1,41 @@
 from pygame import mixer as m
 from random import randint
 
-# regular game
+# ! REGULAR GAME
+
+# ? Movement Sounds
 WALK = []
 PAVEDWALK = []
 ONITEM = None
-AXE, FLAMETHROWER, SHROOM = None, None, None
 PUSH = []
 FAILPUSH = None
-EQUIP = None
 DEATH = None
 
-# bonus
+# ? Item Sounds
+AXE, FLAMETHROWER, SHROOM = None, None, None
+EQUIP = None
+
+# ! BONUS
+
+# ? Added Map Entities
 ICE = None
 LOG = None
-BOMB = None
-FLASH = None
 BEE = None
 BEE_DEATH = None
 
-# menu
+# ? Added Items
+BOMB = None
+FLASH = None
+
+# ? Menu Sounds
 MENU = None
 
-# used this to save on typing: AI
-# for every playsound function, add a small 0.75 second delay to everything
 
-
-# helper func
+# ! Helper Functions
 def path(filename: str):
     return "Assets/Sounds/" + filename
 
-
+# ! Initializers
 def initialize_walk_sounds():
     global WALK, PAVEDWALK, PUSH, FAILPUSH, ONITEM, DEATH
     walk_filenames = [
@@ -54,10 +59,10 @@ def initialize_walk_sounds():
     for a in paved_walk_filenames:
         PAVEDWALK.append(m.Sound(path(a)))
 
-    ONITEM = m.Sound(path("on_item.ogg"))
-
     for p in push_filenames:
-        PUSH.append(m.Sound(path(p)))
+            PUSH.append(m.Sound(path(p)))
+
+    ONITEM = m.Sound(path("on_item.ogg"))
 
     FAILPUSH = m.Sound(path("push_not_successful.mp3"))
     DEATH = m.Sound(path("death.ogg"))
@@ -95,6 +100,7 @@ def initAll():
     initialize_menu()
 
 
+# ! Sound Players
 def walk_sound():
     global WALK
     i = randint(0, len(WALK) - 1)

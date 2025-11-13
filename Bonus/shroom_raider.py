@@ -14,7 +14,7 @@ from Utils.movement import block_keys as b
 from Utils.animator import load_in, typewriter, progress_bar
 from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
-from Bonus_Classes.security import scramble
+from Bonus_Classes.security import scramble, verify_existing_user, register_new_user, get_valid_username
 
 
 from Bonus_Classes.PlayerData import PlayerData
@@ -54,7 +54,7 @@ def show_statistics(player_data):
 
 # * Level List Helper Functions
 
-def print_levels_table(levels, selected=1, f=False):
+def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     """
     Print a summary of the levels.
     """
@@ -68,11 +68,17 @@ def print_levels_table(levels, selected=1, f=False):
     for lvl in levels:
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"> 🧑 {lvl.get("title", "")} <", 
+                center_wr_to_terminal_size(f'<🧑 {lvl.get("title", "")} 🧑>', 
                     colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
+        elif lvl.get("id","") in completed_lvl_ids:
+            display.append(
+                center_wr_to_terminal_size(f'✔  {lvl.get("title", "")}', 
+                    colors=[Fore.GREEN])
+            )
+        
         else:
             display.append(str(lvl.get("title", "")))
     display.append("\n" + spanner)
@@ -95,7 +101,7 @@ def print_folders_table(folders, selected=1, f=False):
     for folder in folders:
         if folder.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"> 🧑 {folder.get("title", "")} <", 
+                center_wr_to_terminal_size(f'<🧑 {folder.get("title", "")} 🧑>', 
                     colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
@@ -114,12 +120,14 @@ def print_after_game_options(selected):
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
 
     option = OPTIONS_LIST[selected]
+
+    display.append("[w] Up | [s] Down | [Enter] Go to\n")
+
     spanner = "--===x{🪓}x===---\n"
-    
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:
-            display.append(center_wr_to_terminal_size(f"> 🧑 {AFTER_GAME_OPTIONS[o]} <", colors=[Back.GREEN, Fore.BLACK]))
+            display.append(center_wr_to_terminal_size(f'<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>', colors=[Back.GREEN, Fore.BLACK]))
         else:
             display.append(AFTER_GAME_OPTIONS[o])
     display.append("\n" + spanner)
@@ -131,7 +139,7 @@ def print_after_game_options(selected):
 # * Level Selection and Launching Functions
 
 
-def choose_level(levels):
+def choose_level(levels, completed_lvl_ids):
     """
     Displays Level Select menu and returns chosen level dict or None on quit.
     """
@@ -144,7 +152,8 @@ def choose_level(levels):
 
     # if there is levels
     selected = 1
-    print_levels_table(levels, selected)
+
+    print_levels_table(levels, selected, completed_lvl_ids)
     while True:
         choice = m()
         if choice is not None:
@@ -158,12 +167,12 @@ def choose_level(levels):
                 if selected > 1:
                     selected -= 1
                     clear_terminal()
-                    print_levels_table(levels, selected)
+                    print_levels_table(levels, selected, completed_lvl_ids)
             elif choice == "s":
                 if selected < len(levels):
                     selected += 1
                     clear_terminal()
-                    print_levels_table(levels, selected)
+                    print_levels_table(levels, selected, completed_lvl_ids)
 
 
 def choose_folder(folders):
@@ -196,11 +205,13 @@ def choose_folder(folders):
                     print_folders_table(folders, selected)
 
 
-def choose_after_game_option():
+def choose_after_game_option(curr_display):
+    blank = center_wr_to_terminal_size("Nothing to show...", colors=[Fore.BLUE])
     clear_terminal()
 
     selected = 0
     print_after_game_options(selected)
+    print(curr_display if curr_display else blank)
     while True:
         choice = m()
         if choice is not None:
@@ -209,14 +220,14 @@ def choose_after_game_option():
             if choice == "w":
                 if selected > 0:
                     selected -= 1
-                    clear_terminal()
-                    print_after_game_options(selected)
+                    
             elif choice == "s":
                 if selected < len(OPTIONS_LIST) - 1:
                     selected += 1
-                    clear_terminal()
-                    print_after_game_options(selected)
-
+                    
+            clear_terminal()
+            print_after_game_options(selected)
+            print(curr_display if curr_display else blank)
 
 def make_stage_file_from_grid(grid_text):
     """
@@ -274,69 +285,30 @@ def launch_game_with_level(level):
                 os.remove(path)
 
 
-# * Password Methods
-def verify_existing_user(username: str, encrypted_username: str) -> str:
-    """
-    Prompt for password until correct for existing user.
-    Returns the correct password once verified.
-    """
-    while True:
-        password = input(f"Password for {username}: ").strip()
-        if not password:
-            print("Password cannot be empty.")
-            continue
-
-        # scramble username with password
-        test_encrypted = scramble(username, password)
-        if test_encrypted == encrypted_username:
-            print("Password correct!")
-            return password
-        else:
-            print("Invalid password, try again.")
-
-
-def register_new_user(username: str) -> str:
-    """
-    Prompt for password and confirmation for new user.
-    Returns the confirmed password.
-    """
-    while True:
-        password = input(f"Enter new password for {username}: ").strip()
-        confirm = input("Confirm password: ").strip()
-        if not password:
-            print("Password cannot be empty.")
-        elif len(password) != len(username):
-            print("Password must have the same length as username")
-        elif password != confirm:
-            print("Passwords do not match. Try again.")
-        else:
-            print("Password confirmed!")
-            return password
 
 
 # gameplay start + loop
 def main():
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 1)
+        typewriter(intro.read(), 15)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-        load_in(art.read(), 1, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
+        load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
-    username = input("Username (leave blank for guest): ").strip() or "GUEST"
+    username = get_valid_username()
 
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
-    if encrypted_username:  # existing user
+    if encrypted_username and username != 'GUEST':  # existing user
+        password = verify_existing_user(username, encrypted_username)
+    else:  
         if username == 'GUEST':
-            password = verify_existing_user(username, '0x/No')
+            player_data = PlayerData('GUEST', 'guest')
         else:
-            password = verify_existing_user(username, encrypted_username)
-    else:  # new user
-        password = register_new_user(username)
-        # store encrypted username & reference username in Excel
-        encrypted_username = scramble(username, password)
-        PlayerData.store_new_user(username, encrypted_username)
-
-    player_data = PlayerData(username, password)
+            password = register_new_user(username)
+            # store encrypted username & reference username in Excel
+            encrypted_username = scramble(username, password)
+            PlayerData.store_new_user(username, encrypted_username)
+            player_data = PlayerData(username, password)
 
     b()
     initAll()
@@ -353,8 +325,10 @@ def main():
 
         while True:
             levels = LevelManager.load_levels(folder_choice)
-            level_choice = choose_level(levels)
-
+            try:
+                level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
+            except:
+                level_choice = choose_level(levels, set())
             if level_choice == "q":
                 progress_bar("Quitting launcher.", total_time=2)
                 exit(ExitCodes.QUIT.value)
@@ -383,30 +357,32 @@ def main():
                         level_id=FULL_ID,
                         elapsed_time=elapsed_time,
                     )
-
+                curr_display = ""
                 while True:
-                    choice = choose_after_game_option()
+                    choice = choose_after_game_option(curr_display)
                     choice = OPTIONS_LIST[choice]
+                    
                     match choice:
                         case "r" | "m":
                             break
                         case "s":
-                            show_statistics(player_data)
+                            curr_display = repr(player_data)
                             continue
                         case "q":
                             progress_bar("Quitting launcher.", total_time=2)
                             exit(ExitCodes.QUIT.value)
                         case "p":
-                            show_personal_leaderboard(player_data)
+                            curr_display = show_personal_leaderboard(player_data)
                             continue
                         case "g":
-                            show_general_leaderboard()
+                            curr_display = show_general_leaderboard()
                             continue
                         case "l":
-                            show_level_leaderboard(FULL_ID)
+                            curr_display = show_level_leaderboard(FULL_ID)
                             continue
                         case _:
                             print("Invalid choice, try again.")
+                    
 
                 if choice in ("r", "replay"):
                     continue  # continue playing the level
