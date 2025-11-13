@@ -14,6 +14,8 @@ from Utils.movement import block_keys as b
 from Utils.general_utils import clear_terminal, wait
 
 from Bonus_Classes.security import scramble
+from colorama import Fore, Style
+
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.Leaderboard import (
     show_personal_leaderboard,
@@ -28,9 +30,9 @@ from Utils.sounds import initAll
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
-    'r': 'replay level',
-    'm': 'main menu',
-    's': 'View Statistics',
+    'r': 'Replay Level',
+    'm': 'Return To Main Menu',
+    's': 'View Player Statistics',
     'p': 'Personal Leaderboard',
     'g': 'General Leaderboard',
     'l': 'Level Leaderboard',
@@ -83,15 +85,15 @@ def print_levels_table(levels, selected = 1):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
-    print("|" + "-" * inner_width + "|")
+    print("🌲" + "-" * inner_width + "🌲")  # top
+    print(f"| {header_line}   |")
+    print("|" + "-" * (inner_width + 2) + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
+        print(f"|  {row_line} |")
 
-    print("+" + "-" * inner_width + "+")  # bottom
+    print("🌲" + "-" * inner_width + "🌲")  # bottom
 
 def print_folders_table(folders, selected = 1):
     print("""
@@ -120,15 +122,15 @@ def print_folders_table(folders, selected = 1):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
-    print("|" + "-" * inner_width + "|")
+    print("🍄" + "-" * inner_width + "🍄")  # top
+    print(f"|  {header_line}   |")
+    print("|" + "-" * (inner_width + 2) + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
         print(f"| {row_line} |")
 
-    print("+" + "-" * inner_width + "+")
+    print("🍄" + "-" * inner_width + "🍄")
 
 def print_after_game_options(selected):
     option = OPTIONS_LIST[selected]
@@ -150,15 +152,15 @@ def print_after_game_options(selected):
     header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
     inner_width = len(header_line) + 2
 
-    print("+" + "-" * inner_width + "+")  # top
-    print(f"| {header_line} |")
+    print("🔥" + "-" * inner_width + "🔥")  # top
+    print(f"|  {header_line} |")
     print("|" + "-" * inner_width + "|")
 
     for row in rows:
         row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
         print(f"| {row_line} |")
 
-    print("+" + "-" * inner_width + "+")
+    print("🔥" + "-" * inner_width + "🔥")
 
 # * Level Selection and Launching Functions
 
@@ -345,11 +347,10 @@ def register_new_user(username: str) -> str:
 
 # gameplay start + loop
 def main():
-    print("""
-+------------------------+
-|WELCOME TO SHROOM RAIDER|
-+------------------------+
-          """)
+    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+        typewriter(intro.read(), 15)
+    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+        load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
@@ -384,7 +385,7 @@ def main():
 
             if level_choice == 'q':
                 print("Quitting launcher.")
-                exit(ExitCodes.QUIT)
+                exit(ExitCodes.QUIT.value)
             elif level_choice == '!':
                 break
 
@@ -422,7 +423,7 @@ def main():
                             continue
                         case "q":
                             print("Quitting launcher.")
-                            exit(ExitCodes.QUIT)
+                            exit(ExitCodes.QUIT.value)
                         case "p":
                             show_personal_leaderboard(player_data)
                             continue

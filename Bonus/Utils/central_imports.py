@@ -13,5 +13,6 @@ from Utils.Enums import ExitCodes
 from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
 from Utils.movement import unblock_keys as ub
+from Utils.animator import load_in, typewriter
 
 from Utils.general_utils import *
