@@ -12,6 +12,7 @@ from Classes.Entities.Player import Player
 from Classes.Entities.Bomb import Bomb
 
 from Utils.general_utils import wait
+from Utils.animator import progress_bar
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -48,8 +49,7 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
 
     # non-WASDP inputs
     if inst == "Q":
-        print("Quitting level...", flush=True)
-        wait(2)
+        progress_bar("Quitting Level", total_time=2)
         exit(ExitCodes.QUIT.value)
 
     if inst == "!":

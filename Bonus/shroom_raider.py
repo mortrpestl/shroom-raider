@@ -11,7 +11,7 @@ from colorama import Fore, Back, Style
 from Utils.Enums import ExitCodes
 from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
-from Utils.animator import load_in, typewriter
+from Utils.animator import load_in, typewriter, progress_bar
 from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
 from Bonus_Classes.security import scramble
@@ -354,7 +354,7 @@ def main():
         folder_choice = choose_folder(folders)
 
         if folder_choice == "q":
-            print("Quitting launcher.")
+            progress_bar("Quitting launcher.", total_time=2)
             exit(ExitCodes.QUIT.value)
 
         path.append(folder_choice)
@@ -364,7 +364,7 @@ def main():
             level_choice = choose_level(levels)
 
             if level_choice == "q":
-                print("Quitting launcher.")
+                progress_bar("Quitting launcher.", total_time=2)
                 exit(ExitCodes.QUIT.value)
             elif level_choice == "!":
                 break
@@ -402,7 +402,7 @@ def main():
                             show_statistics(player_data)
                             continue
                         case "q":
-                            print("Quitting launcher.")
+                            progress_bar("Quitting launcher.", total_time=2)
                             exit(ExitCodes.QUIT.value)
                         case "p":
                             show_personal_leaderboard(player_data)

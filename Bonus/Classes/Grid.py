@@ -3,7 +3,7 @@ import sys
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
-from Utils.general_utils import clear_terminal
+from Utils.general_utils import clear_terminal, center_wr_to_terminal_size
 from Utils.Enums import DisplayMode
 
 
@@ -344,19 +344,19 @@ class Grid:
         held_item_display = "- Not holding anything..."
         additional_inputs = []
 
-        if item_here is not None and item_here.get_collectible():
+        if item_here is not None:
             symbol = self.get_display_symbol_of_obj(item_here)
-            additional_inputs.append(f"\n[p] Pick up [{symbol}{item_here}]?")
-
+            if item_here.get_collectable():
+                additional_inputs.append(f"\n[p] Pick up [{symbol} {item_here}]?")
             item_here_display = (
-                f"[{self.get_display_symbol_of_obj(item_here)}{item_here}] is here"
+                f"[{symbol} {item_here}] is here"
             )
 
         if p.get_item() is not None:
             if p.get_item().get_passive():
                 symbol = self.get_display_symbol_of_obj(p.get_item())
                 additional_inputs.append(
-                    f"\n[F] Use passive item [{symbol}{p.get_item()}]"
+                    f"\n[F] Use passive item [{symbol} {p.get_item()}]"
                 )
 
         additional_inputs = "".join(additional_inputs)
@@ -386,9 +386,9 @@ What will you do? """
             if (
                 f
             ):  # if it is the FIRST time render is called, then animate the loading in!
-                load_in("\n".join(display), 5)
+                load_in("\n".join(display), 5, centered=True)
             else:
-                print(("\n".join(display)))
+                print(center_wr_to_terminal_size("\n".join(display)))
             sys.stdout.flush()
 
         return win or lose

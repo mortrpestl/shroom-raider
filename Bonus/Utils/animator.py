@@ -1,6 +1,7 @@
 import sys
 from emoji import is_emoji
 from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, wait
+from colorama import Fore, Back, Style
 
 
 def load_in(input_str, total_time=1.5, centered=True):
@@ -57,5 +58,28 @@ def typewriter(input_str, total_time=1.5, centered=True):
             sys.stdout.flush()
             if char not in " 　⠀":
                 wait(delta_time)
+            if char in ".,":
+                wait(delta_time*1.2)
         print()
         sys.stdout.flush()
+
+def progress_bar(deco_str, total_time = 1.5, centered=True):
+    delta_time = total_time / 100
+
+    if centered:
+        print(center_wr_to_terminal_size(deco_str, colors=[Fore.RED]))
+        sys.stdout.flush()
+        for frame in range(1, 101):
+            print(center_wr_to_terminal_size((str(frame) + "%") + 
+                                             ("▓" * (frame // 5) + "▒░" + " " * (20-frame//5))[:20] +
+                                             (" " * len(str(frame)))), end="\r")
+            sys.stdout.flush()
+            wait(delta_time)
+
+    else:
+        print(Fore.RED + deco_str + Style.RESET_ALL)
+        sys.stdout.flush()
+        for frame in range(1, 101):
+            print((str(frame) + "%") + ("▓" * (frame // 5) + "▒░")[:20], end="\r")
+            sys.stdout.flush()
+            wait(delta_time)
