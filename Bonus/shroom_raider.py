@@ -14,7 +14,7 @@ from Utils.movement import block_keys as b
 from Utils.animator import load_in, typewriter, progress_bar
 from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
-from Bonus_Classes.security import scramble
+from Bonus_Classes.security import scramble, verify_existing_user, register_new_user, get_valid_username
 
 
 from Bonus_Classes.PlayerData import PlayerData
@@ -114,8 +114,10 @@ def print_after_game_options(selected):
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
 
     option = OPTIONS_LIST[selected]
+
+    display.append("[w] Up | [s] Down | [Enter] Go to\n")
+
     spanner = "--===x{🪓}x===---\n"
-    
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:
@@ -274,44 +276,6 @@ def launch_game_with_level(level):
                 os.remove(path)
 
 
-# * Password Methods
-def verify_existing_user(username: str, encrypted_username: str) -> str:
-    """
-    Prompt for password until correct for existing user.
-    Returns the correct password once verified.
-    """
-    while True:
-        password = input(f"Password for {username}: ").strip()
-        if not password:
-            print("Password cannot be empty.")
-            continue
-
-        # scramble username with password
-        test_encrypted = scramble(username, password)
-        if test_encrypted == encrypted_username:
-            print("Password correct!")
-            return password
-        else:
-            print("Invalid password, try again.")
-
-
-def register_new_user(username: str) -> str:
-    """
-    Prompt for password and confirmation for new user.
-    Returns the confirmed password.
-    """
-    while True:
-        password = input(f"Enter new password for {username}: ").strip()
-        confirm = input("Confirm password: ").strip()
-        if not password:
-            print("Password cannot be empty.")
-        elif len(password) != len(username):
-            print("Password must have the same length as username")
-        elif password != confirm:
-            print("Passwords do not match. Try again.")
-        else:
-            print("Password confirmed!")
-            return password
 
 
 # gameplay start + loop
@@ -321,7 +285,7 @@ def main():
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
         load_in(art.read(), 1, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
-    username = input("Username (leave blank for guest): ").strip() or "GUEST"
+    username = get_valid_username()
 
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
