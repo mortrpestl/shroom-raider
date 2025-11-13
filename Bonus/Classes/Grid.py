@@ -3,8 +3,9 @@ import sys
 from Classes.Entity import Entity
 from Classes.Entities.import_entities import import_entities
 from Utils.animator import load_in
+from Utils.general_utils import clear_terminal
 from Utils.Enums import DisplayMode
-from Utils.central_imports import *
+#from Utils.central_imports import *
 
 
 class Grid:
@@ -62,7 +63,7 @@ class Grid:
             self.ENTITIES["Player"]: ("🧑", "L"),
             self.ENTITIES["Tree"]: ("🌲", "T"),
             self.ENTITIES["Mushroom"]: ("🍄", "+"),
-            self.ENTITIES["Rock"]: ("🪨 ", "R"),
+            self.ENTITIES["Rock"]: ("🗿", "R"), #"🪨"
             self.ENTITIES["Water"]: ("🟦", "~"),
             self.ENTITIES["PavedTile"]: ("⬜", "_"),
             self.ENTITIES["Axe"]: ("🪓", "x"),

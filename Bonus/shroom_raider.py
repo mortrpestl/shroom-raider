@@ -7,12 +7,12 @@ import time
 import LevelManager
 
 from argparse import ArgumentParser as ap
-
+from colorama import Fore, Back, Style
 from Utils.Enums import ExitCodes
 from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
-
-from Utils.general_utils import clear_terminal, wait
+from Utils.animator import load_in, typewriter
+from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
 from Bonus_Classes.security import scramble
 
@@ -54,89 +54,63 @@ def show_statistics(player_data):
 
 # * Level List Helper Functions
 
-
-def print_levels_table(levels, selected=1):
+def print_levels_table(levels, selected=1, f=False):
     """
     Print a summary of the levels.
     """
-    print(r"""
-⠀⢀⡀⠀⠀⢀⣀⣠⣀⠀⣀⠀⢀⣤⡄⢀⣀⣠⣀⠄⣠⠀⠀⠀⠀⠀⠀⠀⡠⣤⡀⢀⣄⣠⣄⡀⢀⡀⠀⠀⢀⣀⣠⣀⠀⠀⢀⣠⡀⠀⣠⣤⣄⣀⠄
-⠐⢻⡇⠀⠐⢻⡏⠉⠁⠚⣿⡄⠁⢹⡟⢻⡏⠉⠁⠐⢿⡇⠀⠀⠀⠀⢀⣾⡉⠛⠁⢻⡏⠉⠁⠐⢳⡇⠀⠐⢻⡏⠉⠁⠀⣰⠉⠹⡿⠞⠉⣿⠋⠁⠀
-⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⢸⣷⠀⣼⠁⢸⡷⠶⠖⠀⢸⡇⠀⠀⠀⠀⠀⠛⢿⣦⡀⢸⣷⠶⠖⠀⢸⡇⠀⠀⢸⡷⠶⠖⠀⣿⠀⠀⠀⠀⠀⣿⠀⠀⠀
-⠀⢸⣇⣀⡀⢸⣧⣀⣀⠀⠀⣿⣶⠇⠀⢸⣧⣀⡠⠀⣼⣇⣀⠄⠀⠀⢠⣢⣀⣹⠇⢸⣧⣀⣀⠄⢸⣧⣀⡀⢸⣧⣀⣀⠀⢿⣧⣀⣀⠄⠀⣿⣀⠀⠀
-⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠀⠘⠁⠀⠀⠊⠙⠛⠁⠀⠋⠛⠃⠀⠀⠀⠈⠛⠋⠁⠀⠘⠙⠓⠁⠀⠊⠙⠊⠀⠈⠙⠓⠁⠀⠈⠙⠓⠁⠀⠀⠘⠀⠀⠀
-""")
-
-    headers = ["ID", "Title", "Description", "Difficulty"]
-    rows = []
+    display = []
+    with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
+    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
+    display.append("--===x{🌲}x===---\n")
     for lvl in levels:
-        rows.append(
-            [
-                str("　" if lvl.get("id", "") != selected else "🧑"),
-                str(lvl.get("title", "")),
-                str(lvl.get("description", "")).replace("\n", " "),
-                str(lvl.get("difficulty", "Normal")),
-            ]
-        )
+        if lvl.get("id", "") == selected:
+            display.append(
+                center_wr_to_terminal_size(f"> 🧑 {lvl.get("title", "")} <", 
+                    colors=[Back.GREEN, Fore.BLACK])
+            )
+            desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
+            difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
+        else:#　
+            display.append(str(lvl.get("title", "")))
+            
+    display.append("\n--===x{🌲}x===---\n")
+    display.append(center_wr_to_terminal_size("Difficulty: " + difficulty, colors=[Fore.RED]))
+    display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
-
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🌲" + "-" * inner_width + "🌲")  # top
-    print(f"| {header_line}   |")
-    print("|" + "-" * (inner_width + 2) + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"|  {row_line} |")
-
-    print("🌲" + "-" * inner_width + "🌲")  # bottom
+    if f: # if first time, load animation
+        load_in("\n".join(display), 1.5)
+    else:
+        clear_terminal()
+        print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_folders_table(folders, selected=1):
-    print("""
-⠀⣀⣠⣄⡀⠀⢠⣄⠀⠀⡄⠀⠀⢀⡄⢠⣄⠀⢀⣄⣠⣄⠀⣀⠀⣠⡀⠀⠀⠀⠀⡠⣤⡀⢠⣀⠤⡠⢀⡄⠀⠀⢀⣀⠤⡠⠀⠀⡠⣄⠀⣠⣤⣄⡠
-⠈⣿⠉⠉⠀⡔⠉⢿⣷⠚⡇⠀⠀⢹⡏⠉⢿⡇⢹⡏⠉⠁⠈⣿⠊⢻⡇⠀⠀⠀⣼⣍⠙⠀⢹⡏⠉⠀⠛⡇⠀⠀⢹⡏⠉⠀⢀⠎⠘⠿⠋⠈⣿⠉⠀
-⠀⣿⠶⠖⢸⣧⠀⠘⡿⠀⡇⠀⠀⢸⡇⠀⠘⡇⢸⡿⠶⠂⠀⣿⢀⡞⠀⠀⠀⠀⠙⢿⣷⡄⢸⡷⠶⠂⠀⡇⠀⠀⢸⡷⠶⠂⢸⡆⠀⠀⠀⠀⣿⠀⠀
-⠀⣟⡄⠀⠀⢿⢷⠔⠁⠀⣷⣤⡄⢸⣧⣀⡰⠁⢰⣧⡤⡤⠀⣿⡤⢿⢄⠀⠀⠀⣾⣄⣹⠃⢸⣧⣤⠄⢀⣧⣄⠄⢸⢧⣤⠄⠸⣿⣄⣀⠀⠀⣟⠄⠀
-⠀⠈⠀⠀⠀⠀⠁⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠉⠀⠀⠉⠀⠈⠁⠀⠀⠀⠉⠉⠀⠀⠈⠉⠉⠀⠈⠉⠉⠀⠈⠉⠉⠀⠀⠈⠉⠁⠀⠀⠉⠀⠀
-""")
-    headers = ["ID", "Title", "Description"]
-    rows = []
+def print_folders_table(folders, selected=1, f=False):
+    display = []
+    with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
+        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
+    display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
+    display.append("--===x{🍄}x===---\n")
     for folder in folders:
-        rows.append(
-            [
-                str("　" if folder.get("id", "") != selected else "🧑"),
-                str(folder.get("title", "")),
-                str(folder.get("description", "")).replace("\n", " "),
-            ]
-        )
+        if folder.get("id", "") == selected:
+            display.append(
+                center_wr_to_terminal_size(f"> 🧑 {folder.get("title", "")} <", 
+                    colors=[Back.GREEN, Fore.BLACK])
+            )
+            desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
+        else:#　
+            display.append(str(folder.get("title", "")))
+            
+    display.append("\n--===x{🍄}x===---\n")
+    display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
-    col_widths = []
-    for i, h in enumerate(headers):
-        max_cell = max(len(row[i]) for row in rows)
-        col_widths.append(max(len(h), max_cell))
+    if f: # if first time, load animation
+        load_in("\n".join(display), 1.5)
+    else:
+        clear_terminal()
+        print(center_wr_to_terminal_size("\n".join(display)))
 
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
-    inner_width = len(header_line) + 2
-
-    print("🍄" + "-" * inner_width + "🍄")  # top
-    print(f"|  {header_line}   |")
-    print("|" + "-" * (inner_width + 2) + "|")
-
-    for row in rows:
-        row_line = " | ".join(row[i].ljust(col_widths[i]) for i in range(len(headers)))
-        print(f"| {row_line} |")
-
-    print("🍄" + "-" * inner_width + "🍄")
-
-
-def print_after_game_options(selected):
+def print_after_game_options(selected, f=False):
     option = OPTIONS_LIST[selected]
     headers = ["option", "description"]
     rows = []
@@ -350,10 +324,10 @@ def register_new_user(username: str) -> str:
 
 # gameplay start + loop
 def main():
-    # with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-    #     typewriter(intro.read(), 15)
-    # with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
-    #     load_in(Fore.RED + "\n" + art.read() + Style.RESET_ALL, 5)
+    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+        typewriter(intro.read(), 1)
+    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+        load_in(Fore.RED + "\n" + art.read() + "\n" + Style.RESET_ALL, 1)
 
     username = input("Username (leave blank for guest): ").strip() or "GUEST"
 
