@@ -1,6 +1,7 @@
-import random
-from random import randint, choice
 import math
+import pathlib
+import random
+from random import choice, randint
 
 empty_tile = "."
 tiles = "T_"
@@ -87,8 +88,7 @@ def get_indiv_probi(element_probi=element_probi):
 
 
 def get_items_and_probabilities(allowed_to_spawn=None, probabilities_shown=True):
-    """
-    Provide a string that will only let the ASCII given in the string appear in the generated map
+    """Provide a string that will only let the ASCII given in the string appear in the generated map
     """
     element_prob = get_indiv_probi()
 
@@ -130,15 +130,13 @@ def gen_empty_map(R, C):
 
 
 def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None, highest_C=None):
-    """
-    Example usage:
+    """Example usage:
     lowest_R, highest_R = (30, 30)
     lowest_C, highest_C = (30, 30)
     generate_n_maps(
         lowest_R=lowest_R, lowest_C=lowest_C, highest_R=highest_R, highest_C=highest_C
     )
     """
-
     if highest_R is None and highest_C is None:
         highest_R = lowest_R
         highest_C = lowest_C
@@ -149,8 +147,7 @@ def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None,
 
         map = gen_map(R, C)
         filename = f"Levels/test{start_numbering + i}.txt"
-        with open(filename, "w") as f:
-            f.write(map)
+        pathlib.Path(filename).write_text(map)
         maps.append(map)
 
     return "".join(maps)
@@ -161,10 +158,8 @@ def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None,
 
 # * Primitive Map Generator Functions
 def gen_map_with_seeds(R, C, seeds=5):
+    """Randomly places 'X's in a map to seed for better map generation.
     """
-    Randomly places 'X's in a map to seed for better map generation.
-    """
-
     new_map = [list(r) for r in gen_map(R, C).split("\n")[1:]]
 
     for i in range(seeds):
@@ -205,16 +200,14 @@ def draw_circles(input_map, centers=None, char="R", fill=False, fatness=0.4, use
             for cx, cy, radius in centers:
                 radius = radius * mult
                 dist = math.sqrt((r - cx) ** 2 + (c - cy) ** 2)
-                if fill and dist <= radius:
-                    grid[r][c] = char
-                elif not fill and abs(dist - radius) < fatness:
+                if (fill and dist <= radius) or (not fill and abs(dist - radius) < fatness):
                     grid[r][c] = char
 
     return build_map(header, grid)
 
 
 def draw_lines(
-    input_map, line_mode="row", points=None, element_probi=None, thickness=1, use_X_coords=False, canyonize=True
+    input_map, line_mode="row", points=None, element_probi=None, thickness=1, use_X_coords=False, canyonize=True,
 ):
 
     header, grid, R, C = parse_map(input_map)
@@ -320,8 +313,8 @@ def draw_polygon_hull(input_map, points, polygon_char="R", thickness=1, canyoniz
 
 # * EXAMPLE USAGE
 
-print(gen_empty_map(10,10))
-randR,randC = randint(3,30),randint(3,30)
+print(gen_empty_map(10, 10))
+randR, randC = randint(3, 30), randint(3, 30)
 
 # 0. Generate empty map
 # print(gen_empty_map(15,30))

@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -10,8 +10,7 @@ from Classes.Grid import Grid
 
 @pytest.fixture
 def test_grid():
-    """
-    Provide a 3x3 test grid for Mushroom behavior.
+    """Provide a 3x3 test grid for Mushroom behavior.
     """
     map_data = """
 ...

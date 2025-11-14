@@ -4,8 +4,7 @@ COUNTER = 1
 
 
 def pytest_itemcollected(item):
-    """
-    Converts test display to a numbered, human-readable format.
+    """Converts test display to a numbered, human-readable format.
     """
     global COUNTER
     if item.name.startswith("test_"):

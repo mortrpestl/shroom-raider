@@ -1,22 +1,22 @@
-import os
 import json
+import os
+
+from LevelManager import get_level_title
 from Utils.general_utils import format_time, tabulate
 
 from Bonus_Classes.PlayerData import read_all_rows
-from LevelManager import get_level_title
 
 HERE = os.path.dirname(__file__)
 
 
 # @debug_wait(WAIT_TIME)
 def show_personal_leaderboard(pdata):
-    """
-    Shows completed levels, etc.
+    """Shows completed levels, etc.
     """
     completed = pdata.get_completed_levels()
     if not completed:
         print("No completed levels yet.\n")
-        return
+        return None
 
     rows = [
         [i + 1, get_level_title(*level_ref.split("/")) or "-", format_time(ms)]
@@ -27,8 +27,7 @@ def show_personal_leaderboard(pdata):
 
 # @debug_wait(WAIT_TIME)
 def show_general_leaderboard():
-    """
-    Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
+    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
     """
     players = read_all_rows()
 
@@ -37,7 +36,7 @@ def show_general_leaderboard():
 
     if not players:
         print("No leaderboard data available.\n")
-        return
+        return None
 
     for p in players:
         try:
@@ -78,15 +77,14 @@ def show_general_leaderboard():
 
 # @debug_wait(WAIT_TIME)
 def show_level_leaderboard(level_ref):
-    """
-    Shows players who've beaten a level sorted by time.
+    """Shows players who've beaten a level sorted by time.
     """
     players = read_all_rows()
     level_title = get_level_title(*level_ref.split("/")) or "UNTITLED"
 
     if not players:
         print(f"No player data for Level {level_ref} ({level_title}).\n")
-        return
+        return None
 
     level_rows = []
     for p in players:
@@ -99,7 +97,7 @@ def show_level_leaderboard(level_ref):
 
     if not level_rows:
         print(f"No completed times for Level {level_ref} ({level_title}).\n")
-        return
+        return None
 
     level_rows.sort(key=lambda x: x[1])
     rows = [[i + 1, username, level_title, format_time(ms)] for i, (username, ms) in enumerate(level_rows)]

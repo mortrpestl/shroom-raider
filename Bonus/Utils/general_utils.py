@@ -1,8 +1,9 @@
-import time
 import os
 import sys
+import time
+
+from colorama import Fore, Style
 from wcwidth import wcswidth
-from colorama import Style, Fore, Back
 
 WAIT_TIME = 5
 DEBUG_MODE = True

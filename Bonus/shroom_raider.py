@@ -1,30 +1,27 @@
-import os
-import sys
-import subprocess
-import tempfile
 import json
+import os
+import pathlib
+import subprocess
+import sys
+import tempfile
 import time
-import LevelManager
-
 from argparse import ArgumentParser as ap
-from colorama import Fore, Back
-from Utils.Enums import ExitCodes
-from Utils.movement import menu_movement as m
-from Utils.movement import block_keys as b
-from Utils.animator import load_in, typewriter, progress_bar
-from Utils.general_utils import clear_terminal, wait, center_wr_to_terminal_size
 
-from Bonus_Classes.security import scramble, verify_existing_user, register_new_user, get_valid_username
-
-
-from Bonus_Classes.PlayerData import PlayerData
+import LevelManager
 from Bonus_Classes.Leaderboard import (
-    show_personal_leaderboard,
     show_general_leaderboard,
     show_level_leaderboard,
+    show_personal_leaderboard,
 )
+from Bonus_Classes.PlayerData import PlayerData
+from Bonus_Classes.security import get_valid_username, register_new_user, scramble, verify_existing_user
+from colorama import Back, Fore
+from Utils.animator import load_in, progress_bar, typewriter
+from Utils.Enums import ExitCodes
+from Utils.general_utils import center_wr_to_terminal_size, clear_terminal, wait
+from Utils.movement import block_keys as b
+from Utils.movement import menu_movement as m
 from Utils.sounds import initAll
-
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
@@ -44,9 +41,10 @@ OPTIONS_LIST = ["r", "m", "s", "p", "g", "l", "q"]
 
 def show_statistics(player_data: PlayerData):
     """Prints the player's stats if they exist
-    
+
     Args:
         playerdata: A PlayerData object
+
     """
     if player_data is None:
         print("No statistics available.")
@@ -58,16 +56,17 @@ def show_statistics(player_data: PlayerData):
 # * Level List Helper Functions
 
 
-def print_levels_table(levels: dict, selected: int =1, completed_lvl_ids=set()):
+def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set()):
     """Print a summary of the levels.
 
     Args:
         levels: The levels to be printed
         selected: The current level to be highlighted for selection
         completed_lvl_ids: The completed levels by this player
+
     """
     display = []
-    with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
+    with open("Assets/UI/LevelSelectArt.txt", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
     spanner = "---===x{🌲}x===---\n"
@@ -76,7 +75,7 @@ def print_levels_table(levels: dict, selected: int =1, completed_lvl_ids=set()):
     for lvl in levels:
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"<🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK])
+                center_wr_to_terminal_size(f"<🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
@@ -94,15 +93,16 @@ def print_levels_table(levels: dict, selected: int =1, completed_lvl_ids=set()):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_folders_table(folders: dict, selected: int=1):
+def print_folders_table(folders: dict, selected: int = 1):
     """Print a summary of the folders.
 
     Args:
         folders: The folders to be printed
         selected: The current folder to be highlighted for selection
+
     """
     display = []
-    with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
+    with open("Assets/UI/FolderSelectArt.txt", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
     spanner = "---===x{🔥}x===---\n"
@@ -111,10 +111,10 @@ def print_folders_table(folders: dict, selected: int=1):
     for folder in folders:
         if folder.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"<🧑 {folder.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK])
+                center_wr_to_terminal_size(f"<🧑 {folder.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
             )
             desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
-        else:  #
+        else:
             display.append(str(folder.get("title", "")))
     display.append("\n" + spanner)
 
@@ -129,10 +129,10 @@ def print_after_game_options(selected: int):
 
     Args:
         selected: The currently selected option to be highlighted
-    """
 
+    """
     display = []
-    with open("Assets/UI/MainMenuArt.txt", "r", encoding="utf+8") as art:
+    with open("Assets/UI/MainMenuArt.txt", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
 
     option = OPTIONS_LIST[selected]
@@ -144,7 +144,7 @@ def print_after_game_options(selected: int):
     for o in AFTER_GAME_OPTIONS:
         if o == option:
             display.append(
-                center_wr_to_terminal_size(f"<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>", colors=[Back.GREEN, Fore.BLACK])
+                center_wr_to_terminal_size(f"<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
             )
         else:
             display.append(AFTER_GAME_OPTIONS[o])
@@ -160,15 +160,14 @@ def print_after_game_options(selected: int):
 def choose_level(levels: dict, completed_lvl_ids: set):
     """Displays level select menu for user to choose level
 
-    Args: 
+    Args:
         levels: A dictionary of levels
         completed_level_ids: A set of all the levels this player has completed
 
     Returns:
         The level selected and its index if there is a chosen level. Else, it returns exit codes to be interpreted later
-    
-    """
 
+    """
     # if no levels
     clear_terminal()
     if not levels:
@@ -203,11 +202,12 @@ def choose_level(levels: dict, completed_lvl_ids: set):
 def choose_folder(folders: dict):
     """Displays folder select menu for user to choose folder
 
-    Args: 
+    Args:
         folders: A dictionary of folders
 
     Returns:
         The folder selected and its index if there is a chosen folder. Else, it returns exit codes to be interpreted later
+
     """
     # if no levels
     clear_terminal()
@@ -241,15 +241,16 @@ def choose_folder(folders: dict):
 def choose_after_game_option(curr_display: str | None):
     """Shows the after-game menu to the user
 
-    Args: 
+    Args:
         curr_display: The display (leaderboards, stats, etc) to be shown after the menu
+
     """
     blank = center_wr_to_terminal_size("Nothing to show...", colors=[Fore.BLUE])
     clear_terminal()
 
     selected = 0
     print_after_game_options(selected)
-    print(curr_display if curr_display else blank)
+    print(curr_display or blank)
     while True:
         choice = m()
         if choice is not None:
@@ -265,17 +266,18 @@ def choose_after_game_option(curr_display: str | None):
 
             clear_terminal()
             print_after_game_options(selected)
-            print(curr_display if curr_display else blank)
+            print(curr_display or blank)
 
 
 def make_stage_file_from_grid(grid_text: str):
-    """Makes a stage file to be run 
+    """Makes a stage file to be run
 
     Args:
         grid_text: The input string to be made into a stage file
 
-    Returns: 
+    Returns:
         The path to the created stage file
+
     """
     if not grid_text.strip():
         raise ValueError("Empty grid")
@@ -283,21 +285,20 @@ def make_stage_file_from_grid(grid_text: str):
     content = grid_text.strip() + "\n"
     fd, path = tempfile.mkstemp(prefix="stage_", suffix=".txt", dir=HERE)
     os.close(fd)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
+    pathlib.Path(path).write_text(content, encoding="utf-8")
     return path
 
 
 def launch_game_with_level(level: dict):
-    """Send the level to game.py for running 
+    """Send the level to game.py for running
 
-    Args: 
+    Args:
         level: A dictionary of the current level data
 
     Returns:
         The return code for the level, as well as the report of the game played
-    """
 
+    """
     # create temp files to store level
     stage_path = make_stage_file_from_grid(level["grid"])
     report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
@@ -312,7 +313,7 @@ def launch_game_with_level(level: dict):
             cmd += ["-d", str(level["dark_radius"])]
 
         # optional bee_data parameter
-        if "bee_data" in level and level["bee_data"]:
+        if level.get("bee_data"):
             cmd += ["--bee_data", str(level["bee_data"])]
 
         print(f"\nRunning: {' '.join(cmd)}\n")
@@ -320,27 +321,26 @@ def launch_game_with_level(level: dict):
 
         # load report
         report = None
-        if os.path.getsize(report_path) > 0:
-            with open(report_path, "r", encoding="utf-8") as f:
+        if pathlib.Path(report_path).stat().st_size > 0:
+            with open(report_path, encoding="utf-8") as f:
                 report = json.load(f)
         return return_code, report
     finally:
         # cleans up temp files
         for path in (stage_path, report_path):
-            if os.path.exists(path):
-                os.remove(path)
+            if pathlib.Path(path).exists():
+                pathlib.Path(path).unlink()
 
 
 # gameplay start + loop
 def main():
-    """
-    Handles the main gameplay loop from user login, folder and level selection, and data storage
+    """Handles the main gameplay loop from user login, folder and level selection, and data storage
     """
     clear_terminal()
 
-    with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
+    with open("Assets/UI/TitleScreenIntro.txt", encoding="unicode_escape") as intro:
         typewriter(intro.read(), 15)
-    with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
+    with open("Assets/UI/TitleScreenArt.txt", encoding="utf+8") as art:
         load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
     username = get_valid_username()
@@ -349,15 +349,14 @@ def main():
 
     if encrypted_username and username != "GUEST":  # existing user
         password = verify_existing_user(username, encrypted_username)
+    elif username == "GUEST":
+        player_data = PlayerData("GUEST", "guest")
     else:
-        if username == "GUEST":
-            player_data = PlayerData("GUEST", "guest")
-        else:
-            password = register_new_user(username)
-            # store encrypted username & reference username in Excel
-            encrypted_username = scramble(username, password)
-            PlayerData.store_new_user(username, encrypted_username)
-            player_data = PlayerData(username, password)
+        password = register_new_user(username)
+        # store encrypted username & reference username in Excel
+        encrypted_username = scramble(username, password)
+        PlayerData.store_new_user(username, encrypted_username)
+        player_data = PlayerData(username, password)
 
     b()
     initAll()

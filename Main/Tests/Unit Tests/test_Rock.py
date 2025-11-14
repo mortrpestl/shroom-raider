@@ -1,5 +1,6 @@
-import sys
 import os
+import sys
+
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
@@ -12,8 +13,7 @@ ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
 
 @pytest.fixture
 def test_grid():
-    """
-    Provide a 3x3 test grid for Rock behavior.
+    """Provide a 3x3 test grid for Rock behavior.
     Center [1,1] is empty.
     """
     map_data = """
@@ -25,8 +25,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """
-    Verify Rock construction and basic attributes.
+    """Verify Rock construction and basic attributes.
 
     - Place a Rock at a specific coordinate.
     - Confirm Rock stores its position and grid reference.
@@ -44,8 +43,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_rock_push_into_empty_space_succeeds(test_grid):
-    """
-    Rock can be pushed by Player into an empty cell.
+    """Rock can be pushed by Player into an empty cell.
 
     - Place Rock at [1,1].
     - Attempt to move Rock downwards ('s').
@@ -62,8 +60,7 @@ def test_rock_push_into_empty_space_succeeds(test_grid):
 
 
 def test_rock_cannot_move_outside_grid(test_grid):
-    """
-    Rock cannot move outside the grid bounds.
+    """Rock cannot move outside the grid bounds.
 
     - Place Rock at top-left [0,0].
     - Attempt to move Rock up ('w') and left ('a').
@@ -83,8 +80,7 @@ def test_rock_cannot_move_outside_grid(test_grid):
 
 
 def test_rock_push_into_water_converts_to_paved_tile(test_grid):
-    """
-    Pushing Rock into Water replaces Water with PavedTile and destroys the Rock.
+    """Pushing Rock into Water replaces Water with PavedTile and destroys the Rock.
 
     - Place Rock at [1,1], Water at [2,1].
     - Move Rock down ('s').
@@ -108,8 +104,7 @@ def test_rock_push_into_water_converts_to_paved_tile(test_grid):
 
 
 def test_rock_push_invalid_blocked_by_collectable(test_grid):
-    """
-    Rock cannot move onto a collectable object.
+    """Rock cannot move onto a collectable object.
 
     - Place a Rock and a collectable (e.g., Mushroom) below it.
     - Attempt to move Rock onto the collectable.

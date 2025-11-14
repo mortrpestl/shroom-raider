@@ -1,26 +1,27 @@
+from Classes.Entities.import_entities import import_entities
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-from Classes.Entities.import_entities import import_entities
 
 
 class Rock(Entity):
-    """
-    A collideable Entity that can be pushed by the player if there are no other collideable or collectible Entities blocking it.
+    """A collideable Entity that can be pushed by the player if there are no other collideable or collectible Entities blocking it.
 
     Attributes:
         See parent class
+
     """
+
     # * Attributes
     _is_collectable = False
     _is_collideable = True
     _is_pushable = True
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "R"):
-        """
-        Initializes a Rock object
+        """Initializes a Rock object
 
         Args:
             See parent class
+
         """
         super().__init__(pos, on_grid, ascii)
 
@@ -34,7 +35,8 @@ class Rock(Entity):
             r, c: The row and column position of the Rock
 
         Returns:
-            True if the rocks is able to move, False if not 
+            True if the rocks is able to move, False if not
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -57,6 +59,7 @@ class Rock(Entity):
 
         Returns:
             A boolean indicating if the Rock is able to be pushed by its pusher
+
         """
         entities = import_entities({"Player"})
         if isinstance(pusher, entities["Player"]):
@@ -70,11 +73,12 @@ class Rock(Entity):
     def set_pos(self, direction: str):
         """Moves the Rock on the Grid
 
-        Args: 
+        Args:
             direction: The direction that the Entity wants to move
 
         Returns:
             A boolean indicating whether the Rock was able to move or not
+
         """
         if super().set_pos(direction):
             entities = import_entities({"Water", "PavedTile"})

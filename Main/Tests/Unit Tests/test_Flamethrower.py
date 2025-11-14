@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -12,8 +12,7 @@ ENTITIES = import_entities({"Player", "Flamethrower"})
 
 @pytest.fixture
 def test_grid():
-    """
-    Provide a 3x3 test grid for Flamethrower behavior.
+    """Provide a 3x3 test grid for Flamethrower behavior.
     """
     map_data = """
 ...
@@ -24,8 +23,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """
-    Verify Flamethrower construction and basic attributes.
+    """Verify Flamethrower construction and basic attributes.
 
     - Place a Flamethrower at a specific coordinate.
     - Confirm it stores its position and grid reference.
@@ -42,8 +40,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_flamethrower_in_grid_stack(test_grid):
-    """
-    Ensure Flamethrower can coexist in a stack and be retrieved.
+    """Ensure Flamethrower can coexist in a stack and be retrieved.
 
     - Place a Flamethrower under a Player.
     - Verify it is the second layer from the top.
@@ -60,15 +57,13 @@ def test_flamethrower_in_grid_stack(test_grid):
 
 
 def test_flamethrower_collected_and_picked_up_by_player(test_grid):
-    """
-    Verify that Player can detect and pick up Flamethrower.
+    """Verify that Player can detect and pick up Flamethrower.
 
     Verify:
     * Place a Player above a Flamethrower.
     * Simulate collect action by popping layers.
     * Ensure Player acquires Flamethrower and grid updates correctly.
     """
-
     g = test_grid
     flame = ENTITIES["Flamethrower"]([1, 1], g)
     player = ENTITIES["Player"]([1, 1], g)

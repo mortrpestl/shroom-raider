@@ -1,9 +1,10 @@
-import sys
 import os
+import sys
+
 import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
-from helper_classes import DummyPlayer, WinPlayer, LosePlayer
+from helper_classes import DummyPlayer, LosePlayer, WinPlayer
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 

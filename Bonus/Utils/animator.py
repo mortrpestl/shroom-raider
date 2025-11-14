@@ -1,7 +1,8 @@
 import sys
+
+from colorama import Fore, Style
 from emoji import is_emoji
-from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, wait
-from colorama import Fore, Back, Style
+from Utils.general_utils import center_wr_to_terminal_size, clear_prev_n_lines, wait
 
 
 def load_in(
@@ -75,7 +76,8 @@ def load_in(
 
 
 def typewriter(input_str, total_time=1.5, centered=True, colors: list = []):
-    if len(input_str) == 0: return
+    if len(input_str) == 0:
+        return
 
     delta_time = total_time / len(input_str)
     input_str = input_str.split("\n")
@@ -108,7 +110,7 @@ def progress_bar(deco_str, total_time=1.5, centered=True):
                 center_wr_to_terminal_size(
                     (str(frame) + "%")
                     + ("▓" * (frame // 5) + "▒░" + " " * (20 - frame // 5))[:20]
-                    + (" " * len(str(frame)))
+                    + (" " * len(str(frame))),
                 ),
                 end="\r",
             )

@@ -1,17 +1,19 @@
 from collections import deque
-from Classes.Entity import Entity
+
 import Utils.sounds as s
+from Classes.Entity import Entity
 
 # ! TODO: Documentation
 
+
 class Bee(Entity):
-    """
-    Handles the Bee, an entity that follows the player's path given a bee lag and a bee count.
+    """Handles the Bee, an entity that follows the player's path given a bee lag and a bee count.
     Bees can be killed with Bombs and Flamethrowers.
 
     Args:
         _lag : Determines the game ticks before the bees spawn since stepping on beehive
         _buffer : Stores the coordinates of previous player positions
+
     """
 
     _all_bees = []

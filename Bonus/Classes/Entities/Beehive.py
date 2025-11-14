@@ -1,16 +1,16 @@
-from Classes.Entity import Entity
 from Classes.Entities.Bee import Bee
+from Classes.Entity import Entity
 
 
 class Beehive(Entity):
-    """
-    Handles entities that let bees spawn when it has been stepped on.
+    """Handles entities that let bees spawn when it has been stepped on.
     Also handles all bee movements.
 
     Args:
         _bee_count : Determines the number of bees that will spawn from a beehive.
         _bee_lag : Determines the number of game move ticks before the bees spawn from the beehive.
         _is_tile_trigger: Lets grid know that beehive is triggered when a player is above it.
+
     """
 
     counter = 0
@@ -27,8 +27,7 @@ class Beehive(Entity):
         return f"{super().__repr__()} (bee angered! RUN)"
 
     def trigger(self, player):
-        """
-        Called when the player steps on this tile.
+        """Called when the player steps on this tile.
         Immediately spawns bee_count bees. Bees handle following the player.
         """
         grid = self.get_on_grid()

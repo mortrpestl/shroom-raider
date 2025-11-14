@@ -1,4 +1,5 @@
 from random import choice
+
 from map_gen import *
 
 empty_tile = "."

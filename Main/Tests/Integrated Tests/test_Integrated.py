@@ -1,15 +1,17 @@
 import os
+import pathlib
+import shutil
 import subprocess
+
 import pandas as pd
 import pytest
-import shutil
 
 # Base directory of this test file
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Temporary directory for test outputs
 TEMP_DIR = os.path.join(base_dir, "Temp")
-os.makedirs(TEMP_DIR, exist_ok=True)
+pathlib.Path(TEMP_DIR).mkdir(exist_ok=True, parents=True)
 
 # Paths for input Excel test cases and the main game script
 EXCEL_FILE = os.path.join(base_dir, "integrated_tests.xlsx")
@@ -20,7 +22,7 @@ SCRIPT = os.path.join(base_dir, "..", "..", "shroom_raider.py")
 def cleanup_unit_tests():
     """Fixture that cleans up temporary files and directories after all tests."""
     yield
-    if os.path.exists(TEMP_DIR):
+    if pathlib.Path(TEMP_DIR).exists():
         shutil.rmtree(TEMP_DIR)
 
 
@@ -46,8 +48,7 @@ if missing:
 
 
 def extract_short_date(date_val):
-    """
-    Convert a date string to a short 'YY-MM-DD' format.
+    """Convert a date string to a short 'YY-MM-DD' format.
 
     Returns an empty string if the conversion fails or the value is invalid.
     """
@@ -65,8 +66,7 @@ df["Day Added"] = df["Date Added"].apply(extract_short_date)
 
 
 def run_game_case(testcase):
-    """
-    Execute the game for a single test case.
+    """Execute the game for a single test case.
 
     - Writes the grid to a temporary file
     - Runs the game script with the input moves
@@ -90,7 +90,7 @@ def run_game_case(testcase):
 
     # Prepare temporary level file
     levels_dir = os.path.join(TEMP_DIR, "Levels")
-    os.makedirs(levels_dir, exist_ok=True)
+    pathlib.Path(levels_dir).mkdir(exist_ok=True, parents=True)
     level_path = os.path.join(levels_dir, f"test_{test_id}.txt")
 
     lines = grid_raw.splitlines()
@@ -116,7 +116,7 @@ def run_game_case(testcase):
     # Run the game script
     proc = subprocess.run(
         ["python3", SCRIPT, "-f", level_path, "-m", moves_raw, "-o", tmp_out_path],
-        capture_output=True,
+        check=False, capture_output=True,
         text=True,
         encoding="utf-8",
         errors="ignore",
@@ -127,20 +127,19 @@ def run_game_case(testcase):
     # Raise error if script crashes
     if proc.returncode != 0:
         raise AssertionError(
-            f"Script crashed for test {test_id} ({category})\nstderr:\n{proc.stderr}\nstdout:\n{proc.stdout}"
+            f"Script crashed for test {test_id} ({category})\nstderr:\n{proc.stderr}\nstdout:\n{proc.stdout}",
         )
 
     # Raise error if output file is not created
-    if not os.path.exists(tmp_out_path):
+    if not pathlib.Path(tmp_out_path).exists():
         raise AssertionError(f"Expected output file not created by script for test {test_id}")
 
     # Read the output
-    with open(tmp_out_path, "r", encoding="utf-8", errors="ignore") as f:
-        actual_output = f.read().strip()
+    actual_output = pathlib.Path(tmp_out_path).read_text(encoding="utf-8", errors="ignore")
 
     # Clean up temporary files
-    os.remove(tmp_out_path)
-    os.remove(level_path)
+    pathlib.Path(tmp_out_path).unlink()
+    pathlib.Path(level_path).unlink()
 
     return expected_output, actual_output, desc, date, category
 
@@ -163,8 +162,7 @@ params = [
 
 @pytest.mark.parametrize("testcase", params)
 def test_shroom_case(testcase):
-    """
-    Run a single integrated test case.
+    """Run a single integrated test case.
 
     - Compares the actual output to the expected output line by line
     - Raises an assertion error if outputs differ, with a formatted comparison table
@@ -186,7 +184,7 @@ def test_shroom_case(testcase):
         for i in range(max_lines):
             exp = expected_lines[i] if i < len(expected_lines) else ""
             act = actual_lines[i] if i < len(actual_lines) else ""
-            comparison.append(f"{str(i + 1):^{max_line_no_width}} | {exp:^40} | {act:^40}")
+            comparison.append(f"{i + 1!s:^{max_line_no_width}} | {exp:^40} | {act:^40}")
 
         pretty_output = "\n".join(comparison)
         raise AssertionError(
@@ -196,5 +194,5 @@ def test_shroom_case(testcase):
             f"Test Case Added at Date: {date}\n"
             f"Description: {desc}\n"
             f"Moves:\n{moves}\n\n"
-            f"\n{pretty_output}\n"
+            f"\n{pretty_output}\n",
         )

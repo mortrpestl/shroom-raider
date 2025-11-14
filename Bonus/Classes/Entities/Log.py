@@ -1,7 +1,7 @@
+import Utils.sounds as s
+from Classes.Entities.import_entities import import_entities
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-from Classes.Entities.import_entities import import_entities
-import Utils.sounds as s
 
 
 class Log(Entity):
@@ -41,8 +41,7 @@ class Log(Entity):
             return False
 
     def chop(self):
-        """
-        Destroys a log when an axe is equipped.
+        """Destroys a log when an axe is equipped.
         """
         s.axe_sound()
         self.destroy()

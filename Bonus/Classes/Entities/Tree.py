@@ -1,6 +1,6 @@
+import Utils.sounds as s
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-import Utils.sounds as s
 
 
 class Tree(Entity):
