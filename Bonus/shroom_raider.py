@@ -7,7 +7,7 @@ import time
 import LevelManager
 
 from argparse import ArgumentParser as ap
-from colorama import Fore, Back, Style
+from colorama import Fore, Back
 from Utils.Enums import ExitCodes
 from Utils.movement import menu_movement as m
 from Utils.movement import block_keys as b
@@ -26,8 +26,6 @@ from Bonus_Classes.Leaderboard import (
 from Utils.sounds import initAll
 
 
-# ! NOTE: Rehash the system for boxing text like LEVEL SELECT (e.g. automate it so we don't have to do it manually.)
-
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
@@ -44,7 +42,12 @@ OPTIONS_LIST = ["r", "m", "s", "p", "g", "l", "q"]
 # * Advanced Helper Functions
 
 
-def show_statistics(player_data):
+def show_statistics(player_data: PlayerData):
+    """Prints the player's stats if they exist
+    
+    Args:
+        playerdata: A PlayerData object
+    """
     if player_data is None:
         print("No statistics available.")
     else:
@@ -55,9 +58,13 @@ def show_statistics(player_data):
 # * Level List Helper Functions
 
 
-def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
-    """
-    Print a summary of the levels.
+def print_levels_table(levels: dict, selected: int =1, completed_lvl_ids=set()):
+    """Print a summary of the levels.
+
+    Args:
+        levels: The levels to be printed
+        selected: The current level to be highlighted for selection
+        completed_lvl_ids: The completed levels by this player
     """
     display = []
     with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
@@ -87,7 +94,13 @@ def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_folders_table(folders, selected=1, f=False):
+def print_folders_table(folders: dict, selected: int=1):
+    """Print a summary of the folders.
+
+    Args:
+        folders: The folders to be printed
+        selected: The current folder to be highlighted for selection
+    """
     display = []
     with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
@@ -111,7 +124,13 @@ def print_folders_table(folders, selected=1, f=False):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_after_game_options(selected):
+def print_after_game_options(selected: int):
+    """Prints the after-level menu
+
+    Args:
+        selected: The currently selected option to be highlighted
+    """
+
     display = []
     with open("Assets/UI/MainMenuArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
@@ -138,9 +157,16 @@ def print_after_game_options(selected):
 # * Level Selection and Launching Functions
 
 
-def choose_level(levels, completed_lvl_ids):
-    """
-    Displays Level Select menu and returns chosen level dict or None on quit.
+def choose_level(levels: dict, completed_lvl_ids: set):
+    """Displays level select menu for user to choose level
+
+    Args: 
+        levels: A dictionary of levels
+        completed_level_ids: A set of all the levels this player has completed
+
+    Returns:
+        The level selected and its index if there is a chosen level. Else, it returns exit codes to be interpreted later
+    
     """
 
     # if no levels
@@ -174,11 +200,19 @@ def choose_level(levels, completed_lvl_ids):
                     print_levels_table(levels, selected, completed_lvl_ids)
 
 
-def choose_folder(folders):
+def choose_folder(folders: dict):
+    """Displays folder select menu for user to choose folder
+
+    Args: 
+        folders: A dictionary of folders
+
+    Returns:
+        The folder selected and its index if there is a chosen folder. Else, it returns exit codes to be interpreted later
+    """
     # if no levels
     clear_terminal()
     if not folders:
-        print("Walang folders boss")
+        print("Sorry, there are no folders")
         return None
 
     # if there is levels
@@ -204,7 +238,12 @@ def choose_folder(folders):
                     print_folders_table(folders, selected)
 
 
-def choose_after_game_option(curr_display):
+def choose_after_game_option(curr_display: str | None):
+    """Shows the after-game menu to the user
+
+    Args: 
+        curr_display: The display (leaderboards, stats, etc) to be shown after the menu
+    """
     blank = center_wr_to_terminal_size("Nothing to show...", colors=[Fore.BLUE])
     clear_terminal()
 
@@ -229,10 +268,14 @@ def choose_after_game_option(curr_display):
             print(curr_display if curr_display else blank)
 
 
-def make_stage_file_from_grid(grid_text):
-    """
-    Creates: the file to send to shroom_raider.py from grid_text.
-    Returns: path to this temporary file, for sending to shroom_raider.py
+def make_stage_file_from_grid(grid_text: str):
+    """Makes a stage file to be run 
+
+    Args:
+        grid_text: The input string to be made into a stage file
+
+    Returns: 
+        The path to the created stage file
     """
     if not grid_text.strip():
         raise ValueError("Empty grid")
@@ -245,9 +288,14 @@ def make_stage_file_from_grid(grid_text):
     return path
 
 
-def launch_game_with_level(level):
-    """
-    Send the level to shroom_raider.py
+def launch_game_with_level(level: dict):
+    """Send the level to game.py for running 
+
+    Args: 
+        level: A dictionary of the current level data
+
+    Returns:
+        The return code for the level, as well as the report of the game played
     """
 
     # create temp files to store level
@@ -285,6 +333,9 @@ def launch_game_with_level(level):
 
 # gameplay start + loop
 def main():
+    """
+    Handles the main gameplay loop from user login, folder and level selection, and data storage
+    """
     clear_terminal()
 
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:

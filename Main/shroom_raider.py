@@ -7,7 +7,6 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 
 # ! the 2 lines of code below were written with AI assistance
-# ! Prompt: {diogn insert it here}
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 

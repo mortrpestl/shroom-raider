@@ -9,6 +9,14 @@ VALID_LETTERS = set(CHARTAPE)
 
 
 def check_validity(data: str):
+    """Checks if a given string is a valid password/username
+
+    Args: 
+        data: The proposed password/username
+
+    Returns:
+        True if valid, False if not
+    """
     if 10 > len(data) > 30:
         return False
 
@@ -20,6 +28,15 @@ def check_validity(data: str):
 
 
 def shift(letter: str, shiftval: str):
+    """Shifts a letter by a number of spaces to the right
+
+    Args:
+        letter: The letter to be shifted
+        shiftval: The letter representation of number of shifts
+
+    Returns:
+        The shifted letter
+    """
     i = CHARTAPE.index(letter)
 
     shiftRight = CHARTAPE.index(shiftval)
@@ -29,6 +46,15 @@ def shift(letter: str, shiftval: str):
 
 
 def unshift(letter: str, shiftval: str):
+    """Shifts a letter by a number of spaces to the left
+
+    Args:
+        letter: The letter to be shifted
+        shiftval: The letter representation of number of shifts
+
+    Returns:
+        The shifted letter
+    """
     i = CHARTAPE.index(letter)
     shiftLeft = CHARTAPE.index(shiftval)
 
@@ -41,6 +67,15 @@ def unshift(letter: str, shiftval: str):
 
 
 def scramble(data: str, key: str):
+    """Vigenère cipher
+
+    Args: 
+        data: The data to be scrambled
+        key: The string key of the cipher
+
+    Returns:  
+        The scrambled string
+    """
     res = r""
 
     for i in range(len(data)):
@@ -50,6 +85,15 @@ def scramble(data: str, key: str):
 
 
 def unscramble(data: str, key: str):
+    """Vigenère cipher unscrambler
+
+    Args: 
+        data: The data to be unscrambled
+        key: The string key of the cipher
+
+    Returns:
+        The original unscrambled string
+    """
     res = r""
 
     for i in range(len(data)):
@@ -58,7 +102,16 @@ def unscramble(data: str, key: str):
     return res
 
 
-def findPW(unencrypted: str, encrypted: str):  # we assume that these are the same len
+def findPW(unencrypted: str, encrypted: str): 
+    """Find the key string given the original and encrypted strings
+
+    Args:
+        unencrypted: The original string
+        encryptedL The string after being scrambled
+
+    Returns:
+        The key string of the cipher 
+    """
     pw = r""
     for i in range(len(unencrypted)):
         i1 = CHARTAPE.index(unencrypted[i])
@@ -79,9 +132,14 @@ def findPW(unencrypted: str, encrypted: str):  # we assume that these are the sa
 
 
 def verify_existing_user(username: str, encrypted_username: str):
-    """
-    Prompt for password until correct for existing user.
-    Returns the correct password once verified.
+    """Prompt for password until correct for existing user.
+
+    Args:
+        username: The username of the current user
+        encrypted_username: The stored encrypted username of the current user with their password
+
+    Returns:
+        The correct password once verified
     """
     while True:
         password = input(center_wr_to_terminal_size(f"Password for {username}: ", colors=[Fore.BLUE])).strip()
@@ -102,9 +160,13 @@ def verify_existing_user(username: str, encrypted_username: str):
 
 
 def register_new_user(username: str):
-    """
-    Prompt for password and confirmation for new user.
-    Returns the confirmed password.
+    """Prompt for valid password and confirmation for new user.
+
+    Args:
+        username: The username of the new user
+
+    Returns:
+        The confirmed password.
     """
     while True:
         password = input(center_wr_to_terminal_size(f"Enter new password for {username}: ", colors=[Fore.BLUE])).strip()
@@ -139,6 +201,12 @@ def register_new_user(username: str):
 
 
 def get_valid_username():
+    """Prompts the user for a valid username
+
+    Returns:
+        The username, once verified to be valid
+    
+    """
     username = input(center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]))
 
     if not username:

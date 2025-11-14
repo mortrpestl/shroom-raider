@@ -145,12 +145,33 @@ class Grid:
         return Grid.GRID_LIST[name]
 
     def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
+        """Gets the object at a certain coordinate and layer
+
+        Args: 
+            r, c: The coordinate being accessed
+            layer: The layer of that coordinate being accessed
+        
+        Returns: 
+            The object at that coordinate
+
+        Raises:
+            IndexError: If the coordinate is out of Grid bounds
+        """
         if not (0 <= r < self.__map_rows and 0 <= c < self.__map_cols):
             raise IndexError(f"coordinate {r, c} out of bounds")
 
         return self.__grid_obj_map[r][c][layer]
 
     def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji"):
+        """Gets the display representation of an object
+
+        Args: 
+            obj: The given object
+            mode: The format of the display symbol
+
+        Returns:
+            The display symbol of the object
+        """
         if mode == "emoji":
             offset = 0
         else:
