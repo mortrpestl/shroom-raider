@@ -181,7 +181,7 @@ class Entity:
         grid.add_active_flame(r, c)
         grid.render()
         grid.smother_active_flames()
-        wait(0.125)
+        wait(0.05)
 
         # continue setting fire to the connections
         while curr_burn_queue:
@@ -206,7 +206,7 @@ class Entity:
             grid.render()  # only renders after the first layer is burnt
             grid.smother_active_flames()  # turn active flames to smoke
             s.flamethrower_sound()
-            wait(0.5)
+            wait(0.05)
 
             curr_burn_queue = list(next_burn_queue)  # next LAYER to burn
         grid.clear_all_flames()  # reset display
