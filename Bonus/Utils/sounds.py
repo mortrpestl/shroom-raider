@@ -9,7 +9,7 @@ PAVEDWALK = []
 ONITEM = None
 PUSH = []
 FAILPUSH = None
-DEATH = None
+WATER = None
 
 # ? Item Sounds
 AXE, FLAMETHROWER, SHROOM = None, None, None
@@ -37,7 +37,7 @@ def path(filename: str):
 
 # ! Initializers
 def initialize_walk_sounds():
-    global WALK, PAVEDWALK, PUSH, FAILPUSH, ONITEM, DEATH
+    global WALK, PAVEDWALK, PUSH, FAILPUSH, ONITEM, WATER
     walk_filenames = [
         "emptytile_step1.mp3",
         "emptytile_step2.mp3",
@@ -65,7 +65,7 @@ def initialize_walk_sounds():
     ONITEM = m.Sound(path("on_item.ogg"))
 
     FAILPUSH = m.Sound(path("push_not_successful.mp3"))
-    DEATH = m.Sound(path("death.ogg"))
+    WATER = m.Sound(path("death.ogg"))
 
 
 def initialize_item_usages():
@@ -163,10 +163,10 @@ def failpush_sound():
         FAILPUSH.play()
 
 
-def death_sound():
-    global DEATH
-    if DEATH:
-        DEATH.play()
+def water_sound():
+    global WATER
+    if WATER:
+        WATER.play()
 
 
 def equip_sound():
