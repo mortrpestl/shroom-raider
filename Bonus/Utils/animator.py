@@ -75,6 +75,8 @@ def load_in(
 
 
 def typewriter(input_str, total_time=1.5, centered=True, colors: list = []):
+    if len(input_str) == 0: return
+
     delta_time = total_time / len(input_str)
     input_str = input_str.split("\n")
 
