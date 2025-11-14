@@ -30,27 +30,17 @@ def read_xlsx_levels(folder_id: int):
         difficulty = str(row.get(diff_col, "Normal")).strip().title()
         dark_val = row.get(dark_col)
         dark_radius = int(dark_val) if pd.notna(dark_val) else None
-        bee_data = (
-            str(row.get(bee_col)) if bee_col and pd.notna(row.get(bee_col)) else None
-        )
+        bee_data = str(row.get(bee_col)) if bee_col and pd.notna(row.get(bee_col)) else None
 
-        levels.append(
-            {
-                "id": int(row[id_col])
-                if id_col and pd.notna(row.get(id_col))
-                else None,
-                "title": str(row[title_col]).strip()
-                if title_col and pd.notna(row.get(title_col))
-                else "UNTITLED",
-                "description": str(row[desc_col]).strip()
-                if desc_col and pd.notna(row.get(desc_col))
-                else "",
-                "difficulty": difficulty,
-                "grid": raw_grid,
-                "dark_radius": dark_radius,
-                "bee_data": bee_data,
-            }
-        )
+        levels.append({
+            "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
+            "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
+            "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
+            "difficulty": difficulty,
+            "grid": raw_grid,
+            "dark_radius": dark_radius,
+            "bee_data": bee_data,
+        })
     return levels
 
 
@@ -67,19 +57,11 @@ def read_xlsx_folders():
     desc_col = cols.get("description")
 
     for _, row in df.iterrows():
-        folders.append(
-            {
-                "id": int(row[id_col])
-                if id_col and pd.notna(row.get(id_col))
-                else None,
-                "title": str(row[title_col]).strip()
-                if title_col and pd.notna(row.get(title_col))
-                else "UNTITLED",
-                "description": str(row[desc_col]).strip()
-                if desc_col and pd.notna(row.get(desc_col))
-                else "",
-            }
-        )
+        folders.append({
+            "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
+            "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
+            "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
+        })
     return folders
 
 

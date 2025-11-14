@@ -5,9 +5,7 @@ from Utils.general_utils import wait
 
 class Entity:
     # * Attributes
-    _is_collideable = (
-        False  # If True, any other collideable object cannot occupy this Entity's space
-    )
+    _is_collideable = False  # If True, any other collideable object cannot occupy this Entity's space
     _is_collectable = False  # If True, Player can collect this Entity
     _is_storable = False  # If True, then Player can keep this in inventory
     _is_pushable = False  # If True, Player can push this Entity
@@ -21,24 +19,22 @@ class Entity:
         self.__pos = list(pos)
         self.__on_grid = on_grid
         self.__ascii = ascii
-        self.ENTITIES = import_entities(
-            {
-                "Player",
-                "Tree",
-                "Rock",
-                "Mushroom",
-                "Water",
-                "PavedTile",
-                "Axe",
-                "Flamethrower",
-                "Flash",
-                "Bomb",
-                "Beehive",
-                "Bee",
-                "Ice",
-                "Log",
-            }
-        )
+        self.ENTITIES = import_entities({
+            "Player",
+            "Tree",
+            "Rock",
+            "Mushroom",
+            "Water",
+            "PavedTile",
+            "Axe",
+            "Flamethrower",
+            "Flash",
+            "Bomb",
+            "Beehive",
+            "Bee",
+            "Ice",
+            "Log",
+        })
 
     # * Simple Getters
 
@@ -61,14 +57,10 @@ class Entity:
         return self._is_burnable
 
     def get_collideable(self):
-        return (
-            self._is_collideable or self._is_pushable
-        )  # all pushables are collideable
+        return self._is_collideable or self._is_pushable  # all pushables are collideable
 
     def get_collectable(self):
-        return (
-            self._is_collectable or self._is_storable
-        )  # all storables are collectables
+        return self._is_collectable or self._is_storable  # all storables are collectables
 
     def get_storable(self):
         return self._is_storable
@@ -165,9 +157,7 @@ class Entity:
 
     def burn_connected(self, visited: set | None = None):
         if not self.get_burnable():
-            raise AttributeError(
-                "Tried to burn unburnable object! Please implement appropriate checker"
-            )
+            raise AttributeError("Tried to burn unburnable object! Please implement appropriate checker")
 
         # initialization
         grid = self.get_on_grid()
@@ -195,10 +185,7 @@ class Entity:
                     except IndexError:
                         neighbor = None
                     if neighbor is not None:
-                        if (
-                            neighbor.get_burnable()
-                            and (new_row, new_column) not in visited
-                        ):
+                        if neighbor.get_burnable() and (new_row, new_column) not in visited:
                             next_burn_queue.append((new_row, new_column))
                             grid.add_active_flame(new_row, new_column)
                             neighbor.destroy()

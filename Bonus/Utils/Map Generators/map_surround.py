@@ -7,9 +7,7 @@ pushables = "#Ro"
 deadly_tiles = "~&"
 items = "!x*"
 
-elements = get_items_and_probabilities(
-    allowed_to_spawn=tiles + pushables + items, probabilities_shown=False
-)
+elements = get_items_and_probabilities(allowed_to_spawn=tiles + pushables + items, probabilities_shown=False)
 
 
 def map_surround(parse, inner_rads, outer_rads, elements_to_surround=elements):

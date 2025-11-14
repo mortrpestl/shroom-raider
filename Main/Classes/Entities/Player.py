@@ -15,9 +15,7 @@ MUSHROOM = items["Mushroom"]
 
 
 class Player(Entity):
-    def __init__(
-        self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None
-    ):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0

@@ -1,8 +1,6 @@
 from Utils.general_utils import wait, clear_prev_n_lines
 
-CHARTAPE = (
-    r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
-)
+CHARTAPE = r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
 CHARTAPE_LEN = len(CHARTAPE)
 VALID_LETTERS = set(CHARTAPE)
 
@@ -76,6 +74,7 @@ def findPW(unencrypted: str, encrypted: str):  # we assume that these are the sa
 
     return pw
 
+
 def verify_existing_user(username: str, encrypted_username: str):
     """
     Prompt for password until correct for existing user.
@@ -120,7 +119,7 @@ def register_new_user(username: str):
             wait(1)
             clear_prev_n_lines(3)
         elif not check_validity(password):
-            print('Invalid password. Please only use alphanumeric symbols')
+            print("Invalid password. Please only use alphanumeric symbols")
 
             wait(1)
             clear_prev_n_lines(3)
@@ -130,19 +129,20 @@ def register_new_user(username: str):
             wait(1)
             clear_prev_n_lines(3)
             return password
-        
+
+
 def get_valid_username():
-    username = input('Username (leave blank for guest): [10-30 characters] -> ')
+    username = input("Username (leave blank for guest): [10-30 characters] -> ")
 
     if not username:
-        return 'GUEST'
+        return "GUEST"
 
     while not check_validity(username):
-        print('Sorry, that is an invalid username...')
+        print("Sorry, that is an invalid username...")
 
         wait(1)
         clear_prev_n_lines(2)
-        
-        username = input('Username (leave blank for guest): [10-30 characters] -> ') 
+
+        username = input("Username (leave blank for guest): [10-30 characters] -> ")
 
     return username

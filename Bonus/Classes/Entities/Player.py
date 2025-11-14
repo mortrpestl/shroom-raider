@@ -3,7 +3,7 @@ from Classes.Grid import Grid
 from Classes.Entities.import_entities import import_entities
 import Utils.sounds as s
 
-needed = {"Flamethrower", "Axe", "Mushroom", "PavedTile", "Bomb", "Log", "Tree", "Bee", 'Water'}
+needed = {"Flamethrower", "Axe", "Mushroom", "PavedTile", "Bomb", "Log", "Tree", "Bee", "Water"}
 items = import_entities(needed)
 
 FLAMETHROWER = items["Flamethrower"]
@@ -21,9 +21,7 @@ WATER = items["Water"]
 
 
 class Player(Entity):
-    def __init__(
-        self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None
-    ):
+    def __init__(self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None):
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
@@ -83,7 +81,7 @@ class Player(Entity):
             s.bee_death_sound()
         elif isinstance(killer, WATER):
             s.water_sound()
-            
+
         self.__is_dead = True
 
     # * Complex Setters

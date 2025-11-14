@@ -66,11 +66,7 @@ def read_all_rows():
             try:
                 pw = findPW(unencrypted_name, encrypted_name)
                 decrypted = decrypt(
-                    {
-                        k: str(v)
-                        for k, v in r.items()
-                        if k not in ("username", "encrypted_username")
-                    },
+                    {k: str(v) for k, v in r.items() if k not in ("username", "encrypted_username")},
                     pw,
                 )
                 decrypted["username"] = unencrypted_name
@@ -83,9 +79,7 @@ def read_all_rows():
 
 
 def write_all_rows(rows):
-    pd.DataFrame(rows, columns=HEADERS).to_excel(
-        EXCEL_FILE, index=False, engine="openpyxl"
-    )
+    pd.DataFrame(rows, columns=HEADERS).to_excel(EXCEL_FILE, index=False, engine="openpyxl")
 
 
 def safe_int(value):
@@ -126,18 +120,16 @@ class PlayerData:
     def store_new_user(username, encrypted_username):
         # Read RAW rows to preserve encryption
         rows = read_raw_rows()
-        rows.append(
-            {
-                "username": username,
-                "encrypted_username": encrypted_username,
-                "total_mushrooms_collected": 0,
-                "total_tiles_walked": 0,
-                "total_wins": 0,
-                "total_times": 0,
-                "total_seconds_played": 0,
-                "completed_data": "{}",
-            }
-        )
+        rows.append({
+            "username": username,
+            "encrypted_username": encrypted_username,
+            "total_mushrooms_collected": 0,
+            "total_tiles_walked": 0,
+            "total_wins": 0,
+            "total_times": 0,
+            "total_seconds_played": 0,
+            "completed_data": "{}",
+        })
         write_all_rows(rows)
 
     # * Getter Methods
@@ -173,9 +165,7 @@ class PlayerData:
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
-                self.total_mushrooms_collected = safe_int(
-                    row.get("total_mushrooms_collected")
-                )
+                self.total_mushrooms_collected = safe_int(row.get("total_mushrooms_collected"))
                 self.total_tiles_walked = safe_int(row.get("total_tiles_walked"))
                 self.total_wins = safe_int(row.get("total_wins"))
                 self.total_times = safe_int(row.get("total_times"))
@@ -263,9 +253,7 @@ class PlayerData:
         data["username"] = self.name
         return data
 
-    def apply_report_dict(
-        self, report, return_code=None, level_id=None, elapsed_time=0
-    ):
+    def apply_report_dict(self, report, return_code=None, level_id=None, elapsed_time=0):
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])
         self.session_win = report["win"]
@@ -291,7 +279,7 @@ class PlayerData:
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             return [["None"]]
-            #completed_headers = ["Completed Levels"]
+            # completed_headers = ["Completed Levels"]
         else:
 
             def sort_key(item):
@@ -311,7 +299,7 @@ class PlayerData:
                 for level_id, ms in sorted_levels
             ]
             return completed_rows
-        
+
     def get_completed_lvl_ids_by_folder_id(self, folder_id):
         completed_rows = self.get_completed_levels_organized()
 
@@ -324,17 +312,15 @@ class PlayerData:
 
         return completed_levels_in_folder
 
-        
     # * Display
 
-    #@debug_wait(WAIT_TIME)
+    # @debug_wait(WAIT_TIME)
     def __repr__(self):
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             completed_rows = [["None"]]
             completed_headers = ["Completed Levels"]
         else:
-
             completed_rows = self.get_completed_levels_organized()
             completed_headers = ["ID", "Title", "Best Time"]
 

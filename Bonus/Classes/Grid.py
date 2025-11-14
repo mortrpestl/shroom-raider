@@ -10,6 +10,7 @@ from wcwidth import wcswidth
 
 from Utils.general_utils import clear_terminal, center_wr_to_terminal_size
 
+
 class Grid:
     # * Attributes
     GRID_LIST = dict()
@@ -38,30 +39,26 @@ class Grid:
             len(self.__grid_vis_map),
             len(self.__grid_vis_map[0]),
         )
-        self.__grid_obj_map = [
-            [[None] for _ in range(self.__map_cols)] for _ in range(self.__map_rows)
-        ]
+        self.__grid_obj_map = [[[None] for _ in range(self.__map_cols)] for _ in range(self.__map_rows)]
         self.__grid_user_display = [[] for _ in range(self.__map_rows)]
         self.__grid_color_display = [[] for _ in range(self.__map_rows)]
 
-        self.ENTITIES = import_entities(
-            {
-                "Player",
-                "Tree",
-                "Rock",
-                "Mushroom",
-                "Water",
-                "PavedTile",
-                "Axe",
-                "Flamethrower",
-                "Flash",
-                "Bomb",
-                "Beehive",
-                "Bee",
-                "Ice",
-                "Log",
-            }
-        )
+        self.ENTITIES = import_entities({
+            "Player",
+            "Tree",
+            "Rock",
+            "Mushroom",
+            "Water",
+            "PavedTile",
+            "Axe",
+            "Flamethrower",
+            "Flash",
+            "Bomb",
+            "Beehive",
+            "Bee",
+            "Ice",
+            "Log",
+        })
         self.character_mapping = {  # for ENTITY display
             self.ENTITIES["Player"]: (("🧑", "L"), Back.GREEN),
             self.ENTITIES["Tree"]: (("🌲", "T"), Back.GREEN),
@@ -82,12 +79,10 @@ class Grid:
             "Flame": (("🔥", "&"), Back.YELLOW),
             "Smoke": (("⚫", "0"), Back.BLACK + Fore.BLACK),
             "Darkness": (("⬛", "#"), Back.BLACK + Fore.BLACK),
-            "Blast": (("💥", "X"), Back.GREEN)
+            "Blast": (("💥", "X"), Back.GREEN),
         }
         # NOTE since non-entity display is separate, these can have the same display string as entity displays
-        self.initialization_map = {
-            k[0][1]: (v, k[0][0], k[1]) for v, k in self.character_mapping.items()
-        }
+        self.initialization_map = {k[0][1]: (v, k[0][0], k[1]) for v, k in self.character_mapping.items()}
 
         self.__active_flashes = []  # flashes affect darkness only
         self.__active_flames = set()  # for flamethrower animation
@@ -117,7 +112,7 @@ class Grid:
 
     def get_grid_user_display(self, r: int, c: int):
         return self.__grid_user_display[r][c]
-    
+
     def get_grid_color_map(self):
         return self.__grid_color_display
 
@@ -184,10 +179,7 @@ class Grid:
         if isinstance(obj, str):
             values = self.overlay_mapping[obj]
         # return symbol and color
-        return {
-            "symbol": values[0][offset],
-            "color": values[1]
-        }
+        return {"symbol": values[0][offset], "color": values[1]}
 
     # * Simple Setters
     def level_clear(self):
@@ -251,9 +243,7 @@ class Grid:
 
         if symbol == "&":
             bee_lag, bee_count = map(int, self.__bee_data.split())
-            return item_type(
-                coord, self, bee_lag=bee_lag, bee_count=bee_count
-            ), item_display_value, item_color
+            return item_type(coord, self, bee_lag=bee_lag, bee_count=bee_count), item_display_value, item_color
 
         return item_type(coord, self, symbol), item_display_value, item_color
 
@@ -300,8 +290,7 @@ class Grid:
         # * DARKNESS LOGIC
         # lit by flash? then display object
         if any(
-            abs(fl.get_pos()[0] - r) + abs(fl.get_pos()[1] - c) <= fl.get_radius()
-            for fl in self.get_active_flashes()
+            abs(fl.get_pos()[0] - r) + abs(fl.get_pos()[1] - c) <= fl.get_radius() for fl in self.get_active_flashes()
         ):
             return display, color
 
@@ -345,10 +334,10 @@ class Grid:
         # NOTE grid_display is separate to "bypass" weirdness from ANSI
 
         # * TITLE DISPLAY
-        span = max((wcswidth(self.__grid_user_display[0])-3)//4, 1)
-        spanner = f'{Fore.GREEN}\nx{"-"*span}{"="*span}{{🍄}}{"="*span}{"-"*span}x\n{Style.RESET_ALL}'
+        span = max((wcswidth(self.__grid_user_display[0]) - 3) // 4, 1)
+        spanner = f"{Fore.GREEN}\nx{'-' * span}{'=' * span}{{🍄}}{'=' * span}{'-' * span}x\n{Style.RESET_ALL}"
         with open("Assets/UI/GameProperArt.txt", "r", encoding="utf+8") as art:
-            title_display.append(f'{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}')
+            title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
             title_display.append(spanner)
 
         # * GRID DISPLAY
@@ -365,23 +354,17 @@ class Grid:
             symbol = self.get_display_of_obj(item_here)["symbol"]
             if item_here.get_collectable():
                 additional_inputs.append(f"\n[p] Pick up [{symbol} {item_here}]?")
-            item_here_display = (
-                f"[{symbol} {item_here}] is here"
-            )
+            item_here_display = f"[{symbol} {item_here}] is here"
 
         if p.get_item() is not None:
             if p.get_item().get_passive():
                 symbol = self.get_display_of_obj(p.get_item())["symbol"]
-                additional_inputs.append(
-                    f"\n[F] Use passive item [{symbol} {p.get_item()}]"
-                )
+                additional_inputs.append(f"\n[F] Use passive item [{symbol} {p.get_item()}]")
 
         additional_inputs = "".join(additional_inputs)
 
         if held_item is not None:
-            held_item_display = (
-                f'Holding item [{self.get_display_of_obj(held_item)["symbol"]}{held_item}]'
-            )
+            held_item_display = f"Holding item [{self.get_display_of_obj(held_item)['symbol']}{held_item}]"
 
         # * PLAYER "HUD"
         terminal_gui = f"""
@@ -396,11 +379,9 @@ class Grid:
 {held_item_display}
 
 What will you do? """
-        
+
         hud_display.append(spanner)
-        hud_display.append(
-            f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected"
-        )
+        hud_display.append(f"\n{mushrooms_collected} out of {total_mushrooms} mushroom(s) collected")
         if win:
             hud_display.append("You win!")
         if lose:
@@ -412,11 +393,18 @@ What will you do? """
 
         clear_terminal()
         if f:  # if it is the FIRST time render is called, then animate the loading in!
-            load_in("\n".join(title_display), 1, centered=True) # colors initialized before
-            load_in("\n".join(grid_display), 1, centered=True, colors=self.get_grid_color_map(), colors2=[Fore.GREEN], mode="--grid")
+            load_in("\n".join(title_display), 1, centered=True)  # colors initialized before
+            load_in(
+                "\n".join(grid_display),
+                1,
+                centered=True,
+                colors=self.get_grid_color_map(),
+                colors2=[Fore.GREEN],
+                mode="--grid",
+            )
             load_in("\n".join(hud_display), 1, centered=True)
         else:
-            print(center_wr_to_terminal_size("\n".join(title_display))) # colors initialized before
+            print(center_wr_to_terminal_size("\n".join(title_display)))  # colors initialized before
             print(center_wr_to_terminal_size("\n".join(grid_display), colors=self.get_grid_color_map(), grid_mode=True))
             print(center_wr_to_terminal_size("\n".join(hud_display)))
         sys.stdout.flush()

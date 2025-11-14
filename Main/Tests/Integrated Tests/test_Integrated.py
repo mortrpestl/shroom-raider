@@ -79,12 +79,8 @@ def run_game_case(testcase):
     desc = testcase["Description"].strip()
     date = testcase.get("Day Added", "").strip()
     grid_raw = testcase["Input Grid"].replace("\r\n", "\n").replace("\r", "\n").strip()
-    moves_raw = (
-        testcase["Input String"].replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
-    )
-    expected_output = (
-        testcase["Output"].replace("\r\n", "\n").replace("\r", "\n").strip()
-    )
+    moves_raw = testcase["Input String"].replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
+    expected_output = testcase["Output"].replace("\r\n", "\n").replace("\r", "\n").strip()
 
     # Skip if input grid or expected output is missing
     if not grid_raw:
@@ -131,16 +127,12 @@ def run_game_case(testcase):
     # Raise error if script crashes
     if proc.returncode != 0:
         raise AssertionError(
-            f"Script crashed for test {test_id} ({category})\n"
-            f"stderr:\n{proc.stderr}\n"
-            f"stdout:\n{proc.stdout}"
+            f"Script crashed for test {test_id} ({category})\nstderr:\n{proc.stderr}\nstdout:\n{proc.stdout}"
         )
 
     # Raise error if output file is not created
     if not os.path.exists(tmp_out_path):
-        raise AssertionError(
-            f"Expected output file not created by script for test {test_id}"
-        )
+        raise AssertionError(f"Expected output file not created by script for test {test_id}")
 
     # Read the output
     with open(tmp_out_path, "r", encoding="utf-8", errors="ignore") as f:
@@ -194,9 +186,7 @@ def test_shroom_case(testcase):
         for i in range(max_lines):
             exp = expected_lines[i] if i < len(expected_lines) else ""
             act = actual_lines[i] if i < len(actual_lines) else ""
-            comparison.append(
-                f"{str(i + 1):^{max_line_no_width}} | {exp:^40} | {act:^40}"
-            )
+            comparison.append(f"{str(i + 1):^{max_line_no_width}} | {exp:^40} | {act:^40}")
 
         pretty_output = "\n".join(comparison)
         raise AssertionError(

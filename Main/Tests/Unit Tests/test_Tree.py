@@ -7,9 +7,7 @@ import pytest
 from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
 
-ENTITIES = import_entities(
-    {"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"}
-)
+ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"})
 
 
 @pytest.fixture

@@ -8,9 +8,7 @@ from helper_classes import DummyPlayer, WinPlayer, LosePlayer
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 
-ENTITIES = import_entities(
-    {"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"}
-)
+ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"})
 
 
 @pytest.fixture
