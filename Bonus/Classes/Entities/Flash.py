@@ -3,6 +3,15 @@ import Utils.sounds as s
 
 
 class Flash(Entity):
+    """
+    When picked up, can be used to light up the map temporarily.
+
+    Args:
+        _active: 
+        _placed_pos: Determines the position where the flash will propagate.
+        _current_radius: The current radius of the flashlight.
+    """
+
     # * Attributes
     _is_collectable = True
     _is_storable = True

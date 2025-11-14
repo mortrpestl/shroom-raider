@@ -7,6 +7,7 @@ import Utils.sounds as s
 class Bee(Entity):
     """
     Handles the Bee, an entity that follows the player's path given a bee lag and a bee count.
+    Bees can be killed with Bombs and Flamethrowers.
 
     Args:
         _lag : Determines the game ticks before the bees spawn since stepping on beehive

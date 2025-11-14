@@ -5,6 +5,8 @@ import Utils.sounds as s
 
 
 class Log(Entity):
+    """An entity that can be pushed by the player and other pushables."""
+
     # * Attributes
     _is_pushable = True
     _is_collideable = True
@@ -39,5 +41,8 @@ class Log(Entity):
             return False
 
     def chop(self):
+        """
+        Destroys a log when an axe is equipped.
+        """
         s.axe_sound()
         self.destroy()

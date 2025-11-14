@@ -10,9 +10,9 @@ class Bomb(Entity):
     Also handles all bomb stacking functionality.
 
     Args:
-        _active : Lets the bomb placed activate (then deactivate forever after being dropped).
+        _active : A boolean that lets the bomb placed activate (then deactivate forever after being dropped).
         _bomb_radius : An int that stores how far the bomb affects its surroundings.
-        _placed_pos : Takes note of where a bomb is dropped / triggered by the player.
+        _placed_pos : A pair of ints that takes note of where a bomb is dropped / triggered by the player.
     """
 
     _is_collectable = True
