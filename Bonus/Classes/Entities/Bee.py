@@ -2,8 +2,18 @@ from collections import deque
 from Classes.Entity import Entity
 import Utils.sounds as s
 
+# ! TODO: Documentation
 
 class Bee(Entity):
+    """
+    Handles the Bee, an entity that follows the player's path given a bee lag and a bee count.
+
+    Args:
+        _lag :
+        _buffer :
+        _is_explodable : 
+    """
+
     _all_bees = []
 
     def __init__(self, pos, on_grid, lag, ascii=">"):
@@ -12,7 +22,8 @@ class Bee(Entity):
         self._lag = int(lag)
         self._buffer = deque()  # cells for player
         self._is_explodable = True
-
+        self._is_burnable = True
+        
         Bee._all_bees.append(self)
 
     def update(self):

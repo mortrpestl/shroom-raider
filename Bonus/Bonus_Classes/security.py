@@ -89,7 +89,7 @@ def verify_existing_user(username: str, encrypted_username: str):
 
         # scramble username with password
         test_encrypted = scramble(username, password)
-        if test_encrypted == encrypted_username:
+        if test_encrypted == encrypted_username and len(password) == len(username):
             print("Password correct!")
             return password
         else:
@@ -119,6 +119,9 @@ def register_new_user(username: str):
             clear_prev_n_lines(3)
         elif password != confirm:
             print("Passwords do not match. Try again.")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif not check_validity(password):
             print('Invalid password. Please only use alphanumeric symbols')
 
@@ -126,6 +129,9 @@ def register_new_user(username: str):
             clear_prev_n_lines(3)
         else:
             print("Password confirmed!")
+
+            wait(1)
+            clear_prev_n_lines(3)
             return password
         
 def get_valid_username():

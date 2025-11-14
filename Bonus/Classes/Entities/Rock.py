@@ -53,7 +53,13 @@ class Rock(Entity):
 
             if isinstance(object_below, entities["Water"]):  # Is the Rock on Water?
                 new_paved_tile = entities["PavedTile"]((r, c), self.get_on_grid(), "-")
+<<<<<<< HEAD
                 s.water_sound()
+=======
+
+                s.water_sound()
+
+>>>>>>> 758d8440b2c0f7a539ec089cee45b6fd57268213
                 self.destroy()  # Destroy Rock
                 object_below.destroy()  # Destroy Water
                 on_grid.add_layer_to_coord(r, c, new_paved_tile)  # Add new paved tile
