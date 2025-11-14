@@ -72,13 +72,9 @@ class Ice(Entity):
                 return moved
 
             if isinstance(object_below, entities["Water"]):  # Is the Ice on Water?
-                new_paved_tile = entities["PavedTile"](
-                    self.get_pos(), self.get_on_grid(), "-"
-                )
+                new_paved_tile = entities["PavedTile"](self.get_pos(), self.get_on_grid(), "-")
                 self.destroy()  # Destroy Ice
                 object_below.destroy()  # Destroy Water
-                self.get_on_grid().add_layer_to_coord(
-                    *self.get_pos(), new_paved_tile
-                )  # Add new paved tile
+                self.get_on_grid().add_layer_to_coord(*self.get_pos(), new_paved_tile)  # Add new paved tile
 
             return moved

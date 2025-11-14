@@ -54,6 +54,7 @@ def show_statistics(player_data):
 
 # * Level List Helper Functions
 
+
 def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     """
     Print a summary of the levels.
@@ -68,17 +69,13 @@ def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     for lvl in levels:
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f'<🧑 {lvl.get("title", "")} 🧑>', 
-                    colors=[Back.GREEN, Fore.BLACK])
+                center_wr_to_terminal_size(f"<🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
-        elif lvl.get("id","") in completed_lvl_ids:
-            display.append(
-                center_wr_to_terminal_size(f'✔  {lvl.get("title", "")}', 
-                    colors=[Fore.GREEN])
-            )
-        
+        elif lvl.get("id", "") in completed_lvl_ids:
+            display.append(center_wr_to_terminal_size(f"✔  {lvl.get('title', '')}", colors=[Fore.GREEN]))
+
         else:
             display.append(str(lvl.get("title", "")))
     display.append("\n" + spanner)
@@ -101,11 +98,10 @@ def print_folders_table(folders, selected=1, f=False):
     for folder in folders:
         if folder.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f'<🧑 {folder.get("title", "")} 🧑>', 
-                    colors=[Back.GREEN, Fore.BLACK])
+                center_wr_to_terminal_size(f"<🧑 {folder.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK])
             )
             desc = str(folder.get("description", "")).replace("\n", " ") + "\n"
-        else:#　
+        else:  #
             display.append(str(folder.get("title", "")))
     display.append("\n" + spanner)
 
@@ -113,6 +109,7 @@ def print_folders_table(folders, selected=1, f=False):
 
     clear_terminal()
     print(center_wr_to_terminal_size("\n".join(display)))
+
 
 def print_after_game_options(selected):
     display = []
@@ -127,7 +124,9 @@ def print_after_game_options(selected):
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:
-            display.append(center_wr_to_terminal_size(f'<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>', colors=[Back.GREEN, Fore.BLACK]))
+            display.append(
+                center_wr_to_terminal_size(f"<🧑 {AFTER_GAME_OPTIONS[o]} 🧑>", colors=[Back.GREEN, Fore.BLACK])
+            )
         else:
             display.append(AFTER_GAME_OPTIONS[o])
     display.append("\n" + spanner)
@@ -220,14 +219,15 @@ def choose_after_game_option(curr_display):
             if choice == "w":
                 if selected > 0:
                     selected -= 1
-                    
+
             elif choice == "s":
                 if selected < len(OPTIONS_LIST) - 1:
                     selected += 1
-                    
+
             clear_terminal()
             print_after_game_options(selected)
             print(curr_display if curr_display else blank)
+
 
 def make_stage_file_from_grid(grid_text):
     """
@@ -252,9 +252,7 @@ def launch_game_with_level(level):
 
     # create temp files to store level
     stage_path = make_stage_file_from_grid(level["grid"])
-    report_fd, report_path = tempfile.mkstemp(
-        prefix="shroom_report_", suffix=".json", dir=HERE
-    )
+    report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
     os.close(report_fd)
 
     try:
@@ -285,12 +283,10 @@ def launch_game_with_level(level):
                 os.remove(path)
 
 
-
-
 # gameplay start + loop
 def main():
     clear_terminal()
-    
+
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
         typewriter(intro.read(), 3)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
@@ -300,11 +296,11 @@ def main():
 
     encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
-    if encrypted_username and username != 'GUEST':  # existing user
+    if encrypted_username and username != "GUEST":  # existing user
         password = verify_existing_user(username, encrypted_username)
-    else:  
-        if username == 'GUEST':
-            player_data = PlayerData('GUEST', 'guest')
+    else:
+        if username == "GUEST":
+            player_data = PlayerData("GUEST", "guest")
         else:
             password = register_new_user(username)
             # store encrypted username & reference username in Excel
@@ -363,7 +359,7 @@ def main():
                 while True:
                     choice = choose_after_game_option(curr_display)
                     choice = OPTIONS_LIST[choice]
-                    
+
                     match choice:
                         case "r" | "m":
                             break
@@ -384,7 +380,6 @@ def main():
                             continue
                         case _:
                             print("Invalid choice, try again.")
-                    
 
                 if choice in ("r", "replay"):
                     continue  # continue playing the level

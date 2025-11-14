@@ -35,6 +35,7 @@ MENU = None
 def path(filename: str):
     return "Assets/Sounds/" + filename
 
+
 # ! Initializers
 def initialize_walk_sounds():
     global WALK, PAVEDWALK, PUSH, FAILPUSH, ONITEM, WATER
@@ -60,7 +61,7 @@ def initialize_walk_sounds():
         PAVEDWALK.append(m.Sound(path(a)))
 
     for p in push_filenames:
-            PUSH.append(m.Sound(path(p)))
+        PUSH.append(m.Sound(path(p)))
 
     ONITEM = m.Sound(path("on_item.ogg"))
 

@@ -22,7 +22,7 @@ def wait(seconds):
     time.sleep(seconds)
 
 
-def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[], grid_mode=False):
+def center_wr_to_terminal_size(input_str: str | list[str], colors: list = [], grid_mode=False):
     """Centers strings, optionally with color per line."""
     if isinstance(input_str, str):
         input_str = input_str.split("\n")
@@ -30,19 +30,19 @@ def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[], grid
     width = os.get_terminal_size()[0]
     result = []
 
-    if not grid_mode: # center a line, then wrap it with color.
+    if not grid_mode:  # center a line, then wrap it with color.
         for line in input_str:
             txt_width = wcswidth(line)
             if txt_width != -1:
                 padding_left = (width - txt_width) // 2
                 if colors:
-                    result.append(''.join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
+                    result.append("".join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
                 else:
-                    result.append(''.join([" "] * padding_left + [line]))
+                    result.append("".join([" "] * padding_left + [line]))
             else:
                 result.append(line)
 
-    else: # colors must be a list of lists
+    else:  # colors must be a list of lists
         for r in range(len(input_str)):
             txt_width = wcswidth(input_str[r])
             if txt_width == -1:
@@ -56,15 +56,14 @@ def center_wr_to_terminal_size(input_str: str | list[str], colors: list=[], grid
 
     return "\n".join(result)
 
+
 # decorator
 def debug_wait(delay=2.5):
     def decorator(func):
         def wrapper(*args, **kwargs):
             answer = func(*args, **kwargs)
             if DEBUG_MODE:
-                print(
-                    "DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils"
-                )
+                print("DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils")
                 wait(delay)
             return answer
 
@@ -96,18 +95,13 @@ def tabulate(headers, table, sep=" ", lborder=" ", rborder=" ", tborder="=", joi
     table = [headers] + table
     R, C = len(table), len(headers)
     # compute max widths
-    col_widths = [
-        min(max(len(truncate(table[r][c], max_width)) for r in range(R)) + 2, max_width)
-        for c in range(C)
-    ]
+    col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(R)) + 2, max_width) for c in range(C)]
 
     def build_border():
         return joint + joint.join(tborder * w for w in col_widths) + joint
 
     def build_row(row):
-        cells = [
-            truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(C)
-        ]
+        cells = [truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(C)]
         return lborder + sep.join(cells) + rborder
 
     lines = [build_border(), build_row(headers), build_border()]
@@ -123,12 +117,12 @@ def tabulate(headers, table, sep=" ", lborder=" ", rborder=" ", tborder="=", joi
             for j in range(1, len(currLine) - 1):
                 if (
                     currLine[j] == joint
-                    and currLine[j - 1] in {joint, lborder, rborder,sep}
-                    and currLine[j + 1] in {joint, lborder, rborder,sep}
+                    and currLine[j - 1] in {joint, lborder, rborder, sep}
+                    and currLine[j + 1] in {joint, lborder, rborder, sep}
                 ):
                     currLine[j] = joint  # intersection points
             final_lines.append("".join(currLine))
         else:
             final_lines.append(line)
 
-    return center_wr_to_terminal_size("\n".join(final_lines), colors=[Fore.BLUE]) 
+    return center_wr_to_terminal_size("\n".join(final_lines), colors=[Fore.BLUE])

@@ -16,32 +16,42 @@ ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = "TEST"
 
 
-def check_win_condition(P, G):
+def check_win_condition(P: Player, G: Grid):
+    """Checks if a player has met the win condition of a grid
+
+    Args:
+        P: A Player Entity
+        G: A Grid object
+    """
+
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
 
-def reset(level):
+def reset(level: str):
+    """Resets a stage to its starting conditions
+
+    Args:
+        level: A string representation of the stage being reset
+
+    Returns:
+        A Grid object that contains the reset level, and a Player entity on that Grid
+    """
     global G, P
     G = Grid("test", level)
     P = G.get_player()
     return G, P
 
 
-def parser(instructions, P: Player, G: Grid, level, reset_only):
-    """
-    Process instructions. instructions can be:
-      - a single-line string ("WASD")
-      - a multi-line string ("WAD!WWW\nASDW")
-      - an iterable/list of lines (["WAD!WWW", "ASDW"])
+def parser(instructions: str, P: Player, G: Grid, level: str, reset_only: bool):
+    """Parses user inputs to play game
 
-    Behavior:
-      - Each line is treated like one input() call (interactive).
-      - For each line: process characters left-to-right.
-      - If a character is invalid (not one of w,a,s,d,p or '!'), stop processing the rest of the current line.
-      - If '!' is encountered: reset the level immediately and stop processing the rest of the current line.
-      - After finishing a line (or breaking out), continue to the next line (if any).
-      - reset_only: if 'reset_only' is passed, parser should stop processing further instructions (keeps previous behavior).
+    Args:
+        instructions: The given input string of the player's moves
+        P: The current Player entity
+        G: The current Grid object
+        level: A string representation of the ORIGINAL stage
+        reset_only: A boolean indicating if moves other than reset can be played
     """
     global item_here, holding_anything
 
@@ -93,6 +103,10 @@ def parser(instructions, P: Player, G: Grid, level, reset_only):
 
 
 def main():
+    """The main game logic for Shroom Raider
+    -> Processes Command Line Arguments
+    -> Handles Game Loop
+    """
     global G, P
 
     argument_parser = ap()
@@ -155,9 +169,7 @@ def main():
                 "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>"
             )
     else:
-        print(
-            "Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>"
-        )
+        print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
 
 
 if __name__ == "__main__":
@@ -169,11 +181,7 @@ if __name__ == "__main__":
         base_folder = "Logs"
         os.makedirs(base_folder, exist_ok=True)
 
-        existing = [
-            d
-            for d in os.listdir(base_folder)
-            if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()
-        ]
+        existing = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()]
         run_number = max([int(d) for d in existing], default=0) + 1
 
         run_folder = os.path.join(base_folder, str(run_number))

@@ -8,9 +8,7 @@ from Classes.Entities.import_entities import import_entities
 from Classes.Grid import Grid
 
 # Register entities
-ENTITIES = import_entities(
-    {"Player", "Axe", "Flamethrower", "Mushroom", "Water", "Tree", "PavedTile"}
-)
+ENTITIES = import_entities({"Player", "Axe", "Flamethrower", "Mushroom", "Water", "Tree", "PavedTile"})
 
 
 @pytest.fixture

@@ -93,11 +93,7 @@ def read_all_rows() -> dict:
             try:
                 pw = findPW(unencrypted_name, encrypted_name)
                 decrypted = decrypt(
-                    {
-                        k: str(v)
-                        for k, v in r.items()
-                        if k not in ("username", "encrypted_username")
-                    },
+                    {k: str(v) for k, v in r.items() if k not in ("username", "encrypted_username")},
                     pw,
                 )
                 decrypted["username"] = unencrypted_name
@@ -198,18 +194,16 @@ class PlayerData:
         """
         # Read RAW rows to preserve encryption
         rows = read_raw_rows()
-        rows.append(
-            {
-                "username": username,
-                "encrypted_username": encrypted_username,
-                "total_mushrooms_collected": 0,
-                "total_tiles_walked": 0,
-                "total_wins": 0,
-                "total_times": 0,
-                "total_seconds_played": 0,
-                "completed_data": "{}",
-            }
-        )
+        rows.append({
+            "username": username,
+            "encrypted_username": encrypted_username,
+            "total_mushrooms_collected": 0,
+            "total_tiles_walked": 0,
+            "total_wins": 0,
+            "total_times": 0,
+            "total_seconds_played": 0,
+            "completed_data": "{}",
+        })
         write_all_rows(rows)
 
     # * Getter Methods
@@ -261,9 +255,7 @@ class PlayerData:
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
-                self.total_mushrooms_collected = safe_int(
-                    row.get("total_mushrooms_collected")
-                )
+                self.total_mushrooms_collected = safe_int(row.get("total_mushrooms_collected"))
                 self.total_tiles_walked = safe_int(row.get("total_tiles_walked"))
                 self.total_wins = safe_int(row.get("total_wins"))
                 self.total_times = safe_int(row.get("total_times"))
@@ -391,7 +383,7 @@ class PlayerData:
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             return [["None"]]
-            #completed_headers = ["Completed Levels"]
+            # completed_headers = ["Completed Levels"]
         else:
 
             def sort_key(item):
@@ -435,7 +427,7 @@ class PlayerData:
 
     # * Display
 
-    #@debug_wait(WAIT_TIME)
+    # @debug_wait(WAIT_TIME)
     def __repr__(self):
         """
         Displays the statistics belonging to a player in an organized manner.
@@ -449,7 +441,6 @@ class PlayerData:
             completed_rows = [["None"]]
             completed_headers = ["Completed Levels"]
         else:
-
             completed_rows = self.get_completed_levels_organized()
             completed_headers = ["ID", "Title", "Best Time"]
 
