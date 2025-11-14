@@ -4,7 +4,7 @@ import time
 import pandas as pd
 from Utils.Enums import ExitCodes
 
-from Utils.general_utils import debug_wait, format_time, tabulate, WAIT_TIME
+from Utils.general_utils import format_time, tabulate
 
 from LevelManager import get_level_title
 from .security import scramble, unscramble, findPW
@@ -427,7 +427,6 @@ class PlayerData:
 
     # * Display
 
-    # @debug_wait(WAIT_TIME)
     def __repr__(self):
         """
         Displays the statistics belonging to a player in an organized manner.
