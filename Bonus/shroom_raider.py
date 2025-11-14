@@ -70,7 +70,7 @@ def print_levels_table(levels: dict, selected: int =1, completed_lvl_ids=set()):
     with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
-    spanner = "--===x{🌲}x===---\n"
+    spanner = "---===x{🌲}x===---\n"
 
     display.append(spanner)
     for lvl in levels:
@@ -105,7 +105,7 @@ def print_folders_table(folders: dict, selected: int=1):
     with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
-    spanner = "--===x{🔥}x===---\n"
+    spanner = "---===x{🔥}x===---\n"
 
     display.append(spanner)
     for folder in folders:
@@ -139,7 +139,7 @@ def print_after_game_options(selected: int):
 
     display.append("[w] Up | [s] Down | [Enter] Go to\n")
 
-    spanner = "--===x{🪓}x===---\n"
+    spanner = "---===x{🪓}x===---\n"
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:
@@ -339,7 +339,7 @@ def main():
     clear_terminal()
 
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 3)
+        typewriter(intro.read(), 15)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
         load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
@@ -361,6 +361,7 @@ def main():
 
     b()
     initAll()
+    progress_bar("\nStarting Game...")
     while True:  # folders muna tayo
         path = []
         folders = LevelManager.load_folders()
