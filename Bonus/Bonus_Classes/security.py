@@ -1,5 +1,4 @@
 from Utils.general_utils import clear_prev_n_lines, wait, center_wr_to_terminal_size
-from Utils.animator import progress_bar
 from colorama import Fore, Back, Style
 
 CHARTAPE = (
@@ -96,7 +95,6 @@ def verify_existing_user(username: str, encrypted_username: str):
             print(center_wr_to_terminal_size("Password correct!", colors=[Fore.GREEN]))
             return password
         else:
-            progress_bar("\nStarting Game...")
             print(center_wr_to_terminal_size("Invalid password, try again.", colors=[Fore.RED]))
 
         wait(1)
@@ -137,7 +135,6 @@ def register_new_user(username: str):
             wait(1)
             clear_prev_n_lines(3)
 
-            progress_bar("\nStarting Game...")
             return password
 
 
@@ -145,7 +142,6 @@ def get_valid_username():
     username = input(center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]))
 
     if not username:
-        progress_bar("\nStarting Game...")
         return 'GUEST'
 
     while not check_validity(username):

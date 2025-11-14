@@ -288,7 +288,7 @@ def main():
     clear_terminal()
 
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 3)
+        typewriter(intro.read(), 15)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
         load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
@@ -310,6 +310,7 @@ def main():
 
     b()
     initAll()
+    progress_bar("\nStarting Game...")
     while True:  # folders muna tayo
         path = []
         folders = LevelManager.load_folders()
