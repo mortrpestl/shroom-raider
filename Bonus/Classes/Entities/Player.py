@@ -38,7 +38,8 @@ class Player(Entity):
         Args:
             item: The item the player is holding 
             Additionally, see parent class.
-        """        super().__init__(pos, on_grid, ascii)
+        """   
+        super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
         self.__is_dead = False
