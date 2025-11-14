@@ -9,24 +9,25 @@ class Bee(Entity):
     Handles the Bee, an entity that follows the player's path given a bee lag and a bee count.
 
     Args:
-        _lag :
-        _buffer :
-        _is_explodable : 
+        _lag : Determines the game ticks before the bees spawn since stepping on beehive
+        _buffer : Stores the coordinates of previous player positions
     """
 
     _all_bees = []
 
     def __init__(self, pos, on_grid, lag, ascii=">"):
+
         super().__init__(pos, on_grid, ascii)
         self._is_deadly = True
         self._lag = int(lag)
         self._buffer = deque()  # cells for player
         self._is_explodable = True
         self._is_burnable = True
-        
+
         Bee._all_bees.append(self)
 
     def update(self):
+        """Update a bee's position."""
         grid = self.get_on_grid()
         player = grid.get_player()
         player_pos = player.get_pos()
@@ -54,11 +55,13 @@ class Bee(Entity):
 
     @staticmethod
     def update_all():
+        """Update all bee positions."""
         for bee in Bee._all_bees:
             bee.update()
 
     @staticmethod
     def remove_bee(bee):
+        """Remove a bee from the master bee list"""
         if bee in Bee._all_bees:
             Bee._all_bees.remove(bee)
 
