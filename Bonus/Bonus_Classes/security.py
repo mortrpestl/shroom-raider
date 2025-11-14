@@ -1,3 +1,5 @@
+from Utils.general_utils import clear_prev_n_lines, wait
+
 CHARTAPE = (
     r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
 )
@@ -93,6 +95,9 @@ def verify_existing_user(username: str, encrypted_username: str):
         else:
             print("Invalid password, try again.")
 
+        wait(1)
+        clear_prev_n_lines(2)
+
 
 def register_new_user(username: str):
     """
@@ -104,12 +109,21 @@ def register_new_user(username: str):
         confirm = input("Confirm password: ").strip()
         if not password:
             print("Password cannot be empty.")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif len(password) != len(username):
             print("Password must have the same length as username")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif password != confirm:
             print("Passwords do not match. Try again.")
         elif not check_validity(password):
             print('Invalid password. Please only use alphanumeric symbols')
+
+            wait(1)
+            clear_prev_n_lines(3)
         else:
             print("Password confirmed!")
             return password
@@ -122,6 +136,8 @@ def get_valid_username():
 
     while not check_validity(username):
         print('Sorry, that is an invalid username...')
+        wait(1)
+        clear_prev_n_lines(2)
         username = input('Username (leave blank for guest): [10-30 characters] -> ') 
 
     return username
