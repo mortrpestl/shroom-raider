@@ -1,7 +1,13 @@
 def import_entities(names: set):
-    """Dynamically imports any class from Entities given a list of their names.
-    Used to avoid circular imports.
+    """Imports all given entities. Used to avoid circular imports
+
+    Args:
+        names: The classnames of entities to be imported
+
+    Returns:
+        A dictionary containing all the imported modules
     """
+    
     imported = {}
     for name in names:
         module = __import__(f"Classes.Entities.{name}", fromlist=[name])

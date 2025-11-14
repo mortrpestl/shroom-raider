@@ -3,11 +3,11 @@ from Classes.Grid import Grid
 
 
 class Flamethrower(Entity):
-    """A storable Entity that, if used by the Player, destroys all collected trees
+    """
+    A storable Entity that, if used by the Player, destroys all connected trees
 
     Attributes:
         See parent class
-
     """
 
     # * Attribues

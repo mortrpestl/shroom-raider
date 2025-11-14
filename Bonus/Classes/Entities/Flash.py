@@ -20,6 +20,11 @@ class Flash(Entity):
     leeway = 5
 
     def __init__(self, pos, on_grid, ascii="?"):
+        """Initializes a Flash object
+
+        Args:
+            See parent class.
+        """
         super().__init__(pos, on_grid, ascii)
         self._active = False
         self._placed_pos = None
@@ -32,8 +37,7 @@ class Flash(Entity):
     # * Complex Functions
 
     def use(self):
-        """Activate flash at player position
-        """
+        """Activate flash at player position"""
         s.flash_sound()
         player_pos = self.get_on_grid().get_player_pos()
         self._placed_pos = list(player_pos)
@@ -45,15 +49,16 @@ class Flash(Entity):
 
     # * Simple Getters
     def get_radius(self):
+        """Gets radius of flash, 0 if not active"""
         return self._current_radius if self._active else 0
 
     def get_pos(self):
+        """Gets the placed position if active; otherwise, the world position"""
         return self._placed_pos if self._active else super().get_pos()
 
     # * Simple Setters
     def update_radius(self):
-        """Decrement radius every render
-        """
+        """Decrement radius every render"""
         if not self._active:
             return
         if self._current_radius > 0:

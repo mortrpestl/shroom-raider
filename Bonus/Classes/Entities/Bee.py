@@ -11,6 +11,7 @@ class Bee(Entity):
     Bees can be killed with Bombs and Flamethrowers.
 
     Args:
+        _all_bees : Stores all Bee objects, "Master Bee list"
         _lag : Determines the game ticks before the bees spawn since stepping on beehive
         _buffer : Stores the coordinates of previous player positions
 
@@ -19,6 +20,11 @@ class Bee(Entity):
     _all_bees = []
 
     def __init__(self, pos, on_grid, lag, ascii=">"):
+        """Initializes a Bee object and appends it to all_bees
+        
+        Args:
+            See base class.
+        """
 
         super().__init__(pos, on_grid, ascii)
         self._is_deadly = True
@@ -69,5 +75,6 @@ class Bee(Entity):
             Bee._all_bees.remove(bee)
 
     def destroy(self):
+        """See base class. Also removes the bee from master bee list"""
         super().destroy()
         Bee.remove_bee(self)

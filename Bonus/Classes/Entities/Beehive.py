@@ -16,6 +16,13 @@ class Beehive(Entity):
     counter = 0
 
     def __init__(self, pos, on_grid, ascii="&", bee_count: int = 3, bee_lag: int = 3):
+        """Initializes a Beehive object.
+        
+        Args:
+            bee_count: Number of bees to spawn
+            bee_lag: Delay between bee spawning
+            Additionally, see base class.
+        """
         # if you want to make a bee chain, make bee_count and bee_lag the same
 
         super().__init__(pos, on_grid, ascii)
@@ -24,6 +31,7 @@ class Beehive(Entity):
         self._bee_lag = int(bee_lag)
 
     def __repr__(self):
+        """Canonical representation of Beehive"""
         return f"{super().__repr__()} (bee angered! RUN)"
 
     def trigger(self, player):
