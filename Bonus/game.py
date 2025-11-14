@@ -11,9 +11,8 @@ from Classes.Grid import Grid
 from Classes.Entities.Player import Player
 from Classes.Entities.Bomb import Bomb
 
-from Utils.general_utils import wait
 from Utils.animator import progress_bar, load_in, typewriter
-from colorama import Fore, Back, Style
+from colorama import Fore
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -26,19 +25,43 @@ MOVES_MADE = 0
 ACTIVE = False
 
 
-def check_win_condition(P, G):
+def check_win_condition(P: Player, G: Grid):
+    """Checks if a player has met the win condition of a grid
+
+    Args:
+        P: A Player Entity
+        G: A Grid object
+    """
+
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
 
-def reset(level, metadata=None):
+def reset(level: str):
+    """Resets a stage to its starting conditions
+
+    Args:
+        level: A string representation of the stage being reset
+
+    Returns:
+        A Grid object that contains the reset level, and a Player entity on that Grid
+    """
     global G, P
-    G = Grid("test", level, metadata=metadata)
+    G = Grid("test", level)
     P = G.get_player()
     return G, P
 
 
-def parser(inst, P: Player, G: Grid, level, reset_only):
+def parser(inst: str, P: Player, G: Grid, level: str, reset_only: bool):
+    """Parses user inputs to play game. Also updates global movecounter for the current game.
+
+    Args:
+        instructions: The given input string of the player's moves
+        P: The current Player entity
+        G: The current Grid object
+        level: A string representation of the ORIGINAL stage
+        reset_only: A boolean indicating if moves other than reset can be played
+    """
     global MOVES_MADE
 
     if ENABLE_TEST_MODE and inst == "?":
@@ -83,7 +106,14 @@ def parser(inst, P: Player, G: Grid, level, reset_only):
         return
 
 
-def write_report(G, P, win: bool, dead: bool):
+def write_report(G: Grid, P: Player, win: bool, dead: bool):
+    """Creates a report of the played game after completion of a level. 
+
+    Args:
+        P: The current Player entity
+        G: The current Grid object
+        win, dead: Indicate whether the player has won the game or has died
+    """
     global REPORT_FILE, MOVES_MADE
     if not REPORT_FILE:
         return
@@ -108,19 +138,13 @@ def write_report(G, P, win: bool, dead: bool):
         print(f"Failed to write report file {REPORT_FILE}: {e}")
 
 
-"""
-NOTE: 
-
-Since shroom_raider.py here cannot be run (by the player) without MainMenu.py, I removed some unnecessary code (like having the args as its own if-statement, because now that is the default).
-
-args will always be used by default
-
--R to assist in storing session statistics
--dark-radius to darken if there is a provided 'dark' param in the sheet
-"""
 
 
 def main():
+    """The main game logic for Shroom Raider
+    -> Processes Command Line Arguments
+    -> Handles Game Loop
+    """
     global G, P, REPORT_FILE, MOVES_MADE
 
     DEFAULT_DARK = 10000

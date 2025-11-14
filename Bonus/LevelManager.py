@@ -5,10 +5,15 @@ HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
-# NOTE: This was refactored (cleaned) fairly heavily. Thank goodness for cleaner Pandas syntax!
-
-
 def read_xlsx_levels(folder_id: int):
+    """Reads the levels in a given folder
+
+    Args:
+        folder_id: The number ID of the folder being accessed
+
+    Returns:
+        The levels in the folder, or an empty list if no levels exist
+    """
     if not os.path.exists(LEVELS_XLSX):
         return []
 
@@ -45,6 +50,12 @@ def read_xlsx_levels(folder_id: int):
 
 
 def read_xlsx_folders():
+    """Reads all folders that exist within the excel file
+
+    Returns: 
+        A list of all the folders, or an empty list if there are no folders
+    
+    """
     if not os.path.exists(LEVELS_XLSX):
         return []
 
@@ -66,7 +77,16 @@ def read_xlsx_folders():
 
 
 def load_levels(folder_id: int):
-    """Returns a list of level dicts: {"id","title","description","difficulty","grid","dark_radius","bee"}"""
+    """Loads the levels from the levels excel file
+
+    Args:
+        folder_id: The number ID of the folder bring accessed
+
+    Returns:
+        A list of all levels, with levels being represented as dictionaries of their level data
+
+    
+    """
     levels = read_xlsx_levels(folder_id)
     for idx, lvl in enumerate(levels, 1):
         if lvl.get("id") is None:
@@ -75,6 +95,11 @@ def load_levels(folder_id: int):
 
 
 def load_folders():
+    """Loads the folders from the levels excel file
+
+    Returns: 
+        A list of all folders, with folders being represented as dictionaries of their folder data
+    """
     folders = read_xlsx_folders()
     for idx, folder in enumerate(folders, 1):
         if folder.get("id") is None:
@@ -84,7 +109,15 @@ def load_folders():
 
 
 def get_level_by_id(folder_id: int, level_id: int):
-    """Lookup a level by id."""
+    """Lookup a level by id
+    
+    Args:
+        folder_id: The ID of the folder being accessed
+        level_id: The ID of the level being accessed
+
+    Returns: 
+        The level if it exists, None if not
+    """
 
     for lvl in load_levels(folder_id):
         if lvl.get("id") == level_id:
@@ -93,6 +126,14 @@ def get_level_by_id(folder_id: int, level_id: int):
 
 
 def get_folder_by_id(folder_id: int):
+    """Lookup a folder by id
+    
+    Args:
+        folder_id: The ID of the folder being accessed
+
+    Returns: 
+        The folder if it exists, None if not
+    """
     for folder in load_folders(folder_id):
         if folder.get("id") == folder_id:
             return folder
@@ -101,11 +142,27 @@ def get_folder_by_id(folder_id: int):
 
 
 def get_folder_title(folder_id: int):
+    """Gets the title of a given folder
+
+    Args:
+        folder_id: The ID of the folder being accessed
+
+    Returns: 
+        The folder title if it exists, None if not
+    """
     folder = get_folder_by_id(folder_id)
     return folder["title"] if folder else None
 
 
 def get_level_title(folder_id: int, level_id: int):
-    """Return the title for a level id or None if not found."""
+    """Gets the title of a given folder
+
+    Args:
+        folder_id: The ID of the folder being accessed
+        level_id: The ID of the level being accessed 
+
+    Returns: 
+        The level title if it exists, None if not
+    """
     lvl = get_level_by_id(int(folder_id), int(level_id))
     return lvl["title"] if lvl else None
