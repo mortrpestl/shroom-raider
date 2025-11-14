@@ -1,3 +1,5 @@
+from Utils.general_utils import wait, clear_prev_n_lines
+
 CHARTAPE = (
     r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
 )
@@ -87,7 +89,7 @@ def verify_existing_user(username: str, encrypted_username: str):
 
         # scramble username with password
         test_encrypted = scramble(username, password)
-        if test_encrypted == encrypted_username:
+        if test_encrypted == encrypted_username and len(password) == len(username):
             print("Password correct!")
             return password
         else:
@@ -104,14 +106,29 @@ def register_new_user(username: str):
         confirm = input("Confirm password: ").strip()
         if not password:
             print("Password cannot be empty.")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif len(password) != len(username):
             print("Password must have the same length as username")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif password != confirm:
             print("Passwords do not match. Try again.")
+
+            wait(1)
+            clear_prev_n_lines(3)
         elif not check_validity(password):
             print('Invalid password. Please only use alphanumeric symbols')
+
+            wait(1)
+            clear_prev_n_lines(3)
         else:
             print("Password confirmed!")
+
+            wait(1)
+            clear_prev_n_lines(3)
             return password
         
 def get_valid_username():
@@ -122,6 +139,10 @@ def get_valid_username():
 
     while not check_validity(username):
         print('Sorry, that is an invalid username...')
+
+        wait(1)
+        clear_prev_n_lines(2)
+        
         username = input('Username (leave blank for guest): [10-30 characters] -> ') 
 
     return username
