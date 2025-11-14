@@ -320,7 +320,8 @@ def draw_polygon_hull(input_map, points, polygon_char="R", thickness=1, canyoniz
 
 # * EXAMPLE USAGE
 
-randR, randC = randint(3, 30), randint(3, 30)
+print(gen_empty_map(10,10))
+randR,randC = randint(3,30),randint(3,30)
 
 # 0. Generate empty map
 # print(gen_empty_map(15,30))

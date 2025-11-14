@@ -22,23 +22,47 @@ HEADERS = [
     "completed_data",
 ]
 
+# ! TODO: documentation
 
-def decrypt(dict, key):
+def decrypt(dict: dict[str,int], key: str) -> dict[str,int]:
+    """Decrypts a dictionary of player data given a key.
+
+    Args:
+        dict: The dictionary containing the player data
+        key: The key used to decrypt the dictionary's contents
+
+    Returns:
+        A dict containing the decrypted entries of player data
+    """
+    
     return {k: unscramble(str(v), key) for k, v in dict.items()}
 
 
-def encrypt(dict, key):
+def encrypt(dict: dict[str,int], key: str) -> dict[str,int]:
+    """Encrypts a dictionary of player data given a key.
+
+    Args:
+        dict: The dictionary containing the player data
+        key: The key used to encrypt the dictionary's contents
+
+    Returns:
+        A dict containing the encrypted entries of player data
+    """
     return {k: scramble(str(v), key) for k, v in dict.items()}
 
 
 # * Pandas helpers
 
 
-def read_raw_rows():
+def read_raw_rows() -> dict:
     """
-    Reads all player rows from Excel WITHOUT decryption.
-    Use this when you need to preserve encrypted state.
+    Reads all player rows from Excel without decryption.
+    Used for reading data in encrypted form.
+
+    Returns: 
+        The raw data (no decryption) in the Excel file transcribed as dictionary.
     """
+
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
     rows = df.to_dict(orient="records")
 
@@ -50,15 +74,18 @@ def read_raw_rows():
     return rows
 
 
-def read_all_rows():
+def read_all_rows() -> dict:
     """
     Reads all player rows from Excel and decrypts all fields.
-    Use this ONLY for displaying/reading data, NOT for saving.
+    Used for displaying/reading data, never for saving.
+
+    Returns:
+        The decrypted data in the Excel file transcribed as dictionary.
     """
+
     rows = read_raw_rows()
 
     for r in rows:
-        # check if username is stored encrypted
         unencrypted_name = r.get("username")
         encrypted_name = r.get("encrypted_username")
 
@@ -78,11 +105,20 @@ def read_all_rows():
     return rows
 
 
-def write_all_rows(rows):
-    pd.DataFrame(rows, columns=HEADERS).to_excel(EXCEL_FILE, index=False, engine="openpyxl")
+def write_all_rows(rows: dict[str,int]):
+    """
+    Writes all player rows (encrypted) back to Excel.
+    """
+
+    pd.DataFrame(rows, columns=HEADERS).to_excel(
+        EXCEL_FILE, index=False, engine="openpyxl"
+    )
 
 
-def safe_int(value):
+def safe_int(value: str | int) -> int:
+    """
+    Parses empty entries into integers if needed.
+    """
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return 0
     try:
@@ -90,9 +126,33 @@ def safe_int(value):
     except (ValueError, TypeError):
         return 0
 
+# * Actual Class Declaration
 
 class PlayerData:
+    """
+    Handles the storing and sending of session data for each game session for a given player.
+    Also handles distribution of global player information to leaderboards.
+
+    Args:
+        name: A string denoting the name of the player
+        password: A string denoting the password of the player
+        total_mushrooms_collected: An int denoting the total mushrooms collected by the player
+        total_tiles_walked: An int denoting the total number of tiles a player walked throughout thegame.
+        total_wins: An int denoting the total wins a player had throughout the game.
+        total_times: An int denoting the
+        total_seconds_played: An int denoting the total minimum time taken by a player to beat each of their completed levels
+        completed_data: A stringified JSON containing data about levels a player has completed. 
+        completed_levels: A dict containing data about levels a player has completed.
+    """
+
     def __init__(self, name, password=None):
+        """Initializes the player's data storage given a name.
+        
+        Args:
+            name: Denotes the name of the player
+            password: Denotes the password of the player, to be used in decrypting
+        """
+
         self.name = name
         self.password = password
         self.total_mushrooms_collected = 0
@@ -108,7 +168,14 @@ class PlayerData:
     # * Log-In Validators
 
     @staticmethod
-    def lookup_excel_username(username):
+    def lookup_excel_username(username : str) -> None | str:
+        """Returns a username from the database if exists and None if does not
+
+        Returns:
+            None if there is no username in the database that matches
+            username if there is a username in the database that matches
+        """
+
         # Read decrypted rows for lookup
         rows = read_all_rows()
         for r in rows:
@@ -117,7 +184,14 @@ class PlayerData:
         return None, username
 
     @staticmethod
-    def store_new_user(username, encrypted_username):
+    def store_new_user(username: str, encrypted_username: str):
+        """
+        Stores a new username and initializes their data in the database if it does not exist in the database.
+
+        Args:
+            username: The username to store in the database.
+            encrypted_username: The encrypted username to store (to find the key later).
+        """
         # Read RAW rows to preserve encryption
         rows = read_raw_rows()
         rows.append({
@@ -133,15 +207,22 @@ class PlayerData:
         write_all_rows(rows)
 
     # * Getter Methods
-    def get_password(self):
+    def get_password(self) -> str:
+        """Returns the password."""
         return self.password
 
     # * Setter Methods
     def set_password(self, key):
+        """Sets the password."""
         self.password = key
 
     # * Session Setter Methods
     def reset_session(self):
+        """Resets the session
+        
+        Start time is recorded (to determine total length later), and win/dead conditions are set to false (as expected from any grid spawn).
+            
+        """
         self.session_mushrooms = 0
         self.session_tiles = 0
         self.session_win = False
@@ -149,18 +230,27 @@ class PlayerData:
         self.session_start_time = time.time()
 
     def record_move(self, n=1):
+        """Adds number of moves to the session data."""
         self.session_tiles += n
 
     def record_mushroom(self, n=1):
+        """Adds number of mushrooms to the session data."""
         self.session_mushrooms += n
 
     def record_win(self):
+        """Records a win for the player"""
         self.session_win = True
 
     def record_death(self):
+        """Records a death for the player"""
         self.session_dead = True
 
     def load_or_create(self):
+        """
+        Reinitializes the player's statistics based on records in the database.
+        This includes initializing the data for a new player.
+        """
+
         # Read decrypted rows to load user data
         rows = read_all_rows()
         for row in rows:
@@ -177,14 +267,13 @@ class PlayerData:
                     self.completed_levels = {}
                 return
 
-        # User not found - need to create
-        # Read RAW rows to preserve encryption of existing users
         raw_rows = read_raw_rows()
         raw_rows.append(self.to_dict())
         write_all_rows(raw_rows)
 
     # * Level Completion Handler Methods
-    def get_completed_levels(self):
+    def get_completed_levels(self) -> dict[str,int,None]:
+        """Gets the completed levels of the player"""
         if not self.completed_levels and self.completed_data:
             try:
                 self.completed_levels = json.loads(self.completed_data)
@@ -193,6 +282,11 @@ class PlayerData:
         return self.completed_levels
 
     def record_level_completion(self, level_id: int, elapsed_time_ms: int):
+        """
+        Adds a completed level and the relevant player data to the player's completed data.
+        If a level has been recompleted, stats can be recomputed (e.g. getting the best time).
+
+        """
         completed = self.get_completed_levels()
         key = str(level_id)
         completed[key] = min(completed.get(key, elapsed_time_ms), elapsed_time_ms)
@@ -201,6 +295,11 @@ class PlayerData:
 
     # * Excel-Interaction Methods
     def commit_session(self, time_elapsed_ms: float):
+        """
+        Adjusts the player data given a level file.
+        Also logs the updated data to the database.
+        """
+
         self.total_mushrooms_collected += self.session_mushrooms
         self.total_tiles_walked += self.session_tiles
         self.total_times += 1
@@ -212,14 +311,9 @@ class PlayerData:
         self.reset_session()
 
     def save(self):
-        """
-        Save player data to Excel, preserving encryption for all rows.
-        Read RAW data to avoid double encryption.
-        """
-        # read RAW Excel data WITHOUT decrypting
+        """Saves player data to the database."""
         rows = read_raw_rows()
 
-        # find and update our player's row
         found = False
         for r in rows:
             if r["username"] == self.name:
@@ -229,14 +323,13 @@ class PlayerData:
                 found = True
                 break
 
-        # if not found, append new row
         if not found:
             rows.append(self.to_dict())
-
-        # write back to Excel
         write_all_rows(rows)
 
     def to_dict(self):
+        """Converts session data to a dict."""
+
         data = {
             "total_mushrooms_collected": self.total_mushrooms_collected,
             "total_tiles_walked": self.total_tiles_walked,
@@ -253,7 +346,11 @@ class PlayerData:
         data["username"] = self.name
         return data
 
-    def apply_report_dict(self, report, return_code=None, level_id=None, elapsed_time=0):
+    def apply_report_dict(
+        self, report, return_code=None, level_id=None, elapsed_time=0
+    ):
+        """Processes the updates to be performed after receiving a session report."""
+
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])
         self.session_win = report["win"]
@@ -271,11 +368,18 @@ class PlayerData:
         self.commit_session(elapsed_time)
 
     def load_report_file(self, path, level_id=None):
+        """"""
         with open(path, "r", encoding="utf-8") as f:
             report = json.load(f)
         return self.apply_report_dict(report, level_id=level_id)
 
     def get_completed_levels_organized(self):
+        """Returns an organized dict of levels
+
+        Returns:
+            completed_levels_in_folder: an organized dict of levels with an associated folder_id
+        """
+
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             return [["None"]]
@@ -299,8 +403,17 @@ class PlayerData:
                 for level_id, ms in sorted_levels
             ]
             return completed_rows
+        
+    def get_completed_lvl_ids_by_folder_id(self, folder_id) -> dict[str,int]:
+        """Returns an organized dict of levels with an associated folder_id        
+        
+        Args:
+            folder_id: gets levels based on folder_id
 
-    def get_completed_lvl_ids_by_folder_id(self, folder_id):
+        Returns:
+            completed_levels_in_folder: an organized dict of levels with an associated folder_id
+        """
+
         completed_rows = self.get_completed_levels_organized()
 
         completed_levels_in_folder = set()
@@ -316,6 +429,13 @@ class PlayerData:
 
     # @debug_wait(WAIT_TIME)
     def __repr__(self):
+        """
+        Displays the statistics belonging to a player in an organized manner.
+
+        Returns:
+            display: a list of rows depicting the organized dict of the player statistics
+        """
+
         completed_levels = self.get_completed_levels()
         if not completed_levels:
             completed_rows = [["None"]]

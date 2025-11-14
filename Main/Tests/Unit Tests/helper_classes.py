@@ -1,7 +1,6 @@
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 
-
 class DummyPlayer(Player):
     """
     A Player subclass that never collects mushrooms and never dies.
@@ -23,9 +22,9 @@ class WinPlayer(Player):
     A Player subclass that immediately wins (collects all mushrooms).
     """
 
-    def __init__(self, grid: Grid, pos=[0, 0], ascii="L", item=None):
-        super().__init__(pos, grid, ascii, item)
-        self.grid = grid
+    def __init__(self, on_grid: Grid, pos=[0, 0], ascii="L", item=None):
+        super().__init__(pos, on_grid, ascii, item)
+        self.grid = on_grid
 
     def get_mushroom_count(self):
         return self.grid.get_total_mushrooms()

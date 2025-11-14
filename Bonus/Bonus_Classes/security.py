@@ -143,11 +143,9 @@ def get_valid_username():
         return "GUEST"
 
     while not check_validity(username):
-        print("Sorry, that is an invalid username...")
-
+        print('Sorry, that is an invalid username...')
         wait(1)
         clear_prev_n_lines(2)
-
-        username = input("Username (leave blank for guest): [10-30 characters] -> ")
+        username = input('Username (leave blank for guest): [10-30 characters] -> ') 
 
     return username

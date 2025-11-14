@@ -6,6 +6,11 @@ import Utils.sounds as s
 
 
 class Ice(Entity):
+    """
+    An entity that when pushed, continues until hitting an immovable entity.
+    Like a rock, turns the tile below it to ice when the ice stops and it happens to be above water when this happens.
+    """
+
     # * Attributes
     _is_pushable = True
     _is_collideable = True
@@ -17,6 +22,9 @@ class Ice(Entity):
     # * Complex Getters
 
     def get_pushable(self, pusher: Entity):
+        """
+        Adds the logic for sliding for the pushable logic.
+        """
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Ice)):
             return True
@@ -47,6 +55,10 @@ class Ice(Entity):
     # * Complex Setters
 
     def set_pos(self, direction):
+        """
+        Adds 'water turns to paved tile' mechanic to ice
+        """
+
         entities = import_entities({"Water", "PavedTile"})
         moved = False
         while super().set_pos(direction):
