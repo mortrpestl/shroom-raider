@@ -78,6 +78,7 @@ def findPW(unencrypted: str, encrypted: str):  # we assume that these are the sa
 
     return pw
 
+
 def verify_existing_user(username: str, encrypted_username: str):
     """
     Prompt for password until correct for existing user.
@@ -126,7 +127,7 @@ def register_new_user(username: str):
             wait(1)
             clear_prev_n_lines(3)
         elif not check_validity(password):
-            print(center_wr_to_terminal_size('Invalid password. Please only use alphanumeric symbols', colors=[Fore.RED]))
+            print(center_wr_to_terminal_size("Invalid password. Please only use alphanumeric symbols", colors=[Fore.RED]))
 
             wait(1)
             clear_prev_n_lines(3)
@@ -138,18 +139,19 @@ def register_new_user(username: str):
 
             progress_bar("\nStarting Game...")
             return password
-        
+
+
 def get_valid_username():
-    username = input(center_wr_to_terminal_size('Username (leave blank for guest): [10-30 characters] -> ', colors=[Fore.BLUE]))
+    username = input(center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]))
 
     if not username:
         progress_bar("\nStarting Game...")
         return 'GUEST'
 
     while not check_validity(username):
-        print(center_wr_to_terminal_size('Sorry, that is an invalid username...', colors=[Fore.RED]))
+        print(center_wr_to_terminal_size("Sorry, that is an invalid username...", colors=[Fore.RED]))
         wait(1)
         clear_prev_n_lines(2)
-        username = input(center_wr_to_terminal_size('Username (leave blank for guest): [10-30 characters] -> ', colors=[Fore.BLUE]))
+        username = input(center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]))
 
     return username

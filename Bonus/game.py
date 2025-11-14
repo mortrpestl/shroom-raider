@@ -170,15 +170,15 @@ def main():
                 if G.get_is_cleared():
                     G.render(test_mode=ENABLE_TEST_MODE)
                     with open("Assets/UI/ClearText.txt", "r", encoding="utf+8") as text:
-                        load_in("\n"+text.read(), 2, colors=[Fore.GREEN], fx_map="✩･ﾟ.")
+                        load_in("\n" + text.read(), 2, colors=[Fore.GREEN], fx_map="✩･ﾟ.")
                     typewriter("Way to go! Onto the next area...", colors=[Fore.GREEN])
                     write_report(G, P, True, False)
                     progress_bar("\nTaking you to main menu...", 2)
                     sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
-                    #G.render(test_mode=ENABLE_TEST_MODE)
+                    # G.render(test_mode=ENABLE_TEST_MODE)
                     with open("Assets/UI/DefeatText.txt", "r", encoding="utf+8") as text:
-                        load_in("\n"+text.read(), 2, colors=[Fore.RED], fx_map="Xx.")
+                        load_in("\n" + text.read(), 2, colors=[Fore.RED], fx_map="Xx.")
                     typewriter("Don't give up yet! There're still shrooms to raid...", colors=[Fore.RED])
                     write_report(G, P, False, True)
                     progress_bar("\nTaking you to main menu...", 2)

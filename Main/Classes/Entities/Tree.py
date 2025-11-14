@@ -3,19 +3,39 @@ from Classes.Grid import Grid
 
 
 class Tree(Entity):
+    """
+    A collideable and burnable Entity that can be destroyed by the player using either the Axe or Flamethrower
+
+    Attributes:
+        See parent class
+    """
     # * Attributes
     _is_collideable = True
     _is_burnable = True
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "T"):
+        """
+        Initializes a Tree object
+
+        Args: 
+            See parent class
+        """
         super().__init__(pos, on_grid, ascii)
 
     # * Simple Setter
     def chop(self):
+        """
+        Destroys a Tree object, and removes it from its Grid
+        """
         self.destroy()
 
     # * Complex Setter
     def burn_connected(self, visited: set | None = None):
+        """Burns all orthogonally connected Trees
+
+        Args: 
+            visited: The set of Trees that have already been burnt
+        """
         if visited is None:
             visited = set()
 

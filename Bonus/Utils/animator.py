@@ -4,17 +4,18 @@ from Utils.general_utils import clear_prev_n_lines, center_wr_to_terminal_size, 
 from colorama import Fore, Back, Style
 
 
-def load_in(input_str, 
-            total_time=1.5, 
-            centered=True, 
-            colors: list=[], 
-            colors2: list=[], 
-            fx_map: str="=-.", 
-            mode: str="--normal",
-            ):
+def load_in(
+    input_str,
+    total_time=1.5,
+    centered=True,
+    colors: list = [],
+    colors2: list = [],
+    fx_map: str = "=-.",
+    mode: str = "--normal",
+):
     if isinstance(input_str, str):
         input_str = input_str.split("\n")
-    
+
     height = len(input_str)
     delta_time = total_time / height
 
@@ -31,11 +32,11 @@ def load_in(input_str,
         wave.append("".join(temp))
 
     grid_mode = False
-    if mode == "--grid": # transition for every cell
+    if mode == "--grid":  # transition for every cell
         mode = "--normal"
         grid_mode = True
 
-    if mode == "--normal": # normal mode: one color per line
+    if mode == "--normal":  # normal mode: one color per line
         if centered:
             input_str = center_wr_to_terminal_size(input_str, colors, grid_mode).split("\n")
             wave = center_wr_to_terminal_size(wave, colors if not colors2 or not grid_mode else colors2).split("\n")
@@ -43,7 +44,7 @@ def load_in(input_str,
             input_str = colors + input_str + [Style.RESET_ALL]
             wave = (colors if not colors2 else colors2) + wave + [Style.RESET_ALL]
 
-    elif mode == "--alternate": # alternate mode: alternate colors per line
+    elif mode == "--alternate":  # alternate mode: alternate colors per line
         for i in range(height):
             using_color = colors if i % 2 else colors2
             if centered:
@@ -52,7 +53,7 @@ def load_in(input_str,
             elif colors:
                 input_str[i] = "".join(using_color + [input_str[i]] + [Style.RESET_ALL])
                 wave[i] = "".join(using_color + [wave[i]] + [Style.RESET_ALL])
-    
+
     for i in range(height):
         print(input_str[i])
         sys.stdout.flush()
@@ -73,7 +74,7 @@ def load_in(input_str,
         clear_prev_n_lines(k)
 
 
-def typewriter(input_str, total_time=1.5, centered=True, colors: list=[]):
+def typewriter(input_str, total_time=1.5, centered=True, colors: list = []):
     delta_time = total_time / len(input_str)
     input_str = input_str.split("\n")
 
@@ -89,20 +90,26 @@ def typewriter(input_str, total_time=1.5, centered=True, colors: list=[]):
             if char not in " 　⠀":
                 wait(delta_time)
             if char in ".,?":
-                wait(delta_time*1.5)
+                wait(delta_time * 1.5)
         print()
         sys.stdout.flush()
 
-def progress_bar(deco_str, total_time = 1.5, centered=True):
+
+def progress_bar(deco_str, total_time=1.5, centered=True):
     delta_time = total_time / 100
 
     if centered:
         print(center_wr_to_terminal_size(deco_str, colors=[Fore.RED]))
         sys.stdout.flush()
         for frame in range(1, 101):
-            print(center_wr_to_terminal_size((str(frame) + "%") + 
-                                             ("▓" * (frame // 5) + "▒░" + " " * (20-frame//5))[:20] +
-                                             (" " * len(str(frame)))), end="\r")
+            print(
+                center_wr_to_terminal_size(
+                    (str(frame) + "%")
+                    + ("▓" * (frame // 5) + "▒░" + " " * (20 - frame // 5))[:20]
+                    + (" " * len(str(frame)))
+                ),
+                end="\r",
+            )
             sys.stdout.flush()
             wait(delta_time)
 
