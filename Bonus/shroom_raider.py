@@ -62,7 +62,7 @@ def print_levels_table(levels, selected=1, completed_lvl_ids=set()):
     with open("Assets/UI/LevelSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
-    spanner = "--===x{🌲}x===---\n"
+    spanner = "---===x{🌲}x===---\n"
 
     display.append(spanner)
     for lvl in levels:
@@ -95,7 +95,7 @@ def print_folders_table(folders, selected=1, f=False):
     with open("Assets/UI/FolderSelectArt.txt", "r", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
-    spanner = "--===x{🔥}x===---\n"
+    spanner = "---===x{🔥}x===---\n"
 
     display.append(spanner)
     for folder in folders:
@@ -123,7 +123,7 @@ def print_after_game_options(selected):
 
     display.append("[w] Up | [s] Down | [Enter] Go to\n")
 
-    spanner = "--===x{🪓}x===---\n"
+    spanner = "---===x{🪓}x===---\n"
     display.append(spanner)
     for o in AFTER_GAME_OPTIONS:
         if o == option:

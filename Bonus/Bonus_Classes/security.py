@@ -1,4 +1,6 @@
-from Utils.general_utils import clear_prev_n_lines, wait
+from Utils.general_utils import clear_prev_n_lines, wait, center_wr_to_terminal_size
+from Utils.animator import progress_bar
+from colorama import Fore, Back, Style
 
 CHARTAPE = (
     r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
@@ -82,18 +84,19 @@ def verify_existing_user(username: str, encrypted_username: str):
     Returns the correct password once verified.
     """
     while True:
-        password = input(f"Password for {username}: ").strip()
+        password = input(center_wr_to_terminal_size(f"Password for {username}: ", colors=[Fore.BLUE])).strip()
         if not password:
-            print("Password cannot be empty.")
+            print(center_wr_to_terminal_size("Password cannot be empty.", colors=[Fore.RED]))
             continue
 
         # scramble username with password
         test_encrypted = scramble(username, password)
         if test_encrypted == encrypted_username and len(password) == len(username):
-            print("Password correct!")
+            print(center_wr_to_terminal_size("Password correct!", colors=[Fore.GREEN]))
             return password
         else:
-            print("Invalid password, try again.")
+            progress_bar("\nStarting Game...")
+            print(center_wr_to_terminal_size("Invalid password, try again.", colors=[Fore.RED]))
 
         wait(1)
         clear_prev_n_lines(2)
@@ -105,45 +108,48 @@ def register_new_user(username: str):
     Returns the confirmed password.
     """
     while True:
-        password = input(f"Enter new password for {username}: ").strip()
-        confirm = input("Confirm password: ").strip()
+        password = input(center_wr_to_terminal_size(f"Enter new password for {username}: ", colors=[Fore.BLUE])).strip()
+        confirm = input(center_wr_to_terminal_size(f"Confirm password: ", colors=[Fore.BLUE])).strip()
         if not password:
-            print("Password cannot be empty.")
+            print(center_wr_to_terminal_size("Password cannot be empty.", colors=[Fore.RED]))
 
             wait(1)
             clear_prev_n_lines(3)
         elif len(password) != len(username):
-            print("Password must have the same length as username")
+            print(center_wr_to_terminal_size("Password must have the same length as username", colors=[Fore.RED]))
 
             wait(1)
             clear_prev_n_lines(3)
         elif password != confirm:
-            print("Passwords do not match. Try again.")
+            print(center_wr_to_terminal_size("Passwords do not match. Try again.", colors=[Fore.RED]))
 
             wait(1)
             clear_prev_n_lines(3)
         elif not check_validity(password):
-            print('Invalid password. Please only use alphanumeric symbols')
+            print(center_wr_to_terminal_size('Invalid password. Please only use alphanumeric symbols', colors=[Fore.RED]))
 
             wait(1)
             clear_prev_n_lines(3)
         else:
-            print("Password confirmed!")
+            print(center_wr_to_terminal_size("Password confirmed!", colors=[Fore.GREEN]))
 
             wait(1)
             clear_prev_n_lines(3)
+
+            progress_bar("\nStarting Game...")
             return password
         
 def get_valid_username():
-    username = input('Username (leave blank for guest): [10-30 characters] -> ')
+    username = input(center_wr_to_terminal_size('Username (leave blank for guest): [10-30 characters] -> ', colors=[Fore.BLUE]))
 
     if not username:
+        progress_bar("\nStarting Game...")
         return 'GUEST'
 
     while not check_validity(username):
-        print('Sorry, that is an invalid username...')
+        print(center_wr_to_terminal_size('Sorry, that is an invalid username...', colors=[Fore.RED]))
         wait(1)
         clear_prev_n_lines(2)
-        username = input('Username (leave blank for guest): [10-30 characters] -> ') 
+        username = input(center_wr_to_terminal_size('Username (leave blank for guest): [10-30 characters] -> ', colors=[Fore.BLUE]))
 
     return username
