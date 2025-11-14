@@ -65,25 +65,40 @@ class Entity:
     The following functions contain the simple getters for all the basic class attributes
     """
     def get_burnable(self):
+        """
+        Returns: A boolean indicating if an object is burnable or not
+        """
         return self._is_burnable
 
     def get_collideable(self):
-        return (
-            self._is_collideable or self._is_pushable
-        )  # all pushables are collideable
+        """
+        Returns: A boolean indicating if an object is collideable or not
+        """
+        return self._is_collideable or self._is_pushable
 
     def get_collectable(self):
-        return (
-            self._is_collectable or self._is_storable
-        )  # all storables are collectables
+        """
+        Returns: A boolean indicating if an object is collectible or not
+        """
+        return self._is_collectable or self._is_storable
+          
 
     def get_storable(self):
+        """
+        Returns: A boolean indicating if an object is storable or not
+        """
         return self._is_storable
 
     def get_deadly(self):
+        """
+        Returns: A boolean indicating if an object is deadly or not
+        """
         return self._is_deadly
 
     def get_pushable(self):
+        """
+        Returns: A boolean indicating if an object is pushable or not
+        """
         return self._is_pushable
 
     # * Complex Getters
