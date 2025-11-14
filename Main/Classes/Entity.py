@@ -88,7 +88,7 @@ class Entity:
         """
         return self._is_deadly
 
-    def get_pushable(self):
+    def get_pushable(self, pusher):
         """Returns: A boolean indicating if an object is pushable or not
         """
         return self._is_pushable
