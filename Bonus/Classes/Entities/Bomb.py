@@ -20,6 +20,11 @@ class Bomb(Entity):
     _is_passive = True
 
     def __init__(self, pos: list[int], on_grid: Grid, ascii: str = "!"):
+        """Initializes a Bomb object.
+        
+        Args:
+            See base class.
+        """
         super().__init__(pos, on_grid, ascii)
         self._active = False
         self._bomb_radius = 3

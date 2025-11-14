@@ -22,8 +22,23 @@ WATER = items["Water"]
 
 
 class Player(Entity):
+    """
+    This Entity is the main controllable character of the game.
+
+    Attributes: 
+        __item: The item the player is holding
+        __mushroom_count: The number of mushrooms that a Player has collected
+        __is_dead: Indicates if the Player is dead
+        Additionally, see parent class.
+
+    """
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None):
-        super().__init__(pos, on_grid, ascii)
+        """ Initializes a Player with a given item
+
+        Args:
+            item: The item the player is holding 
+            Additionally, see parent class.
+        """        super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
         self.__is_dead = False
@@ -31,22 +46,16 @@ class Player(Entity):
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self):
+        """
+        Returns: The item the player is holding
+        """
         return self.__item
 
-    def set_item(self, item: Entity | None):
-        # specific check for bomb:
-
-        if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
-            self.get_item().increment_radius()
-            return
-
-        self.__item = item
-
     def get_mushroom_count(self):
+        """
+        Returns: The number of mushrooms the player has collected 
+        """
         return self.__mushroom_count
-
-    def increment_mushroom_count(self):
-        self.__mushroom_count += 1
 
     def get_is_dead(self):
         return self.__is_dead
@@ -54,6 +63,14 @@ class Player(Entity):
     # * Complex Getters
 
     def get_movement_validity(self, direction: str, r: int, c: int):
+        """Overrides parent method. Allows player to move in previously invalid directions if holding certain items
+
+        Args:
+            See parent class
+        
+        Returns:
+            See parent class
+        """
         if not self.in_bounds(r, c):
             return False
 
@@ -74,8 +91,30 @@ class Player(Entity):
         return super().get_movement_validity(direction, r, c)
 
     # * Simple Setters
+    def set_item(self, item: Entity | None):
+        """
+        Sets an item to be held by the player
+
+        Args: 
+            item: The Entity for the player to hold
+        """
+        # specific check for bomb:
+        if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
+            self.get_item().increment_radius()
+            return
+
+        self.__item = item
+    
+    def increment_mushroom_count(self):
+        """
+        Increases mushroom count by one
+        """
+        self.__mushroom_count += 1
 
     def kill(self):
+        """
+        Sets the player status to dead
+        """
         killer = self.get_entity_below()
 
         if isinstance(killer, BEE):
@@ -88,6 +127,9 @@ class Player(Entity):
     # * Complex Setters
 
     def use_item(self):
+        """
+        Uses the current held item
+        """
         equipped = self.get_item()
         if not equipped:
             return
@@ -98,6 +140,9 @@ class Player(Entity):
         self.set_item(None)
 
     def collect_item(self):
+        """
+        If on top of an item, collects it. Otherwise, does nothing
+        """
         item = self.get_entity_below()
 
         if not item:
@@ -109,6 +154,9 @@ class Player(Entity):
             item.destroy()
 
     def collect_shroom(self):
+        """
+        Collects the shroom below the player if it exists
+        """
         shroom = self.get_entity_below()
 
         if not shroom:
@@ -120,6 +168,17 @@ class Player(Entity):
             shroom.destroy()
 
     def set_pos(self, direction: str):
+        """
+        Moves the player in desired direction, checks if movement kills them
+
+        Activated any triggers if there are.
+
+        Args:
+            direction: 'wasd', the desired direction of movement
+
+        Returns: 
+            True if the Player was able to move, False if not. Returns nothing if player dies
+        """
         if super().set_pos(direction):
             entity_below = self.get_entity_below()
             if entity_below:

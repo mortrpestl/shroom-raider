@@ -8,6 +8,9 @@ from Utils.general_utils import wait
 class Ice(Entity):
     """An entity that when pushed, continues until hitting an immovable entity.
     Like a rock, turns the tile below it to ice when the ice stops and it happens to be above water when this happens.
+
+    Attributes:
+        See parent class.
     """
 
     # * Attributes
@@ -21,7 +24,10 @@ class Ice(Entity):
     # * Complex Getters
 
     def get_pushable(self, pusher: Entity):
-        """Adds the logic for sliding for the pushable logic.
+        """Overrides parent method. Adds the logic for sliding for the pushable logic.
+
+        Args:
+            See parent class.
         """
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Ice)):
@@ -30,6 +36,11 @@ class Ice(Entity):
             return False
 
     def get_movement_validity(self, direction: str, r: int, c: int):
+        """Checks if a Rock can be pushed in a certain direction
+
+        Args:
+            See parent class.
+        """
         if not self.in_bounds(r, c):
             return False
 
@@ -50,7 +61,16 @@ class Ice(Entity):
 
     def set_pos(self, direction):
         """Adds 'water turns to paved tile' mechanic to ice
+  
+        Continuously set position until stopped. If there is water below it, it paved the water.
+
+        Args:
+            direction: A string containing the direction the ice continues to move in
+
+        Returns:
+            moved: Whether the entity has moved or not
         """
+
         entities = import_entities({"Water", "PavedTile"})
         moved = False
         while super().set_pos(direction):
