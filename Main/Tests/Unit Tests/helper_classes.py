@@ -1,9 +1,9 @@
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 
+
 class DummyPlayer(Player):
-    """
-    A Player subclass that never collects mushrooms and never dies.
+    """A Player subclass that never collects mushrooms and never dies.
     Useful for testing non-winning/non-losing scenarios.
     """
 
@@ -18,8 +18,7 @@ class DummyPlayer(Player):
 
 
 class WinPlayer(Player):
-    """
-    A Player subclass that immediately wins (collects all mushrooms).
+    """A Player subclass that immediately wins (collects all mushrooms).
     """
 
     def __init__(self, on_grid: Grid, pos=[0, 0], ascii="L", item=None):
@@ -34,8 +33,7 @@ class WinPlayer(Player):
 
 
 class LosePlayer(Player):
-    """
-    A Player subclass that is always dead.
+    """A Player subclass that is always dead.
     """
 
     def __init__(self, pos=[0, 0], on_grid: Grid = None, ascii="L", item=None):

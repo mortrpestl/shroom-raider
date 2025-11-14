@@ -14,21 +14,24 @@ class Entity:
         __pos: [r, c], the row and column of the Grid where the entity is located
         __on_grid: The Grid object that contains the entity
         __ascii: The ascii symbol that represents the entity
+
     """
+
     _is_collideable = False
-    _is_collectable = False  
-    _is_storable = False 
-    _is_pushable = False 
-    _is_deadly = False  
-    _is_burnable = False  
+    _is_collectable = False
+    _is_storable = False
+    _is_pushable = False
+    _is_deadly = False
+    _is_burnable = False
 
     def __init__(self, pos: list, on_grid, ascii: str):
         """Initializes an Entity object
 
-        Args: 
+        Args:
             pos: [r, c], the row and column of the entity on the given Grid
             on_grid: The grid which contains this entity
             ascii: The ascii character which corresponds to this entity
+
         """
         self.__pos = list(pos)
         self.__on_grid = on_grid
@@ -37,81 +40,70 @@ class Entity:
     # * Simple Getters
 
     def get_ascii(self):
-        """
-        Returns: The ascii character representation of the Entity
+        """Returns: The ascii character representation of the Entity
         """
         return self.__ascii
 
     def get_on_grid(self):
-        """
-        Returns: The Grid object that this Entity resides in
+        """Returns: The Grid object that this Entity resides in
         """
         return self.__on_grid
 
     def get_pos(self):
-        """
-        Returns: The position [r, c] of this Entity in its Grid
+        """Returns: The position [r, c] of this Entity in its Grid
         """
         return self.__pos
 
     def get_obj_in_coord(self, r: int, c: int):
-        """
-        Returns: The object on coordinate [r, c] on the same Grid as this Entity
+        """Returns: The object on coordinate [r, c] on the same Grid as this Entity
         """
         return self.__on_grid.get_obj_in_coord(r, c)
-
 
     """
     The following functions contain the simple getters for all the basic class attributes
     """
+
     def get_burnable(self):
-        """
-        Returns: A boolean indicating if an object is burnable or not
+        """Returns: A boolean indicating if an object is burnable or not
         """
         return self._is_burnable
 
     def get_collideable(self):
-        """
-        Returns: A boolean indicating if an object is collideable or not
+        """Returns: A boolean indicating if an object is collideable or not
         """
         return self._is_collideable or self._is_pushable
 
     def get_collectable(self):
-        """
-        Returns: A boolean indicating if an object is collectible or not
+        """Returns: A boolean indicating if an object is collectible or not
         """
         return self._is_collectable or self._is_storable
-          
 
     def get_storable(self):
-        """
-        Returns: A boolean indicating if an object is storable or not
+        """Returns: A boolean indicating if an object is storable or not
         """
         return self._is_storable
 
     def get_deadly(self):
-        """
-        Returns: A boolean indicating if an object is deadly or not
+        """Returns: A boolean indicating if an object is deadly or not
         """
         return self._is_deadly
 
     def get_pushable(self):
-        """
-        Returns: A boolean indicating if an object is pushable or not
+        """Returns: A boolean indicating if an object is pushable or not
         """
         return self._is_pushable
 
     # * Complex Getters
 
-
     def in_bounds(self, r: int, c: int):
         """Checks if the Entity is within the bounds of its Grid
 
-        Args: 
+        Args:
             r, c: The row and column position of the Entity
 
         Returns:
             A boolean indicating if the Entity is within the bounds of its Grid
+
         """
         on_grid = self.get_on_grid()
         rows = len(on_grid.get_grid_obj_map())
@@ -129,8 +121,9 @@ class Entity:
             direction: "wasd", where the Entity intends to move
             r, c: The current row and column position of the Entity
 
-        Returns: 
+        Returns:
             A bool indicating if the Entity can move
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -145,7 +138,7 @@ class Entity:
         # Is the object pushable? then TRY to push that object.
         if target_obj.get_pushable(self):
             return target_obj.set_pos(
-                direction
+                direction,
             )  # If the target entity cannot move, then the current entity cannot too.
 
         # Is the object collideable, otherwise? then you cannot move to that.
@@ -155,16 +148,14 @@ class Entity:
         return True
 
     def get_entity_below(self):
-        """ 
-        Returns: The Entity that exists below this Entity in the Grid
+        """Returns: The Entity that exists below this Entity in the Grid
         """
         stack = self.get_on_grid().get_layers_from_coord(*self.get_pos())
         return stack[-2] if len(stack) > 1 else None
 
     # * Simple Setters
     def set_coordinate(self, r: int, c: int):
-        """
-        Sets the position of this Entity. DOES NOT MODIFY THE GRID
+        """Sets the position of this Entity. DOES NOT MODIFY THE GRID
         """
         self.__pos = [r, c]
 
@@ -173,11 +164,12 @@ class Entity:
     def set_pos(self, direction: str):
         """Moves the Entity on the Grid
 
-        Args: 
+        Args:
             direction: The direction that the Entity wants to move
 
         Returns:
             A boolean indicating if the move was successful
+
         """
         r, c = self.get_pos()
         on_grid = self.get_on_grid()
@@ -201,8 +193,7 @@ class Entity:
         return True  # The Entity has moved
 
     def destroy(self):
-        """
-        Destroys the Entity, and removes it from the Grid
+        """Destroys the Entity, and removes it from the Grid
         """
         on_grid_stck = self.get_on_grid().get_layers_from_coord(*self.get_pos())
         for i in range(-1, -len(on_grid_stck) - 1, -1):

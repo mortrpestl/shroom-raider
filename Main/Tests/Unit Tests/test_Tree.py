@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -12,8 +12,7 @@ ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "Pave
 
 @pytest.fixture
 def large_grid():
-    """
-    Provide an empty 5x5 grid for testing Tree behavior.
+    """Provide an empty 5x5 grid for testing Tree behavior.
     """
     map_data = """
 .....
@@ -26,8 +25,7 @@ def large_grid():
 
 
 def test_initialization_stores_position_and_flags(large_grid):
-    """
-    Verify tree construction and basic attributes.
+    """Verify tree construction and basic attributes.
 
     - Create a Tree at a specific coordinate on an empty grid.
     - Ensure Tree stores its position and grid reference.
@@ -44,8 +42,7 @@ def test_initialization_stores_position_and_flags(large_grid):
 
 
 def test_tree_chop_removes_tree_from_grid(large_grid):
-    """
-    Ensure chopping a tree removes it from the grid.
+    """Ensure chopping a tree removes it from the grid.
 
     - Place a Tree at a grid cell.
     - Verify the top object is the Tree.
@@ -61,8 +58,7 @@ def test_tree_chop_removes_tree_from_grid(large_grid):
 
 
 def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
-    """
-    Burning affects only orthogonally adjacent trees.
+    """Burning affects only orthogonally adjacent trees.
 
     - Place several Trees: two adjacent, one diagonal, one distant.
     - Burn the first Tree.
@@ -90,8 +86,7 @@ def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
 
 
 def test_tree_burn_following_orthogonal_chain_only(large_grid):
-    """
-    Burning follows orthogonal chains only.
+    """Burning follows orthogonal chains only.
 
     - Create a chain of Trees: first two orthogonally connected, next ones diagonal.
     - Burn from the first Tree.

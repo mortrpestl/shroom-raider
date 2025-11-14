@@ -1,15 +1,15 @@
-from Classes.Entity import Entity
 import Utils.sounds as s
+from Classes.Entity import Entity
 
 
 class Flash(Entity):
-    """
-    When picked up, can be used to light up the map temporarily.
+    """When picked up, can be used to light up the map temporarily.
 
     Args:
-        _active: 
+        _active:
         _placed_pos: Determines the position where the flash will propagate.
         _current_radius: The current radius of the flashlight.
+
     """
 
     # * Attributes

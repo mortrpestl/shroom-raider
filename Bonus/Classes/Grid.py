@@ -1,18 +1,16 @@
 import sys
-from Classes.Entity import Entity
-from Classes.Entities.import_entities import import_entities
-from Utils.animator import load_in
-from Utils.general_utils import clear_terminal, center_wr_to_terminal_size
-from Utils.Enums import DisplayMode
-from colorama import Fore, Back, Style
-from wcwidth import wcswidth
 
-from Utils.general_utils import clear_terminal, center_wr_to_terminal_size
+from Classes.Entities.import_entities import import_entities
+from Classes.Entity import Entity
+from colorama import Back, Fore, Style
+from Utils.animator import load_in
+from Utils.Enums import DisplayMode
+from Utils.general_utils import center_wr_to_terminal_size, clear_terminal
+from wcwidth import wcswidth
 
 
 class Grid:
-    """
-    The grid is the playarea in which the players and all game objects reside
+    """The grid is the playarea in which the players and all game objects reside
 
     It is represented as a 3D data structure, a 2D list with each coordinate containing a stack of entities
 
@@ -25,7 +23,7 @@ class Grid:
         __is_cleared: Indicates if a certain Grid has been cleared or not
         __display_mode: The display mode of the Grid
         __metadata: Contains data on darkness and Bees
-        __dark_radius, __bee_data: Contained in metadata. Indicates how to handle level darkness and bee behaviors 
+        __dark_radius, __bee_data: Contained in metadata. Indicates how to handle level darkness and bee behaviors
 
         __grid_vis_map: 2D list of characters that represent the Grid
         __map_rows, __map_cols: The number of rows and columns that the Grid contains
@@ -39,7 +37,9 @@ class Grid:
         __initialization_map: Maps each valid character to their corresponding object and visual representation
 
         __active_flashes, __active_flames, __active_smokes, __active_blasts: Used to store frames for animations
+
     """
+
     GRID_LIST = dict()
     EMPTY_TILES = "."  # default empty tiles
 
@@ -50,7 +50,6 @@ class Grid:
         mode: DisplayMode = DisplayMode.EMOJI,
         metadata: dict | None = None,
     ):
-
         """Initializes a Grid object based on a given stage
 
         Args:
@@ -58,6 +57,7 @@ class Grid:
             map_data: A string representation of the stage
             mode: The displaymode of the grid
             metadata: Data concerning darkness and bees
+
         """
         self.__name = name
         self.__player_pos = [0, 0]
@@ -138,105 +138,89 @@ class Grid:
     # * Simple Getters
 
     def get_player(self):
-        """
-        Returns: The Player entity on the Grid
+        """Returns: The Player entity on the Grid
         """
         return self.get_obj_in_coord(*self.__player_pos)
 
     def get_player_pos(self):
-        """
-        Returns: The Player entity's position on the Grid
+        """Returns: The Player entity's position on the Grid
         """
         return self.__player_pos
 
     def get_grid_obj_map(self):
-        """
-        Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
+        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
         """
         return self.__grid_obj_map
 
     def get_grid_user_display(self, r: int, c: int):
-        """
-        Args:
+        """Args:
             r, c: The row and column coordinate of the cell being accessed
-        
-        Returns:  
+
+        Returns:
             The user display for that cell
+
         """
         return self.__grid_user_display[r][c]
 
     def get_grid_color_map(self):
-        """
-        Returns: The color display for the grid
+        """Returns: The color display for the grid
         """
         return self.__grid_color_display
 
     def get_layers_from_coord(self, r: int, c: int):
-        """
-        Returns: The stack of a certain coordinate, containing the entities at that coordinate
+        """Returns: The stack of a certain coordinate, containing the entities at that coordinate
         """
         return self.__grid_obj_map[r][c]
 
     def get_total_mushrooms(self):
-        """
-        Returns: The integer amount of total mushrooms contained in the Grid
+        """Returns: The integer amount of total mushrooms contained in the Grid
         """
         return self.__total_mushrooms
 
     def get_dark_radius(self):
-        """
-        Returns: The size of the visible section for a given Grid
+        """Returns: The size of the visible section for a given Grid
         """
         return self.__dark_radius
 
     def get_bee_data(self):
-        """
-        Returns: The lag and count of bees for this Grid
+        """Returns: The lag and count of bees for this Grid
         """
         return self.__bee_data
 
     def get_is_cleared(self):
-        """
-        Returns: A boolean indicating if the current Grid has been cleared
+        """Returns: A boolean indicating if the current Grid has been cleared
         """
         return self.__is_cleared
 
     def get_display_mode(self):
-        """
-        Returns: The display mode of the current Grid
+        """Returns: The display mode of the current Grid
         """
         return self.__display_mode
 
     def get_metadata(self):
-        """
-        Returns: The metadata of the current Grid
+        """Returns: The metadata of the current Grid
         """
         return self.__metadata
 
     def get_active_flashes(self):
-        """
-        Used for animation
+        """Used for animation
         """
         return self.__active_flashes
 
     def get_active_flames(self):
-        """
-        Used for animation
+        """Used for animation
         """
         return self.__active_flames
 
     def get_active_smokes(self):
-        """
-        Used for animation
+        """Used for animation
         """
         return self.__active_smokes
 
     def get_active_blasts(self):
-        """
-        Used for animation
+        """Used for animation
         """
         return self.__active_blasts
-
 
     @staticmethod
     def get_grid_by_name(name: str):
@@ -266,6 +250,7 @@ class Grid:
             layer: The layer of the stack in which the entity is located
 
         Returns: An entity or None
+
         """
         return self.get_grid_obj_map()[r][c].pop(layer)
 
@@ -278,21 +263,23 @@ class Grid:
             c: The column being accessed
             obj: The entity being added to the coordinate
             layer: The layer that the entity is being added to
+
         """
         return self.get_grid_obj_map()[r][c].append(entity)
 
     def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
         """Gets the object at a certain coordinate and layer
 
-        Args: 
+        Args:
             r, c: The coordinate being accessed
             layer: The layer of that coordinate being accessed
-        
-        Returns: 
+
+        Returns:
             The object at that coordinate
 
         Raises:
             IndexError: If the coordinate is out of Grid bounds
+
         """
         if not (0 <= r < self.__map_rows and 0 <= c < self.__map_cols):
             raise IndexError(f"coordinate {r, c} out of bounds")
@@ -302,11 +289,12 @@ class Grid:
     def get_display_of_obj(self, obj: Entity | None | str):
         """Gets the display representation of an object
 
-        Args: 
+        Args:
             obj: The given object
 
         Returns:
             The display symbol of the object
+
         """
         offset = self.get_display_mode().value
         if isinstance(obj, Entity):
@@ -327,9 +315,10 @@ class Grid:
 
     def set_player_pos(self, pos: list[int]):
         """Sets the player position
-        
+
         Args:
             pos: The position of the player
+
         """
         self.__player_pos = pos
 
@@ -339,6 +328,7 @@ class Grid:
         Args:
             r, c: The coordinate being accessed
             symbol: The symbol to be set
+
         """
         self.__grid_user_display[r][c] = symbol
 
@@ -348,6 +338,7 @@ class Grid:
         Args:
             r, c: The coordinate being accessed
             color: The color of the coordinate
+
         """
         self.__grid_color_display[r][c] = color
 
@@ -378,7 +369,6 @@ class Grid:
         self.clear_all_smoke()
         self.__active_flames = set()
 
-
     # * Complex Setters
     def add_layer_to_coord(self, r: int, c: int, entity: Entity):
         """Adds an entity to the Grid at a certain coordinate
@@ -387,6 +377,7 @@ class Grid:
             r: The row being accessed
             c: The column being accessed
             obj: The entity being added to the coordinate
+
         """
         self.get_grid_obj_map()[r][c].append(entity)
 
@@ -405,6 +396,7 @@ class Grid:
 
         Raises:
             ValueError: If the given symbol is not a valid symbol
+
         """
         if symbol in Grid.EMPTY_TILES:
             return None, "　", Back.GREEN
@@ -433,7 +425,8 @@ class Grid:
         """Activates a current flash
 
         Args:
-            flash: The flash being accessed 
+            flash: The flash being accessed
+
         """
         if flash not in self.__active_flashes:
             self.__active_flashes.append(flash)
@@ -455,13 +448,14 @@ class Grid:
     # * Visualization Helpers
     def __compute_display_for_cell(self, r: int, c: int, obj: Entity | None):
         """Computes the display and color of a cell
-        
-        Args: 
+
+        Args:
             r, c: The coordinate of the cell
             obj: The topmost Entity at that cell
 
         Returns:
             The display of the object at the cell, and the color of the cell
+
         """
         display, color = list(self.get_display_of_obj(obj).values()) if obj else ["　", Back.GREEN]
 
@@ -503,12 +497,13 @@ class Grid:
 
         Args:
             mode: Indicates how the visualization should be formatted
+
         """
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj = self.get_obj_in_coord(r, c)
                 self.__grid_user_display[r][c], self.__grid_color_display[r][c] = self.__compute_display_for_cell(
-                    r, c, obj
+                    r, c, obj,
                 )
 
     def get_vis_map_as_str(self):
@@ -519,11 +514,12 @@ class Grid:
 
         Returns:
             A multi-line string representation of the Grid based on the given mode
+
         """
         self.visualize_map()
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, test_mode: bool = False, f: bool=False):
+    def render(self, test_mode: bool = False, f: bool = False):
         """Prints the Grid and GUI for the user
 
         Args:
@@ -531,6 +527,7 @@ class Grid:
             f: Flag indicating if this is first time Grid has been rendered
         Returns:
             A boolean indicating if the game has ended
+
         """
         p = self.get_player()
         self.update_all_flashes()
@@ -554,7 +551,7 @@ class Grid:
         # * TITLE DISPLAY
         span = max((wcswidth(self.__grid_user_display[0]) - 3) // 4, 1)
         spanner = f"{Fore.GREEN}\nx{'-' * span}{'=' * span}{{🍄}}{'=' * span}{'-' * span}x\n{Style.RESET_ALL}"
-        with open("Assets/UI/GameProperArt.txt", "r", encoding="utf+8") as art:
+        with open("Assets/UI/GameProperArt.txt", encoding="utf+8") as art:
             title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
             title_display.append(spanner)
 

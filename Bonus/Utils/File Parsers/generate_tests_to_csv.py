@@ -1,4 +1,6 @@
 import os
+import pathlib
+
 import pandas as pd
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +21,7 @@ for folder in os.listdir(logs_dir):
 
     def read_if_exists(filename):
         path = os.path.join(folder_path, filename)
-        if os.path.exists(path):
+        if pathlib.Path(path).exists():
             with open(path, encoding="utf-8") as f:
                 return f.read().strip()
         return ""

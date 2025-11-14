@@ -1,5 +1,6 @@
-from pygame import mixer as m
 from random import randint
+
+from pygame import mixer as m
 
 # ! REGULAR GAME
 

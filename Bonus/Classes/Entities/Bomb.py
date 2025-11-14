@@ -1,18 +1,18 @@
+import Utils.sounds as s
 from Classes.Entity import Entity
 from Classes.Grid import Grid
 from Utils.general_utils import wait
-import Utils.sounds as s
 
 
 class Bomb(Entity):
-    """
-    Handles entities that destroy collidable surroundings when exploding.
+    """Handles entities that destroy collidable surroundings when exploding.
     Also handles all bomb stacking functionality.
 
     Args:
         _active : A boolean that lets the bomb placed activate (then deactivate forever after being dropped).
         _bomb_radius : An int that stores how far the bomb affects its surroundings.
         _placed_pos : A pair of ints that takes note of where a bomb is dropped / triggered by the player.
+
     """
 
     _is_collectable = True
@@ -42,8 +42,7 @@ class Bomb(Entity):
         self._bomb_radius += 3
 
     def use(self):
-        """
-        Activates the bomb at the player's position and destroys nearby entities.
+        """Activates the bomb at the player's position and destroys nearby entities.
         """
         on_grid = self.get_on_grid()
         pr, pc = on_grid.get_player_pos()

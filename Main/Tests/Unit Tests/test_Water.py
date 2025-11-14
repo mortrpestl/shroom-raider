@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -13,8 +13,7 @@ ENTITIES = import_entities({"Player", "Water"})
 
 @pytest.fixture
 def test_grid():
-    """
-    * Verify: Provides a 5x5 test grid with Player starting at (2,2)
+    """* Verify: Provides a 5x5 test grid with Player starting at (2,2)
     """
     map_data = """.....
 .....
@@ -25,8 +24,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """
-    * Verify: Water is not collideable, not collectable, and deadly
+    """* Verify: Water is not collideable, not collectable, and deadly
     """
     water = ENTITIES["Water"]([0, 0], test_grid)
     assert not water.get_collideable()
@@ -35,8 +33,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_player_moving_into_water_is_deadly(test_grid):
-    """
-    * Verify: Player moving onto Water cell detects deadly interaction
+    """* Verify: Player moving onto Water cell detects deadly interaction
     """
     g = test_grid
     player = g.get_player()

@@ -1,18 +1,18 @@
-import sys
 import io
-import os
 import json
+import os
+import pathlib
+import sys
 from argparse import ArgumentParser as ap
-import Utils.sounds as s
+
 import Utils.movement as m
-from Utils.Enums import ExitCodes
-
-from Classes.Grid import Grid
-from Classes.Entities.Player import Player
+import Utils.sounds as s
 from Classes.Entities.Bomb import Bomb
-
-from Utils.animator import progress_bar, load_in, typewriter
+from Classes.Entities.Player import Player
+from Classes.Grid import Grid
 from colorama import Fore
+from Utils.animator import load_in, progress_bar, typewriter
+from Utils.Enums import ExitCodes
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -31,8 +31,8 @@ def check_win_condition(P: Player, G: Grid):
     Args:
         P: A Player Entity
         G: A Grid object
-    """
 
+    """
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
@@ -45,6 +45,7 @@ def reset(level: str):
 
     Returns:
         A Grid object that contains the reset level, and a Player entity on that Grid
+
     """
     global G, P
     G = Grid("test", level)
@@ -61,6 +62,7 @@ def parser(inst: str, P: Player, G: Grid, level: str, reset_only: bool):
         G: The current Grid object
         level: A string representation of the ORIGINAL stage
         reset_only: A boolean indicating if moves other than reset can be played
+
     """
     global MOVES_MADE
 
@@ -88,9 +90,7 @@ def parser(inst: str, P: Player, G: Grid, level: str, reset_only: bool):
         if moved:
             MOVES_MADE += 1
     elif inst == "p":
-        if P.get_item() is None:
-            P.collect_item()
-        elif isinstance(P.get_item(), Bomb) and isinstance(P.get_entity_below(), Bomb):
+        if P.get_item() is None or (isinstance(P.get_item(), Bomb) and isinstance(P.get_entity_below(), Bomb)):
             P.collect_item()
         else:
             return  # no overwriting items
@@ -107,12 +107,13 @@ def parser(inst: str, P: Player, G: Grid, level: str, reset_only: bool):
 
 
 def write_report(G: Grid, P: Player, win: bool, dead: bool):
-    """Creates a report of the played game after completion of a level. 
+    """Creates a report of the played game after completion of a level.
 
     Args:
         P: The current Player entity
         G: The current Grid object
         win, dead: Indicate whether the player has won the game or has died
+
     """
     global REPORT_FILE, MOVES_MADE
     if not REPORT_FILE:
@@ -130,14 +131,12 @@ def write_report(G: Grid, P: Player, win: bool, dead: bool):
             f.flush()
             os.fsync(f.fileno())
         try:
-            os.replace(tmp, REPORT_FILE)
+            pathlib.Path(tmp).replace(REPORT_FILE)
         except Exception:
             with open(REPORT_FILE, "w", encoding="utf-8") as f:
                 json.dump(payload, f)
     except Exception as e:
         print(f"Failed to write report file {REPORT_FILE}: {e}")
-
-
 
 
 def main():
@@ -193,7 +192,7 @@ def main():
 
                 if G.get_is_cleared():
                     G.render(test_mode=ENABLE_TEST_MODE)
-                    with open("Assets/UI/ClearText.txt", "r", encoding="utf+8") as text:
+                    with open("Assets/UI/ClearText.txt", encoding="utf+8") as text:
                         load_in("\n" + text.read(), 2, colors=[Fore.GREEN], fx_map="✩･ﾟ.")
                     typewriter("Way to go! Onto the next area...", colors=[Fore.GREEN])
                     write_report(G, P, True, False)
@@ -201,7 +200,7 @@ def main():
                     sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
                     # G.render(test_mode=ENABLE_TEST_MODE)
-                    with open("Assets/UI/DefeatText.txt", "r", encoding="utf+8") as text:
+                    with open("Assets/UI/DefeatText.txt", encoding="utf+8") as text:
                         load_in("\n" + text.read(), 2, colors=[Fore.RED], fx_map="Xx.")
                     typewriter("Don't give up yet! There're still shrooms to raid...", colors=[Fore.RED])
                     write_report(G, P, False, True)
@@ -215,5 +214,5 @@ if __name__ == "__main__":
     P, G = None, None
     if ENABLE_TEST_MODE:
         # test-mode logging setup (unchanged)
-        os.makedirs("Logs", exist_ok=True)
+        pathlib.Path("Logs").mkdir(exist_ok=True, parents=True)
     main()

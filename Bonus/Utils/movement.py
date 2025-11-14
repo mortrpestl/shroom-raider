@@ -1,5 +1,5 @@
-from keyboard import is_pressed as p
 from keyboard import block_key as b
+from keyboard import is_pressed as p
 from keyboard import unblock_key as ub
 from Utils.sounds import menu_sound
 

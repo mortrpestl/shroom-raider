@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-import sys
 import io
 import os
+import pathlib
+import sys
 from argparse import ArgumentParser as ap
-from Classes.Grid import Grid
+
 from Classes.Entities.Player import Player
+from Classes.Grid import Grid
 
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -21,8 +23,8 @@ def check_win_condition(P: Player, G: Grid):
     Args:
         P: A Player Entity
         G: A Grid object
-    """
 
+    """
     if P.get_mushroom_count() == G.get_total_mushrooms():
         G.level_clear()
 
@@ -35,6 +37,7 @@ def reset(level: str):
 
     Returns:
         A Grid object that contains the reset level, and a Player entity on that Grid
+
     """
     global G, P
     G = Grid("test", level)
@@ -51,6 +54,7 @@ def parser(instructions: str, P: Player, G: Grid, level: str, reset_only: bool):
         G: The current Grid object
         level: A string representation of the ORIGINAL stage
         reset_only: A boolean indicating if moves other than reset can be played
+
     """
     global item_here, holding_anything
 
@@ -165,7 +169,7 @@ def main():
             print(
                 "Invalid arguments. Usage:\n"
                 "python3 shroom_raider.py -f <stage_file>\n"
-                "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>"
+                "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
             )
     else:
         print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
@@ -178,13 +182,13 @@ if __name__ == "__main__":
 
     if ENABLE_TEST_MODE:
         base_folder = "Logs"
-        os.makedirs(base_folder, exist_ok=True)
+        pathlib.Path(base_folder).mkdir(exist_ok=True, parents=True)
 
-        existing = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d)) and d.isdigit()]
+        existing = [d for d in os.listdir(base_folder) if pathlib.Path(os.path.join(base_folder, d)).is_dir() and d.isdigit()]
         run_number = max([int(d) for d in existing], default=0) + 1
 
         run_folder = os.path.join(base_folder, str(run_number))
-        os.makedirs(run_folder)
+        pathlib.Path(run_folder).mkdir(parents=True)
 
         with (
             open(f"{LEVEL_NAME}.txt", encoding="utf-8") as src,

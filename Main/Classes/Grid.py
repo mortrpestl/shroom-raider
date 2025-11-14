@@ -1,11 +1,11 @@
 import os
-from Classes.Entity import Entity
+
 from Classes.Entities.import_entities import import_entities
+from Classes.Entity import Entity
 
 
 class Grid:
-    """
-    The grid is the playarea in which the players and all game objects reside
+    """The grid is the playarea in which the players and all game objects reside
 
     It is represented as a 3D data structure, a 2D list with each coordinate containing a stack of entities
 
@@ -24,6 +24,7 @@ class Grid:
 
         __character_mapping: Maps each entity to their visual representation
         __initialization_map: Maps each valid character to their corresponding object and visual representation
+
     """
 
     # * Attributes
@@ -35,6 +36,7 @@ class Grid:
         Args:
             name: The name of the Grid
             map_data: A string representation of the stage
+
         """
         self.__name = name
         self.__player_pos = [0, 0]
@@ -83,32 +85,27 @@ class Grid:
     # * Simple Getters
 
     def get_player(self):
-        """
-        Returns: The Player entity on the Grid
+        """Returns: The Player entity on the Grid
         """
         return self.get_obj_in_coord(*self.__player_pos)
 
     def get_grid_obj_map(self):
-        """
-        Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
+        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
         """
         return self.__grid_obj_map
 
     def get_layers_from_coord(self, r: int, c: int):
-        """
-        Returns: The stack of a certain coordinate, containing the entities at that coordinate
+        """Returns: The stack of a certain coordinate, containing the entities at that coordinate
         """
         return self.__grid_obj_map[r][c]
 
     def get_total_mushrooms(self):
-        """
-        Returns: The integer amount of total mushrooms contained in the Grid
+        """Returns: The integer amount of total mushrooms contained in the Grid
         """
         return self.__total_mushrooms
 
     def get_is_cleared(self):
-        """
-        Returns: A boolean indicating if the current Grid has been cleared
+        """Returns: A boolean indicating if the current Grid has been cleared
         """
         return self.__is_cleared
 
@@ -123,6 +120,7 @@ class Grid:
             layer: The layer of the stack in which the entity is located
 
         Returns: An entity or None
+
         """
         return self.get_grid_obj_map()[r][c].pop(layer)
 
@@ -147,15 +145,16 @@ class Grid:
     def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
         """Gets the object at a certain coordinate and layer
 
-        Args: 
+        Args:
             r, c: The coordinate being accessed
             layer: The layer of that coordinate being accessed
-        
-        Returns: 
+
+        Returns:
             The object at that coordinate
 
         Raises:
             IndexError: If the coordinate is out of Grid bounds
+
         """
         if not (0 <= r < self.__map_rows and 0 <= c < self.__map_cols):
             raise IndexError(f"coordinate {r, c} out of bounds")
@@ -165,12 +164,13 @@ class Grid:
     def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji"):
         """Gets the display representation of an object
 
-        Args: 
+        Args:
             obj: The given object
             mode: The format of the display symbol
 
         Returns:
             The display symbol of the object
+
         """
         if mode == "emoji":
             offset = 0
@@ -200,6 +200,7 @@ class Grid:
             r: The row being accessed
             c: The column being accessed
             obj: The entity being added to the coordinate
+
         """
         self.get_grid_obj_map()[r][c].append(obj)
 
@@ -219,6 +220,7 @@ class Grid:
 
         Raises:
             ValueError: If the given symbol is not a valid symbol
+
         """
         if symbol == ".":
             return None, "　"
@@ -241,6 +243,7 @@ class Grid:
 
         Args:
             mode: Indicates how the visualization should be formatted
+
         """
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
@@ -259,6 +262,7 @@ class Grid:
 
         Returns:
             A multi-line string representation of the Grid based on the given mode
+
         """
         grid_str_rep = []
 
@@ -278,6 +282,7 @@ class Grid:
 
         Returns:
             A boolean indicating if the game has ended
+
         """
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()

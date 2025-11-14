@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -22,8 +22,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """
-    * Verify: Axe initializes with correct position and flags
+    """* Verify: Axe initializes with correct position and flags
     """
     g = test_grid
     axe = ENTITIES["Axe"]([0, 0], g)
@@ -34,8 +33,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_player_can_collect_axe(test_grid):
-    """
-    * Verify: Player can move onto Axe and collect it, removing it from the grid
+    """* Verify: Player can move onto Axe and collect it, removing it from the grid
     """
     g = test_grid
     player = g.get_player()
@@ -51,8 +49,7 @@ def test_player_can_collect_axe(test_grid):
 
 
 def test_player_uses_axe_on_tree(test_grid):
-    """
-    * Verify: Player uses Axe on a Tree, tree is removed, Axe is consumed
+    """* Verify: Player uses Axe on a Tree, tree is removed, Axe is consumed
     """
     g = test_grid
     player = g.get_player()
@@ -69,8 +66,7 @@ def test_player_uses_axe_on_tree(test_grid):
 
 
 def test_player_tries_to_use_axe_on_two_trees(test_grid):
-    """
-    * Verify: Player with Axe can only chop one Tree at a time, Axe is consumed after first
+    """* Verify: Player with Axe can only chop one Tree at a time, Axe is consumed after first
     """
     g = test_grid
     player = g.get_player()

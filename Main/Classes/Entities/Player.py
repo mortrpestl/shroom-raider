@@ -1,6 +1,6 @@
+from Classes.Entities.import_entities import import_entities
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-from Classes.Entities.import_entities import import_entities
 
 needed = {"Flamethrower", "Axe", "Mushroom"}
 items = import_entities(needed)
@@ -15,22 +15,23 @@ MUSHROOM = items["Mushroom"]
 
 
 class Player(Entity):
-    """
-    This Entity is the main controllable character of the game
+    """This Entity is the main controllable character of the game
 
-    Attributes: 
+    Attributes:
         __item: The item the player is holding
         __mushroom_count: The number of mushrooms that a Player has collected
         __is_dead: Indicates if the Player is dead
 
         For other Attributes:
             See parent class
+
     """
+
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None):
-        """ Initializes a Player with a given item
+        """Initializes a Player with a given item
 
         Args: (only Args not passed to parent class are indicated)
-            item: The item the player is holding 
+            item: The item the player is holding
         """
         super().__init__(pos, on_grid, ascii)
         self.__item = item
@@ -40,20 +41,17 @@ class Player(Entity):
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self):
-        """
-        Returns: The item the player is holding
+        """Returns: The item the player is holding
         """
         return self.__item
 
     def get_mushroom_count(self):
-        """
-        Returns: The number of mushrooms the player has collected 
+        """Returns: The number of mushrooms the player has collected
         """
         return self.__mushroom_count
 
     def get_is_dead(self):
-        """
-        Returns: A bool indicating if the player is dead
+        """Returns: A bool indicating if the player is dead
         """
         return self.__is_dead
 
@@ -64,9 +62,10 @@ class Player(Entity):
 
         Args:
             See parent class
-        
+
         Returns:
             See parent class
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -89,37 +88,33 @@ class Player(Entity):
     # * Simple Setters
 
     def kill(self):
-        """
-        Sets the player status to dead
+        """Sets the player status to dead
         """
         self.__is_dead = True
 
     def set_item(self, item: Entity | None):
-        """
-        Sets an item to be held by the player
+        """Sets an item to be held by the player
 
-        Args: 
+        Args:
             item: The Entity for the player to hold
+
         """
         self.__item = item
 
     def increment_mushroom_count(self):
-        """
-        Increases mushroom count
+        """Increases mushroom count
         """
         self.__mushroom_count += 1
-    
+
     def use_item(self):
-        """
-        Removes the current held item
+        """Removes the current held item
         """
         self.__item = None
 
     # * Complex Setters
 
     def collect_item(self):
-        """
-        If on top of an item, collects it. Else, does nothing
+        """If on top of an item, collects it. Else, does nothing
         """
         item = self.get_entity_below()
 
@@ -131,8 +126,7 @@ class Player(Entity):
             item.destroy()
 
     def collect_shroom(self):
-        """
-        Collects the shroom below the player if it exists
+        """Collects the shroom below the player if it exists
         """
         shroom = self.get_entity_below()
 
@@ -144,14 +138,14 @@ class Player(Entity):
             shroom.destroy()
 
     def set_pos(self, direction: str):
-        """
-        Moves the player in desired direction, checks if movement kills them
+        """Moves the player in desired direction, checks if movement kills them
 
         Args:
             direction: 'wasd', the desired direction of movement
 
-        Returns: 
+        Returns:
             True if the Player was able to move, False if not. Returns nothing if player dies
+
         """
         if super().set_pos(direction):
             entity_below = self.get_entity_below()

@@ -1,13 +1,12 @@
+import Utils.sounds as s
+from Classes.Entities.import_entities import import_entities
 from Classes.Entity import Entity
 from Classes.Grid import Grid
-from Classes.Entities.import_entities import import_entities
 from Utils.general_utils import wait
-import Utils.sounds as s
 
 
 class Ice(Entity):
-    """
-    An entity that when pushed, continues until hitting an immovable entity.
+    """An entity that when pushed, continues until hitting an immovable entity.
     Like a rock, turns the tile below it to ice when the ice stops and it happens to be above water when this happens.
 
     Attributes:
@@ -53,11 +52,7 @@ class Ice(Entity):
             return True
 
         # Is the object collideable, otherwise? then you cannot move to that.
-        elif target_obj.get_collideable():
-            return False
-
-        # Ice cannot move to collectables
-        elif target_obj.get_collectable():
+        elif target_obj.get_collideable() or target_obj.get_collectable():
             return False
 
         return super().get_movement_validity(direction, r, c)
@@ -65,7 +60,8 @@ class Ice(Entity):
     # * Complex Setters
 
     def set_pos(self, direction):
-        """
+        """Adds 'water turns to paved tile' mechanic to ice
+  
         Continuously set position until stopped. If there is water below it, it paved the water.
 
         Args:
@@ -82,15 +78,14 @@ class Ice(Entity):
             self.get_on_grid().render()
             s.ice_sound()
             wait(0.075)
-        else:
-            object_below = self.get_entity_below()
-            if object_below is None:
-                return moved
-
-            if isinstance(object_below, entities["Water"]):  # Is the Ice on Water?
-                new_paved_tile = entities["PavedTile"](self.get_pos(), self.get_on_grid(), "-")
-                self.destroy()  # Destroy Ice
-                object_below.destroy()  # Destroy Water
-                self.get_on_grid().add_layer_to_coord(*self.get_pos(), new_paved_tile)  # Add new paved tile
-
+        object_below = self.get_entity_below()
+        if object_below is None:
             return moved
+
+        if isinstance(object_below, entities["Water"]):  # Is the Ice on Water?
+            new_paved_tile = entities["PavedTile"](self.get_pos(), self.get_on_grid(), "-")
+            self.destroy()  # Destroy Ice
+            object_below.destroy()  # Destroy Water
+            self.get_on_grid().add_layer_to_coord(*self.get_pos(), new_paved_tile)  # Add new paved tile
+
+        return moved
