@@ -88,7 +88,8 @@ class Player(Entity):
 
         elif equipped.get_passive():
             equipped.use()
-            self.set_item(None)
+
+        self.set_item(None)
 
     def collect_item(self):
         item = self.get_entity_below()
