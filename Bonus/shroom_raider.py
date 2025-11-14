@@ -289,8 +289,10 @@ def launch_game_with_level(level):
 
 # gameplay start + loop
 def main():
+    clear_terminal()
+    
     with open("Assets/UI/TitleScreenIntro.txt", "r", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 15)
+        typewriter(intro.read(), 3)
     with open("Assets/UI/TitleScreenArt.txt", "r", encoding="utf+8") as art:
         load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
