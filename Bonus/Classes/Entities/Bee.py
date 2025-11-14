@@ -39,7 +39,6 @@ class Bee(Entity):
 
         target_layers = grid.get_layers_from_coord(*target)
         if player in target_layers:
-            s.bee_death_sound()
             player.kill()
 
     @staticmethod
