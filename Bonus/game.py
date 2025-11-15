@@ -37,18 +37,19 @@ def check_win_condition(P: Player, G: Grid):
         G.level_clear()
 
 
-def reset(level: str):
+def reset(level: str, metadata: dict):
     """Resets a stage to its starting conditions
 
     Args:
         level: A string representation of the stage being reset
+        metadata: A dict of attributes representing specific grid configurations (e.g. bee lag, bee count)
 
     Returns:
         A Grid object that contains the reset level, and a Player entity on that Grid
 
     """
     global G, P
-    G = Grid("test", level)
+    G = Grid("test", level, metadata=metadata)
     P = G.get_player()
     return G, P
 
