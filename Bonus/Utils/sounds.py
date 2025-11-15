@@ -2,6 +2,14 @@ from random import randint
 
 from pygame import mixer as m
 
+import os
+from LevelManager import get_folder_bgm_filename
+
+HERE = os.path.dirname(__file__)
+
+def path(filename: str):
+    return os.path.join(HERE, "Assets", "Sounds", filename)
+
 # ! REGULAR GAME
 
 # ? Movement Sounds
@@ -31,6 +39,14 @@ FLASH = None
 # ? Menu Sounds
 MENU = None
 
+# ? Background Music
+FADE_MS = 1000
+BGM = None
+WELCOME_BGM = None
+
+# ? Level End Sounds
+VICTORY = None
+DEFEAT = None
 
 # ! Helper Functions
 def path(filename: str):
@@ -93,6 +109,16 @@ def initialize_menu():
     global MENU
     MENU = m.Sound(path("main_menu_click.ogg"))
 
+def initialize_bgms():
+    global BGM, WELCOME_BGM
+    BGM = m.Sound(path("bgm.mp3"))
+    WELCOME_BGM = m.Sound(path("welcome_bgm.mp3"))
+
+def initialize_victory_defeat():
+    global VICTORY, DEFEAT
+    VICTORY = m.Sound(path("victory_sound.mp3"))
+    DEFEAT = m.Sound(path("defeat_sound.mp3"))
+
 
 def initAll():
     m.init()
@@ -100,6 +126,8 @@ def initAll():
     initialize_bonus()
     initialize_item_usages()
     initialize_menu()
+    initialize_bgms()
+    initialize_victory_defeat()
 
 
 # ! Sound Players
@@ -215,3 +243,68 @@ def menu_sound():
     global MENU
     if MENU:
         MENU.play()
+
+# * Victory and Defeat
+
+def victory_sound():
+    global VICTORY
+    if VICTORY:
+        VICTORY.play()
+
+def defeat_sound():
+    global DEFEAT
+    if DEFEAT:
+        DEFEAT.play()
+
+# * BGM
+
+def current_bgm_stop():
+    global BGM, FADE_MS
+    BGM.fadeout(FADE_MS)
+
+# welcome bgm
+def welcome_sound():
+    global WELCOME_BGM
+    if WELCOME_BGM:
+        WELCOME_BGM.play(loops=-1, fade_ms=FADE_MS)
+
+
+def welcome_sound_stop():
+    global WELCOME_BGM
+    WELCOME_BGM.fadeout(FADE_MS)
+
+
+# mainmenubgm
+def mainmenu_sound():
+    current_bgm_stop()
+    global BGM
+    BGM = m.Sound(path("bgm.mp3"))
+    if BGM:
+        BGM.play(loops=-1, fade_ms=FADE_MS)
+
+
+# level bgm
+def level_bgm_sound(level_bgm):
+    current_bgm_stop()
+    global BGM, FADE_MS
+    try:
+        bgm_file = path(os.path.join("level_music", level_bgm))
+        BGM = m.Sound(bgm_file)
+        BGM.play(loops=-1, fade_ms=FADE_MS)
+    except Exception:
+        print(f"failed to play level BGM <{bgm_file}>")
+
+# folder bgm
+def folder_bgm_sound(folder_id):
+    current_bgm_stop()
+    global BGM, FADE_MS
+
+    try:
+        folder_bgm = get_folder_bgm_filename(folder_id)
+        bgm_file = path(os.path.join("folder_music", folder_bgm))
+
+        BGM = m.Sound(bgm_file)
+        BGM.play(loops=-1, fade_ms=FADE_MS)
+
+    except Exception:
+        print(f"failed to play folder BGM <{bgm_file}>")

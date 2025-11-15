@@ -2,11 +2,11 @@ import os
 import pathlib
 
 import pandas as pd
+from Utils.general_utils import debug_wait
 
 HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
-
 
 def read_xlsx_levels(folder_id: int):
     """Reads the levels in a given folder
@@ -33,6 +33,7 @@ def read_xlsx_levels(folder_id: int):
     diff_col = cols.get("difficulty")
     dark_col = cols.get("dark")
     bee_col = cols.get("bee")
+    bgm_col = cols.get("bgm")
 
     for _, row in df.iterrows():
         raw_grid = str(row.get(grid_col, "")).replace("\\n", "\n")
@@ -40,6 +41,7 @@ def read_xlsx_levels(folder_id: int):
         dark_val = row.get(dark_col)
         dark_radius = int(dark_val) if pd.notna(dark_val) else None
         bee_data = str(row.get(bee_col)) if bee_col and pd.notna(row.get(bee_col)) else None
+        bgm_file = str(row.get(bgm_col)).strip() if bgm_col and pd.notna(row.get(bgm_col)) else "default-level-music.mp3"
 
         levels.append({
             "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
@@ -49,7 +51,9 @@ def read_xlsx_levels(folder_id: int):
             "grid": raw_grid,
             "dark_radius": dark_radius,
             "bee_data": bee_data,
+            "bgm": bgm_file, 
         })
+
     return levels
 
 
@@ -174,3 +178,28 @@ def get_level_title(folder_id: int, level_id: int):
     """
     lvl = get_level_by_id(int(folder_id), int(level_id))
     return lvl["title"] if lvl else None
+
+def get_folder_bgm_filename(folder_id: int):
+    """Returns the BGM filename for a given folder from the Folders sheet.
+    
+    Args:
+        folder_id: The ID of the folder being accessed
+
+    Returns:
+        The filename of the audio file associated with the folder
+    """
+    
+    df = pd.read_excel(LEVELS_XLSX, sheet_name="Folders", engine="openpyxl")
+    cols = {c.lower(): c for c in df.columns}
+    id_col = cols.get("id")
+    bgm_col = cols.get("bgm")
+
+    row = df[df[id_col] == folder_id]
+    if row.empty or bgm_col is None:
+        return "default-level-music.mp3"
+
+    bgm_value = row[bgm_col].iloc[0]
+    if pd.isna(bgm_value):
+        return "default-level-music.mp3"
+
+    return str(bgm_value).strip()

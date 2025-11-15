@@ -155,6 +155,7 @@ def main():
     argument_parser.add_argument("-R", "--report_file", default=None)
     argument_parser.add_argument("-d", "--darkness_radius", default=DEFAULT_DARK)
     argument_parser.add_argument("-B", "--bee_data", default=DEFAULT_BEE)
+    argument_parser.add_argument("-M", "--bgm", default="default-level-music.mp3")
     args = argument_parser.parse_args()
 
     REPORT_FILE = args.report_file
@@ -167,8 +168,10 @@ def main():
     bee_data = args.bee_data
 
     m.block_keys()
-
+    
     metadata = {"dark_radius": dark_radius, "bee_data": bee_data}
+
+    s.level_bgm_sound(args.bgm)
 
     with open(args.stage_file, encoding="utf-8") as lvl_file:
         first_line = lvl_file.readline().lstrip("\ufeff")
@@ -181,7 +184,6 @@ def main():
         check_win_condition(P, G)
 
         stop_or_reset_only = G.render(test_mode=ENABLE_TEST_MODE, f=True)
-
         while True:
             key_input = m.check_movement()
             if key_input is not None:
@@ -193,6 +195,10 @@ def main():
 
                 if G.get_is_cleared():
                     G.render(test_mode=ENABLE_TEST_MODE)
+
+                    s.current_bgm_stop()
+                    s.victory_sound()
+
                     with open("Assets/UI/ClearText.txt", encoding="utf+8") as text:
                         load_in("\n" + text.read(), 2, colors=[Fore.GREEN], fx_map="✩･ﾟ.")
                     typewriter("Way to go! Onto the next area...", colors=[Fore.GREEN])
@@ -201,7 +207,11 @@ def main():
                     sys.exit(ExitCodes.VICTORY.value)
                 if P.get_is_dead():
                     # G.render(test_mode=ENABLE_TEST_MODE)
-                    with open("Assets/UI/DefeatText.txt", encoding="utf+8") as text:
+                    
+                    s.current_bgm_stop()
+                    s.defeat_sound()
+
+                    with open("Assets/UI/DefeatText.txt", encoding="utf-8") as text:
                         load_in("\n" + text.read(), 2, colors=[Fore.RED], fx_map="Xx.")
                     typewriter("Don't give up yet! There're still shrooms to raid...", colors=[Fore.RED])
                     write_report(G, P, False, True)

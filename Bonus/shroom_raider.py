@@ -23,6 +23,8 @@ from Utils.movement import block_keys as b
 from Utils.movement import menu_movement as m
 from Utils.sounds import initAll
 
+import Utils.sounds as s
+
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
 AFTER_GAME_OPTIONS = {
@@ -308,6 +310,8 @@ def launch_game_with_level(level: dict):
         # run game
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
 
+        cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
+
         # optional dark mode parameter
         if "dark_radius" in level and level["dark_radius"] is not None:
             cmd += ["-d", str(level["dark_radius"])]
@@ -315,6 +319,11 @@ def launch_game_with_level(level: dict):
         # optional bee_data parameter
         if level.get("bee_data"):
             cmd += ["--bee_data", str(level["bee_data"])]
+
+        bgm_file = level.get("bgm")
+        cmd += ["-M", str(bgm_file)]
+
+        s.current_bgm_stop()
 
         print(f"\nRunning: {' '.join(cmd)}\n")
         return_code = subprocess.call(cmd)
@@ -334,10 +343,15 @@ def launch_game_with_level(level: dict):
 
 # gameplay start + loop
 def main():
+
     """Handles the main gameplay loop from user login, folder and level selection, and data storage
     """
     clear_terminal()
+    initAll()
+    s.current_bgm_stop()
 
+    s.welcome_sound()
+    
     with open("Assets/UI/TitleScreenIntro.txt", encoding="unicode_escape") as intro:
         typewriter(intro.read(), 6)
     with open("Assets/UI/TitleScreenArt.txt", encoding="utf+8") as art:
@@ -359,20 +373,26 @@ def main():
         player_data = PlayerData(username, password)
 
     b()
-    initAll()
     progress_bar("\nStarting Game...")
+
+    s.welcome_sound_stop()
+
     while True:  # folders muna tayo
+        s.mainmenu_sound()
         path = []
         folders = LevelManager.load_folders()
         folder_choice = choose_folder(folders)
 
         if folder_choice == "q":
+            s.current_bgm_stop()
             progress_bar("Quitting launcher.", total_time=2)
             exit(ExitCodes.QUIT.value)
 
         path.append(folder_choice)
 
         while True:
+            s.folder_bgm_sound(folder_choice)
+
             levels = LevelManager.load_levels(folder_choice)
             try:
                 level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
@@ -396,6 +416,8 @@ def main():
                 clear_terminal()
                 # session end
 
+                s.mainmenu_sound()
+                
                 FULL_ID = "/".join(str(x) for x in path)
                 # process session data
                 if report:
@@ -444,6 +466,7 @@ if __name__ == "__main__":
     argument_parser.add_argument("-f", "--stage_file")
     argument_parser.add_argument("-d", "--darkness_radius", default=None)
     argument_parser.add_argument("-R", "--report_file", default=None)
+    argument_parser.add_argument("-M", "--bgm", default="default_level_music.mp3")
     args = argument_parser.parse_args()
 
     if args.stage_file is not None:  # if they wanna be weird and test just the game out
@@ -457,8 +480,7 @@ if __name__ == "__main__":
         if args.report_file is not None:
             cmd += ["-R", str(args.report_file)]
 
-        print(f"\nRunning: {' '.join(cmd)}\n")
-        return_code = subprocess.call(cmd)
+        cmd += ["-M", str(args.bgm)]
 
     else:
         main()
