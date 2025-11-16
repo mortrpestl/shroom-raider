@@ -8,7 +8,7 @@ from LevelManager import get_folder_bgm_filename
 HERE = os.path.dirname(__file__)
 
 def path(filename: str):
-    return os.path.join(HERE, "Assets", "Sounds", filename)
+    return os.path.join(HERE, "..", "Assets", "Sounds", filename)
 
 # ! REGULAR GAME
 
@@ -49,9 +49,43 @@ VICTORY = None
 DEFEAT = None
 
 # ! Helper Functions
-def path(filename: str):
-    return "Assets/Sounds/" + filename
+# --- SOUND CACHE + PRELOADS ---
+SOUND_CACHE = {}
+PRELOADED_LEVEL_BGM = {}
+PRELOADED_FOLDER_BGM = {}
+PRELOADED_MAINMENU_BGM = None
 
+def load_sound(fullpath: str):
+    fp = os.path.normpath(fullpath)
+    if not os.path.isabs(fp):
+        fp = os.path.normpath(os.path.join(HERE, fp))
+    if fp in SOUND_CACHE:
+        return SOUND_CACHE[fp]
+    snd = m.Sound(fp)
+    SOUND_CACHE[fp] = snd
+    return snd
+
+def preload_level_bgms():
+    level_dir = os.path.join(HERE, "..", "Assets", "Sounds", "level_music")
+    if not os.path.isdir(level_dir):
+        return
+    for fn in os.listdir(level_dir):
+        if not fn.lower().endswith((".mp3", ".ogg", ".wav")):
+            continue
+        full = os.path.join(level_dir, fn)
+        snd = load_sound(full)
+        PRELOADED_LEVEL_BGM[fn] = snd
+
+def preload_folder_bgms():
+    folder_dir = os.path.join(HERE, "..", "Assets", "Sounds", "folder_music")
+    if not os.path.isdir(folder_dir):
+        return
+    for fn in os.listdir(folder_dir):
+        if not fn.lower().endswith((".mp3", ".ogg", ".wav")):
+            continue
+        full = os.path.join(folder_dir, fn)
+        snd = load_sound(full)
+        PRELOADED_FOLDER_BGM[fn] = snd
 
 # ! Initializers
 def initialize_walk_sounds():
@@ -72,56 +106,58 @@ def initialize_walk_sounds():
     push_filenames = ["push1.mp3", "push2.mp3"]
 
     for a in walk_filenames:
-        WALK.append(m.Sound(path(a)))
+        WALK.append(load_sound(path(a)))
 
     for a in paved_walk_filenames:
-        PAVEDWALK.append(m.Sound(path(a)))
+        PAVEDWALK.append(load_sound(path(a)))
 
     for p in push_filenames:
-        PUSH.append(m.Sound(path(p)))
+        PUSH.append(load_sound(path(p)))
 
-    ONITEM = m.Sound(path("on_item.ogg"))
+    ONITEM = load_sound(path("on_item.ogg"))
 
-    FAILPUSH = m.Sound(path("push_not_successful.mp3"))
-    WATER = m.Sound(path("death.ogg"))
+    FAILPUSH = load_sound(path("push_not_successful.mp3"))
+    WATER = load_sound(path("death.ogg"))
 
 
 def initialize_item_usages():
     global AXE, FLAMETHROWER, SHROOM, FLASH, EQUIP
 
-    EQUIP = m.Sound(path("equip.ogg"))
-    AXE = m.Sound(path("axe_tree.mp3"))
-    FLAMETHROWER = m.Sound(path("burn_tree.ogg"))
-    SHROOM = m.Sound(path("mushroom_collected.mp3"))
-    FLASH = m.Sound(path("flash.ogg"))
+    EQUIP = load_sound(path("equip.ogg"))
+    AXE = load_sound(path("axe_tree.mp3"))
+    FLAMETHROWER = load_sound(path("burn_tree.ogg"))
+    SHROOM = load_sound(path("mushroom_collected.mp3"))
+    FLASH = load_sound(path("flash.ogg"))
 
 
 def initialize_bonus():
     global ICE, LOG, BOMB, BEE, BEE_DEATH
-    ICE = m.Sound(path("ice.ogg"))
-    LOG = m.Sound(path("move_log.ogg"))
-    BOMB = m.Sound(path("bomb.ogg"))
-    BEE = m.Sound(path("bee_move.ogg"))
-    BEE_DEATH = m.Sound(path("bee_death.ogg"))
+    ICE = load_sound(path("ice.ogg"))
+    LOG = load_sound(path("move_log.ogg"))
+    BOMB = load_sound(path("bomb.ogg"))
+    BEE = load_sound(path("bee_move.ogg"))
+    BEE_DEATH = load_sound(path("bee_death.ogg"))
 
 
 def initialize_menu():
     global MENU
-    MENU = m.Sound(path("main_menu_click.ogg"))
+    MENU = load_sound(path("main_menu_click.ogg"))
 
 def initialize_bgms():
-    global BGM, WELCOME_BGM
-    BGM = m.Sound(path("bgm.mp3"))
-    WELCOME_BGM = m.Sound(path("welcome_bgm.mp3"))
+    global BGM, WELCOME_BGM, PRELOADED_MAINMENU_BGM
+    PRELOADED_MAINMENU_BGM = load_sound(path("bgm.mp3"))
+    WELCOME_BGM = load_sound(path("welcome_bgm.mp3"))
 
 def initialize_victory_defeat():
     global VICTORY, DEFEAT
-    VICTORY = m.Sound(path("victory_sound.mp3"))
-    DEFEAT = m.Sound(path("defeat_sound.mp3"))
+    VICTORY = load_sound(path("victory_sound.mp3"))
+    DEFEAT = load_sound(path("defeat_sound.mp3"))
 
 
 def initAll():
     m.init()
+    preload_level_bgms()
+    preload_folder_bgms()
     initialize_walk_sounds()
     initialize_bonus()
     initialize_item_usages()
@@ -248,11 +284,13 @@ def menu_sound():
 
 def victory_sound():
     global VICTORY
+    current_bgm_stop()
     if VICTORY:
         VICTORY.play()
 
 def defeat_sound():
     global DEFEAT
+    current_bgm_stop()
     if DEFEAT:
         DEFEAT.play()
 
@@ -260,7 +298,8 @@ def defeat_sound():
 
 def current_bgm_stop():
     global BGM, FADE_MS
-    BGM.fadeout(FADE_MS)
+    if BGM:
+        BGM.fadeout(FADE_MS)
 
 # welcome bgm
 def welcome_sound():
@@ -271,14 +310,16 @@ def welcome_sound():
 
 def welcome_sound_stop():
     global WELCOME_BGM
-    WELCOME_BGM.fadeout(FADE_MS)
+    if WELCOME_BGM:
+        WELCOME_BGM.fadeout(FADE_MS)
 
 
-# mainmenubgm
+# mainmenu bgm
 def mainmenu_sound():
     current_bgm_stop()
     global BGM
-    BGM = m.Sound(path("bgm.mp3"))
+    BGM = PRELOADED_MAINMENU_BGM
+
     if BGM:
         BGM.play(loops=-1, fade_ms=FADE_MS)
 
@@ -287,24 +328,16 @@ def mainmenu_sound():
 def level_bgm_sound(level_bgm):
     current_bgm_stop()
     global BGM, FADE_MS
-    try:
-        bgm_file = path(os.path.join("level_music", level_bgm))
-        BGM = m.Sound(bgm_file)
+    BGM = PRELOADED_LEVEL_BGM.get(level_bgm)
+    if BGM:
         BGM.play(loops=-1, fade_ms=FADE_MS)
-    except Exception:
-        print(f"failed to play level BGM <{bgm_file}>")
 
 # folder bgm
 def folder_bgm_sound(folder_id):
     current_bgm_stop()
     global BGM, FADE_MS
 
-    try:
-        folder_bgm = get_folder_bgm_filename(folder_id)
-        bgm_file = path(os.path.join("folder_music", folder_bgm))
-
-        BGM = m.Sound(bgm_file)
+    folder_bgm = get_folder_bgm_filename(folder_id)
+    BGM = PRELOADED_FOLDER_BGM.get(folder_bgm)
+    if BGM:
         BGM.play(loops=-1, fade_ms=FADE_MS)
-
-    except Exception:
-        print(f"failed to play folder BGM <{bgm_file}>")

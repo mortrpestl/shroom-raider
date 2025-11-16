@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import os
 from argparse import ArgumentParser as ap
 
 import LevelManager
@@ -37,6 +38,8 @@ AFTER_GAME_OPTIONS = {
     "q": "Quit Launcher",
 }
 OPTIONS_LIST = ["r", "m", "s", "p", "g", "l", "q"]
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 # * Advanced Helper Functions
 
@@ -325,7 +328,10 @@ def launch_game_with_level(level: dict):
 
         s.current_bgm_stop()
 
-        print(f"\nRunning: {' '.join(cmd)}\n")
+        # print(f"\nRunning: {' '.join(cmd)}\n")
+
+        # ! You can integrate loading screen feature here
+        progress_bar("Loading your level...", total_time=2)
         return_code = subprocess.call(cmd)
 
         # load report
@@ -416,7 +422,7 @@ def main():
                 clear_terminal()
                 # session end
 
-                s.mainmenu_sound()
+                s.folder_bgm_sound(folder_choice)
                 
                 FULL_ID = "/".join(str(x) for x in path)
                 # process session data
