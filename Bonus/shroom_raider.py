@@ -333,7 +333,7 @@ def launch_game_with_level(level: dict):
         # print(f"\nRunning: {' '.join(cmd)}\n")
 
         # ! You can integrate loading screen feature here
-        progress_bar("Loading your level...", total_time=1)
+        progress_bar("Loading your level...", total_time=0.2)
         return_code = subprocess.call(cmd)
 
         # load report
@@ -371,13 +371,12 @@ def main():
 
     if encrypted_username and username != "GUEST":  # existing user
         password = verify_existing_user(username, encrypted_username)
+        player_data = PlayerData(username, password)
     elif username == "GUEST":
         player_data = PlayerData("GUEST", "guest")
     else:
         password = register_new_user(username)
         # store encrypted username & reference username in Excel
-        encrypted_username = scramble(username, password)
-        PlayerData.store_new_user(username, encrypted_username)
         player_data = PlayerData(username, password)
 
     b()
@@ -416,7 +415,7 @@ def main():
                     selected = LEVEL_SELECTED
                     )
             except:
-                level_choice, LEVEL_SELECTED = choose_level(levels, set(), LEVEL_SELECTED)
+                level_choice, LEVEL_SELECTED = choose_level(levels, set(), folder=None, selected=LEVEL_SELECTED)
             if level_choice == "q":
                 s.fadeout_all_sounds(1000)
                 progress_bar("Quitting launcher.", total_time=1)

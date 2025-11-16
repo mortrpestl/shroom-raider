@@ -31,9 +31,6 @@ def show_general_leaderboard():
     """
     players = read_all_rows()
 
-    for p in players:
-        print(p)
-
     if not players:
         print("No leaderboard data available.\n")
         return None
