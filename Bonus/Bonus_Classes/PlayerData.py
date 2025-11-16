@@ -404,12 +404,18 @@ class PlayerData:
         """
         completed_rows = self.get_completed_levels_organized()
 
+        if completed_rows == [["None"]]:
+            return set()
+        
         completed_levels_in_folder = set()
 
         for i in completed_rows:
-            lvl_id = i[0].split("/")
-            if int(lvl_id[0]) == folder_id:
-                completed_levels_in_folder.add(int(lvl_id[1]))
+            try:
+                lvl_id = i[0].split("/")
+                if int(lvl_id[0]) == folder_id:
+                    completed_levels_in_folder.add(int(lvl_id[1]))
+            except (ValueError, IndexError):
+                continue
 
         return completed_levels_in_folder
 
@@ -422,14 +428,6 @@ class PlayerData:
             display: a list of rows depicting the organized dict of the player statistics
 
         """
-        completed_levels = self.get_completed_levels()
-        if not completed_levels:
-            completed_rows = [["None"]]
-            completed_headers = ["Completed Levels"]
-        else:
-            completed_rows = self.get_completed_levels_organized()
-            completed_headers = ["ID", "Title", "Best Time"]
-
         stats_rows = [
             ["Player Name", self.name],
             ["Total Mushrooms", self.total_mushrooms_collected],
@@ -440,6 +438,5 @@ class PlayerData:
         ]
 
         display = tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"
-        display += tabulate(completed_headers, completed_rows, max_width=24)
 
         return display

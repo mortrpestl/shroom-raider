@@ -13,6 +13,7 @@ from Classes.Grid import Grid
 from colorama import Fore
 from Utils.animator import load_in, progress_bar, typewriter
 from Utils.Enums import ExitCodes
+from Utils.general_utils import clear_prev_n_lines
 
 # Keep stdout/stderr unicode-friendly (was added to support emojis via subprocess)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
@@ -76,6 +77,8 @@ def parser(inst: str, P: Player, G: Grid, level: str, reset_only: bool):
 
     # non-WASDP inputs
     if inst == "Q":
+        s.fadeout_all_sounds(1500)
+
         progress_bar("Quitting Level", total_time=2)
         exit(ExitCodes.QUIT.value)
 
@@ -156,6 +159,7 @@ def main():
     argument_parser.add_argument("-d", "--darkness_radius", default=DEFAULT_DARK)
     argument_parser.add_argument("-B", "--bee_data", default=DEFAULT_BEE)
     argument_parser.add_argument("-M", "--bgm", default="default-level-music.mp3")
+    argument_parser.add_argument("-S", "--song_name", default="Baba Is You OST - Box Has Key")
     args = argument_parser.parse_args()
 
     REPORT_FILE = args.report_file
@@ -166,10 +170,11 @@ def main():
         dark_radius = None
 
     bee_data = args.bee_data
+    song_name = args.song_name
 
     m.block_keys()
     
-    metadata = {"dark_radius": dark_radius, "bee_data": bee_data}
+    metadata = {"dark_radius": dark_radius, "bee_data": bee_data, "song_name": song_name}
 
     s.level_bgm_sound(args.bgm)
 
@@ -196,7 +201,6 @@ def main():
                 if G.get_is_cleared():
                     G.render(test_mode=ENABLE_TEST_MODE)
 
-                    s.current_bgm_stop()
                     s.victory_sound()
 
                     with open("Assets/UI/ClearText.txt", encoding="utf+8") as text:
@@ -208,7 +212,6 @@ def main():
                 if P.get_is_dead():
                     # G.render(test_mode=ENABLE_TEST_MODE)
                     
-                    s.current_bgm_stop()
                     s.defeat_sound()
 
                     with open("Assets/UI/DefeatText.txt", encoding="utf-8") as text:

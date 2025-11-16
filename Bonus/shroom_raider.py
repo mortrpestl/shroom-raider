@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import os
 from argparse import ArgumentParser as ap
 
 import LevelManager
@@ -38,6 +39,8 @@ AFTER_GAME_OPTIONS = {
 }
 OPTIONS_LIST = ["r", "m", "s", "p", "g", "l", "q"]
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 # * Advanced Helper Functions
 
 
@@ -58,7 +61,7 @@ def show_statistics(player_data: PlayerData):
 # * Level List Helper Functions
 
 
-def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set()):
+def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set(), folder: dict | None = None):
     """Print a summary of the levels.
 
     Args:
@@ -75,21 +78,24 @@ def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set())
 
     display.append(spanner)
     for lvl in levels:
+        checked = '✔' if lvl.get("id", "") in completed_lvl_ids else ''
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f"<🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
+                center_wr_to_terminal_size(f" {checked} <🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
         elif lvl.get("id", "") in completed_lvl_ids:
-            display.append(center_wr_to_terminal_size(f"✔  {lvl.get('title', '')}", colors=[Fore.GREEN]))
-
+            display.append(center_wr_to_terminal_size(f"{checked} {lvl.get('title', '')}", colors=[Fore.GREEN]))
         else:
             display.append(str(lvl.get("title", "")))
     display.append("\n" + spanner)
 
     display.append(center_wr_to_terminal_size("Difficulty: " + difficulty, colors=[Fore.RED]))
     display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
+
+    if folder and folder.get("song_name"):
+        display.append(center_wr_to_terminal_size(f"Song Playing:\n {folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX]))
 
     clear_terminal()
     print(center_wr_to_terminal_size("\n".join(display)))
@@ -126,13 +132,14 @@ def print_folders_table(folders: dict, selected: int = 1):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_after_game_options(selected: int):
+def print_after_game_options(selected: int, folder : int):
     """Prints the after-level menu
 
     Args:
         selected: The currently selected option to be highlighted
 
     """
+
     display = []
     with open("Assets/UI/MainMenuArt.txt", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
@@ -152,6 +159,8 @@ def print_after_game_options(selected: int):
             display.append(AFTER_GAME_OPTIONS[o])
     display.append("\n" + spanner)
 
+    display.append(center_wr_to_terminal_size(f"\nSong Playing:\n{folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX]))
+
     clear_terminal()
     print(center_wr_to_terminal_size("\n".join(display)))
 
@@ -159,7 +168,7 @@ def print_after_game_options(selected: int):
 # * Level Selection and Launching Functions
 
 
-def choose_level(levels: dict, completed_lvl_ids: set):
+def choose_level(levels: dict, completed_lvl_ids: set, folder: dict | None = None, selected: int = 1):
     """Displays level select menu for user to choose level
 
     Args:
@@ -177,31 +186,29 @@ def choose_level(levels: dict, completed_lvl_ids: set):
         return None
 
     # if there is levels
-    selected = 1
-
-    print_levels_table(levels, selected, completed_lvl_ids)
+    print_levels_table(levels, selected, completed_lvl_ids, folder)
     while True:
         choice = m()
         if choice is not None:
             if choice == "Q":
-                return "q"
+                return "q", selected
             if choice == "!":
-                return "!"
+                return "!", selected
             if choice == "enter":
-                return (selected, levels[selected - 1])
+                return (selected, levels[selected - 1]), selected
             if choice == "w":
                 if selected > 1:
                     selected -= 1
                     clear_terminal()
-                    print_levels_table(levels, selected, completed_lvl_ids)
+                    print_levels_table(levels, selected, completed_lvl_ids, folder)
             elif choice == "s":
                 if selected < len(levels):
                     selected += 1
                     clear_terminal()
-                    print_levels_table(levels, selected, completed_lvl_ids)
+                    print_levels_table(levels, selected, completed_lvl_ids, folder)
 
 
-def choose_folder(folders: dict):
+def choose_folder(folders: dict, selected : int):
     """Displays folder select menu for user to choose folder
 
     Args:
@@ -215,19 +222,18 @@ def choose_folder(folders: dict):
     clear_terminal()
     if not folders:
         print("Sorry, there are no folders")
-        return None
+        return None, None
 
     # if there is levels
 
-    selected = 1
     print_folders_table(folders, selected)
     while True:
         choice = m()
         if choice is not None:
             if choice == "Q":
-                return "q"
+                return "q", None
             if choice == "enter":
-                return selected
+                return selected, selected
             if choice == "w":
                 if selected > 1:
                     selected -= 1
@@ -240,7 +246,7 @@ def choose_folder(folders: dict):
                     print_folders_table(folders, selected)
 
 
-def choose_after_game_option(curr_display: str | None):
+def choose_after_game_option(curr_display: str | None, folder_choice : int):
     """Shows the after-game menu to the user
 
     Args:
@@ -251,7 +257,7 @@ def choose_after_game_option(curr_display: str | None):
     clear_terminal()
 
     selected = 0
-    print_after_game_options(selected)
+    print_after_game_options(selected, folder_choice)
     print(curr_display or blank)
     while True:
         choice = m()
@@ -267,7 +273,7 @@ def choose_after_game_option(curr_display: str | None):
                     selected += 1
 
             clear_terminal()
-            print_after_game_options(selected)
+            print_after_game_options(selected, folder_choice)
             print(curr_display or blank)
 
 
@@ -310,8 +316,6 @@ def launch_game_with_level(level: dict):
         # run game
         cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
 
-        cmd = [sys.executable, SHROOM_SCRIPT, "-f", stage_path, "-R", report_path]
-
         # optional dark mode parameter
         if "dark_radius" in level and level["dark_radius"] is not None:
             cmd += ["-d", str(level["dark_radius"])]
@@ -320,12 +324,16 @@ def launch_game_with_level(level: dict):
         if level.get("bee_data"):
             cmd += ["--bee_data", str(level["bee_data"])]
 
-        bgm_file = level.get("bgm")
+        bgm_file, song_name = level.get("bgm"), level.get("song_name")
         cmd += ["-M", str(bgm_file)]
+        cmd += ["-S", str(song_name)]
 
         s.current_bgm_stop()
 
-        print(f"\nRunning: {' '.join(cmd)}\n")
+        # print(f"\nRunning: {' '.join(cmd)}\n")
+
+        # ! You can integrate loading screen feature here
+        progress_bar("Loading your level...", total_time=0.2)
         return_code = subprocess.call(cmd)
 
         # load report
@@ -363,13 +371,12 @@ def main():
 
     if encrypted_username and username != "GUEST":  # existing user
         password = verify_existing_user(username, encrypted_username)
+        player_data = PlayerData(username, password)
     elif username == "GUEST":
         player_data = PlayerData("GUEST", "guest")
     else:
         password = register_new_user(username)
         # store encrypted username & reference username in Excel
-        encrypted_username = scramble(username, password)
-        PlayerData.store_new_user(username, encrypted_username)
         player_data = PlayerData(username, password)
 
     b()
@@ -377,29 +384,41 @@ def main():
 
     s.welcome_sound_stop()
 
+    SELECTED = 1
+
     while True:  # folders muna tayo
         s.mainmenu_sound()
         path = []
         folders = LevelManager.load_folders()
-        folder_choice = choose_folder(folders)
+        folder_choice, SELECTED = choose_folder(folders, SELECTED)
 
         if folder_choice == "q":
-            s.current_bgm_stop()
-            progress_bar("Quitting launcher.", total_time=2)
+            s.fadeout_all_sounds(1000)
+            progress_bar("Quitting launcher.", total_time=1)
             exit(ExitCodes.QUIT.value)
 
         path.append(folder_choice)
 
+        s.folder_bgm_sound(folder_choice)
+        
+        LEVEL_SELECTED = 1
+        
         while True:
-            s.folder_bgm_sound(folder_choice)
 
             levels = LevelManager.load_levels(folder_choice)
             try:
-                level_choice = choose_level(levels, player_data.get_completed_lvl_ids_by_folder_id(folder_choice))
+                current_folder = folders[folder_choice-1]
+                level_choice, LEVEL_SELECTED = choose_level(
+                    levels,
+                    player_data.get_completed_lvl_ids_by_folder_id(folder_choice),
+                    folder=current_folder,
+                    selected = LEVEL_SELECTED
+                    )
             except:
-                level_choice = choose_level(levels, set())
+                level_choice, LEVEL_SELECTED = choose_level(levels, set(), folder=None, selected=LEVEL_SELECTED)
             if level_choice == "q":
-                progress_bar("Quitting launcher.", total_time=2)
+                s.fadeout_all_sounds(1000)
+                progress_bar("Quitting launcher.", total_time=1)
                 exit(ExitCodes.QUIT.value)
             elif level_choice == "!":
                 break
@@ -416,7 +435,7 @@ def main():
                 clear_terminal()
                 # session end
 
-                s.mainmenu_sound()
+                s.folder_bgm_sound(folder_choice)
                 
                 FULL_ID = "/".join(str(x) for x in path)
                 # process session data
@@ -430,25 +449,31 @@ def main():
                     )
                 curr_display = ""
                 while True:
-                    choice = choose_after_game_option(curr_display)
+                    choice = choose_after_game_option(curr_display, current_folder)
                     choice = OPTIONS_LIST[choice]
+                    print()
 
                     match choice:
                         case "r" | "m":
                             break
                         case "s":
+                            progress_bar("Loading your statistics...", 0.5)
                             curr_display = repr(player_data)
                             continue
                         case "q":
-                            progress_bar("Quitting launcher.", total_time=2)
+                            s.fadeout_all_sounds(1000)
+                            progress_bar("Quitting launcher.", total_time=1)
                             exit(ExitCodes.QUIT.value)
                         case "p":
+                            progress_bar("Loading leaderboard...", 0.5)
                             curr_display = show_personal_leaderboard(player_data)
                             continue
                         case "g":
+                            progress_bar("Loading leaderboard...", 0.5)
                             curr_display = show_general_leaderboard()
                             continue
                         case "l":
+                            progress_bar("Loading leaderboard...", 0.5)
                             curr_display = show_level_leaderboard(FULL_ID)
                             continue
                         case _:
@@ -457,6 +482,7 @@ def main():
                 if choice in ("r", "replay"):
                     continue  # continue playing the level
                 if choice in ("m", "menu"):  # stop and go back to menu
+                    progress_bar("Going back to main menu...", 0.5)
                     clear_terminal()
                     break
 
