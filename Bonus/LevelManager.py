@@ -2,12 +2,16 @@ import os
 import pathlib
 
 import pandas as pd
-from Utils.general_utils import debug_wait
 
 HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
+def valid_col(row, col):
+    return col and pd.notna(row.get(col))
+
+def clean_str(string):
+    return str(string).strip()
 def read_xlsx_levels(folder_id: int):
     """Reads the levels in a given folder
 
@@ -34,24 +38,30 @@ def read_xlsx_levels(folder_id: int):
     dark_col = cols.get("dark")
     bee_col = cols.get("bee")
     bgm_col = cols.get("bgm")
+    bgm_title_col = cols.get("song name")
 
     for _, row in df.iterrows():
-        raw_grid = str(row.get(grid_col, "")).replace("\\n", "\n")
-        difficulty = str(row.get(diff_col, "Normal")).strip().title()
+        id = int(row[id_col]) if valid_col(row, id_col) else None
+        title = clean_str(row[title_col]) if valid_col(row, title_col) else "UNTITLED"
+        description = clean_str(row[desc_col]) if valid_col(row, desc_col) else ""
+        raw_grid = clean_str(row.get(grid_col, "")).replace("\\n", "\n")
+        difficulty = clean_str(row.get(diff_col, "Normal"))
         dark_val = row.get(dark_col)
         dark_radius = int(dark_val) if pd.notna(dark_val) else None
-        bee_data = str(row.get(bee_col)) if bee_col and pd.notna(row.get(bee_col)) else None
-        bgm_file = str(row.get(bgm_col)).strip() if bgm_col and pd.notna(row.get(bgm_col)) else "default-level-music.mp3"
+        bee_data = clean_str(row.get(bee_col)) if valid_col(row, bee_col) else None
+        bgm_file = clean_str(row.get(bgm_col)) if valid_col(row, bgm_col) else "default-level-music.mp3"
+        bgm_title = clean_str(row.get(bgm_title_col)) if valid_col(row, bgm_title_col) else "Box Has Key - Baba is You OST"
 
         levels.append({
-            "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
-            "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
-            "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
+            "id": id,
+            "title": title,
+            "description": description,
             "difficulty": difficulty,
             "grid": raw_grid,
             "dark_radius": dark_radius,
             "bee_data": bee_data,
             "bgm": bgm_file, 
+            "song_name": bgm_title,
         })
 
     return levels
@@ -74,12 +84,14 @@ def read_xlsx_folders():
     id_col = cols.get("id")
     title_col = cols.get("title")
     desc_col = cols.get("description")
+    song_col = cols.get("song name")
 
     for _, row in df.iterrows():
         folders.append({
-            "id": int(row[id_col]) if id_col and pd.notna(row.get(id_col)) else None,
-            "title": str(row[title_col]).strip() if title_col and pd.notna(row.get(title_col)) else "UNTITLED",
-            "description": str(row[desc_col]).strip() if desc_col and pd.notna(row.get(desc_col)) else "",
+            "id": int(row[id_col]) if valid_col(row,id_col) else None,
+            "title": clean_str(row[title_col]) if valid_col(row,title_col) else "UNTITLED",
+            "description": clean_str(row[desc_col]) if valid_col(row,desc_col) else "",
+            "song_name": clean_str(row[song_col]) if valid_col(row,song_col) else "Baba Is You OST - Baba Is You Theme"
         })
     return folders
 

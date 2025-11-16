@@ -68,6 +68,7 @@ class Grid:
 
         self.__dark_radius = self.__metadata.get("dark_radius", None)
         self.__bee_data = self.__metadata.get("bee_data", "3 3")
+        self.__song_name = self.__metadata.get("song_name")
 
         # convert string to grid
         self.__grid_vis_map = [list(row) for row in map_data.strip().split("\n")]
@@ -221,6 +222,12 @@ class Grid:
         """Used for animation
         """
         return self.__active_blasts
+    
+    def get_song_name(self):
+        """Used for displaying song name
+        """
+        return self.__song_name
+
 
     @staticmethod
     def get_grid_by_name(name: str):
@@ -592,6 +599,8 @@ class Grid:
 
 {item_here_display}
 {held_item_display}
+
+Song Playing: {self.get_song_name()}
 
 What will you do? """
 

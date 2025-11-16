@@ -41,6 +41,8 @@ MENU = None
 
 # ? Background Music
 FADE_MS = 1000
+QUIT_FADE_MS = 2000
+
 BGM = None
 WELCOME_BGM = None
 
@@ -295,49 +297,47 @@ def defeat_sound():
         DEFEAT.play()
 
 # * BGM
-
-def current_bgm_stop():
-    global BGM, FADE_MS
+# stop current BGM
+def current_bgm_stop(fade_ms=FADE_MS):
     if BGM:
-        BGM.fadeout(FADE_MS)
+        BGM.fadeout(fade_ms)
 
-# welcome bgm
-def welcome_sound():
-    global WELCOME_BGM
+# welcome BGM
+def welcome_sound(fade_ms=FADE_MS):
     if WELCOME_BGM:
-        WELCOME_BGM.play(loops=-1, fade_ms=FADE_MS)
+        WELCOME_BGM.play(loops=-1, fade_ms=fade_ms)
 
 
-def welcome_sound_stop():
-    global WELCOME_BGM
+def welcome_sound_stop(fade_ms=FADE_MS):
     if WELCOME_BGM:
-        WELCOME_BGM.fadeout(FADE_MS)
+        WELCOME_BGM.fadeout(fade_ms)
 
-
-# mainmenu bgm
-def mainmenu_sound():
-    current_bgm_stop()
+# main menu BGM
+def mainmenu_sound(fade_ms=FADE_MS):
+    current_bgm_stop(fade_ms)
     global BGM
     BGM = PRELOADED_MAINMENU_BGM
-
     if BGM:
-        BGM.play(loops=-1, fade_ms=FADE_MS)
+        BGM.play(loops=-1, fade_ms=fade_ms)
 
-
-# level bgm
-def level_bgm_sound(level_bgm):
-    current_bgm_stop()
-    global BGM, FADE_MS
+# level BGM
+def level_bgm_sound(level_bgm, fade_ms=FADE_MS):
+    current_bgm_stop(fade_ms)
+    global BGM
     BGM = PRELOADED_LEVEL_BGM.get(level_bgm)
     if BGM:
-        BGM.play(loops=-1, fade_ms=FADE_MS)
+        BGM.play(loops=-1, fade_ms=fade_ms)
 
-# folder bgm
-def folder_bgm_sound(folder_id):
-    current_bgm_stop()
-    global BGM, FADE_MS
-
+# folder BGM
+def folder_bgm_sound(folder_id, fade_ms=FADE_MS):
+    current_bgm_stop(fade_ms)
+    global BGM
     folder_bgm = get_folder_bgm_filename(folder_id)
     BGM = PRELOADED_FOLDER_BGM.get(folder_bgm)
     if BGM:
-        BGM.play(loops=-1, fade_ms=FADE_MS)
+        BGM.play(loops=-1, fade_ms=fade_ms)
+
+def fadeout_all_sounds(fade_ms=FADE_MS):
+    for sound in [BGM, WELCOME_BGM]:
+        if sound:
+            sound.fadeout(fade_ms)
