@@ -5,17 +5,17 @@ import subprocess
 import sys
 import tempfile
 import time
-import os
 from argparse import ArgumentParser as ap
 
 import LevelManager
+import Utils.sounds as s
 from Bonus_Classes.Leaderboard import (
     show_general_leaderboard,
     show_level_leaderboard,
     show_personal_leaderboard,
 )
 from Bonus_Classes.PlayerData import PlayerData
-from Bonus_Classes.security import get_valid_username, register_new_user, scramble, verify_existing_user
+from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
 from colorama import Back, Fore
 from Utils.animator import load_in, progress_bar, typewriter
 from Utils.Enums import ExitCodes
@@ -23,8 +23,6 @@ from Utils.general_utils import center_wr_to_terminal_size, clear_terminal, wait
 from Utils.movement import block_keys as b
 from Utils.movement import menu_movement as m
 from Utils.sounds import initAll
-
-import Utils.sounds as s
 
 HERE = os.path.dirname(__file__)
 SHROOM_SCRIPT = os.path.join(HERE, "game.py")
@@ -132,14 +130,13 @@ def print_folders_table(folders: dict, selected: int = 1):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_after_game_options(selected: int, folder : int):
+def print_after_game_options(selected: int, folder: int):
     """Prints the after-level menu
 
     Args:
         selected: The currently selected option to be highlighted
 
     """
-
     display = []
     with open("Assets/UI/MainMenuArt.txt", encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.YELLOW]))
@@ -208,7 +205,7 @@ def choose_level(levels: dict, completed_lvl_ids: set, folder: dict | None = Non
                     print_levels_table(levels, selected, completed_lvl_ids, folder)
 
 
-def choose_folder(folders: dict, selected : int):
+def choose_folder(folders: dict, selected: int):
     """Displays folder select menu for user to choose folder
 
     Args:
@@ -246,7 +243,7 @@ def choose_folder(folders: dict, selected : int):
                     print_folders_table(folders, selected)
 
 
-def choose_after_game_option(curr_display: str | None, folder_choice : int):
+def choose_after_game_option(curr_display: str | None, folder_choice: int):
     """Shows the after-game menu to the user
 
     Args:
@@ -351,7 +348,6 @@ def launch_game_with_level(level: dict):
 
 # gameplay start + loop
 def main():
-
     """Handles the main gameplay loop from user login, folder and level selection, and data storage
     """
     clear_terminal()
@@ -359,11 +355,11 @@ def main():
     s.current_bgm_stop()
 
     s.welcome_sound()
-    
+
     with open("Assets/UI/TitleScreenIntro.txt", encoding="unicode_escape") as intro:
-        typewriter(intro.read(), 6)
+        typewriter(intro.read(), 0.5)
     with open("Assets/UI/TitleScreenArt.txt", encoding="utf+8") as art:
-        load_in(art.read(), 3, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
+        load_in(art.read(), 0.5, colors=[Fore.RED], colors2=[Fore.YELLOW], mode="--alternate")
 
     username = get_valid_username()
 
@@ -400,9 +396,9 @@ def main():
         path.append(folder_choice)
 
         s.folder_bgm_sound(folder_choice)
-        
+
         LEVEL_SELECTED = 1
-        
+
         while True:
 
             levels = LevelManager.load_levels(folder_choice)
@@ -412,7 +408,7 @@ def main():
                     levels,
                     player_data.get_completed_lvl_ids_by_folder_id(folder_choice),
                     folder=current_folder,
-                    selected = LEVEL_SELECTED
+                    selected=LEVEL_SELECTED,
                     )
             except:
                 level_choice, LEVEL_SELECTED = choose_level(levels, set(), folder=None, selected=LEVEL_SELECTED)
@@ -436,7 +432,7 @@ def main():
                 # session end
 
                 s.folder_bgm_sound(folder_choice)
-                
+
                 FULL_ID = "/".join(str(x) for x in path)
                 # process session data
                 if report:

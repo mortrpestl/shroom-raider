@@ -13,8 +13,7 @@ ENTITIES = import_entities({"Player", "Axe", "Flamethrower", "Mushroom", "Water"
 
 @pytest.fixture
 def test_grid():
-    """* Verify: Provides a 5x5 test grid with Player starting at (2,2)
-    """
+    """* Verify: Provides a 5x5 test grid with Player starting at (2,2)"""
     map_data = """.....
 .....
 ..L..
@@ -24,8 +23,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """* Verify: Player initializes with no item, zero mushrooms, and alive status
-    """
+    """* Verify: Player initializes with no item, zero mushrooms, and alive status"""
     g = test_grid
     player = g.get_player()
     assert player.get_item() is None
@@ -34,8 +32,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_set_and_use_item(test_grid):
-    """* Verify: Player can set an item and use it, clearing it afterwards
-    """
+    """* Verify: Player can set an item and use it, clearing it afterwards"""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"]([0, 0], g)
@@ -46,8 +43,7 @@ def test_set_and_use_item(test_grid):
 
 
 def test_increment_mushroom_count(test_grid):
-    """* Verify: Mushroom count increments correctly
-    """
+    """* Verify: Mushroom count increments correctly"""
     g = test_grid
     player = g.get_player()
     player.increment_mushroom_count()
@@ -56,8 +52,7 @@ def test_increment_mushroom_count(test_grid):
 
 
 def test_kill_sets_is_dead_flag(test_grid):
-    """* Verify: Player kill() sets is_dead flag to 1
-    """
+    """* Verify: Player kill() sets is_dead flag to 1"""
     g = test_grid
     player = g.get_player()
     player.kill()
@@ -65,8 +60,7 @@ def test_kill_sets_is_dead_flag(test_grid):
 
 
 def test_get_entity_below_returns_axe_if_present(test_grid):
-    """* Verify: get_entity_below() returns Axe if present beneath Player
-    """
+    """* Verify: get_entity_below() returns Axe if present beneath Player"""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"](player.get_pos(), g)
@@ -77,8 +71,7 @@ def test_get_entity_below_returns_axe_if_present(test_grid):
 
 
 def test_get_entity_below_returns_mushroom_if_present(test_grid):
-    """* Verify: get_entity_below() returns Mushroom if present beneath Player
-    """
+    """* Verify: get_entity_below() returns Mushroom if present beneath Player"""
     g = test_grid
     player = g.get_player()
     shroom = ENTITIES["Mushroom"](player.get_pos(), g)
@@ -89,8 +82,7 @@ def test_get_entity_below_returns_mushroom_if_present(test_grid):
 
 
 def test_get_entity_below_returns_water_if_present(test_grid):
-    """* Verify: get_entity_below() returns Water if present beneath Player
-    """
+    """* Verify: get_entity_below() returns Water if present beneath Player"""
     g = test_grid
     player = g.get_player()
     water = ENTITIES["Water"](player.get_pos(), g)
@@ -101,8 +93,7 @@ def test_get_entity_below_returns_water_if_present(test_grid):
 
 
 def test_get_entity_below_returns_paved_tile_if_present(test_grid):
-    """* Verify: get_entity_below() returns Paved Tile if present beneath Player
-    """
+    """* Verify: get_entity_below() returns Paved Tile if present beneath Player"""
     g = test_grid
     player = g.get_player()
     paved = ENTITIES["PavedTile"](player.get_pos(), g)
@@ -113,16 +104,14 @@ def test_get_entity_below_returns_paved_tile_if_present(test_grid):
 
 
 def test_get_entity_below_returns_none_when_on_empty_tile(test_grid):
-    """* Verify: get_entity_below() returns None when no Entity (i.e. Empty Tile) beneath Player
-    """
+    """* Verify: get_entity_below() returns None when no Entity (i.e. Empty Tile) beneath Player"""
     g = test_grid
     player = g.get_player()
     assert player.get_entity_below() is None
 
 
 def test_collect_item_adds_to_player_and_removes_from_grid(test_grid):
-    """* Verify: collect_item() equips item beneath Player and removes it from the grid
-    """
+    """* Verify: collect_item() equips item beneath Player and removes it from the grid"""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"](player.get_pos(), g)
@@ -135,8 +124,7 @@ def test_collect_item_adds_to_player_and_removes_from_grid(test_grid):
 
 
 def test_collect_item_does_nothing_if_no_item(test_grid):
-    """* Verify: collect_item() does nothing when no collectible item beneath Player
-    """
+    """* Verify: collect_item() does nothing when no collectible item beneath Player"""
     g = test_grid
     player = g.get_player()
     player.collect_item()
@@ -144,8 +132,7 @@ def test_collect_item_does_nothing_if_no_item(test_grid):
 
 
 def test_get_movement_validity_out_of_bounds(test_grid):
-    """* Verify: Player cannot move out of grid boundaries
-    """
+    """* Verify: Player cannot move out of grid boundaries"""
     g = test_grid
     player = g.get_player()
     assert not player.get_movement_validity("w", -1, 2)
@@ -155,8 +142,7 @@ def test_get_movement_validity_out_of_bounds(test_grid):
 
 
 def test_get_movement_validity_against_tree(test_grid):
-    """* Verify: Player cannot move to a Tree
-    """
+    """* Verify: Player cannot move to a Tree"""
     g = test_grid
     player = g.get_player()
     tree = ENTITIES["Tree"]([2, 3], g)

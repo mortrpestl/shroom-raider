@@ -13,6 +13,10 @@ ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "Pave
 @pytest.fixture
 def large_grid():
     """Provide an empty 5x5 grid for testing Tree behavior.
+
+    Returns:
+        A test grid for testing.
+
     """
     map_data = """
 .....
@@ -24,7 +28,7 @@ def large_grid():
     return Grid("large_tree_grid", map_data)
 
 
-def test_initialization_stores_position_and_flags(large_grid):
+def test_initialization_stores_position_and_flags(large_grid: Grid):
     """Verify tree construction and basic attributes.
 
     - Create a Tree at a specific coordinate on an empty grid.
@@ -41,7 +45,7 @@ def test_initialization_stores_position_and_flags(large_grid):
     assert tree._is_burnable
 
 
-def test_tree_chop_removes_tree_from_grid(large_grid):
+def test_tree_chop_removes_tree_from_grid(large_grid: Grid):
     """Ensure chopping a tree removes it from the grid.
 
     - Place a Tree at a grid cell.
@@ -57,7 +61,7 @@ def test_tree_chop_removes_tree_from_grid(large_grid):
     assert g.get_obj_in_coord(0, 1) is None
 
 
-def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
+def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid: Grid):
     """Burning affects only orthogonally adjacent trees.
 
     - Place several Trees: two adjacent, one diagonal, one distant.
@@ -85,7 +89,7 @@ def test_tree_burn_only_affects_adjacent_orthogonal_trees(large_grid):
     assert g.get_obj_in_coord(3, 3) == tree4
 
 
-def test_tree_burn_following_orthogonal_chain_only(large_grid):
+def test_tree_burn_following_orthogonal_chain_only(large_grid: Grid):
     """Burning follows orthogonal chains only.
 
     - Create a chain of Trees: first two orthogonally connected, next ones diagonal.

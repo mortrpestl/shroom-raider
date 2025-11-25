@@ -3,12 +3,13 @@ from Classes.Grid import Grid
 
 
 class Axe(Entity):
-    """
-    A storable Entity that, if used by the player, destroys a tree
+    """A storable Entity that, if used by the player, destroys a tree
 
     Attributes:
         See parent class
+
     """
+
     # * Attributes
     _is_collectable = True
     _is_storable = True
@@ -18,5 +19,6 @@ class Axe(Entity):
         
         Args:
             See parent class.
+
         """
         super().__init__(pos, on_grid, ascii)

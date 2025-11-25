@@ -1,14 +1,16 @@
+import os
+import pathlib
 from random import randint
 
-from pygame import mixer as m
-
-import os
 from LevelManager import get_folder_bgm_filename
+from pygame import mixer as m
 
 HERE = os.path.dirname(__file__)
 
+
 def path(filename: str):
     return os.path.join(HERE, "..", "Assets", "Sounds", filename)
+
 
 # ! REGULAR GAME
 
@@ -57,9 +59,10 @@ PRELOADED_LEVEL_BGM = {}
 PRELOADED_FOLDER_BGM = {}
 PRELOADED_MAINMENU_BGM = None
 
+
 def load_sound(fullpath: str):
     fp = os.path.normpath(fullpath)
-    if not os.path.isabs(fp):
+    if not pathlib.Path(fp).is_absolute():
         fp = os.path.normpath(os.path.join(HERE, fp))
     if fp in SOUND_CACHE:
         return SOUND_CACHE[fp]
@@ -67,9 +70,10 @@ def load_sound(fullpath: str):
     SOUND_CACHE[fp] = snd
     return snd
 
+
 def preload_level_bgms():
     level_dir = os.path.join(HERE, "..", "Assets", "Sounds", "level_music")
-    if not os.path.isdir(level_dir):
+    if not pathlib.Path(level_dir).is_dir():
         return
     for fn in os.listdir(level_dir):
         if not fn.lower().endswith((".mp3", ".ogg", ".wav")):
@@ -78,9 +82,10 @@ def preload_level_bgms():
         snd = load_sound(full)
         PRELOADED_LEVEL_BGM[fn] = snd
 
+
 def preload_folder_bgms():
     folder_dir = os.path.join(HERE, "..", "Assets", "Sounds", "folder_music")
-    if not os.path.isdir(folder_dir):
+    if not pathlib.Path(folder_dir).is_dir():
         return
     for fn in os.listdir(folder_dir):
         if not fn.lower().endswith((".mp3", ".ogg", ".wav")):
@@ -88,6 +93,7 @@ def preload_folder_bgms():
         full = os.path.join(folder_dir, fn)
         snd = load_sound(full)
         PRELOADED_FOLDER_BGM[fn] = snd
+
 
 # ! Initializers
 def initialize_walk_sounds():
@@ -145,10 +151,12 @@ def initialize_menu():
     global MENU
     MENU = load_sound(path("main_menu_click.ogg"))
 
+
 def initialize_bgms():
     global BGM, WELCOME_BGM, PRELOADED_MAINMENU_BGM
     PRELOADED_MAINMENU_BGM = load_sound(path("bgm.mp3"))
     WELCOME_BGM = load_sound(path("welcome_bgm.mp3"))
+
 
 def initialize_victory_defeat():
     global VICTORY, DEFEAT
@@ -284,11 +292,13 @@ def menu_sound():
 
 # * Victory and Defeat
 
+
 def victory_sound():
     global VICTORY
     current_bgm_stop()
     if VICTORY:
         VICTORY.play()
+
 
 def defeat_sound():
     global DEFEAT
@@ -296,11 +306,13 @@ def defeat_sound():
     if DEFEAT:
         DEFEAT.play()
 
+
 # * BGM
 # stop current BGM
 def current_bgm_stop(fade_ms=FADE_MS):
     if BGM:
         BGM.fadeout(fade_ms)
+
 
 # welcome BGM
 def welcome_sound(fade_ms=FADE_MS):
@@ -312,6 +324,7 @@ def welcome_sound_stop(fade_ms=FADE_MS):
     if WELCOME_BGM:
         WELCOME_BGM.fadeout(fade_ms)
 
+
 # main menu BGM
 def mainmenu_sound(fade_ms=FADE_MS):
     current_bgm_stop(fade_ms)
@@ -319,6 +332,7 @@ def mainmenu_sound(fade_ms=FADE_MS):
     BGM = PRELOADED_MAINMENU_BGM
     if BGM:
         BGM.play(loops=-1, fade_ms=fade_ms)
+
 
 # level BGM
 def level_bgm_sound(level_bgm, fade_ms=FADE_MS):
@@ -328,6 +342,7 @@ def level_bgm_sound(level_bgm, fade_ms=FADE_MS):
     if BGM:
         BGM.play(loops=-1, fade_ms=fade_ms)
 
+
 # folder BGM
 def folder_bgm_sound(folder_id, fade_ms=FADE_MS):
     current_bgm_stop(fade_ms)
@@ -336,6 +351,7 @@ def folder_bgm_sound(folder_id, fade_ms=FADE_MS):
     BGM = PRELOADED_FOLDER_BGM.get(folder_bgm)
     if BGM:
         BGM.play(loops=-1, fade_ms=fade_ms)
+
 
 def fadeout_all_sounds(fade_ms=FADE_MS):
     for sound in [BGM, WELCOME_BGM]:

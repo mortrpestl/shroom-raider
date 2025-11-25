@@ -6,8 +6,8 @@ def import_entities(names: set):
 
     Returns:
         A dictionary containing all the imported modules
+
     """
-    
     imported = {}
     for name in names:
         module = __import__(f"Classes.Entities.{name}", fromlist=[name])

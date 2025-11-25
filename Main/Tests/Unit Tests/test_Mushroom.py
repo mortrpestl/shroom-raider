@@ -10,8 +10,7 @@ from Classes.Grid import Grid
 
 @pytest.fixture
 def test_grid():
-    """Provide a 3x3 test grid for Mushroom behavior.
-    """
+    """Provide a 3x3 test grid for Mushroom behavior."""
     map_data = """
 ...
 ...

@@ -109,7 +109,7 @@ def findPW(unencrypted: str, encrypted: str):
 
     Args:
         unencrypted: The original string
-        encryptedL The string after being scrambled
+        encrypted: The string after being scrambled
 
     Returns:
         The key string of the cipher

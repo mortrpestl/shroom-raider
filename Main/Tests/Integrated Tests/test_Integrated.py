@@ -116,7 +116,8 @@ def run_game_case(testcase):
     # Run the game script
     proc = subprocess.run(
         ["python3", SCRIPT, "-f", level_path, "-m", moves_raw, "-o", tmp_out_path],
-        check=False, capture_output=True,
+        check=False,
+        capture_output=True,
         text=True,
         encoding="utf-8",
         errors="ignore",

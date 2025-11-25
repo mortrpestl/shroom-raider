@@ -14,6 +14,5 @@ class Water(Entity):
     _is_deadly = True
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "~"):
-        """Initializes a Water object
-        """
+        """Initializes a Water object"""
         super().__init__(pos, on_grid, ascii)

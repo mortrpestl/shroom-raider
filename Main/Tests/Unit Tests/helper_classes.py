@@ -18,8 +18,7 @@ class DummyPlayer(Player):
 
 
 class WinPlayer(Player):
-    """A Player subclass that immediately wins (collects all mushrooms).
-    """
+    """A Player subclass that immediately wins (collects all mushrooms)."""
 
     def __init__(self, on_grid: Grid, pos=[0, 0], ascii="L", item=None):
         super().__init__(pos, on_grid, ascii, item)
@@ -33,8 +32,7 @@ class WinPlayer(Player):
 
 
 class LosePlayer(Player):
-    """A Player subclass that is always dead.
-    """
+    """A Player subclass that is always dead."""
 
     def __init__(self, pos=[0, 0], on_grid: Grid = None, ascii="L", item=None):
         super().__init__(pos, on_grid, ascii, item)

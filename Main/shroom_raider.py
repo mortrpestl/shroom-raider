@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import io
-import os
-import pathlib
 import sys
-from argparse import ArgumentParser as ap
+from argparse import ArgumentParser
+from pathlib import Path
 
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
@@ -17,20 +16,20 @@ ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = "TEST"
 
 
-def check_win_condition(P: Player, G: Grid):
-    """Checks if a player has met the win condition of a grid
+def check_win_condition(player: Player, grid: Grid) -> None:
+    """Check if a player has met the win condition of a grid.
 
     Args:
-        P: A Player Entity
-        G: A Grid object
+        player: A Player Entity
+        grid: A Grid object
 
     """
-    if P.get_mushroom_count() == G.get_total_mushrooms():
-        G.level_clear()
+    if player.get_mushroom_count() == grid.get_total_mushrooms():
+        grid.level_clear()
 
 
-def reset(level: str):
-    """Resets a stage to its starting conditions
+def reset(level: str) -> None:
+    """Reset a stage to its starting conditions.
 
     Args:
         level: A string representation of the stage being reset
@@ -39,25 +38,22 @@ def reset(level: str):
         A Grid object that contains the reset level, and a Player entity on that Grid
 
     """
-    global G, P
-    G = Grid("test", level)
-    P = G.get_player()
-    return G, P
+    main_grid = Grid("test", level)
+    main_player = main_grid.get_player()
+    return main_grid, main_player
 
 
-def parser(instructions: str, P: Player, G: Grid, level: str, reset_only: bool):
-    """Parses user inputs to play game
+def parser(instructions: str, player: Player, grid: Grid, level: str, reset_only: bool = False) -> None:
+    """Parse user inputs to play game.
 
     Args:
-        instructions: The given input string of the player's moves
-        P: The current Player entity
-        G: The current Grid object
-        level: A string representation of the ORIGINAL stage
-        reset_only: A boolean indicating if moves other than reset can be played
+        instructions: The given input string of the player's moves.
+        player: The current Player entity.
+        grid: The current Grid object.
+        level: A string representation of the ORIGINAL stage.
+        reset_only: A boolean indicating if moves other than reset can be played.
 
     """
-    global item_here, holding_anything
-
     if instructions is None:
         return
 
@@ -73,46 +69,41 @@ def parser(instructions: str, P: Player, G: Grid, level: str, reset_only: bool):
                     f.write(str(ln) + "\n")
 
     for line in lines:
-        for inst in line:
-            inst = inst.lower()
+        for inst_raw in line:
+            inst = inst_raw.lower()
 
             if ENABLE_TEST_MODE and inst == "?":
                 with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
-                    f.write("CLEAR\n" if G.get_is_cleared() else "NO CLEAR\n")
-                    f.write(G.get_vis_map_as_str())
-                exit()
+                    f.write("CLEAR\n" if grid.get_is_cleared() else "NO CLEAR\n")
+                    f.write(grid.get_vis_map_as_str())
+                sys.exit()
 
             if inst == "!":
-                G, P = reset(level)
+                grid, player = reset(level)
 
             if reset_only:
                 break
 
-            if G.get_is_cleared() or P.get_is_dead():
+            if grid.get_is_cleared() or player.get_is_dead():
                 break
 
             if inst not in "wasdp!":
                 break
 
             if inst in "wasd":
-                P.set_pos(inst)
-            elif inst == "p":
-                if P.get_item() is None:
-                    P.collect_item()
+                player.set_pos(inst)
+            elif inst == "p" and player.get_item() is None:
+                player.collect_item()
 
-            P.collect_shroom()  # if applicable
+            player.collect_shroom()  # if applicable
 
-            check_win_condition(P, G)
+            check_win_condition(player, grid)
 
 
-def main():
-    """The main game logic for Shroom Raider
-    -> Processes Command Line Arguments
-    -> Handles Game Loop
-    """
-    global G, P
+def main() -> None:
+    main_player, main_grid = None, None
 
-    argument_parser = ap()
+    argument_parser = ArgumentParser()
     argument_parser.add_argument("-f", "--stage_file")
     argument_parser.add_argument("-m", "--movement_file")
     argument_parser.add_argument("-o", "--output_file")
@@ -124,17 +115,17 @@ def main():
             r, c = map(int, first_line.split())
             level = lvl_file.read()
 
-        G = Grid(LEVEL_NAME, level)
-        P = G.get_player()
+        main_grid = Grid(LEVEL_NAME, level)
+        main_player = main_grid.get_player()
 
-        check_win_condition(P, G)
+        check_win_condition(main_player, main_grid)
 
         while True:
-            stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+            stop_or_reset_only = main_grid.render(main_player, test_mode=ENABLE_TEST_MODE)
             if stop_or_reset_only:
-                exit()
+                sys.exit()
             # each input() returns one line; parser will process that line
-            parser(input(), P, G, level, stop_or_reset_only)
+            parser(input(), main_player, main_grid, level, reset_only=stop_or_reset_only)
 
     elif args.stage_file is not None:
         with open(args.stage_file, encoding="utf-8") as lvl_file:
@@ -142,28 +133,28 @@ def main():
             r, c = map(int, first_line.split())
             level = lvl_file.read()
 
-        G = Grid("UserInput", level)
-        P = G.get_player()
+        main_grid = Grid("UserInput", level)
+        main_player = main_grid.get_player()
 
-        check_win_condition(P, G)
+        check_win_condition(main_player, main_grid)
 
         if args.movement_file is None or args.output_file is None:
             while True:
-                stop_or_reset_only = G.render(P, test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = main_grid.render(main_player, test_mode=ENABLE_TEST_MODE)
                 if stop_or_reset_only:
-                    exit()
-                parser(input(), P, G, level, stop_or_reset_only)
+                    sys.exit()
+                parser(input(), main_player, main_grid, level, reset_only=stop_or_reset_only)
 
         elif args.movement_file is not None and args.output_file is not None:
-            parser(args.movement_file, P, G, level, reset_only=False)
+            parser(args.movement_file, main_player, main_grid, level, reset_only=False)
 
             with open(args.output_file, "w", encoding="utf-8") as f:
                 f.write(f"{r} {c}\n")
-                if P.get_mushroom_count() == G.get_total_mushrooms():
+                if main_player.get_mushroom_count() == main_grid.get_total_mushrooms():
                     f.write("CLEAR\n")
                 else:
                     f.write("NO CLEAR\n")
-                f.write(G.get_vis_map_as_str())
+                f.write(main_grid.get_vis_map_as_str())
 
         else:  # this is just for safety
             print(
@@ -176,27 +167,20 @@ def main():
 
 
 if __name__ == "__main__":
-    P, G = None, None
-    item_here = "No items here"
-    holding_anything = None
-
     if ENABLE_TEST_MODE:
         base_folder = "Logs"
-        pathlib.Path(base_folder).mkdir(exist_ok=True, parents=True)
+        Path(base_folder).mkdir(exist_ok=True, parents=True)
 
-        existing = [d for d in os.listdir(base_folder) if pathlib.Path(os.path.join(base_folder, d)).is_dir() and d.isdigit()]
+        existing = [d for d in Path.iterdir(base_folder) if Path(base_folder, d).is_dir() and d.isdigit()]
         run_number = max([int(d) for d in existing], default=0) + 1
 
-        run_folder = os.path.join(base_folder, str(run_number))
-        pathlib.Path(run_folder).mkdir(parents=True)
+        run_folder = Path(base_folder, str(run_number))
+        Path(run_folder).mkdir(parents=True)
 
-        with (
-            open(f"{LEVEL_NAME}.txt", encoding="utf-8") as src,
-            open(os.path.join(run_folder, "map.txt"), "w", encoding="utf-8") as dst,
-        ):
-            dst.write(src.read())
+        with Path(f"{LEVEL_NAME}.txt").read_text(encoding="utf-8") as src:
+            Path(Path(run_folder, "maplayer.txt")).write_text(src.read(), encoding="utf-8")
 
-        INPUT_LOG_FILE = os.path.join(run_folder, "input.txt")
-        OUTPUT_LOG_FILE = os.path.join(run_folder, "output.txt")
+        INPUT_LOG_FILE = Path(run_folder, "input.txt")
+        OUTPUT_LOG_FILE = Path(run_folder, "output.txt")
 
     main()

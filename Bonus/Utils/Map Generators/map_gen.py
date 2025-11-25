@@ -125,8 +125,8 @@ def gen_map(R, C, element_probi=None, player_exists=True, boost_prob=None):
     return build_map(f"{R} {C}", grid)
 
 
-def gen_empty_map(R, C):
-    return gen_map(R, C, element_probi={".": 50, "_": 1})
+def gen_empty_map(R, C, element_probi={".": 50, "_": 1}):
+    return gen_map(R, C, element_probi)
 
 
 def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None, highest_C=None):
@@ -313,7 +313,7 @@ def draw_polygon_hull(input_map, points, polygon_char="R", thickness=1, canyoniz
 
 # * EXAMPLE USAGE
 
-print(gen_empty_map(10, 10))
+print(gen_empty_map(50, 50, element_probi={'~': 50}))
 randR, randC = randint(3, 30), randint(3, 30)
 
 # 0. Generate empty map

@@ -40,23 +40,19 @@ class Entity:
     # * Simple Getters
 
     def get_ascii(self):
-        """Returns: The ascii character representation of the Entity
-        """
+        """Returns: The ascii character representation of the Entity"""
         return self.__ascii
 
     def get_on_grid(self):
-        """Returns: The Grid object that this Entity resides in
-        """
+        """Returns: The Grid object that this Entity resides in"""
         return self.__on_grid
 
     def get_pos(self):
-        """Returns: The position [r, c] of this Entity in its Grid
-        """
+        """Returns: The position [r, c] of this Entity in its Grid"""
         return self.__pos
 
     def get_obj_in_coord(self, r: int, c: int):
-        """Returns: The object on coordinate [r, c] on the same Grid as this Entity
-        """
+        """Returns: The object on coordinate [r, c] on the same Grid as this Entity"""
         return self.__on_grid.get_obj_in_coord(r, c)
 
     """
@@ -64,33 +60,27 @@ class Entity:
     """
 
     def get_burnable(self):
-        """Returns: A boolean indicating if an object is burnable or not
-        """
+        """Returns: A boolean indicating if an object is burnable or not"""
         return self._is_burnable
 
     def get_collideable(self):
-        """Returns: A boolean indicating if an object is collideable or not
-        """
+        """Returns: A boolean indicating if an object is collideable or not"""
         return self._is_collideable or self._is_pushable
 
     def get_collectable(self):
-        """Returns: A boolean indicating if an object is collectible or not
-        """
+        """Returns: A boolean indicating if an object is collectible or not"""
         return self._is_collectable or self._is_storable
 
     def get_storable(self):
-        """Returns: A boolean indicating if an object is storable or not
-        """
+        """Returns: A boolean indicating if an object is storable or not"""
         return self._is_storable
 
     def get_deadly(self):
-        """Returns: A boolean indicating if an object is deadly or not
-        """
+        """Returns: A boolean indicating if an object is deadly or not"""
         return self._is_deadly
 
     def get_pushable(self, pusher):
-        """Returns: A boolean indicating if an object is pushable or not
-        """
+        """Returns: A boolean indicating if an object is pushable or not"""
         return self._is_pushable
 
     # * Complex Getters
@@ -148,15 +138,13 @@ class Entity:
         return True
 
     def get_entity_below(self):
-        """Returns: The Entity that exists below this Entity in the Grid
-        """
+        """Returns: The Entity that exists below this Entity in the Grid"""
         stack = self.get_on_grid().get_layers_from_coord(*self.get_pos())
         return stack[-2] if len(stack) > 1 else None
 
     # * Simple Setters
     def set_coordinate(self, r: int, c: int):
-        """Sets the position of this Entity. DOES NOT MODIFY THE GRID
-        """
+        """Sets the position of this Entity. DOES NOT MODIFY THE GRID"""
         self.__pos = [r, c]
 
     # * Complex Setters
@@ -193,8 +181,7 @@ class Entity:
         return True  # The Entity has moved
 
     def destroy(self):
-        """Destroys the Entity, and removes it from the Grid
-        """
+        """Destroys the Entity, and removes it from the Grid"""
         on_grid_stck = self.get_on_grid().get_layers_from_coord(*self.get_pos())
         for i in range(-1, -len(on_grid_stck) - 1, -1):
             if on_grid_stck[i] == self:

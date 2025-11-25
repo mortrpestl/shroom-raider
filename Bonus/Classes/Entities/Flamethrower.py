@@ -3,12 +3,13 @@ from Classes.Grid import Grid
 
 
 class Flamethrower(Entity):
-    """
-    A storable Entity that, if used by the Player, destroys all connected burnable entities
+    """A storable Entity that, if used by the Player, destroys all connected burnable entities
 
     Attributes:
         See parent class.
+
     """
+
     # * Attributes
     _is_collectable = True
     _is_storable = True
@@ -18,5 +19,6 @@ class Flamethrower(Entity):
         
         Args:
             See parent class.
+
         """
         super().__init__(pos, on_grid, ascii)

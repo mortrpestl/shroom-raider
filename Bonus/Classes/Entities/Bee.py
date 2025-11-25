@@ -24,8 +24,8 @@ class Bee(Entity):
         
         Args:
             See base class.
-        """
 
+        """
         super().__init__(pos, on_grid, ascii)
         self._is_deadly = True
         self._lag = int(lag)

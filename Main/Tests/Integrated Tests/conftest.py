@@ -2,8 +2,7 @@
 
 
 def pytest_collection_modifyitems(items):
-    """Modify collected test items so that only the human-readable parametrize ID is shown.
-    """
+    """Modify collected test items so that only the human-readable parametrize ID is shown."""
     for item in items:
         # Check if the test was parametrized
         if hasattr(item, "callspec"):

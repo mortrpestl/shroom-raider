@@ -85,28 +85,23 @@ class Grid:
     # * Simple Getters
 
     def get_player(self):
-        """Returns: The Player entity on the Grid
-        """
+        """Returns: The Player entity on the Grid"""
         return self.get_obj_in_coord(*self.__player_pos)
 
     def get_grid_obj_map(self):
-        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
-        """
+        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain"""
         return self.__grid_obj_map
 
     def get_layers_from_coord(self, r: int, c: int):
-        """Returns: The stack of a certain coordinate, containing the entities at that coordinate
-        """
+        """Returns: The stack of a certain coordinate, containing the entities at that coordinate"""
         return self.__grid_obj_map[r][c]
 
     def get_total_mushrooms(self):
-        """Returns: The integer amount of total mushrooms contained in the Grid
-        """
+        """Returns: The integer amount of total mushrooms contained in the Grid"""
         return self.__total_mushrooms
 
     def get_is_cleared(self):
-        """Returns: A boolean indicating if the current Grid has been cleared
-        """
+        """Returns: A boolean indicating if the current Grid has been cleared"""
         return self.__is_cleared
 
     # * Complex Getters

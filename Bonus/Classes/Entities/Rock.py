@@ -5,13 +5,15 @@ from Classes.Grid import Grid
 
 
 class Rock(Entity):
-    """A collideable Entity that can be pushed by the player 
+    """A collideable Entity that can be pushed by the player
     
     Rocks cannot be pushed if there are other collideable or collectable Entities blocking it.
 
     Attributes:
         See parent class
+
     """
+
     # * Attributes
     _is_collectable = False
     _is_collideable = True
@@ -23,6 +25,7 @@ class Rock(Entity):
 
         Args:
             See parent class
+
         """
         super().__init__(pos, on_grid, ascii)
 
@@ -36,8 +39,8 @@ class Rock(Entity):
 
         Returns:
             True if the rocks is able to move, False if not 
-        """
 
+        """
         if not self.in_bounds(r, c):
             return False
 
@@ -59,6 +62,7 @@ class Rock(Entity):
 
         Returns:
             A boolean indicating if the Rock is able to be pushed by its pusher
+
         """
         entities = import_entities({"Player"})
         if isinstance(pusher, entities["Player"]):
@@ -72,11 +76,12 @@ class Rock(Entity):
     def set_pos(self, direction: str):
         """Moves the Rock on the Grid
 
-        Args: 
+        Args:
             direction: The direction that the Entity wants to move
 
         Returns:
             A boolean indicating whether the Rock was able to move or not
+
         """
         if super().set_pos(direction):
             s.push_sound()

@@ -3,12 +3,13 @@ from Classes.Grid import Grid
 
 
 class Mushroom(Entity):
-    """
-    An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it
+    """An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it
 
-    Attributes: 
+    Attributes:
         See parent class
+
     """
+
     # * Attributes
     _is_collectable = True
 
@@ -17,6 +18,7 @@ class Mushroom(Entity):
         
         Args:
             See parent class.
+
         """
         super().__init__(pos, on_grid, ascii)
 

@@ -24,8 +24,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """Tests if PavedTile properly renders in grid (along with other objects we will use for testing)
-    """
+    """Tests if PavedTile properly renders in grid (along with other objects we will use for testing)"""
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)
@@ -54,8 +53,7 @@ def test_initialization_stores_position_and_flags(test_grid):
 
 
 def test_player_moves_over_and_off_pavedtile(test_grid):
-    """Move the player around the rock and onto the paved tile, then back.
-    """
+    """Move the player around the rock and onto the paved tile, then back."""
     g = test_grid
     player = g.get_player()
     paved = g.get_obj_in_coord(3, 2)
@@ -105,8 +103,7 @@ def test_player_pushes_rock_onto_pavedtile(test_grid):
 
 
 def test_rock_moves_off_pavedtile(test_grid):
-    """After the Rock sits on the PavedTile, move it further down to (4,2).
-    """
+    """After the Rock sits on the PavedTile, move it further down to (4,2)."""
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)

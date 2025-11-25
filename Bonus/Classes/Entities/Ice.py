@@ -11,6 +11,7 @@ class Ice(Entity):
 
     Attributes:
         See parent class.
+
     """
 
     # * Attributes
@@ -28,6 +29,7 @@ class Ice(Entity):
 
         Args:
             See parent class.
+
         """
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Ice)):
@@ -40,6 +42,7 @@ class Ice(Entity):
 
         Args:
             See parent class.
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -69,8 +72,8 @@ class Ice(Entity):
 
         Returns:
             moved: Whether the entity has moved or not
-        """
 
+        """
         entities = import_entities({"Water", "PavedTile"})
         moved = False
         while super().set_pos(direction):

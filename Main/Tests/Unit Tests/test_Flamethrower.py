@@ -12,8 +12,7 @@ ENTITIES = import_entities({"Player", "Flamethrower"})
 
 @pytest.fixture
 def test_grid():
-    """Provide a 3x3 test grid for Flamethrower behavior.
-    """
+    """Provide a 3x3 test grid for Flamethrower behavior."""
     map_data = """
 ...
 ...

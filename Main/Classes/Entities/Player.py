@@ -41,18 +41,15 @@ class Player(Entity):
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self):
-        """Returns: The item the player is holding
-        """
+        """Returns: The item the player is holding"""
         return self.__item
 
     def get_mushroom_count(self):
-        """Returns: The number of mushrooms the player has collected
-        """
+        """Returns: The number of mushrooms the player has collected"""
         return self.__mushroom_count
 
     def get_is_dead(self):
-        """Returns: A bool indicating if the player is dead
-        """
+        """Returns: A bool indicating if the player is dead"""
         return self.__is_dead
 
     # * Complex Getters
@@ -88,8 +85,7 @@ class Player(Entity):
     # * Simple Setters
 
     def kill(self):
-        """Sets the player status to dead
-        """
+        """Sets the player status to dead"""
         self.__is_dead = True
 
     def set_item(self, item: Entity | None):
@@ -102,20 +98,17 @@ class Player(Entity):
         self.__item = item
 
     def increment_mushroom_count(self):
-        """Increases mushroom count
-        """
+        """Increases mushroom count"""
         self.__mushroom_count += 1
 
     def use_item(self):
-        """Removes the current held item
-        """
+        """Removes the current held item"""
         self.__item = None
 
     # * Complex Setters
 
     def collect_item(self):
-        """If on top of an item, collects it. Else, does nothing
-        """
+        """If on top of an item, collects it. Else, does nothing"""
         item = self.get_entity_below()
 
         if not item:
@@ -126,8 +119,7 @@ class Player(Entity):
             item.destroy()
 
     def collect_shroom(self):
-        """Collects the shroom below the player if it exists
-        """
+        """Collects the shroom below the player if it exists"""
         shroom = self.get_entity_below()
 
         if not shroom:

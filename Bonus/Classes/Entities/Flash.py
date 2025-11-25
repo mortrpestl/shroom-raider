@@ -24,6 +24,7 @@ class Flash(Entity):
 
         Args:
             See parent class.
+
         """
         super().__init__(pos, on_grid, ascii)
         self._active = False
