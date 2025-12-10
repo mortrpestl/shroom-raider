@@ -1,19 +1,23 @@
-import os
 import pathlib
 import sys
-
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
 
 import pytest
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
 
-# Register entities
+sys.path.append((pathlib.Path(__file__).parent / "../..").resolve())
+
 ENTITIES = import_entities({"Player", "Axe", "Tree"})
 
 
 @pytest.fixture
-def test_grid():
+def test_grid() -> Grid:
+    """Provide a small test grid for Axe/Player interactions.
+
+    Returns:
+        a Grid for testing.
+
+    """
     map_data = """.....
 .....
 ..L..
@@ -22,18 +26,18 @@ def test_grid():
     return Grid("axe_test_grid", map_data)
 
 
-def test_initialization_stores_position_and_flags(test_grid):
-    """* Verify: Axe initializes with correct position and flags."""
+def test_initialization_stores_position_and_flags(test_grid: Grid) -> None:
+    """Verify: Axe initializes with correct position and flags."""
     g = test_grid
     axe = ENTITIES["Axe"]([0, 0], g)
     assert axe.get_pos() == [0, 0]
     assert axe.get_on_grid() == g
-    assert axe._is_collectable
-    assert not axe._is_collideable
+    assert axe.get_collectable()
+    assert not axe.get_collideable()
 
 
-def test_player_can_collect_axe(test_grid):
-    """* Verify: Player can move onto Axe and collect it, removing it from the grid."""
+def test_player_can_collect_axe(test_grid: Grid) -> None:
+    """Verify: Player can move onto Axe and collect it, removing it from the grid."""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"]([2, 3], g)
@@ -47,8 +51,8 @@ def test_player_can_collect_axe(test_grid):
     assert all(obj != ENTITIES["Axe"] or obj is player for obj in layers)
 
 
-def test_player_uses_axe_on_tree(test_grid):
-    """* Verify: Player uses Axe on a Tree, tree is removed, Axe is consumed."""
+def test_player_uses_axe_on_tree(test_grid: Grid) -> None:
+    """Verify: Player uses Axe on a Tree, tree is removed, Axe is consumed."""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"]([0, 0], g)
@@ -63,8 +67,8 @@ def test_player_uses_axe_on_tree(test_grid):
     assert player.get_item() is None
 
 
-def test_player_tries_to_use_axe_on_two_trees(test_grid):
-    """* Verify: Player with Axe can only chop one Tree at a time, Axe is consumed after first."""
+def test_player_tries_to_use_axe_on_two_trees(test_grid: Grid) -> None:
+    """Verify: Player with Axe can only chop one Tree at a time, Axe is consumed after first."""
     g = test_grid
     player = g.get_player()
     axe = ENTITIES["Axe"]([0, 0], g)

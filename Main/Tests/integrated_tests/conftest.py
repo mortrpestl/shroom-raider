@@ -1,9 +1,10 @@
-#! AI was prompted to ask with finding which attributes pertain to parameter
+from collections.abc import Sequence
+
+from _pytest.nodes import Item
 
 
-def pytest_collection_modifyitems(items) -> None:
-    """Modify collected test items so that only the human-readable parametrize ID is shown."""
+def pytest_collection_modifyitems(items: Sequence[Item]) -> None:
+    """Modify collected test items to display only the human-readable parametrize ID."""
     for item in items:
-        # Check if the test was parametrized
         if hasattr(item, "callspec"):
-            item._nodeid = str(item.callspec.id)  # set nodeid to your id param
+            item._nodeid = str(item.callspec.id)  # noqa: SLF001

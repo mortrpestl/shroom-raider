@@ -1,31 +1,34 @@
-import os
-import pathlib
 import sys
-
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
+from pathlib import Path
 
 import pytest
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
 
-# Register entities
+sys.path.append((Path(__file__).parent / "../..").resolve())
+
 import_entities({"Player", "Rock", "PavedTile"})
 
 
 @pytest.fixture
-def test_grid():
+def test_grid() -> Grid:
+    """Provide a 6x5 test grid with Player, Rock, and PavedTile for testing.
+
+    Returns:
+        Grid: A Grid instance with preset objects.
+
+    """
     map_data = """.....
 ..L..
 ..R..
 .._..
 .....
 ....."""
-
     return Grid("pavedtile_test_grid", map_data)
 
 
-def test_initialization_stores_position_and_flags(test_grid):
-    """Tests if PavedTile properly renders in grid (along with other objects we will use for testing)."""
+def test_initialization_stores_position_and_flags(test_grid: Grid) -> None:
+    """Test that PavedTile and other objects are correctly initialized on the grid."""
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)
@@ -53,14 +56,13 @@ def test_initialization_stores_position_and_flags(test_grid):
     assert paved.get_collectable() is False
 
 
-def test_player_moves_over_and_off_pavedtile(test_grid):
-    """Move the player around the rock and onto the paved tile, then back."""
+def test_player_moves_over_and_off_pavedtile(test_grid: Grid) -> None:
+    """Move the player around the rock onto the paved tile, then back."""
     g = test_grid
     player = g.get_player()
     paved = g.get_obj_in_coord(3, 2)
 
     # path (r,c): (1,2) → (1,3) → (2,3) → (3,3) → (3,2)
-    # moved = player.set_pos(["d", "s", "s", "a"])
     moved = False
     for inst in "dssa":
         moved = player.set_pos(inst)
@@ -82,10 +84,11 @@ def test_player_moves_over_and_off_pavedtile(test_grid):
     assert g.get_obj_in_coord(3, 2) == paved
 
 
-def test_player_pushes_rock_onto_pavedtile(test_grid):
-    """Player pushes the rock one cell down onto the paved tile:
-    - Player (1,2), Rock (2,2), Paved (3,2)
-    - Move "s" should push Rock to (3,2) and Player to (2,2).
+def test_player_pushes_rock_onto_pavedtile(test_grid: Grid) -> None:
+    """Player pushes the rock one cell down onto the paved tile.
+
+    - Player at (1,2), Rock at (2,2), PavedTile at (3,2).
+    - Moving 's' pushes Rock to (3,2) and Player to (2,2).
     """
     g = test_grid
     player = g.get_player()
@@ -103,8 +106,8 @@ def test_player_pushes_rock_onto_pavedtile(test_grid):
     assert rock in layers
 
 
-def test_rock_moves_off_pavedtile(test_grid):
-    """After the Rock sits on the PavedTile, move it further down to (4,2)."""
+def test_rock_moves_off_pavedtile(test_grid: Grid) -> None:
+    """Move the rock further down from the PavedTile to (4,2)."""
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)

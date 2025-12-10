@@ -1,12 +1,11 @@
-import os
-import pathlib
 import sys
-
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
+from pathlib import Path
 
 import pytest
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
+
+sys.path.append((Path(__file__).parent / "../..").resolve())
 
 ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"})
 
@@ -42,8 +41,8 @@ def test_initialization_stores_position_and_flags(large_grid: Grid):
 
     assert tree.get_pos() == [0, 1]
     assert tree.get_on_grid() == g
-    assert tree._is_collideable
-    assert tree._is_burnable
+    assert tree.get_collideable()
+    assert tree.get_burnable()
 
 
 def test_tree_chop_removes_tree_from_grid(large_grid: Grid):

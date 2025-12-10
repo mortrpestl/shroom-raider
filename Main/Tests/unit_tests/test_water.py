@@ -1,12 +1,14 @@
-import os
-import pathlib
 import sys
-
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
+from pathlib import Path
 
 import pytest
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
+
+sys.path.append((Path(__file__).parent / "../..").resolve())
+
+ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
+
 
 # Register entities
 ENTITIES = import_entities({"Player", "Water"})
@@ -33,7 +35,7 @@ def test_initialization_stores_position_and_flags(test_grid: Grid):
     water = ENTITIES["Water"]([0, 0], test_grid)
     assert not water.get_collideable()
     assert not water.get_collectable()
-    assert water._is_deadly
+    assert water.get_deadly()
 
 
 def test_player_moving_into_water_is_deadly(test_grid: Grid):

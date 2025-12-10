@@ -1,10 +1,10 @@
-import os
-import pathlib
 import sys
-
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
+from pathlib import Path
 
 import pytest
+
+sys.path.append((Path(__file__).parent / "../..").resolve())
+
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
 
@@ -12,8 +12,13 @@ ENTITIES = import_entities({"Player", "Flamethrower"})
 
 
 @pytest.fixture
-def test_grid():
-    """Provide a 3x3 test grid for Flamethrower behavior."""
+def test_grid() -> Grid:
+    """Provide a 3x3 test grid for Flamethrower behavior.
+
+    Returns:
+        Grid: A blank 3x3 grid for testing Flamethrower placement and interactions.
+
+    """
     map_data = """
 ...
 ...
@@ -22,12 +27,12 @@ def test_grid():
     return Grid("flamethrower_test_grid", map_data)
 
 
-def test_initialization_stores_position_and_flags(test_grid):
+def test_initialization_stores_position_and_flags(test_grid: Grid) -> None:
     """Verify Flamethrower construction and basic attributes.
 
     - Place a Flamethrower at a specific coordinate.
     - Confirm it stores its position and grid reference.
-    - Assert _is_collectable and _is_collideable flags.
+    - Assert collectable and collideable flags.
     """
     g = test_grid
     flame = ENTITIES["Flamethrower"]([1, 1], g)
@@ -39,7 +44,7 @@ def test_initialization_stores_position_and_flags(test_grid):
     assert flame.get_collideable() is False
 
 
-def test_flamethrower_in_grid_stack(test_grid):
+def test_flamethrower_in_grid_stack(test_grid: Grid) -> None:
     """Ensure Flamethrower can coexist in a stack and be retrieved.
 
     - Place a Flamethrower under a Player.
@@ -56,13 +61,13 @@ def test_flamethrower_in_grid_stack(test_grid):
     assert layers[-2] == flame
 
 
-def test_flamethrower_collected_and_picked_up_by_player(test_grid):
+def test_flamethrower_collected_and_picked_up_by_player(test_grid: Grid) -> None:
     """Verify that Player can detect and pick up Flamethrower.
 
-    Verify:
-    * Place a Player above a Flamethrower.
-    * Simulate collect action by popping layers.
-    * Ensure Player acquires Flamethrower and grid updates correctly.
+    Steps:
+    1. Place a Player above a Flamethrower.
+    2. Simulate collect action by popping layers.
+    3. Ensure Player acquires Flamethrower and grid updates correctly.
     """
     g = test_grid
     flame = ENTITIES["Flamethrower"]([1, 1], g)

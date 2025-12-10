@@ -1,21 +1,26 @@
-import os
-import pathlib
 import sys
+from pathlib import Path
 
 import pytest
 from classes.entities.import_entities import import_entities
 from classes.grid import Grid
-from helper_classes import DummyPlayer
 
-sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
+from .helper_classes import DummyPlayer
+
+sys.path.append((Path(__file__).parent / "../..").resolve())
 
 ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
 
 
 @pytest.fixture
-def test_grid():
+def test_grid() -> Grid:
     """Provide a 3x3 test grid for Rock behavior.
+
     Center [1,1] is empty.
+
+    Returns:
+        Grid: A Grid instance with empty center.
+
     """
     map_data = """
 ...
@@ -25,12 +30,11 @@ def test_grid():
     return Grid("rock_test_grid", map_data)
 
 
-def test_initialization_stores_position_and_flags(test_grid):
+def test_initialization_stores_position_and_flags(test_grid: Grid) -> None:
     """Verify Rock construction and basic attributes.
 
-    - Place a Rock at a specific coordinate.
-    - Confirm Rock stores its position and grid reference.
-    - Assert Rock flags (_is_collideable, _is_pushable, _is_collectable) are correct.
+    Place a Rock at a specific coordinate and confirm it stores its
+    position and grid reference. Assert Rock flags are correct.
     """
     g = test_grid
     rock = ENTITIES["Rock"]([1, 1], g)
@@ -43,12 +47,11 @@ def test_initialization_stores_position_and_flags(test_grid):
     assert not rock.get_collectable()
 
 
-def test_rock_push_into_empty_space_succeeds(test_grid):
+def test_rock_push_into_empty_space_succeeds(test_grid: Grid) -> None:
     """Rock can be pushed by Player into an empty cell.
 
-    - Place Rock at [1,1].
-    - Attempt to move Rock downwards ('s').
-    - Verify Rock moved to [2,1] and original cell is empty.
+    Place Rock at [1,1] and attempt to move it downwards ('s').
+    Verify Rock moved to [2,1] and original cell is empty.
     """
     g = test_grid
     rock = ENTITIES["Rock"]([1, 1], g)
@@ -60,12 +63,11 @@ def test_rock_push_into_empty_space_succeeds(test_grid):
     assert g.get_obj_in_coord(1, 1) is None
 
 
-def test_rock_cannot_move_outside_grid(test_grid):
+def test_rock_cannot_move_outside_grid(test_grid: Grid) -> None:
     """Rock cannot move outside the grid bounds.
 
-    - Place Rock at top-left [0,0].
-    - Attempt to move Rock up ('w') and left ('a').
-    - Verify movement fails and position stays the same.
+    Place Rock at top-left [0,0]. Attempt to move up ('w') and left ('a').
+    Verify movement fails and position remains the same.
     """
     g = test_grid
     rock = ENTITIES["Rock"]([0, 0], g)
@@ -80,12 +82,10 @@ def test_rock_cannot_move_outside_grid(test_grid):
     assert rock.get_pos() == [0, 0]
 
 
-def test_rock_push_into_water_converts_to_paved_tile(test_grid):
+def test_rock_push_into_water_converts_to_paved_tile(test_grid: Grid) -> None:
     """Pushing Rock into Water replaces Water with PavedTile and destroys the Rock.
 
-    - Place Rock at [1,1], Water at [2,1].
-    - Move Rock down ('s').
-    - Verify:
+    Place Rock at [1,1], Water at [2,1]. Move Rock down ('s') and verify:
         * Water cell replaced with PavedTile.
         * Rock is destroyed (no longer in grid).
     """
@@ -100,16 +100,14 @@ def test_rock_push_into_water_converts_to_paved_tile(test_grid):
     target_obj = g.get_obj_in_coord(2, 1)
     assert target_obj is not None
     assert target_obj.__class__.__name__ == "PavedTile"
-    # Rock is destroyed
     assert g.get_obj_in_coord(1, 1) is None
 
 
-def test_rock_push_invalid_blocked_by_collectable(test_grid):
+def test_rock_push_invalid_blocked_by_collectable(test_grid: Grid) -> None:
     """Rock cannot move onto a collectable object.
 
-    - Place a Rock and a collectable (e.g., Mushroom) below it.
-    - Attempt to move Rock onto the collectable.
-    - Verify movement fails and Rock remains in place.
+    Place Rock and a collectable (e.g., Mushroom) below it. Attempt to move
+    Rock onto the collectable. Verify movement fails and Rock remains in place.
     """
     g = test_grid
     rock = ENTITIES["Rock"]([1, 1], g)
