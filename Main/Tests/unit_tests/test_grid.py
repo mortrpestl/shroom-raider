@@ -1,4 +1,5 @@
 import os
+import pathlib
 import sys
 
 import pytest
@@ -6,7 +7,7 @@ from classes.entities.import_entities import import_entities
 from classes.grid import Grid
 from helper_classes import DummyPlayer, LosePlayer, WinPlayer
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
 
 
 ENTITIES = import_entities({"Player", "Tree", "Mushroom", "Rock", "Water", "PavedTile", "Axe", "Flamethrower"})
@@ -106,7 +107,7 @@ def test_get_display_symbol_returns_correct_ascii_and_emoji(small_grid):
     """Ensure get_display_symbol_of_obj returns ASCII, emoji, or None for unknown objects."""
     g = small_grid
     tree = ENTITIES["Tree"]((1, 1), g, "T")
-    assert g.get_display_symbol_of_obj(tree, mode="emoji") in {"🌲"}
+    assert g.get_display_symbol_of_obj(tree, mode="emoji") == "🌲"
     assert g.get_display_symbol_of_obj(tree, mode="ascii") == "T"
     assert g.get_display_symbol_of_obj(object()) is None
 

@@ -1,7 +1,8 @@
 import os
+import pathlib
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
 
 import pytest
 from classes.entities.import_entities import import_entities
@@ -24,8 +25,7 @@ def test_grid():
 
 
 def test_initialization_stores_position_and_flags(test_grid):
-    """Tests if PavedTile properly renders in grid (along with other objects we will use for testing).
-    """
+    """Tests if PavedTile properly renders in grid (along with other objects we will use for testing)."""
     g = test_grid
     player = g.get_player()
     rock = g.get_obj_in_coord(2, 2)
@@ -85,7 +85,7 @@ def test_player_moves_over_and_off_pavedtile(test_grid):
 def test_player_pushes_rock_onto_pavedtile(test_grid):
     """Player pushes the rock one cell down onto the paved tile:
     - Player (1,2), Rock (2,2), Paved (3,2)
-    - Move "s" should push Rock to (3,2) and Player to (2,2)
+    - Move "s" should push Rock to (3,2) and Player to (2,2).
     """
     g = test_grid
     player = g.get_player()

@@ -1,4 +1,5 @@
 import os
+import pathlib
 import sys
 
 import pytest
@@ -6,7 +7,7 @@ from classes.entities.import_entities import import_entities
 from classes.grid import Grid
 from helper_classes import DummyPlayer
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
 
 ENTITIES = import_entities({"Player", "Rock", "Water", "PavedTile", "Mushroom"})
 

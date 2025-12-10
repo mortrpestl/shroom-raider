@@ -1,7 +1,8 @@
 import os
+import pathlib
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(pathlib.Path(os.path.join(pathlib.Path(__file__).parent, "../..")).resolve())
 
 import pytest
 from classes.entities.import_entities import import_entities

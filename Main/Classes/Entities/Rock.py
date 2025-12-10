@@ -2,9 +2,11 @@ from classes.entities.import_entities import import_entities
 from classes.entity import Entity
 from classes.grid import Grid
 
+# * RUFF CHECKED: No errors (12/10/2025)
+
 
 class Rock(Entity):
-    """A collideable Entity that can be pushed by the player if there are no other collideable or collectible Entities blocking it.
+    """A collideable entity that can be pushed by the player.
 
     Attributes:
         See parent class
@@ -16,26 +18,29 @@ class Rock(Entity):
     _is_collideable = True
     _is_pushable = True
 
-    def __init__(self, pos: list, on_grid: Grid, ascii: str = "R"):
-        """Initializes a Rock object
+    def __init__(self, pos: list, on_grid: Grid, ascii_char: str = "R") -> None:
+        """Initialize a Rock object.
 
         Args:
-            See parent class
+            pos: [r, c] position on the grid.
+            on_grid: The grid containing the rock.
+            ascii_char: The ascii character for the rock.
 
         """
-        super().__init__(pos, on_grid, ascii)
+        super().__init__(pos, on_grid, ascii_char)
 
     # * Complex Getters
 
-    def get_movement_validity(self, direction: str, r: int, c: int):
-        """Checks if a Rock can be pushed in a certain direction
+    def get_movement_validity(self, direction: str, r: int, c: int) -> bool:
+        """Check if a Rock can be pushed in a certain direction.
 
         Args:
-            direction: 'wasd', the intended direction of movement
-            r, c: The row and column position of the Rock
+            direction: 'wasd', the intended direction of movement.
+            r: The target row.
+            c: The target column.
 
         Returns:
-            True if the rocks is able to move, False if not
+            True if the rock can move, False otherwise.
 
         """
         if not self.in_bounds(r, c):
@@ -51,33 +56,30 @@ class Rock(Entity):
 
         return super().get_movement_validity(direction, r, c)
 
-    def get_pushable(self, pusher: Entity):
-        """Checks if the rock is pushable by its pusher
+    def get_pushable(self, pusher: Entity) -> bool:
+        """Return whether the rock is pushable by the given pusher.
 
         Args:
-            pusher: The Entity trying to push the Rock
+            pusher: The Entity trying to push the Rock.
 
         Returns:
-            A boolean indicating if the Rock is able to be pushed by its pusher
+            True if the pusher may push the rock, otherwise False.
 
         """
         entities = import_entities({"Player"})
-        if isinstance(pusher, entities["Player"]):
-            return True
-        else:
-            return False
+        return isinstance(pusher, entities["Player"])
 
     # * Simple Setters
 
     # * Complex Setters
-    def set_pos(self, direction: str):
-        """Moves the Rock on the Grid
+    def set_pos(self, direction: str) -> bool:
+        """Move the Rock on the Grid.
 
         Args:
-            direction: The direction that the Entity wants to move
+            direction: The direction that the Entity wants to move.
 
         Returns:
-            A boolean indicating whether the Rock was able to move or not
+            True if the rock moved, otherwise False.
 
         """
         if super().set_pos(direction):

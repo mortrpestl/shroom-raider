@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 
 # Base directory of this test file
-base_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = pathlib.Path(pathlib.Path(__file__).resolve()).parent
 
 # Temporary directory for test outputs
 TEMP_DIR = os.path.join(base_dir, "Temp")
@@ -38,7 +38,7 @@ Integrated Testing
 # Read test cases from Excel and normalize columns
 df = pd.read_excel(EXCEL_FILE, dtype=str)
 df.columns = [c if not c.startswith("Unnamed") else "Category" for c in df.columns]
-df.fillna("", inplace=True)
+df = df.fillna("")
 
 # Ensure required columns exist in the Excel sheet
 required = {"Category", "ID", "Description", "Input Grid", "Input String", "Output"}
