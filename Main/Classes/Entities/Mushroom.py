@@ -1,6 +1,5 @@
-from Classes.Entity import Entity
-from Classes.Grid import Grid
-
+from classes.entity import Entity
+from classes.grid import Grid
 
 class Mushroom(Entity):
     """An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it

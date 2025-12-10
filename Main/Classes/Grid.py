@@ -1,7 +1,7 @@
 import os
 
-from Classes.Entities.import_entities import import_entities
-from Classes.Entity import Entity
+from classes.entities.import_entities import import_entities
+from classes.entity import Entity
 
 
 class Grid:

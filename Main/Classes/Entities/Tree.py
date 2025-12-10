@@ -1,5 +1,5 @@
-from Classes.Entity import Entity
-from Classes.Grid import Grid
+from classes.entity import Entity
+from classes.grid import Grid
 
 
 class Tree(Entity):
