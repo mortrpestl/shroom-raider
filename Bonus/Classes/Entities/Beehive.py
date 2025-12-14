@@ -22,6 +22,7 @@ class Beehive(Entity):
             bee_count: Number of bees to spawn
             bee_lag: Delay between bee spawning
             Additionally, see base class.
+
         """
         # if you want to make a bee chain, make bee_count and bee_lag the same
 

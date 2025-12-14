@@ -24,6 +24,7 @@ class Bomb(Entity):
         
         Args:
             See base class.
+
         """
         super().__init__(pos, on_grid, ascii)
         self._active = False

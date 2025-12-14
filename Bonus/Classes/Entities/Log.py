@@ -23,6 +23,7 @@ class Log(Entity):
         
         Args:
             See base class.
+
         """
         super().__init__(pos, on_grid, ascii)
 
@@ -36,6 +37,7 @@ class Log(Entity):
 
         Returns:
             True if the Log is able to move, False if not 
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -57,6 +59,7 @@ class Log(Entity):
 
         Args:
             See parent class.
+
         """
         entities = import_entities({"Player"})
         if isinstance(pusher, (entities["Player"], Log)):
@@ -66,8 +69,7 @@ class Log(Entity):
             return False
 
     def chop(self):
-        """
-        Destroys a log when an axe is equipped. 
+        """Destroys a log when an axe is equipped.
         """
         s.axe_sound()
         self.destroy()

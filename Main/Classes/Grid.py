@@ -1,79 +1,60 @@
-import os
+from typing import ClassVar
 
-from Classes.Entities.import_entities import import_entities
-from Classes.Entity import Entity
+from classes.entities.import_entities import import_entities
+from classes.entity import Entity
 
 
 class Grid:
-    """The grid is the playarea in which the players and all game objects reside
+    """Represent the play area where players and all game objects reside.
 
-    It is represented as a 3D data structure, a 2D list with each coordinate containing a stack of entities
-
-    Attributes:
-        GRID_LIST: A dictionary of all grid objects created
-
-        __name: The name of a Grid object
-        __player_pos: The player position within a certain Grid object
-        __total_mushrooms: Number of mushrooms contained in a grid
-        __is_cleared: Indicates if a certain Grid has been cleared or not
-        __grid_vis_map: 2D list of characters that represent the Grid
-        __map_rows, __map_cols: The number of rows and columns that the Grid contains
-        __grid_obj_map: A 3D data structure containing all the objects in the Grid
-        __grid_user_display: A 2D list containing the visualization of the Grid to be shown to users
-        __ENTITIES: A dictionary containing all possible entities that could reside in the Grid
-
-        __character_mapping: Maps each entity to their visual representation
-        __initialization_map: Maps each valid character to their corresponding object and visual representation
-
+    The Grid is a 3D structure: a 2D list where each coordinate contains a stack of entities.
     """
 
-    # * Attributes
-    GRID_LIST = dict()  # Dictionary of all grid objects created
+    # Class-level dictionary of all grids
+    GRID_LIST: ClassVar[dict[str, "Grid"]] = {}
 
-    def __init__(self, name: str, map_data: str):
-        """Initializes a Grid object based on a given stage
+    def __init__(self, name: str, map_data: str) -> None:
+        """Initialize a Grid object from a stage string.
 
         Args:
             name: The name of the Grid
             map_data: A string representation of the stage
 
         """
-        self.__name = name
-        self.__player_pos = [0, 0]
-        self.__total_mushrooms = 0
-        self.__is_cleared = False
+        self.__name: str = name
+        self.__player_pos: list[int] = [0, 0]
+        self.__total_mushrooms: int = 0
+        self.__is_cleared: bool = False
 
-        self.__grid_vis_map = [list(rows) for rows in map_data.strip().split("\n")]
-        self.__map_rows, self.__map_cols = (
-            len(self.__grid_vis_map),
-            len(self.__grid_vis_map[0]),
-        )
-        self.__grid_obj_map = [[[None] for c in range(self.__map_cols)] for r in range(self.__map_rows)]
-        self.__grid_user_display = [[] for _ in range(self.__map_rows)]
+        self.__grid_vis_map: list[list[str]] = [list(row) for row in map_data.strip().split("\n")]
+        self.__map_rows, self.__map_cols = len(self.__grid_vis_map), len(self.__grid_vis_map[0])
+        # split long line to fix E501
+        self.__grid_obj_map: list[list[list[Entity | None]]] = [
+            [[None] for _ in range(self.__map_cols)] for _ in range(self.__map_rows)
+        ]
+        self.__grid_user_display: list[list[str]] = [[] for _ in range(self.__map_rows)]
 
-        self.ENTITIES = import_entities({
-            "Player",
-            "Tree",
-            "Rock",
-            "Mushroom",
-            "Water",
-            "PavedTile",
-            "Axe",
-            "Flamethrower",
+        self.ENTITIES: dict[str, type[Entity]] = import_entities({
+            "Player", "Tree", "Rock", "Mushroom", "Water",
+            "PavedTile", "Axe", "Flamethrower",
         })
-        self.character_mapping = {  # for display
+
+        # Display mappings
+        self.character_mapping: dict[type[Entity], tuple[str, str]] = {
             self.ENTITIES["Player"]: ("🧑", "L"),
             self.ENTITIES["Tree"]: ("🌲", "T"),
             self.ENTITIES["Mushroom"]: ("🍄", "+"),
-            self.ENTITIES["Rock"]: ("🪨 ", "R"),
+            self.ENTITIES["Rock"]: ("🪨", "R"),
             self.ENTITIES["Water"]: ("🟦", "~"),
             self.ENTITIES["PavedTile"]: ("⬜", "_"),
             self.ENTITIES["Axe"]: ("🪓", "x"),
             self.ENTITIES["Flamethrower"]: ("🔥", "*"),
         }
-        self.initialization_map = {k[1]: (v, k[0]) for v, k in self.character_mapping.items()}
+        self.initialization_map: dict[str, tuple[type[Entity], str]] = {
+            k[1]: (v, k[0]) for v, k in self.character_mapping.items()
+        }
 
-        # initialize all items and makes object map for collision detection
+        # Initialize objects in grid
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj, display = self.init_coord(self.__grid_vis_map[r][c], [r, c])
@@ -84,142 +65,130 @@ class Grid:
 
     # * Simple Getters
 
-    def get_player(self):
-        """Returns: The Player entity on the Grid
+    def get_player(self) -> Entity | None:
+        """Return the Player entity on the Grid.
+
+        Returns:
+            The Player entity if present, otherwise None.
+
         """
         return self.get_obj_in_coord(*self.__player_pos)
 
-    def get_grid_obj_map(self):
-        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
+    def get_grid_obj_map(self) -> list[list[list[Entity | None]]]:
+        """Return the 2D list of entity stacks on the Grid.
+
+        Returns:
+            The internal 2D list of stacks representing entities.
+
         """
         return self.__grid_obj_map
 
-    def get_layers_from_coord(self, r: int, c: int):
-        """Returns: The stack of a certain coordinate, containing the entities at that coordinate
+    def get_layers_from_coord(self, r: int, c: int) -> list[Entity | None]:
+        """Return the stack of entities at coordinate (r, c).
+
+        Returns:
+            A list representing the stack of entities at (r, c).
+
         """
         return self.__grid_obj_map[r][c]
 
-    def get_total_mushrooms(self):
-        """Returns: The integer amount of total mushrooms contained in the Grid
+    def get_total_mushrooms(self) -> int:
+        """Return the total number of mushrooms in the Grid.
+
+        Returns:
+            The integer count of mushrooms in this grid.
+
         """
         return self.__total_mushrooms
 
-    def get_is_cleared(self):
-        """Returns: A boolean indicating if the current Grid has been cleared
+    def get_is_cleared(self) -> bool:
+        """Return True if the Grid has been cleared.
+
+        Returns:
+            True if the grid is cleared, else False.
+
         """
         return self.__is_cleared
 
     # * Complex Getters
 
-    def pop_layer_from_coord(self, r: int, c: int, layer: int = -1):
-        """Removes an entity at a certain coordinate.
+    def pop_layer_from_coord(self, r: int, c: int, layer: int = -1) -> Entity | None:
+        """Remove and return an entity at a specific coordinate and layer.
 
-        Args:
-            r: The row being accessed
-            c: The column being accessed
-            layer: The layer of the stack in which the entity is located
-
-        Returns: An entity or None
+        Returns:
+            The popped entity, or None if that layer held None.
 
         """
         return self.get_grid_obj_map()[r][c].pop(layer)
 
     @staticmethod
-    def get_grid_by_name(name: str):
-        """Gets a Grid object based on name
-
-        Args:
-            name: the name of the Grid being accessed
+    def get_grid_by_name(name: str) -> "Grid":
+        """Return a Grid object by its name.
 
         Returns:
-            A grid object
+            The Grid instance with the given name.
 
         Raises:
-            KeyError: If no Grid with the given name exists
+            KeyError: If no Grid with the given name exists.
 
         """
         if name not in Grid.GRID_LIST:
             raise KeyError(f"No grid found with name:{name}")
         return Grid.GRID_LIST[name]
 
-    def get_obj_in_coord(self, r: int, c: int, layer: int = -1):
-        """Gets the object at a certain coordinate and layer
-
-        Args:
-            r, c: The coordinate being accessed
-            layer: The layer of that coordinate being accessed
+    def get_obj_in_coord(self, r: int, c: int, layer: int = -1) -> Entity | None:
+        """Return the entity at coordinate (r, c) and layer, or None.
 
         Returns:
-            The object at that coordinate
+            The entity located at (r, c, layer) or None.
 
         Raises:
-            IndexError: If the coordinate is out of Grid bounds
+            IndexError: If the coordinate is out of Grid bounds.
 
         """
         if not (0 <= r < self.__map_rows and 0 <= c < self.__map_cols):
-            raise IndexError(f"coordinate {r, c} out of bounds")
-
+            raise IndexError(f"Coordinate {r, c} out of bounds")
         return self.__grid_obj_map[r][c][layer]
 
-    def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji"):
-        """Gets the display representation of an object
-
-        Args:
-            obj: The given object
-            mode: The format of the display symbol
+    def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji") -> str | None:
+        """Return the visual representation of an object.
 
         Returns:
-            The display symbol of the object
+            A string representing the display symbol, or None if no mapping.
 
         """
-        if mode == "emoji":
-            offset = 0
-        else:
-            offset = 1
-
+        offset = 0 if mode == "emoji" else 1
         for cm in self.character_mapping:
             if isinstance(obj, cm):
                 return self.character_mapping[cm][offset]
+        return None
 
     # * Simple Setters
 
-    def level_clear(self):
-        """Sets the current level as completed/cleared"""
+    def level_clear(self) -> None:
+        """Mark the level as cleared."""
         self.__is_cleared = True
 
-    def increment_total_mushrooms(self):
-        """Increments total mushrooms collected by one"""
+    def increment_total_mushrooms(self) -> None:
+        """Increment the total mushroom count."""
         self.__total_mushrooms += 1
 
     # * Complex Setters
 
-    def add_layer_to_coord(self, r: int, c: int, obj: Entity | None):
-        """Adds an entity to the Grid at a certain coordinate
-
-        Args:
-            r: The row being accessed
-            c: The column being accessed
-            obj: The entity being added to the coordinate
-
-        """
+    def add_layer_to_coord(self, r: int, c: int, obj: Entity | None) -> None:
+        """Add an entity to a specific coordinate."""
         self.get_grid_obj_map()[r][c].append(obj)
 
     # * Misc
 
-    def init_coord(self, symbol: str, coord: list):
-        """Initializes a Grid coordinate based on a character from the stage string
-
-        Args:
-            symbol: The character being processed
-            coord: [r, c]
-                r: The row being accessed
-                c: The column being accessed
+    def init_coord(self, symbol: str, coord: list[int]) -> tuple[Entity | None, str]:
+        """Return the entity and display character for a given symbol.
 
         Returns:
-            The object to be placed in the Grid and the display character for that entity
+            A tuple of (entity instance or None, display character for that tile).
 
         Raises:
-            ValueError: If the given symbol is not a valid symbol
+            ValueError: If the symbol is invalid.
 
         """
         if symbol == ".":
@@ -230,71 +199,57 @@ class Grid:
             self.increment_total_mushrooms()
 
         item = self.initialization_map.get(symbol)
-
         if not item:
             raise ValueError(f"Unknown type symbol: {symbol}")
 
         item_type, item_display_value = item
-
         return item_type(coord, self, symbol), item_display_value
 
-    def visualize_map(self, mode: str = "emoji"):
-        """Creates the user-facing visualization of the Grid
-
-        Args:
-            mode: Indicates how the visualization should be formatted
-
-        """
+    def visualize_map(self, mode: str = "emoji") -> None:
+        """Generate the user-facing visualization of the Grid."""
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj_in_coord = self.get_obj_in_coord(r, c)
-
                 if not obj_in_coord:
                     self.__grid_user_display[r][c] = "　" if mode == "emoji" else "."
                 else:
-                    self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(obj_in_coord, mode)
+                    self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(
+                        obj_in_coord, mode,
+                    )
 
-    def get_vis_map_as_str(self, mode: str = "ascii"):
-        """Gets the visualization map of the Grid
-
-        Args:
-            mode: Indicates how the visualization should be formatted
+    def get_vis_map_as_str(self, mode: str = "ascii") -> str:
+        """Return the visualization of the Grid as a multi-line string.
 
         Returns:
-            A multi-line string representation of the Grid based on the given mode
+            A single string composed of the visualization rows joined by newline.
 
         """
-        grid_str_rep = []
-
         self.visualize_map(mode)
+        return "\n".join("".join(row) for row in self.__grid_user_display)
 
-        for row in self.__grid_user_display:
-            grid_str_rep.append("".join(row))
-
-        return "\n".join(grid_str_rep)
-
-    def render(self, p: Entity, test_mode: bool = False):
-        """Prints the Grid and GUI for the user
-
-        Args:
-            p: The Player entity
-            test_mode: Indicates if the game should be printed in debugging mode
+    def render(self, p: Entity, *, test_mode: bool = False) -> bool:
+        """Print the Grid and GUI, and return True if the game has ended.
 
         Returns:
-            A boolean indicating if the game has ended
+            True if the player has won or lost (game ended), otherwise False.
 
         """
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
-        item_here = p.get_entity_below().__class__.__name__  # element below player
-        held_item = p.get_item().__class__.__name__
+        below = p.get_entity_below()
+        item_here = below.__class__.__name__ if below else "None"
+        held_item_obj = p.get_item()
+        held_item = held_item_obj.__class__.__name__ if held_item_obj else "None"
 
         win = mushrooms_collected == total_mushrooms
         lose = p.get_is_dead()
 
         self.visualize_map()
 
-        os.system("cls" if os.name == "nt" else "clear")
+        if not test_mode:
+            # replaced cls with this because OS command was being treated as "potential for injection"
+            print("\033[H\033[J", end="")
+
         for row in self.__grid_user_display:
             print("".join(row))
 
@@ -304,20 +259,13 @@ class Grid:
             print("You win!")
         elif lose:
             print("You lose...")
-
         else:
-            terminal_gui = f"""
-[W] Move up
-[A] Move left
-[S] Move down
-[D] Move right
-[!] Reset
-
-{item_here + " is here" if item_here != "NoneType" else "Nothing Here"}
-{f"Holding item {held_item}" if held_item != "NoneType" else "Not holding anything"}
-
-What will you do?
-            """
-            print(terminal_gui, end="")
+            print(
+                f"[W] Up [A] Left [S] Down [D] Right [!] Reset\n"
+                f"{item_here} is here\n"
+                f"Holding: {held_item}\n"
+                f"What will you do?",
+                end="",
+            )
 
         return win or lose

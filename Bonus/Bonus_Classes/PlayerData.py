@@ -406,7 +406,7 @@ class PlayerData:
 
         if completed_rows == [["None"]]:
             return set()
-        
+
         completed_levels_in_folder = set()
 
         for i in completed_rows:

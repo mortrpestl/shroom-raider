@@ -7,11 +7,15 @@ HERE = os.path.dirname(__file__)
 LEVELS_DIR = os.path.join(HERE, "Levels")
 LEVELS_XLSX = os.path.join(LEVELS_DIR, "levels_list.xlsx")
 
+
 def valid_col(row, col):
     return col and pd.notna(row.get(col))
 
+
 def clean_str(string):
     return str(string).strip()
+
+
 def read_xlsx_levels(folder_id: int):
     """Reads the levels in a given folder
 
@@ -60,7 +64,7 @@ def read_xlsx_levels(folder_id: int):
             "grid": raw_grid,
             "dark_radius": dark_radius,
             "bee_data": bee_data,
-            "bgm": bgm_file, 
+            "bgm": bgm_file,
             "song_name": bgm_title,
         })
 
@@ -88,10 +92,10 @@ def read_xlsx_folders():
 
     for _, row in df.iterrows():
         folders.append({
-            "id": int(row[id_col]) if valid_col(row,id_col) else None,
-            "title": clean_str(row[title_col]) if valid_col(row,title_col) else "UNTITLED",
-            "description": clean_str(row[desc_col]) if valid_col(row,desc_col) else "",
-            "song_name": clean_str(row[song_col]) if valid_col(row,song_col) else "Baba Is You OST - Baba Is You Theme"
+            "id": int(row[id_col]) if valid_col(row, id_col) else None,
+            "title": clean_str(row[title_col]) if valid_col(row, title_col) else "UNTITLED",
+            "description": clean_str(row[desc_col]) if valid_col(row, desc_col) else "",
+            "song_name": clean_str(row[song_col]) if valid_col(row, song_col) else "Baba Is You OST - Baba Is You Theme",
         })
     return folders
 
@@ -191,6 +195,7 @@ def get_level_title(folder_id: int, level_id: int):
     lvl = get_level_by_id(int(folder_id), int(level_id))
     return lvl["title"] if lvl else None
 
+
 def get_folder_bgm_filename(folder_id: int):
     """Returns the BGM filename for a given folder from the Folders sheet.
     
@@ -199,8 +204,8 @@ def get_folder_bgm_filename(folder_id: int):
 
     Returns:
         The filename of the audio file associated with the folder
+
     """
-    
     df = pd.read_excel(LEVELS_XLSX, sheet_name="Folders", engine="openpyxl")
     cols = {c.lower(): c for c in df.columns}
     id_col = cols.get("id")

@@ -1,12 +1,14 @@
-from Classes.Entity import Entity
-from Classes.Grid import Grid
+from classes.entity import Entity
+from classes.grid import Grid
+
+# * RUFF CHECKED: No errors (12/10/2025)
 
 
 class Tree(Entity):
-    """A collideable and burnable Entity that can be destroyed by the player using either the Axe or Flamethrower
+    """A collideable and burnable entity that can be destroyed by the player.
 
     Attributes:
-        See parent class
+        See parent class.
 
     """
 
@@ -14,27 +16,28 @@ class Tree(Entity):
     _is_collideable = True
     _is_burnable = True
 
-    def __init__(self, pos: list, on_grid: Grid, ascii: str = "T"):
-        """Initializes a Tree object
+    def __init__(self, pos: list, on_grid: Grid, ascii_char: str = "T") -> None:
+        """Initialize a Tree object.
 
         Args:
-            See parent class
+            pos: [r, c] position on the grid.
+            on_grid: The grid containing the tree.
+            ascii_char: The ascii character for the tree.
 
         """
-        super().__init__(pos, on_grid, ascii)
+        super().__init__(pos, on_grid, ascii_char)
 
     # * Simple Setter
-    def chop(self):
-        """Destroys a Tree object, and removes it from its Grid
-        """
+    def chop(self) -> None:
+        """Destroy the tree and remove it from its grid."""
         self.destroy()
 
     # * Complex Setter
-    def burn_connected(self, visited: set | None = None):
-        """Burns all orthogonally connected Trees
+    def burn_connected(self, visited: set | None = None) -> None:
+        """Burn all orthogonally connected trees.
 
         Args:
-            visited: The set of Trees that have already been burnt
+            visited: Set of coordinates already visited.
 
         """
         if visited is None:

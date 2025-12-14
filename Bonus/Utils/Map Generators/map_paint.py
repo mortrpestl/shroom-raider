@@ -1,4 +1,4 @@
-from map_tools import *
+from map_gen import *
 
 
 def paint(
@@ -57,74 +57,49 @@ def paint(
     return clean_map
 
 
-MAP = gen_map(50, 50, element_probi={"~": 1})
-MAP = place_laro_center(MAP)
-print(MAP)
+# MAP = gen_map(50, 50, element_probi={".": 1})
+# MAP = place_laro_center(MAP)
+# print(MAP)
 
-MAP = """50 50
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRR~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRR~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRRR~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRRR~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRRR~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRRR~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~RRRRRRRRRR~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~.RRRRRRRRRR~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~....RRRRRRRRRRRR~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~.....RRRRRRRRRRRR~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~...RRRRRRRRRRRRRR..~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~..RRRRRRRRRRRRRRR......~~~~~~~~~~~~~
-~~~~~~~~~~~~~RRRRRRRRRRRRRRRRR........~~~~~~~~~~~~
-~~~~~~~~~~RRRRRRRRRRRRRRRRRR...........~~~~~~~~~~~
-~RRRRRRRRRRRRRRRRRRRRRRRRRR.............~~~~~~~~~~
-RRRRRRRRRRRRRRRRRRRRRRRRR...............~~~~~~~~~~
-RRRRRRRRRRRRRRRRRRRRRR...................~~~~~~~~~
-RRRRRRRRRRRRRRRRRRR.......................~~~~~~~~
-RRRRRRRRRRRRRRRR..........................~~~~~~~~
-RRRRRRRRRRRRR.............................~~~~~~~~
-RRRRRRRRRR.................................~~~~~~~
-R~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~..................L..................~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~...................................~~~~~~X
-~~~~~~~~...................................~~~~~~~
-~~~~~~~~~.................................~~~~~~~~
-~~~~~~~~~........................X........~~~~~~~~
-~~~~~~~~~.................................~~~~~~~~
-~~~~~~~~~~...............................~~~~~~~~~
-~~~~~~~~~~~.............................~~~~~~~~~~
-~~~~~~~~~~~.............................~~~~~~~~~~
-~~~~~~~~~~~~...........X...............~~~~~~~~~~~
-~~~~~~~~~~~~~.........................~~~~~~~~~~~~
-~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~...................~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~.................~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~...........~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~X~~~~~~~~~.~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"""
+
+MAP = """25 25
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRR9RRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRR"""
 
 # example 1:
 painted_map = paint(
-    MAP,
-    polygon_char="R",
+    MAP,s
+    polygon_char="o",
     circle_char=".",
     line_char="T",
-    line_thickness=3,
+    line_thickness=0.8,
     canyonize=0,
-    fatness=2,
-    fill_circles=True,
-    mult=2,
+    fatness=0.8,
+    fill_circles=False,
+    mult=1.2,
 )
 
 print(place_laro_center(painted_map))

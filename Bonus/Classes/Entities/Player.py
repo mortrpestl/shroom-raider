@@ -22,23 +22,24 @@ WATER = items["Water"]
 
 
 class Player(Entity):
-    """
-    This Entity is the main controllable character of the game.
+    """This Entity is the main controllable character of the game.
 
-    Attributes: 
+    Attributes:
         __item: The item the player is holding
         __mushroom_count: The number of mushrooms that a Player has collected
         __is_dead: Indicates if the Player is dead
         Additionally, see parent class.
 
     """
+
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "L", item: Entity | None = None):
-        """ Initializes a Player with a given item
+        """Initializes a Player with a given item
 
         Args:
             item: The item the player is holding 
             Additionally, see parent class.
-        """   
+
+        """
         super().__init__(pos, on_grid, ascii)
         self.__item = item
         self.__mushroom_count = 0
@@ -47,14 +48,12 @@ class Player(Entity):
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self):
-        """
-        Returns: The item the player is holding
+        """Returns: The item the player is holding
         """
         return self.__item
 
     def get_mushroom_count(self):
-        """
-        Returns: The number of mushrooms the player has collected 
+        """Returns: The number of mushrooms the player has collected
         """
         return self.__mushroom_count
 
@@ -71,6 +70,7 @@ class Player(Entity):
         
         Returns:
             See parent class
+
         """
         if not self.in_bounds(r, c):
             return False
@@ -93,11 +93,11 @@ class Player(Entity):
 
     # * Simple Setters
     def set_item(self, item: Entity | None):
-        """
-        Sets an item to be held by the player
+        """Sets an item to be held by the player
 
-        Args: 
+        Args:
             item: The Entity for the player to hold
+
         """
         # specific check for bomb:
         if isinstance(self.get_item(), BOMB) and isinstance(item, BOMB):
@@ -105,16 +105,14 @@ class Player(Entity):
             return
 
         self.__item = item
-    
+
     def increment_mushroom_count(self):
-        """
-        Increases mushroom count by one
+        """Increases mushroom count by one
         """
         self.__mushroom_count += 1
 
     def kill(self):
-        """
-        Sets the player status to dead
+        """Sets the player status to dead
         """
         killer = self.get_entity_below()
 
@@ -128,8 +126,7 @@ class Player(Entity):
     # * Complex Setters
 
     def use_item(self):
-        """
-        Uses the current held item
+        """Uses the current held item
         """
         equipped = self.get_item()
         if not equipped:
@@ -140,8 +137,7 @@ class Player(Entity):
             self.set_item(None)
 
     def collect_item(self):
-        """
-        If on top of an item, collects it. Otherwise, does nothing
+        """If on top of an item, collects it. Otherwise, does nothing
         """
         item = self.get_entity_below()
 
@@ -154,8 +150,7 @@ class Player(Entity):
             item.destroy()
 
     def collect_shroom(self):
-        """
-        Collects the shroom below the player if it exists
+        """Collects the shroom below the player if it exists
         """
         shroom = self.get_entity_below()
 
@@ -168,16 +163,16 @@ class Player(Entity):
             shroom.destroy()
 
     def set_pos(self, direction: str):
-        """
-        Moves the player in desired direction, checks if movement kills them
+        """Moves the player in desired direction, checks if movement kills them
 
         Activated any triggers if there are.
 
         Args:
             direction: 'wasd', the desired direction of movement
 
-        Returns: 
+        Returns:
             True if the Player was able to move, False if not. Returns nothing if player dies
+
         """
         if super().set_pos(direction):
             entity_below = self.get_entity_below()

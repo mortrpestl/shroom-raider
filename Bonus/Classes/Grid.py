@@ -222,12 +222,11 @@ class Grid:
         """Used for animation
         """
         return self.__active_blasts
-    
+
     def get_song_name(self):
         """Used for displaying song name
         """
         return self.__song_name
-
 
     @staticmethod
     def get_grid_by_name(name: str):
