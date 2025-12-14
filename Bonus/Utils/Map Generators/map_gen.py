@@ -88,8 +88,7 @@ def get_indiv_probi(element_probi=element_probi):
 
 
 def get_items_and_probabilities(allowed_to_spawn=None, probabilities_shown=True):
-    """Provide a string that will only let the ASCII given in the string appear in the generated map
-    """
+    """Provide a string that will only let the ASCII given in the string appear in the generated map"""
     element_prob = get_indiv_probi()
 
     if not allowed_to_spawn:
@@ -158,8 +157,7 @@ def generate_n_maps(lowest_R, lowest_C, n=10, start_numbering=1, highest_R=None,
 
 # * Primitive Map Generator Functions
 def gen_map_with_seeds(R, C, seeds=5):
-    """Randomly places 'X's in a map to seed for better map generation.
-    """
+    """Randomly places 'X's in a map to seed for better map generation."""
     new_map = [list(r) for r in gen_map(R, C).split("\n")[1:]]
 
     for i in range(seeds):
@@ -207,7 +205,13 @@ def draw_circles(input_map, centers=None, char="R", fill=False, fatness=0.4, use
 
 
 def draw_lines(
-    input_map, line_mode="row", points=None, element_probi=None, thickness=1, use_X_coords=False, canyonize=True,
+    input_map,
+    line_mode="row",
+    points=None,
+    element_probi=None,
+    thickness=1,
+    use_X_coords=False,
+    canyonize=True,
 ):
 
     header, grid, R, C = parse_map(input_map)
@@ -313,7 +317,7 @@ def draw_polygon_hull(input_map, points, polygon_char="R", thickness=1, canyoniz
 
 # * EXAMPLE USAGE
 
-print(gen_empty_map(50, 50, element_probi={'~': 50}))
+print(gen_empty_map(50, 50, element_probi={"~": 50}))
 randR, randC = randint(3, 30), randint(3, 30)
 
 # 0. Generate empty map

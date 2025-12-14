@@ -35,8 +35,14 @@ class Grid:
         self.__grid_user_display: list[list[str]] = [[] for _ in range(self.__map_rows)]
 
         self.ENTITIES: dict[str, type[Entity]] = import_entities({
-            "Player", "Tree", "Rock", "Mushroom", "Water",
-            "PavedTile", "Axe", "Flamethrower",
+            "Player",
+            "Tree",
+            "Rock",
+            "Mushroom",
+            "Water",
+            "PavedTile",
+            "Axe",
+            "Flamethrower",
         })
 
         # Display mappings
@@ -214,7 +220,8 @@ class Grid:
                     self.__grid_user_display[r][c] = "　" if mode == "emoji" else "."
                 else:
                     self.__grid_user_display[r][c] = self.get_display_symbol_of_obj(
-                        obj_in_coord, mode,
+                        obj_in_coord,
+                        mode,
                     )
 
     def get_vis_map_as_str(self, mode: str = "ascii") -> str:
@@ -227,7 +234,7 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity, *, test_mode: bool = False) -> bool:
+    def render(self, p: Entity) -> bool:
         """Print the Grid and GUI, and return True if the game has ended.
 
         Returns:
@@ -241,14 +248,12 @@ class Grid:
         held_item_obj = p.get_item()
         held_item = held_item_obj.__class__.__name__ if held_item_obj else "None"
 
-        win = mushrooms_collected == total_mushrooms
+        win = (mushrooms_collected == total_mushrooms)
         lose = p.get_is_dead()
 
         self.visualize_map()
-
-        if not test_mode:
-            # replaced cls with this because OS command was being treated as "potential for injection"
-            print("\033[H\033[J", end="")
+        # replaced cls with this because OS command was being treated as "potential for injection"
+        print("\033[H\033[J", end="")
 
         for row in self.__grid_user_display:
             print("".join(row))

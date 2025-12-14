@@ -27,7 +27,6 @@ class Tree(Entity):
 
     # * Simple Setter
     def chop(self):
-        """Destroys a Tree object, and removes it from its Grid
-        """
+        """Destroys a Tree object, and removes it from its Grid"""
         s.axe_sound()
         self.destroy()

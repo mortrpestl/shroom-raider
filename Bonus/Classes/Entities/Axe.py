@@ -16,7 +16,7 @@ class Axe(Entity):
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "x"):
         """Initializes Axe object
-        
+
         Args:
             See parent class.
 

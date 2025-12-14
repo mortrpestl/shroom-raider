@@ -6,7 +6,7 @@ from Classes.Grid import Grid
 
 class Rock(Entity):
     """A collideable Entity that can be pushed by the player
-    
+
     Rocks cannot be pushed if there are other collideable or collectable Entities blocking it.
 
     Attributes:
@@ -38,7 +38,7 @@ class Rock(Entity):
             See parent class.
 
         Returns:
-            True if the rocks is able to move, False if not 
+            True if the rocks is able to move, False if not
 
         """
         if not self.in_bounds(r, c):

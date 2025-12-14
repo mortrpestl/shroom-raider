@@ -64,7 +64,7 @@ class Ice(Entity):
 
     def set_pos(self, direction):
         """Adds 'water turns to paved tile' mechanic to ice
-  
+
         Continuously set position until stopped. If there is water below it, it paved the water.
 
         Args:

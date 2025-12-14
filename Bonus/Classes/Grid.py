@@ -139,18 +139,15 @@ class Grid:
     # * Simple Getters
 
     def get_player(self):
-        """Returns: The Player entity on the Grid
-        """
+        """Returns: The Player entity on the Grid"""
         return self.get_obj_in_coord(*self.__player_pos)
 
     def get_player_pos(self):
-        """Returns: The Player entity's position on the Grid
-        """
+        """Returns: The Player entity's position on the Grid"""
         return self.__player_pos
 
     def get_grid_obj_map(self):
-        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain
-        """
+        """Returns: A 2-D list of stacks, representing each tile on the Grid and the entities they contain"""
         return self.__grid_obj_map
 
     def get_grid_user_display(self, r: int, c: int):
@@ -164,68 +161,55 @@ class Grid:
         return self.__grid_user_display[r][c]
 
     def get_grid_color_map(self):
-        """Returns: The color display for the grid
-        """
+        """Returns: The color display for the grid"""
         return self.__grid_color_display
 
     def get_layers_from_coord(self, r: int, c: int):
-        """Returns: The stack of a certain coordinate, containing the entities at that coordinate
-        """
+        """Returns: The stack of a certain coordinate, containing the entities at that coordinate"""
         return self.__grid_obj_map[r][c]
 
     def get_total_mushrooms(self):
-        """Returns: The integer amount of total mushrooms contained in the Grid
-        """
+        """Returns: The integer amount of total mushrooms contained in the Grid"""
         return self.__total_mushrooms
 
     def get_dark_radius(self):
-        """Returns: The size of the visible section for a given Grid
-        """
+        """Returns: The size of the visible section for a given Grid"""
         return self.__dark_radius
 
     def get_bee_data(self):
-        """Returns: The lag and count of bees for this Grid
-        """
+        """Returns: The lag and count of bees for this Grid"""
         return self.__bee_data
 
     def get_is_cleared(self):
-        """Returns: A boolean indicating if the current Grid has been cleared
-        """
+        """Returns: A boolean indicating if the current Grid has been cleared"""
         return self.__is_cleared
 
     def get_display_mode(self):
-        """Returns: The display mode of the current Grid
-        """
+        """Returns: The display mode of the current Grid"""
         return self.__display_mode
 
     def get_metadata(self):
-        """Returns: The metadata of the current Grid
-        """
+        """Returns: The metadata of the current Grid"""
         return self.__metadata
 
     def get_active_flashes(self):
-        """Used for animation
-        """
+        """Used for animation"""
         return self.__active_flashes
 
     def get_active_flames(self):
-        """Used for animation
-        """
+        """Used for animation"""
         return self.__active_flames
 
     def get_active_smokes(self):
-        """Used for animation
-        """
+        """Used for animation"""
         return self.__active_smokes
 
     def get_active_blasts(self):
-        """Used for animation
-        """
+        """Used for animation"""
         return self.__active_blasts
 
     def get_song_name(self):
-        """Used for displaying song name
-        """
+        """Used for displaying song name"""
         return self.__song_name
 
     @staticmethod
@@ -509,7 +493,9 @@ class Grid:
             for c in range(self.__map_cols):
                 obj = self.get_obj_in_coord(r, c)
                 self.__grid_user_display[r][c], self.__grid_color_display[r][c] = self.__compute_display_for_cell(
-                    r, c, obj,
+                    r,
+                    c,
+                    obj,
                 )
 
     def get_vis_map_as_str(self):

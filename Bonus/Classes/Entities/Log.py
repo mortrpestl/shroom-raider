@@ -6,7 +6,7 @@ from Classes.Grid import Grid
 
 class Log(Entity):
     """An entity that can be pushed by the player and other logs.
-    
+
     Attributes:
         See base class.
 
@@ -20,7 +20,7 @@ class Log(Entity):
 
     def __init__(self, pos: list[int], on_grid: Grid, ascii="o"):
         """Initializes Log object
-        
+
         Args:
             See base class.
 
@@ -36,7 +36,7 @@ class Log(Entity):
             See parent class.
 
         Returns:
-            True if the Log is able to move, False if not 
+            True if the Log is able to move, False if not
 
         """
         if not self.in_bounds(r, c):
@@ -54,7 +54,7 @@ class Log(Entity):
 
     def get_pushable(self, pusher: Entity):
         """Checks if pushable by the pusher
-        
+
         Logs can only be moved by other Logs and the Player!
 
         Args:
@@ -69,7 +69,6 @@ class Log(Entity):
             return False
 
     def chop(self):
-        """Destroys a log when an axe is equipped.
-        """
+        """Destroys a log when an axe is equipped."""
         s.axe_sound()
         self.destroy()

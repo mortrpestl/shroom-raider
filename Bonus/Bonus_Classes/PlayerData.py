@@ -106,14 +106,12 @@ def read_all_rows() -> dict:
 
 
 def write_all_rows(rows: dict[str, int]):
-    """Writes all player rows (encrypted) back to Excel.
-    """
+    """Writes all player rows (encrypted) back to Excel."""
     pd.DataFrame(rows, columns=HEADERS).to_excel(EXCEL_FILE, index=False, engine="openpyxl")
 
 
 def safe_int(value: str | int) -> int:
-    """Parses empty entries into integers if needed.
-    """
+    """Parses empty entries into integers if needed."""
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return 0
     try:

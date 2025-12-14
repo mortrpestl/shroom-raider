@@ -11,8 +11,7 @@ HERE = os.path.dirname(__file__)
 
 # @debug_wait(WAIT_TIME)
 def show_personal_leaderboard(pdata):
-    """Shows completed levels, etc.
-    """
+    """Shows completed levels, etc."""
     completed = pdata.get_completed_levels()
     if not completed:
         print("No completed levels yet.\n")
@@ -27,8 +26,7 @@ def show_personal_leaderboard(pdata):
 
 # @debug_wait(WAIT_TIME)
 def show_general_leaderboard():
-    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
-    """
+    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)"""
     players = read_all_rows()
 
     if not players:
@@ -74,8 +72,7 @@ def show_general_leaderboard():
 
 # @debug_wait(WAIT_TIME)
 def show_level_leaderboard(level_ref):
-    """Shows players who've beaten a level sorted by time.
-    """
+    """Shows players who've beaten a level sorted by time."""
     players = read_all_rows()
     level_title = get_level_title(*level_ref.split("/")) or "UNTITLED"
 

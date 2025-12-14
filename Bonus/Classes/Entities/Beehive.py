@@ -17,7 +17,7 @@ class Beehive(Entity):
 
     def __init__(self, pos, on_grid, ascii="&", bee_count: int = 3, bee_lag: int = 3):
         """Initializes a Beehive object.
-        
+
         Args:
             bee_count: Number of bees to spawn
             bee_lag: Delay between bee spawning

@@ -6,6 +6,7 @@ import sys
 import tempfile
 import time
 from argparse import ArgumentParser as ap
+from pathlib import Path
 
 import LevelManager
 import Utils.sounds as s
@@ -37,7 +38,7 @@ AFTER_GAME_OPTIONS = {
 }
 OPTIONS_LIST = ["r", "m", "s", "p", "g", "l", "q"]
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 # * Advanced Helper Functions
 
@@ -59,27 +60,33 @@ def show_statistics(player_data: PlayerData):
 # * Level List Helper Functions
 
 
-def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set(), folder: dict | None = None):
+def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids: set | None = None, folder: dict | None = None):
     """Print a summary of the levels.
 
     Args:
         levels: The levels to be printed
         selected: The current level to be highlighted for selection
         completed_lvl_ids: The completed levels by this player
+        folder: The current folder being accessed
 
     """
+    if completed_lvl_ids is None:
+        completed_lvl_ids = set()
+
     display = []
-    with open("Assets/UI/LevelSelectArt.txt", encoding="utf+8") as art:
+    with Path("Assets/UI/LevelSelectArt.txt").read_text(encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
     spanner = "---===x{🌲}x===---\n"
 
     display.append(spanner)
     for lvl in levels:
-        checked = '✔' if lvl.get("id", "") in completed_lvl_ids else ''
+        checked = "✔" if lvl.get("id", "") in completed_lvl_ids else ""
         if lvl.get("id", "") == selected:
             display.append(
-                center_wr_to_terminal_size(f" {checked} <🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK]),
+                center_wr_to_terminal_size(
+                    f" {checked} <🧑 {lvl.get('title', '')} 🧑>", colors=[Back.GREEN, Fore.BLACK],
+                ),
             )
             desc = str(lvl.get("description", "")).replace("\n", " ") + "\n"
             difficulty = str(lvl.get("difficulty", "Normal")) + "\n"
@@ -93,13 +100,15 @@ def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids=set(),
     display.append(center_wr_to_terminal_size("Description:\n" + desc, colors=[Fore.BLUE]))
 
     if folder and folder.get("song_name"):
-        display.append(center_wr_to_terminal_size(f"Song Playing:\n {folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX]))
+        display.append(
+            center_wr_to_terminal_size(f"Song Playing:\n {folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX]),
+        )
 
     clear_terminal()
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_folders_table(folders: dict, selected: int = 1):
+def print_folders_table(folders: dict, selected: int = 1) -> None:
     """Print a summary of the folders.
 
     Args:
@@ -108,7 +117,7 @@ def print_folders_table(folders: dict, selected: int = 1):
 
     """
     display = []
-    with open("Assets/UI/FolderSelectArt.txt", encoding="utf+8") as art:
+    with Path("Assets/UI/FolderSelectArt.txt").read_text(encoding="utf+8") as art:
         display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
     spanner = "---===x{🔥}x===---\n"
@@ -130,11 +139,12 @@ def print_folders_table(folders: dict, selected: int = 1):
     print(center_wr_to_terminal_size("\n".join(display)))
 
 
-def print_after_game_options(selected: int, folder: int):
-    """Prints the after-level menu
+def print_after_game_options(selected: int, folder: int) -> None:
+    """Print the after-level menu.
 
     Args:
         selected: The currently selected option to be highlighted
+        folder: The ID of the folder currently being accessed 
 
     """
     display = []
@@ -156,7 +166,9 @@ def print_after_game_options(selected: int, folder: int):
             display.append(AFTER_GAME_OPTIONS[o])
     display.append("\n" + spanner)
 
-    display.append(center_wr_to_terminal_size(f"\nSong Playing:\n{folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX]))
+    display.append(
+        center_wr_to_terminal_size(f"\nSong Playing:\n{folder.get('song_name')}\n", colors=[Fore.LIGHTBLUE_EX])
+    )
 
     clear_terminal()
     print(center_wr_to_terminal_size("\n".join(display)))
@@ -348,8 +360,7 @@ def launch_game_with_level(level: dict):
 
 # gameplay start + loop
 def main():
-    """Handles the main gameplay loop from user login, folder and level selection, and data storage
-    """
+    """Handles the main gameplay loop from user login, folder and level selection, and data storage"""
     clear_terminal()
     initAll()
     s.current_bgm_stop()
@@ -400,16 +411,15 @@ def main():
         LEVEL_SELECTED = 1
 
         while True:
-
             levels = LevelManager.load_levels(folder_choice)
             try:
-                current_folder = folders[folder_choice-1]
+                current_folder = folders[folder_choice - 1]
                 level_choice, LEVEL_SELECTED = choose_level(
                     levels,
                     player_data.get_completed_lvl_ids_by_folder_id(folder_choice),
                     folder=current_folder,
                     selected=LEVEL_SELECTED,
-                    )
+                )
             except:
                 level_choice, LEVEL_SELECTED = choose_level(levels, set(), folder=None, selected=LEVEL_SELECTED)
             if level_choice == "q":

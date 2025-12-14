@@ -15,7 +15,7 @@ class Mushroom(Entity):
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "+"):
         """Initializes a Mushroom object
-        
+
         Args:
             See parent class.
 

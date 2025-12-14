@@ -15,9 +15,7 @@ def pytest_itemcollected(item: Item) -> None:
         readable_name = item.name[5:].replace("_", " ").capitalize()
 
         item._nodeid = (  # noqa: SLF001
-            f"{'Unit Test ' + str(COUNTER).zfill(3):^19} | "
-            f"{file_base:^24} | "
-            f"{readable_name:<90}"
+            f"{'Unit Test ' + str(COUNTER).zfill(3):^19} | {file_base:^24} | {readable_name:<90}"
         )
 
         COUNTER += 1

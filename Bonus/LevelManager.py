@@ -54,7 +54,9 @@ def read_xlsx_levels(folder_id: int):
         dark_radius = int(dark_val) if pd.notna(dark_val) else None
         bee_data = clean_str(row.get(bee_col)) if valid_col(row, bee_col) else None
         bgm_file = clean_str(row.get(bgm_col)) if valid_col(row, bgm_col) else "default-level-music.mp3"
-        bgm_title = clean_str(row.get(bgm_title_col)) if valid_col(row, bgm_title_col) else "Box Has Key - Baba is You OST"
+        bgm_title = (
+            clean_str(row.get(bgm_title_col)) if valid_col(row, bgm_title_col) else "Box Has Key - Baba is You OST"
+        )
 
         levels.append({
             "id": id,
@@ -95,7 +97,9 @@ def read_xlsx_folders():
             "id": int(row[id_col]) if valid_col(row, id_col) else None,
             "title": clean_str(row[title_col]) if valid_col(row, title_col) else "UNTITLED",
             "description": clean_str(row[desc_col]) if valid_col(row, desc_col) else "",
-            "song_name": clean_str(row[song_col]) if valid_col(row, song_col) else "Baba Is You OST - Baba Is You Theme",
+            "song_name": clean_str(row[song_col])
+            if valid_col(row, song_col)
+            else "Baba Is You OST - Baba Is You Theme",
         })
     return folders
 
@@ -198,7 +202,7 @@ def get_level_title(folder_id: int, level_id: int):
 
 def get_folder_bgm_filename(folder_id: int):
     """Returns the BGM filename for a given folder from the Folders sheet.
-    
+
     Args:
         folder_id: The ID of the folder being accessed
 

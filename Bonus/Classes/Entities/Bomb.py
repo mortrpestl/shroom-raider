@@ -21,7 +21,7 @@ class Bomb(Entity):
 
     def __init__(self, pos: list[int], on_grid: Grid, ascii: str = "!"):
         """Initializes a Bomb object.
-        
+
         Args:
             See base class.
 
@@ -43,8 +43,7 @@ class Bomb(Entity):
         self._bomb_radius += 3
 
     def use(self):
-        """Activates the bomb at the player's position and destroys nearby entities.
-        """
+        """Activates the bomb at the player's position and destroys nearby entities."""
         on_grid = self.get_on_grid()
         pr, pc = on_grid.get_player_pos()
 

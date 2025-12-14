@@ -91,7 +91,7 @@ RRRRRRRRRRRRRRRRRRRRRRRRR"""
 
 # example 1:
 painted_map = paint(
-    MAP,s
+    MAP,
     polygon_char="o",
     circle_char=".",
     line_char="T",

@@ -21,7 +21,7 @@ class Bee(Entity):
 
     def __init__(self, pos, on_grid, lag, ascii=">"):
         """Initializes a Bee object and appends it to all_bees
-        
+
         Args:
             See base class.
 

@@ -16,7 +16,7 @@ class Flamethrower(Entity):
 
     def __init__(self, pos: list, on_grid: Grid, ascii: str = "*"):
         """Initializes Flamethrower object.
-        
+
         Args:
             See parent class.
 

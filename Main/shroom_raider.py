@@ -1,8 +1,6 @@
-
 # * RUFF CHECKED: 2 ERRORS LEFT (12/10/2025 7:54 PM)
 
 import io
-import pathlib
 import sys
 from argparse import ArgumentParser
 
@@ -14,16 +12,17 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignor
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 
-ENABLE_TEST_MODE = False  # toggle if you want to get logs; for testing
 LEVEL_NAME = "TEST"
 
 
 def check_win_condition(p: Player, g: Grid) -> None:
     """Check if a player has met the win condition of a grid.
 
+    Marks the current grid as cleared if player has met the win conditions
+
     Args:
-        p: A Player Entity.
-        g: A Grid object.
+        p (Player): The player being checked
+        g (Grid): The grid that contains the player
 
     """
     if p.get_mushroom_count() == g.get_total_mushrooms():
@@ -68,32 +67,14 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
     else:
         lines = list(instructions)
 
-    if ENABLE_TEST_MODE:
-        with open(INPUT_LOG_FILE, "a", encoding="utf-8") as f:
-            for ln in lines:
-                if ln != "?":
-                    f.write(str(ln) + "\n")
-
     for line in lines:
         for ch in line:
             inst = ch.lower()
 
-            if ENABLE_TEST_MODE and inst == "?":
-                with open(OUTPUT_LOG_FILE, "w", encoding="utf-8") as f:
-                    f.write("CLEAR\n" if g.get_is_cleared() else "NO CLEAR\n")
-                    f.write(g.get_vis_map_as_str())
-                sys.exit()
-
             if inst == "!":
                 g, p = reset(level)
 
-            if reset_only:
-                break
-
-            if g.get_is_cleared() or p.get_is_dead():
-                break
-
-            if inst not in "wasdp!":
+            if (reset_only) or (g.get_is_cleared() or p.get_is_dead()) or (inst not in "wasdp!"):
                 break
 
             if inst in "wasd":
@@ -131,7 +112,7 @@ def main() -> None:
         check_win_condition(globals()["P"], globals()["G"])
 
         while True:
-            stop_or_reset_only = globals()["G"].render(globals()["P"], test_mode=ENABLE_TEST_MODE)
+            stop_or_reset_only = globals()["G"].render(globals()["P"])
             if stop_or_reset_only:
                 sys.exit()
             # each input() returns one line; parser will process that line
@@ -150,7 +131,7 @@ def main() -> None:
 
         if args.movement_file is None or args.output_file is None:
             while True:
-                stop_or_reset_only = globals()["G"].render(globals()["P"], test_mode=ENABLE_TEST_MODE)
+                stop_or_reset_only = globals()["G"].render(globals()["P"])
                 if stop_or_reset_only:
                     sys.exit()
                 parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
@@ -181,23 +162,5 @@ if __name__ == "__main__":
     P, G = None, None
     item_here = "No items here"
     holding_anything = None
-
-    if ENABLE_TEST_MODE:
-        base_folder = "Logs"
-        pathlib.Path(base_folder).mkdir(exist_ok=True, parents=True)
-
-        base_path = pathlib.Path(base_folder)
-        existing = [d.name for d in base_path.iterdir() if d.is_dir() and d.name.isdigit()]
-        run_number = max([int(d) for d in existing], default=0) + 1
-
-        run_folder = base_path / str(run_number)
-        run_folder.mkdir(parents=True)
-
-        src_path = pathlib.Path(f"{LEVEL_NAME}.txt")
-        dst_path = run_folder / "map.txt"
-        dst_path.write_text(src_path.read_text(encoding="utf-8"), encoding="utf-8")
-
-        INPUT_LOG_FILE = run_folder / "input.txt"
-        OUTPUT_LOG_FILE = run_folder / "output.txt"
 
     main()

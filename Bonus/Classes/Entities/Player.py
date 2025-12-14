@@ -36,7 +36,7 @@ class Player(Entity):
         """Initializes a Player with a given item
 
         Args:
-            item: The item the player is holding 
+            item: The item the player is holding
             Additionally, see parent class.
 
         """
@@ -48,13 +48,11 @@ class Player(Entity):
     # * Simple Getters, AI generated with minor edits
 
     def get_item(self):
-        """Returns: The item the player is holding
-        """
+        """Returns: The item the player is holding"""
         return self.__item
 
     def get_mushroom_count(self):
-        """Returns: The number of mushrooms the player has collected
-        """
+        """Returns: The number of mushrooms the player has collected"""
         return self.__mushroom_count
 
     def get_is_dead(self):
@@ -67,7 +65,7 @@ class Player(Entity):
 
         Args:
             See parent class
-        
+
         Returns:
             See parent class
 
@@ -107,13 +105,11 @@ class Player(Entity):
         self.__item = item
 
     def increment_mushroom_count(self):
-        """Increases mushroom count by one
-        """
+        """Increases mushroom count by one"""
         self.__mushroom_count += 1
 
     def kill(self):
-        """Sets the player status to dead
-        """
+        """Sets the player status to dead"""
         killer = self.get_entity_below()
 
         if isinstance(killer, BEE):
@@ -126,8 +122,7 @@ class Player(Entity):
     # * Complex Setters
 
     def use_item(self):
-        """Uses the current held item
-        """
+        """Uses the current held item"""
         equipped = self.get_item()
         if not equipped:
             return
@@ -137,8 +132,7 @@ class Player(Entity):
             self.set_item(None)
 
     def collect_item(self):
-        """If on top of an item, collects it. Otherwise, does nothing
-        """
+        """If on top of an item, collects it. Otherwise, does nothing"""
         item = self.get_entity_below()
 
         if not item:
@@ -150,8 +144,7 @@ class Player(Entity):
             item.destroy()
 
     def collect_shroom(self):
-        """Collects the shroom below the player if it exists
-        """
+        """Collects the shroom below the player if it exists"""
         shroom = self.get_entity_below()
 
         if not shroom:
