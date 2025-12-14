@@ -4,6 +4,8 @@ import io
 import sys
 from argparse import ArgumentParser
 
+from Bonus_Classes.PlayerData import PlayerData
+from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 
@@ -12,7 +14,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignor
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 
-LEVEL_NAME = "TEST"
+LEVEL_NAME = "Default"
 
 
 def check_win_condition(p: Player, g: Grid) -> None:
