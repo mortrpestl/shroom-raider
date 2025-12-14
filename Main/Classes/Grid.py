@@ -1,7 +1,7 @@
 from typing import ClassVar
 
-from classes.entities.import_entities import import_entities
-from classes.entity import Entity
+from Classes.Entities.import_entities import import_entities
+from Classes.Entity import Entity
 
 
 class Grid:

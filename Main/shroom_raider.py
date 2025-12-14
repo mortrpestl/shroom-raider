@@ -4,8 +4,8 @@ import io
 import sys
 from argparse import ArgumentParser
 
-from classes.entities.player import Player
-from classes.grid import Grid
+from Classes.Entities.Player import Player
+from Classes.Grid import Grid
 
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
