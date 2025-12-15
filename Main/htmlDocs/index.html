@@ -37,18 +37,348 @@
 </div>
 <section id="shroom-raider">
 <h1>Shroom Raider<a class="headerlink" href="#shroom-raider" title="Link to this heading">¶</a></h1>
-<section id="main-game-logic">
-<h2>Main Game Logic<a class="headerlink" href="#main-game-logic" title="Link to this heading">¶</a></h2>
+<section id="module-shroom_raider">
+<span id="main-game-logic"></span><h2>Main Game Logic<a class="headerlink" href="#module-shroom_raider" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.check_win_condition">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">check_win_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.check_win_condition" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a player has met the win condition of a grid.</p>
+<p>Marks the current grid as cleared if player has met the win conditions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><em>Player</em></a>) – The player being checked</p></li>
+<li><p><strong>g</strong> (<a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><em>Grid</em></a>) – The grid that contains the player</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.main">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.main" title="Link to this definition">¶</a></dt>
+<dd><p>Run the main game logic for Shroom Raider.</p>
+<p>Processes command line arguments and handles the main gameplay loop.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.parser">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instructions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.parser" title="Link to this definition">¶</a></dt>
+<dd><p>Parse user inputs to play game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instructions</strong> (<em>str</em>) – The given input string of the player’s moves</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><em>Player</em></a>) – The current Player entity</p></li>
+<li><p><strong>g</strong> (<a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><em>Grid</em></a>) – The current Grid object</p></li>
+<li><p><strong>level</strong> (<em>str</em>) – A string representation of the ORIGINAL stage</p></li>
+<li><p><strong>reset_only</strong> (<em>bool</em>) – A boolean indicating if moves other than reset can be played</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.reset">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#shroom_raider.reset" title="Link to this definition">¶</a></dt>
+<dd><p>Reset a stage to its starting conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> (<em>str</em>) – A string representation of the stage being reset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Grid object that contains the reset level, and a Player entity on that Grid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.write_report">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">write_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shroom_raider.write_report" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a report of the played game after completion of a level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>P</strong> – The current Player entity</p></li>
+<li><p><strong>G</strong> – The current Grid object</p></li>
+<li><p><strong>win</strong> – Indicate whether the player has won the game or has died</p></li>
+<li><p><strong>dead</strong> – Indicate whether the player has won the game or has died</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="entity">
-<h2>Entity<a class="headerlink" href="#entity" title="Link to this heading">¶</a></h2>
+<section id="module-classes.entity">
+<span id="entity"></span><h2>Entity<a class="headerlink" href="#module-classes.entity" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="classes.entity.Entity">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entity.</span></span><span class="sig-name descname"><span class="pre">Entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entity.Entity" title="Link to this definition">¶</a></dt>
+<dd><p>The superclass for all entities that exist in the game.</p>
+<p>Some functions in this class are overwritten by some of the child classes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_collideable">
+<span class="sig-name descname"><span class="pre">_is_collideable</span></span><a class="headerlink" href="#classes.entity.Entity._is_collideable" title="Link to this definition">¶</a></dt>
+<dd><p>If True, any other collideable object cannot occupy this Entity’s space.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_collectable">
+<span class="sig-name descname"><span class="pre">_is_collectable</span></span><a class="headerlink" href="#classes.entity.Entity._is_collectable" title="Link to this definition">¶</a></dt>
+<dd><p>If True, Player can collect this Entity.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_storable">
+<span class="sig-name descname"><span class="pre">_is_storable</span></span><a class="headerlink" href="#classes.entity.Entity._is_storable" title="Link to this definition">¶</a></dt>
+<dd><p>If True, then Player can keep this in inventory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_pushable">
+<span class="sig-name descname"><span class="pre">_is_pushable</span></span><a class="headerlink" href="#classes.entity.Entity._is_pushable" title="Link to this definition">¶</a></dt>
+<dd><p>If True, Player can push this Entity.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_deadly">
+<span class="sig-name descname"><span class="pre">_is_deadly</span></span><a class="headerlink" href="#classes.entity.Entity._is_deadly" title="Link to this definition">¶</a></dt>
+<dd><p>If True, Player gets game over’d when on it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity._is_burnable">
+<span class="sig-name descname"><span class="pre">_is_burnable</span></span><a class="headerlink" href="#classes.entity.Entity._is_burnable" title="Link to this definition">¶</a></dt>
+<dd><p>If True, triggers burning of Tree.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity.__pos">
+<span class="sig-name descname"><span class="pre">__pos</span></span><a class="headerlink" href="#classes.entity.Entity.__pos" title="Link to this definition">¶</a></dt>
+<dd><p>[r, c], the row and column of the Grid where the entity is located.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity.__on_grid">
+<span class="sig-name descname"><span class="pre">__on_grid</span></span><a class="headerlink" href="#classes.entity.Entity.__on_grid" title="Link to this definition">¶</a></dt>
+<dd><p>The Grid object that contains the entity.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entity.Entity.__ascii">
+<span class="sig-name descname"><span class="pre">__ascii</span></span><a class="headerlink" href="#classes.entity.Entity.__ascii" title="Link to this definition">¶</a></dt>
+<dd><p>The ascii symbol that represents the entity.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.destroy">
+<span class="sig-name descname"><span class="pre">destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entity.Entity.destroy" title="Link to this definition">¶</a></dt>
+<dd><p>Destroy the Entity and remove it from the Grid.</p>
+<p>This removes the last occurrence of the entity from its current stack.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_ascii">
+<span class="sig-name descname"><span class="pre">get_ascii</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_ascii" title="Link to this definition">¶</a></dt>
+<dd><p>Return the ASCII character representation of the Entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ASCII character.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_burnable">
+<span class="sig-name descname"><span class="pre">get_burnable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_burnable" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is burnable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if burnable, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_collectable">
+<span class="sig-name descname"><span class="pre">get_collectable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_collectable" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is collectable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if collectible (or storable), otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_collideable">
+<span class="sig-name descname"><span class="pre">get_collideable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_collideable" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is collideable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if collideable (or pushable), otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_deadly">
+<span class="sig-name descname"><span class="pre">get_deadly</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_deadly" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is deadly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if deadly, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_entity_below">
+<span class="sig-name descname"><span class="pre">get_entity_below</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_entity_below" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Entity that exists below this Entity in the Grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The entity directly under this entity in the stacking order, or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_movement_validity">
+<span class="sig-name descname"><span class="pre">get_movement_validity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_movement_validity" title="Link to this definition">¶</a></dt>
+<dd><p>Check if an Entity can move to the target coordinate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<em>str</em>) – “wasd”, where the Entity intends to move.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Target row.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Target column.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the Entity can move to (r, c), otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_obj_in_coord">
+<span class="sig-name descname"><span class="pre">get_obj_in_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_obj_in_coord" title="Link to this definition">¶</a></dt>
+<dd><p>Return the object on coordinate [r, c] on the same Grid as this Entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The entity at the given coordinate, or None if empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_on_grid">
+<span class="sig-name descname"><span class="pre">get_on_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></span><a class="headerlink" href="#classes.entity.Entity.get_on_grid" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Grid object that this Entity resides in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Grid containing this entity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_pos">
+<span class="sig-name descname"><span class="pre">get_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.entity.Entity.get_pos" title="Link to this definition">¶</a></dt>
+<dd><p>Return the position [r, c] of this Entity in its Grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The row/column pair for this entity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_pushable">
+<span class="sig-name descname"><span class="pre">get_pushable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pusher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_pushable" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is pushable by the given pusher.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pusher</strong> – The entity attempting the push; may be None.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if pushable, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.get_storable">
+<span class="sig-name descname"><span class="pre">get_storable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.get_storable" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the object is storable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if storable, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.in_bounds">
+<span class="sig-name descname"><span class="pre">in_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.in_bounds" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the given row and column are within the grid bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> – Row index.</p></li>
+<li><p><strong>c</strong> – Column index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if [r, c] is inside the grid, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.set_coordinate">
+<span class="sig-name descname"><span class="pre">set_coordinate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entity.Entity.set_coordinate" title="Link to this definition">¶</a></dt>
+<dd><p>Set the position of this Entity. DOES NOT MODIFY THE GRID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entity.Entity.set_pos">
+<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entity.Entity.set_pos" title="Link to this definition">¶</a></dt>
+<dd><p>Move the Entity on the Grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>direction</strong> (<em>str</em>) – The direction that the Entity wants to move.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the move was successful, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <section id="entities">
 <h3>Entities<a class="headerlink" href="#entities" title="Link to this heading">¶</a></h3>
 <section id="module-classes.entities.axe">
 <span id="axe"></span><h4>Axe<a class="headerlink" href="#module-classes.entities.axe" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.axe.Axe">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.axe.</span></span><span class="sig-name descname"><span class="pre">Axe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.axe.Axe" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.axe.</span></span><span class="sig-name descname"><span class="pre">Axe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.axe.Axe" title="Link to this definition">¶</a></dt>
 <dd><p>A storable Entity that, if used by the player, destroys a tree.</p>
 <p>Default character is ‘x’</p>
 <dl class="py attribute">
@@ -63,7 +393,7 @@
 <span id="flamethrower"></span><h4>Flamethrower<a class="headerlink" href="#module-classes.entities.flamethrower" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.flamethrower.Flamethrower">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.flamethrower.</span></span><span class="sig-name descname"><span class="pre">Flamethrower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.flamethrower.Flamethrower" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.flamethrower.</span></span><span class="sig-name descname"><span class="pre">Flamethrower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.flamethrower.Flamethrower" title="Link to this definition">¶</a></dt>
 <dd><p>A storable Entity that, if used by the Player, destroys all connected trees.</p>
 <p>Default character is ‘*’</p>
 <dl class="py attribute">
@@ -78,7 +408,7 @@
 <span id="mushroom"></span><h4>Mushroom<a class="headerlink" href="#module-classes.entities.mushroom" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.mushroom.Mushroom">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.mushroom.</span></span><span class="sig-name descname"><span class="pre">Mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.mushroom.Mushroom" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.mushroom.</span></span><span class="sig-name descname"><span class="pre">Mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.mushroom.Mushroom" title="Link to this definition">¶</a></dt>
 <dd><p>An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it.</p>
 <p>Default character is ‘+’</p>
 <dl class="py attribute">
@@ -93,7 +423,7 @@
 <span id="paved-tile"></span><h4>Paved Tile<a class="headerlink" href="#module-classes.entities.pavedtile" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.pavedtile.PavedTile">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.pavedtile.</span></span><span class="sig-name descname"><span class="pre">PavedTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.pavedtile.PavedTile" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.pavedtile.</span></span><span class="sig-name descname"><span class="pre">PavedTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.pavedtile.PavedTile" title="Link to this definition">¶</a></dt>
 <dd><p>An Entity that is created when a rock goes over water. Can be walked on.</p>
 <p>Default character is ‘_’</p>
 <dl class="py attribute">
@@ -104,14 +434,146 @@
 </dd></dl>
 
 </section>
-<section id="player">
-<h4>Player<a class="headerlink" href="#player" title="Link to this heading">¶</a></h4>
+<section id="module-classes.entities.player">
+<span id="player"></span><h4>Player<a class="headerlink" href="#module-classes.entities.player" title="Link to this heading">¶</a></h4>
+<dl class="py class">
+<dt class="sig sig-object py" id="classes.entities.player.Player">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.player.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'L'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.player.Player" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the main controllable character of the game.</p>
+<p>Default character is ‘L’</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entities.player.Player.__item">
+<span class="sig-name descname"><span class="pre">__item</span></span><a class="headerlink" href="#classes.entities.player.Player.__item" title="Link to this definition">¶</a></dt>
+<dd><p>The item the player is holding.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entities.player.Player.__mushroom_count">
+<span class="sig-name descname"><span class="pre">__mushroom_count</span></span><a class="headerlink" href="#classes.entities.player.Player.__mushroom_count" title="Link to this definition">¶</a></dt>
+<dd><p>The number of mushrooms the Player has collected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="classes.entities.player.Player.__is_dead">
+<span class="sig-name descname"><span class="pre">__is_dead</span></span><a class="headerlink" href="#classes.entities.player.Player.__is_dead" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the Player is dead.</p>
+</dd></dl>
+
+<p>For other attributes, see the parent class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.collect_item">
+<span class="sig-name descname"><span class="pre">collect_item</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.collect_item" title="Link to this definition">¶</a></dt>
+<dd><p>Collect the item below the player if it is storable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.collect_shroom">
+<span class="sig-name descname"><span class="pre">collect_shroom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.collect_shroom" title="Link to this definition">¶</a></dt>
+<dd><p>Collect the mushroom below the player if present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.get_is_dead">
+<span class="sig-name descname"><span class="pre">get_is_dead</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entities.player.Player.get_is_dead" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the player is dead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the player is dead, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.get_item">
+<span class="sig-name descname"><span class="pre">get_item</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.get_item" title="Link to this definition">¶</a></dt>
+<dd><p>Return the item the player is holding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The held item or None if empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.get_movement_validity">
+<span class="sig-name descname"><span class="pre">get_movement_validity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entities.player.Player.get_movement_validity" title="Link to this definition">¶</a></dt>
+<dd><p>Override parent’s movement validity to allow item-based actions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> – Movement direction (‘w’,’a’,’s’,’d’).</p></li>
+<li><p><strong>r</strong> – Target row.</p></li>
+<li><p><strong>c</strong> – Target column.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if movement is allowed, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.get_mushroom_count">
+<span class="sig-name descname"><span class="pre">get_mushroom_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#classes.entities.player.Player.get_mushroom_count" title="Link to this definition">¶</a></dt>
+<dd><p>Return the number of mushrooms the player has collected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The mushroom count as an integer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.increment_mushroom_count">
+<span class="sig-name descname"><span class="pre">increment_mushroom_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.increment_mushroom_count" title="Link to this definition">¶</a></dt>
+<dd><p>Increase the player’s mushroom count by one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.kill">
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.kill" title="Link to this definition">¶</a></dt>
+<dd><p>Mark the player as dead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.set_item">
+<span class="sig-name descname"><span class="pre">set_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.set_item" title="Link to this definition">¶</a></dt>
+<dd><p>Set the item to be held by the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – The Entity for the player to hold.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.set_pos">
+<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entities.player.Player.set_pos" title="Link to this definition">¶</a></dt>
+<dd><p>Move the player in the given direction and handle collisions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>direction</strong> – ‘wasd’, the desired direction of movement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the Player moved successfully, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classes.entities.player.Player.use_item">
+<span class="sig-name descname"><span class="pre">use_item</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.entities.player.Player.use_item" title="Link to this definition">¶</a></dt>
+<dd><p>Remove the currently held item.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-classes.entities.rock">
 <span id="rock"></span><h4>Rock<a class="headerlink" href="#module-classes.entities.rock" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.rock.Rock">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.rock.</span></span><span class="sig-name descname"><span class="pre">Rock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'R'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.rock.Rock" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.rock.</span></span><span class="sig-name descname"><span class="pre">Rock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'R'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.rock.Rock" title="Link to this definition">¶</a></dt>
 <dd><p>A collideable entity that can be pushed by the player.</p>
 <p>Default character is ‘R’</p>
 <dl class="py attribute">
@@ -139,7 +601,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classes.entities.rock.Rock.get_pushable">
-<span class="sig-name descname"><span class="pre">get_pushable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pusher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Entity</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entities.rock.Rock.get_pushable" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_pushable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pusher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.entities.rock.Rock.get_pushable" title="Link to this definition">¶</a></dt>
 <dd><p>Return whether the rock is pushable by the given pusher.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -172,7 +634,7 @@
 <span id="tree"></span><h4>Tree<a class="headerlink" href="#module-classes.entities.tree" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.tree.Tree">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'T'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.tree.Tree" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'T'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.tree.Tree" title="Link to this definition">¶</a></dt>
 <dd><p>A collideable and burnable entity that can be destroyed by the player.</p>
 <p>Default character is ‘T’</p>
 <dl class="py attribute">
@@ -204,7 +666,7 @@
 <span id="water"></span><h4>Water<a class="headerlink" href="#module-classes.entities.water" title="Link to this heading">¶</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="classes.entities.water.Water">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.water.</span></span><span class="sig-name descname"><span class="pre">Water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'~'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.water.Water" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.entities.water.</span></span><span class="sig-name descname"><span class="pre">Water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'~'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.entities.water.Water" title="Link to this definition">¶</a></dt>
 <dd><p>A deadly entity that kills the player if stepped on.</p>
 <p>Default character is ‘~’</p>
 <dl class="py attribute">
@@ -234,36 +696,36 @@
 
 </section>
 </section>
-<section id="module-classes.Grid">
-<span id="grid"></span><h2>Grid<a class="headerlink" href="#module-classes.Grid" title="Link to this heading">¶</a></h2>
+<section id="module-classes.grid">
+<span id="grid"></span><h2>Grid<a class="headerlink" href="#module-classes.grid" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="classes.Grid.Grid">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.Grid.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.Grid.Grid" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classes.grid.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#classes.grid.Grid" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the play area where players and all game objects reside.</p>
 <p>The Grid is a 3D data structure: a 2D list where each coordinate contains a stack of entities.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.add_layer_to_coord">
-<span class="sig-name descname"><span class="pre">add_layer_to_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.add_layer_to_coord" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.add_layer_to_coord">
+<span class="sig-name descname"><span class="pre">add_layer_to_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.add_layer_to_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Add an entity to a specific coordinate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
 <li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
-<li><p><strong>obj</strong> (<em>Entity</em><em> | </em><em>None</em>) – The object to be added into the Grid</p></li>
+<li><p><strong>obj</strong> (<a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><em>Entity</em></a><em> | </em><em>None</em>) – The object to be added into the Grid</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_display_symbol_of_obj">
-<span class="sig-name descname"><span class="pre">get_display_symbol_of_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_display_symbol_of_obj" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_display_symbol_of_obj">
+<span class="sig-name descname"><span class="pre">get_display_symbol_of_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_display_symbol_of_obj" title="Link to this definition">¶</a></dt>
 <dd><p>Return the visual representation of an object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>Entity</em><em> | </em><em>None</em>) – The object being checked</p></li>
+<li><p><strong>obj</strong> (<a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><em>Entity</em></a><em> | </em><em>None</em>) – The object being checked</p></li>
 <li><p><strong>mode</strong> (<em>str</em>) – The display mode</p></li>
 </ul>
 </dd>
@@ -274,22 +736,25 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_grid_by_name">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_grid_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.Grid.Grid" title="classes.Grid.Grid"><span class="pre">Grid</span></a></span></span><a class="headerlink" href="#classes.Grid.Grid.get_grid_by_name" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_grid_by_name">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_grid_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></span><a class="headerlink" href="#classes.grid.Grid.get_grid_by_name" title="Link to this definition">¶</a></dt>
 <dd><p>Return a Grid object by its name.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Grid instance with the given name.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the Grid</p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no Grid with the given name exists.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Grid instance with the given name.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – If no Grid with the given name exists.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_grid_obj_map">
-<span class="sig-name descname"><span class="pre">get_grid_obj_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_grid_obj_map" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_grid_obj_map">
+<span class="sig-name descname"><span class="pre">get_grid_obj_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.grid.Grid.get_grid_obj_map" title="Link to this definition">¶</a></dt>
 <dd><p>Return the 2D list of entity stacks on the Grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -299,8 +764,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_is_cleared">
-<span class="sig-name descname"><span class="pre">get_is_cleared</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_is_cleared" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_is_cleared">
+<span class="sig-name descname"><span class="pre">get_is_cleared</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_is_cleared" title="Link to this definition">¶</a></dt>
 <dd><p>Return True if the Grid has been cleared.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -310,19 +775,25 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_layers_from_coord">
-<span class="sig-name descname"><span class="pre">get_layers_from_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_layers_from_coord" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_layers_from_coord">
+<span class="sig-name descname"><span class="pre">get_layers_from_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.grid.Grid.get_layers_from_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Return the stack of entities at coordinate (r, c).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list representing the stack of entities at (r, c).</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list representing the stack of entities at (r, c).</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_obj_in_coord">
-<span class="sig-name descname"><span class="pre">get_obj_in_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_obj_in_coord" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_obj_in_coord">
+<span class="sig-name descname"><span class="pre">get_obj_in_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_obj_in_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Return the entity at coordinate (r, c) and layer, or None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -342,8 +813,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_player">
-<span class="sig-name descname"><span class="pre">get_player</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_player" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_player">
+<span class="sig-name descname"><span class="pre">get_player</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_player" title="Link to this definition">¶</a></dt>
 <dd><p>Return the Player entity on the Grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -353,8 +824,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_total_mushrooms">
-<span class="sig-name descname"><span class="pre">get_total_mushrooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_total_mushrooms" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_total_mushrooms">
+<span class="sig-name descname"><span class="pre">get_total_mushrooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_total_mushrooms" title="Link to this definition">¶</a></dt>
 <dd><p>Return the total number of mushrooms in the Grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -364,8 +835,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.get_vis_map_as_str">
-<span class="sig-name descname"><span class="pre">get_vis_map_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ascii'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#classes.Grid.Grid.get_vis_map_as_str" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.get_vis_map_as_str">
+<span class="sig-name descname"><span class="pre">get_vis_map_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ascii'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#classes.grid.Grid.get_vis_map_as_str" title="Link to this definition">¶</a></dt>
 <dd><p>Return the visualization of the Grid as a multi-line string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -378,14 +849,14 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.increment_total_mushrooms">
-<span class="sig-name descname"><span class="pre">increment_total_mushrooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.increment_total_mushrooms" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.increment_total_mushrooms">
+<span class="sig-name descname"><span class="pre">increment_total_mushrooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.increment_total_mushrooms" title="Link to this definition">¶</a></dt>
 <dd><p>Increment the total mushroom count.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.init_coord">
-<span class="sig-name descname"><span class="pre">init_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.Grid.Grid.init_coord" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.init_coord">
+<span class="sig-name descname"><span class="pre">init_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#classes.grid.Grid.init_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Return the entity and display character for a given symbol.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -404,29 +875,36 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.level_clear">
-<span class="sig-name descname"><span class="pre">level_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.level_clear" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.level_clear">
+<span class="sig-name descname"><span class="pre">level_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.level_clear" title="Link to this definition">¶</a></dt>
 <dd><p>Mark the level as cleared.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.pop_layer_from_coord">
-<span class="sig-name descname"><span class="pre">pop_layer_from_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Entity</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.pop_layer_from_coord" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.pop_layer_from_coord">
+<span class="sig-name descname"><span class="pre">pop_layer_from_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.pop_layer_from_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Remove and return an entity at a specific coordinate and layer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The popped entity, or None if that layer held None.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+<li><p><strong>layer</strong> (<em>int</em>) – Layer index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The popped entity, or None if that layer held None.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Entity</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExitCodes</span></span></span><a class="headerlink" href="#classes.Grid.Grid.render" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a></span></span><a class="headerlink" href="#classes.grid.Grid.render" title="Link to this definition">¶</a></dt>
 <dd><p>Print the Grid and GUI, and return True if the game has ended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>p</strong> (<em>Entity</em>) – The Player object in the current Grid instance</p>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><em>Entity</em></a>) – The Player object in the current Grid instance</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the player has won or lost (game ended), otherwise False.</p>
@@ -435,8 +913,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="classes.Grid.Grid.visualize_map">
-<span class="sig-name descname"><span class="pre">visualize_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.Grid.Grid.visualize_map" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="classes.grid.Grid.visualize_map">
+<span class="sig-name descname"><span class="pre">visualize_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.visualize_map" title="Link to this definition">¶</a></dt>
 <dd><p>Generate the user-facing visualization of the Grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -447,6 +925,591 @@
 
 </dd></dl>
 
+</section>
+<section id="leaderboard-and-player-data">
+<h2>Leaderboard and Player Data<a class="headerlink" href="#leaderboard-and-player-data" title="Link to this heading">¶</a></h2>
+<section id="module-bonusclasses.leaderboard">
+<span id="leaderboard"></span><h3>Leaderboard<a class="headerlink" href="#module-bonusclasses.leaderboard" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.leaderboard.show_leaderboard">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.leaderboard.</span></span><span class="sig-name descname"><span class="pre">show_leaderboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'total_wins'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.leaderboard.show_leaderboard" title="Link to this definition">¶</a></dt>
+<dd><p>Compares player to other players. Ranked by levels beaten and sum of best times (formatted)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sort_by</strong> (<em>str</em><em> | </em><em>tuple</em>) – sorts the leaderboard using a key or a tuple of keys (by default, total_wins)</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em>) – whether the leaderboard is sorted ascending or descending (by default, False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-bonusclasses.playerdata">
+<span id="player-data"></span><h3>Player Data<a class="headerlink" href="#module-bonusclasses.playerdata" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">PlayerData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData" title="Link to this definition">¶</a></dt>
+<dd><p>Handles the storing and sending of session data for each game session for a given player.
+Also handles distribution of global player information to leaderboards.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.name" title="Link to this definition">¶</a></dt>
+<dd><p>A string denoting the name of the player</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.password" title="Link to this definition">¶</a></dt>
+<dd><p>A string denoting the password of the player</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_mushrooms_collected">
+<span class="sig-name descname"><span class="pre">total_mushrooms_collected</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_mushrooms_collected" title="Link to this definition">¶</a></dt>
+<dd><p>An int denoting the total mushrooms collected by the player</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_tiles_walked">
+<span class="sig-name descname"><span class="pre">total_tiles_walked</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_tiles_walked" title="Link to this definition">¶</a></dt>
+<dd><p>An int denoting the total number of tiles a player walked throughout thegame.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_wins">
+<span class="sig-name descname"><span class="pre">total_wins</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_wins" title="Link to this definition">¶</a></dt>
+<dd><p>An int denoting the total wins a player had throughout the game.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_times">
+<span class="sig-name descname"><span class="pre">total_times</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_times" title="Link to this definition">¶</a></dt>
+<dd><p>An int denoting the</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_seconds_played">
+<span class="sig-name descname"><span class="pre">total_seconds_played</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_seconds_played" title="Link to this definition">¶</a></dt>
+<dd><p>An int denoting the total minimum time taken by a player to beat each of their completed levels</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.completed_data">
+<span class="sig-name descname"><span class="pre">completed_data</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.completed_data" title="Link to this definition">¶</a></dt>
+<dd><p>A stringified JSON containing data about levels a player has completed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.completed_levels">
+<span class="sig-name descname"><span class="pre">completed_levels</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.completed_levels" title="Link to this definition">¶</a></dt>
+<dd><p>A dict containing data about levels a player has completed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.apply_report_dict">
+<span class="sig-name descname"><span class="pre">apply_report_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.apply_report_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Processes the updates to be performed after receiving a session report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report</strong> (<em>dict</em>) – The latest session data</p></li>
+<li><p><strong>return_codes</strong> (<a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><em>ExitCodes</em></a><em> | </em><em>None</em>) – The exit code of the last game</p></li>
+<li><p><strong>elapsed_time</strong> (<em>float</em>) – The time taken for completion</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.commit_session">
+<span class="sig-name descname"><span class="pre">commit_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.commit_session" title="Link to this definition">¶</a></dt>
+<dd><p>Adjusts the player data given a level file.
+Also logs the updated data to the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.get_password">
+<span class="sig-name descname"><span class="pre">get_password</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.get_password" title="Link to this definition">¶</a></dt>
+<dd><p>Returns:
+The player’s password</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.load_or_create">
+<span class="sig-name descname"><span class="pre">load_or_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.load_or_create" title="Link to this definition">¶</a></dt>
+<dd><p>Reinitializes the player’s statistics based on records in the database.
+This includes initializing the data for a new player.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.load_report_file">
+<span class="sig-name descname"><span class="pre">load_report_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.load_report_file" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a report file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – The path to the report file</p></li>
+<li><p><strong>level_id</strong> (<em>int</em><em> | </em><em>None</em>) – the ID of the level being accessed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.lookup_excel_username">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_excel_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.lookup_excel_username" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a username from the database if exists and None if does not</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>username</strong> (<em>str</em>) – The username to be accessed</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None if there is no username in the database that matches
+username if there is a username in the database that matches</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_death">
+<span class="sig-name descname"><span class="pre">record_death</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_death" title="Link to this definition">¶</a></dt>
+<dd><p>Records a death for the player</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_move">
+<span class="sig-name descname"><span class="pre">record_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_move" title="Link to this definition">¶</a></dt>
+<dd><p>Adds number of moves to the session data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of moves to be added</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_mushroom">
+<span class="sig-name descname"><span class="pre">record_mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_mushroom" title="Link to this definition">¶</a></dt>
+<dd><p>Adds number of mushrooms to the session data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of mushrooms to be added</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_win">
+<span class="sig-name descname"><span class="pre">record_win</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_win" title="Link to this definition">¶</a></dt>
+<dd><p>Records a win for the player</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.reset_session">
+<span class="sig-name descname"><span class="pre">reset_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.reset_session" title="Link to this definition">¶</a></dt>
+<dd><p>Resets the session</p>
+<p>Start time is recorded (to determine total length later), and win/dead conditions are set to false (as expected from any grid spawn).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.save" title="Link to this definition">¶</a></dt>
+<dd><p>Saves player data to the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.set_password">
+<span class="sig-name descname"><span class="pre">set_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.set_password" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the password.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.store_new_user">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_new_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted_username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.store_new_user" title="Link to this definition">¶</a></dt>
+<dd><p>Stores a new username and initializes their data in the database if it does not exist in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – The username to store in the database.</p></li>
+<li><p><strong>encrypted_username</strong> (<em>str</em>) – The encrypted username to store (to find the key later).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Converts session data to a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.decrypt">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">decrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.decrypt" title="Link to this definition">¶</a></dt>
+<dd><p>Decrypts a dictionary of player data given a key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key used to decrypt the dictionary’s contents</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict containing the decrypted entries of player data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.encrypt">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">encrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.encrypt" title="Link to this definition">¶</a></dt>
+<dd><p>Encrypts a dictionary of player data given a key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key used to encrypt the dictionary’s contents</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict containing the encrypted entries of player data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.read_all_rows">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">read_all_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.read_all_rows" title="Link to this definition">¶</a></dt>
+<dd><p>Reads all player rows from Excel and decrypts all fields.
+Used for displaying/reading data, never for saving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The decrypted data in the Excel file transcribed as dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.read_raw_rows">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">read_raw_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.read_raw_rows" title="Link to this definition">¶</a></dt>
+<dd><p>Reads all player rows from Excel without decryption.
+Used for reading data in encrypted form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The raw data (no decryption) in the Excel file transcribed as dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.safe_float">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">safe_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.safe_float" title="Link to this definition">¶</a></dt>
+<dd><p>Parses empty entries into floats if needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em><em> | </em><em>float</em><em> | </em><em>None</em>) – The value to be processed</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A processed float for storage</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.safe_int">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">safe_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.safe_int" title="Link to this definition">¶</a></dt>
+<dd><p>Parses empty entries into integers if needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em><em> | </em><em>int</em><em> | </em><em>None</em>) – The value to be processed</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A processed integer for storage</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.playerdata.write_all_rows">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">write_all_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.write_all_rows" title="Link to this definition">¶</a></dt>
+<dd><p>Writes all player rows (encrypted) back to Excel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rows</strong> (<em>dict</em>) – The encrypted rows</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-bonusclasses.security">
+<span id="security-system"></span><h3>Security System<a class="headerlink" href="#module-bonusclasses.security" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.check_validity">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">check_validity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#bonusclasses.security.check_validity" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if a given string is a valid password/username</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – The proposed password/username</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if valid, False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.findPW">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">findPW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unencrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.findPW" title="Link to this definition">¶</a></dt>
+<dd><p>Find the key string given the original and encrypted strings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unencrypted</strong> (<em>str</em>) – The original string</p></li>
+<li><p><strong>encrypted</strong> (<em>str</em>) – The string after being scrambled</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The key string of the cipher.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.get_valid_username">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">get_valid_username</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.get_valid_username" title="Link to this definition">¶</a></dt>
+<dd><p>Prompts the user for a valid username</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The username, once verified to be valid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.register_new_user">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">register_new_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.register_new_user" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt for valid password and confirmation for new user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>username</strong> (<em>str</em>) – The username of the new user</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The confirmed password.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.scramble">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">scramble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.scramble" title="Link to this definition">¶</a></dt>
+<dd><p>Vigenère cipher</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em>) – The data to be scrambled</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The string key of the cipher</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The scrambled string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.shift">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">letter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.shift" title="Link to this definition">¶</a></dt>
+<dd><p>Shifts a letter by a number of spaces to the right</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>letter</strong> (<em>str</em>) – The letter to be shifted</p></li>
+<li><p><strong>shiftval</strong> (<em>str</em>) – The letter representation of number of shifts</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The shifted letter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.unscramble">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">unscramble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.unscramble" title="Link to this definition">¶</a></dt>
+<dd><p>Vigenère cipher unscrambler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em>) – The data to be unscrambled</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The string key of the cipher</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The original unscrambled string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.unshift">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">unshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">letter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.unshift" title="Link to this definition">¶</a></dt>
+<dd><p>Shifts a letter by a number of spaces to the left</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>letter</strong> (<em>str</em>) – The letter to be shifted</p></li>
+<li><p><strong>shiftval</strong> (<em>str</em>) – The letter representation of number of shifts</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The shifted letter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bonusclasses.security.verify_existing_user">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">verify_existing_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted_username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.verify_existing_user" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt for password until correct for existing user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – The username of the current user</p></li>
+<li><p><strong>encrypted_username</strong> (<em>str</em>) – The stored encrypted username of the current user with their password</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The correct password once verified.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Link to this heading">¶</a></h2>
+<section id="module-utils.enums">
+<span id="enums"></span><h3>Enums<a class="headerlink" href="#module-utils.enums" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.enums.ExitCodes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.enums.</span></span><span class="sig-name descname"><span class="pre">ExitCodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.enums.ExitCodes" title="Link to this definition">¶</a></dt>
+<dd><p>Codes for finishing the game.</p>
+</dd></dl>
+
+</section>
+<section id="module-utils.general_utils">
+<span id="general-utils"></span><h3>General Utils<a class="headerlink" href="#module-utils.general_utils" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.calculate_percentage">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_percentage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">den</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.calculate_percentage" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates formatted percentage (xx%). 0% if divided by 0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num</strong> (<em>float</em><em>|</em><em>int</em>) – numerator of the fraction</p></li>
+<li><p><strong>den</strong> (<em>float</em><em>|</em><em>int</em>) – denominator of the fraction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string in the format xx%</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.clear_prev_n_lines">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">clear_prev_n_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.clear_prev_n_lines" title="Link to this definition">¶</a></dt>
+<dd><p>Clears the previous n lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number of lines to clear.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.clear_terminal">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">clear_terminal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.clear_terminal" title="Link to this definition">¶</a></dt>
+<dd><p>Clears the terminal.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.debug_wait">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
+<dd><p>Debug decorator factory for functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>delay</strong> (<em>float</em><em>|</em><em>int</em>) – time to wait.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.format_time">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">format_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.format_time" title="Link to this definition">¶</a></dt>
+<dd><p>Formats time in the hh:mm:ss format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seconds</strong> (<em>float</em><em>|</em><em>int</em>) – time to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string of the formatted time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.print_and_wait">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">print_and_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.print_and_wait" title="Link to this definition">¶</a></dt>
+<dd><p>Print a message then wait some number of seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – the message to print.</p></li>
+<li><p><strong>seconds</strong> (<em>float</em><em>|</em><em>int</em>) – waiting time after print.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.tabulate">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">tabulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.tabulate" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>headers</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Headers for the table.</p></li>
+<li><p><strong>table</strong> (<em>list</em><em>[</em><em>list</em><em>]</em>) – List containing rows for the table.</p></li>
+<li><p><strong>sep</strong> (<em>str</em>) – border character between the columns</p></li>
+<li><p><strong>lborder</strong> (<em>str</em>) – left-most border character</p></li>
+<li><p><strong>rborder</strong> (<em>str</em>) – right-most border character</p></li>
+<li><p><strong>tborder</strong> (<em>str</em>) – top and bottom border character</p></li>
+<li><p><strong>joint</strong> (<em>str</em>) – intersection between border elements</p></li>
+<li><p><strong>max_width</strong> (<em>int</em>) – maximum width of the table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A multi-line string of the table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.general_utils.wait">
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.wait" title="Link to this definition">¶</a></dt>
+<dd><p>Do nothing for the specified amount of seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seconds</strong> (<em>float</em><em>|</em><em>int</em>) – seconds to wait.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
@@ -461,8 +1524,43 @@
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Shroom Raider</a><ul>
-<li><a class="reference internal" href="#main-game-logic">Main Game Logic</a></li>
-<li><a class="reference internal" href="#entity">Entity</a><ul>
+<li><a class="reference internal" href="#module-shroom_raider">Main Game Logic</a><ul>
+<li><a class="reference internal" href="#shroom_raider.check_win_condition"><code class="docutils literal notranslate"><span class="pre">check_win_condition()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.parser"><code class="docutils literal notranslate"><span class="pre">parser()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.write_report"><code class="docutils literal notranslate"><span class="pre">write_report()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-classes.entity">Entity</a><ul>
+<li><a class="reference internal" href="#classes.entity.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a><ul>
+<li><a class="reference internal" href="#classes.entity.Entity._is_collideable"><code class="docutils literal notranslate"><span class="pre">Entity._is_collideable</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity._is_collectable"><code class="docutils literal notranslate"><span class="pre">Entity._is_collectable</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity._is_storable"><code class="docutils literal notranslate"><span class="pre">Entity._is_storable</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity._is_pushable"><code class="docutils literal notranslate"><span class="pre">Entity._is_pushable</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity._is_deadly"><code class="docutils literal notranslate"><span class="pre">Entity._is_deadly</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity._is_burnable"><code class="docutils literal notranslate"><span class="pre">Entity._is_burnable</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.__pos"><code class="docutils literal notranslate"><span class="pre">Entity.__pos</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.__on_grid"><code class="docutils literal notranslate"><span class="pre">Entity.__on_grid</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.__ascii"><code class="docutils literal notranslate"><span class="pre">Entity.__ascii</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.destroy"><code class="docutils literal notranslate"><span class="pre">Entity.destroy()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_ascii"><code class="docutils literal notranslate"><span class="pre">Entity.get_ascii()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_burnable"><code class="docutils literal notranslate"><span class="pre">Entity.get_burnable()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_collectable"><code class="docutils literal notranslate"><span class="pre">Entity.get_collectable()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_collideable"><code class="docutils literal notranslate"><span class="pre">Entity.get_collideable()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_deadly"><code class="docutils literal notranslate"><span class="pre">Entity.get_deadly()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_entity_below"><code class="docutils literal notranslate"><span class="pre">Entity.get_entity_below()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Entity.get_movement_validity()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_obj_in_coord"><code class="docutils literal notranslate"><span class="pre">Entity.get_obj_in_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_on_grid"><code class="docutils literal notranslate"><span class="pre">Entity.get_on_grid()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_pos"><code class="docutils literal notranslate"><span class="pre">Entity.get_pos()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_pushable"><code class="docutils literal notranslate"><span class="pre">Entity.get_pushable()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.get_storable"><code class="docutils literal notranslate"><span class="pre">Entity.get_storable()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.in_bounds"><code class="docutils literal notranslate"><span class="pre">Entity.in_bounds()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.set_coordinate"><code class="docutils literal notranslate"><span class="pre">Entity.set_coordinate()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entity.Entity.set_pos"><code class="docutils literal notranslate"><span class="pre">Entity.set_pos()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#entities">Entities</a><ul>
 <li><a class="reference internal" href="#module-classes.entities.axe">Axe</a><ul>
 <li><a class="reference internal" href="#classes.entities.axe.Axe"><code class="docutils literal notranslate"><span class="pre">Axe</span></code></a></li>
@@ -480,7 +1578,26 @@
 <li><a class="reference internal" href="#classes.entities.pavedtile.PavedTile"><code class="docutils literal notranslate"><span class="pre">PavedTile</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#player">Player</a></li>
+<li><a class="reference internal" href="#module-classes.entities.player">Player</a><ul>
+<li><a class="reference internal" href="#classes.entities.player.Player"><code class="docutils literal notranslate"><span class="pre">Player</span></code></a><ul>
+<li><a class="reference internal" href="#classes.entities.player.Player.__item"><code class="docutils literal notranslate"><span class="pre">Player.__item</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.__mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.__mushroom_count</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.__is_dead"><code class="docutils literal notranslate"><span class="pre">Player.__is_dead</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.collect_item"><code class="docutils literal notranslate"><span class="pre">Player.collect_item()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.collect_shroom"><code class="docutils literal notranslate"><span class="pre">Player.collect_shroom()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.get_is_dead"><code class="docutils literal notranslate"><span class="pre">Player.get_is_dead()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.get_item"><code class="docutils literal notranslate"><span class="pre">Player.get_item()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Player.get_movement_validity()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.get_mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.get_mushroom_count()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.increment_mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.increment_mushroom_count()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.kill"><code class="docutils literal notranslate"><span class="pre">Player.kill()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.set_item"><code class="docutils literal notranslate"><span class="pre">Player.set_item()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.set_pos"><code class="docutils literal notranslate"><span class="pre">Player.set_pos()</span></code></a></li>
+<li><a class="reference internal" href="#classes.entities.player.Player.use_item"><code class="docutils literal notranslate"><span class="pre">Player.use_item()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-classes.entities.rock">Rock</a><ul>
 <li><a class="reference internal" href="#classes.entities.rock.Rock"><code class="docutils literal notranslate"><span class="pre">Rock</span></code></a><ul>
 <li><a class="reference internal" href="#classes.entities.rock.Rock.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Rock.get_movement_validity()</span></code></a></li>
@@ -510,24 +1627,98 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-classes.Grid">Grid</a><ul>
-<li><a class="reference internal" href="#classes.Grid.Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a><ul>
-<li><a class="reference internal" href="#classes.Grid.Grid.add_layer_to_coord"><code class="docutils literal notranslate"><span class="pre">Grid.add_layer_to_coord()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_display_symbol_of_obj"><code class="docutils literal notranslate"><span class="pre">Grid.get_display_symbol_of_obj()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_grid_by_name"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_by_name()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_grid_obj_map"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_obj_map()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_is_cleared"><code class="docutils literal notranslate"><span class="pre">Grid.get_is_cleared()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_layers_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_layers_from_coord()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_obj_in_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_obj_in_coord()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_player"><code class="docutils literal notranslate"><span class="pre">Grid.get_player()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.get_total_mushrooms()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.get_vis_map_as_str"><code class="docutils literal notranslate"><span class="pre">Grid.get_vis_map_as_str()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.increment_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.increment_total_mushrooms()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.init_coord"><code class="docutils literal notranslate"><span class="pre">Grid.init_coord()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.level_clear"><code class="docutils literal notranslate"><span class="pre">Grid.level_clear()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.pop_layer_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.pop_layer_from_coord()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.render"><code class="docutils literal notranslate"><span class="pre">Grid.render()</span></code></a></li>
-<li><a class="reference internal" href="#classes.Grid.Grid.visualize_map"><code class="docutils literal notranslate"><span class="pre">Grid.visualize_map()</span></code></a></li>
+<li><a class="reference internal" href="#module-classes.grid">Grid</a><ul>
+<li><a class="reference internal" href="#classes.grid.Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a><ul>
+<li><a class="reference internal" href="#classes.grid.Grid.add_layer_to_coord"><code class="docutils literal notranslate"><span class="pre">Grid.add_layer_to_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_display_symbol_of_obj"><code class="docutils literal notranslate"><span class="pre">Grid.get_display_symbol_of_obj()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_grid_by_name"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_grid_obj_map"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_obj_map()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_is_cleared"><code class="docutils literal notranslate"><span class="pre">Grid.get_is_cleared()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_layers_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_layers_from_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_obj_in_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_obj_in_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_player"><code class="docutils literal notranslate"><span class="pre">Grid.get_player()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.get_total_mushrooms()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.get_vis_map_as_str"><code class="docutils literal notranslate"><span class="pre">Grid.get_vis_map_as_str()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.increment_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.increment_total_mushrooms()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.init_coord"><code class="docutils literal notranslate"><span class="pre">Grid.init_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.level_clear"><code class="docutils literal notranslate"><span class="pre">Grid.level_clear()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.pop_layer_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.pop_layer_from_coord()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.render"><code class="docutils literal notranslate"><span class="pre">Grid.render()</span></code></a></li>
+<li><a class="reference internal" href="#classes.grid.Grid.visualize_map"><code class="docutils literal notranslate"><span class="pre">Grid.visualize_map()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#leaderboard-and-player-data">Leaderboard and Player Data</a><ul>
+<li><a class="reference internal" href="#module-bonusclasses.leaderboard">Leaderboard</a><ul>
+<li><a class="reference internal" href="#bonusclasses.leaderboard.show_leaderboard"><code class="docutils literal notranslate"><span class="pre">show_leaderboard()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-bonusclasses.playerdata">Player Data</a><ul>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData"><code class="docutils literal notranslate"><span class="pre">PlayerData</span></code></a><ul>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.name"><code class="docutils literal notranslate"><span class="pre">PlayerData.name</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.password"><code class="docutils literal notranslate"><span class="pre">PlayerData.password</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.total_mushrooms_collected"><code class="docutils literal notranslate"><span class="pre">PlayerData.total_mushrooms_collected</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.total_tiles_walked"><code class="docutils literal notranslate"><span class="pre">PlayerData.total_tiles_walked</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.total_wins"><code class="docutils literal notranslate"><span class="pre">PlayerData.total_wins</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.total_times"><code class="docutils literal notranslate"><span class="pre">PlayerData.total_times</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.total_seconds_played"><code class="docutils literal notranslate"><span class="pre">PlayerData.total_seconds_played</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.completed_data"><code class="docutils literal notranslate"><span class="pre">PlayerData.completed_data</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.completed_levels"><code class="docutils literal notranslate"><span class="pre">PlayerData.completed_levels</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.apply_report_dict"><code class="docutils literal notranslate"><span class="pre">PlayerData.apply_report_dict()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.commit_session"><code class="docutils literal notranslate"><span class="pre">PlayerData.commit_session()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.get_password"><code class="docutils literal notranslate"><span class="pre">PlayerData.get_password()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.load_or_create"><code class="docutils literal notranslate"><span class="pre">PlayerData.load_or_create()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.load_report_file"><code class="docutils literal notranslate"><span class="pre">PlayerData.load_report_file()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.lookup_excel_username"><code class="docutils literal notranslate"><span class="pre">PlayerData.lookup_excel_username()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.record_death"><code class="docutils literal notranslate"><span class="pre">PlayerData.record_death()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.record_move"><code class="docutils literal notranslate"><span class="pre">PlayerData.record_move()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.record_mushroom"><code class="docutils literal notranslate"><span class="pre">PlayerData.record_mushroom()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.record_win"><code class="docutils literal notranslate"><span class="pre">PlayerData.record_win()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.reset_session"><code class="docutils literal notranslate"><span class="pre">PlayerData.reset_session()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.save"><code class="docutils literal notranslate"><span class="pre">PlayerData.save()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.set_password"><code class="docutils literal notranslate"><span class="pre">PlayerData.set_password()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.store_new_user"><code class="docutils literal notranslate"><span class="pre">PlayerData.store_new_user()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.PlayerData.to_dict"><code class="docutils literal notranslate"><span class="pre">PlayerData.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.decrypt"><code class="docutils literal notranslate"><span class="pre">decrypt()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.encrypt"><code class="docutils literal notranslate"><span class="pre">encrypt()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.read_all_rows"><code class="docutils literal notranslate"><span class="pre">read_all_rows()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.read_raw_rows"><code class="docutils literal notranslate"><span class="pre">read_raw_rows()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.safe_float"><code class="docutils literal notranslate"><span class="pre">safe_float()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.safe_int"><code class="docutils literal notranslate"><span class="pre">safe_int()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.playerdata.write_all_rows"><code class="docutils literal notranslate"><span class="pre">write_all_rows()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-bonusclasses.security">Security System</a><ul>
+<li><a class="reference internal" href="#bonusclasses.security.check_validity"><code class="docutils literal notranslate"><span class="pre">check_validity()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.findPW"><code class="docutils literal notranslate"><span class="pre">findPW()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.get_valid_username"><code class="docutils literal notranslate"><span class="pre">get_valid_username()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.register_new_user"><code class="docutils literal notranslate"><span class="pre">register_new_user()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.scramble"><code class="docutils literal notranslate"><span class="pre">scramble()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.shift"><code class="docutils literal notranslate"><span class="pre">shift()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.unscramble"><code class="docutils literal notranslate"><span class="pre">unscramble()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.unshift"><code class="docutils literal notranslate"><span class="pre">unshift()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.verify_existing_user"><code class="docutils literal notranslate"><span class="pre">verify_existing_user()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utils">Utils</a><ul>
+<li><a class="reference internal" href="#module-utils.enums">Enums</a><ul>
+<li><a class="reference internal" href="#utils.enums.ExitCodes"><code class="docutils literal notranslate"><span class="pre">ExitCodes</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-utils.general_utils">General Utils</a><ul>
+<li><a class="reference internal" href="#utils.general_utils.calculate_percentage"><code class="docutils literal notranslate"><span class="pre">calculate_percentage()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.clear_prev_n_lines"><code class="docutils literal notranslate"><span class="pre">clear_prev_n_lines()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.clear_terminal"><code class="docutils literal notranslate"><span class="pre">clear_terminal()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.debug_wait"><code class="docutils literal notranslate"><span class="pre">debug_wait()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.format_time"><code class="docutils literal notranslate"><span class="pre">format_time()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.print_and_wait"><code class="docutils literal notranslate"><span class="pre">print_and_wait()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.tabulate"><code class="docutils literal notranslate"><span class="pre">tabulate()</span></code></a></li>
+<li><a class="reference internal" href="#utils.general_utils.wait"><code class="docutils literal notranslate"><span class="pre">wait()</span></code></a></li>
 </ul>
 </li>
 </ul>

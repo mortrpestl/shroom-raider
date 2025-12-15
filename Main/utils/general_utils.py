@@ -14,31 +14,35 @@ def clear_terminal() -> None:
 
 def clear_prev_n_lines(n: int) -> None:
     """Clears the previous n lines.
-    
+
     Args:
         n (int): number of lines to clear.
+
     """
     for _ in range(n):
         sys.stdout.write("\033[F")
         sys.stdout.write("\033[K")
 
 
-def wait(seconds: float|int) -> None:
+def wait(seconds: float) -> None:
     """Do nothing for the specified amount of seconds.
 
     Args:
         seconds (float|int): seconds to wait.
+
     """
     time.sleep(seconds)
 
 
 # decorator
-def debug_wait(delay: float|int=2.5) -> None:
+def debug_wait(delay: float = 2.5) -> None:
     """Debug decorator factory for functions.
-    
+
     Args:
         delay (float|int): time to wait.
+
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             answer = func(*args, **kwargs)
@@ -52,32 +56,34 @@ def debug_wait(delay: float|int=2.5) -> None:
     return decorator
 
 
-def print_and_wait(message: str, seconds: int|float=1) -> None:
+def print_and_wait(message: str, seconds: float = 1) -> None:
     """Print a message then wait some number of seconds.
-    
+
     Args:
         message (str): the message to print.
         seconds (float|int): waiting time after print.
+
     """
     print(message)
     wait(seconds)
     clear_terminal()
 
 
-def format_time(seconds: float|int) -> str:
+def format_time(seconds: float) -> str:
     """Formats time in the hh:mm:ss format.
-    
+
     Args:
         seconds (float|int): time to format.
-    
+
     Returns:
-        A string of the formatted time. 
+        A string of the formatted time.
+
     """
     m, s = divmod(seconds, 60)
     return f"{int(m):02}:{s:06.3f}"
 
 
-def calculate_percentage(num: float|int, den: float|int) -> str:
+def calculate_percentage(num: float, den: float) -> str:
     """Calculates formatted percentage (xx%). 0% if divided by 0
 
     Args:
@@ -86,15 +92,26 @@ def calculate_percentage(num: float|int, den: float|int) -> str:
 
     Returns:
         A string in the format xx%
+
     """
-    if den == 0: return "0%"
+    if den == 0:
+        return "0%"
     return str(ceil((num / den) * 100)) + "%"
 
 
 # yes, that's my 10G code right there with some modifications
-def tabulate(headers: list[str], table: list[list], sep:str=" ", lborder:str=" ", rborder:str=" ", tborder:str="=", joint:str="+", max_width:int=20) -> str:
+def tabulate(
+    headers: list[str],
+    table: list[list],
+    sep: str = " ",
+    lborder: str = " ",
+    rborder: str = " ",
+    tborder: str = "=",
+    joint: str = "+",
+    max_width: int = 20,
+) -> str:
     """Generates a table
-    
+
     Args:
         headers (list[str]): Headers for the table.
         table (list[list]): List containing rows for the table.
@@ -107,7 +124,9 @@ def tabulate(headers: list[str], table: list[list], sep:str=" ", lborder:str=" "
 
     Returns:
         A multi-line string of the table
+
     """
+
     def truncate(text, width):
         text = "" if text is None else str(text)
         # replace NaN with -
@@ -116,15 +135,15 @@ def tabulate(headers: list[str], table: list[list], sep:str=" ", lborder:str=" "
         return text if len(text) <= width else text[: max(0, width - 3)] + "..."
 
     table = [headers] + table
-    R, C = len(table), len(headers)
+    r, c = len(table), len(headers)
     # compute max widths
-    col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(R)) + 2, max_width) for c in range(C)]
+    col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(r)) + 2, max_width) for c in range(c)]
 
     def build_border():
         return joint + joint.join(tborder * w for w in col_widths) + joint
 
     def build_row(row):
-        cells = [truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(C)]
+        cells = [truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(c)]
         return lborder + sep.join(cells) + rborder
 
     lines = [build_border(), build_row(headers), build_border()]
@@ -136,15 +155,15 @@ def tabulate(headers: list[str], table: list[list], sep:str=" ", lborder:str=" "
     final_lines = []
     for line in lines:
         if line.startswith(joint):
-            currLine = list(line)
-            for j in range(1, len(currLine) - 1):
+            currline = list(line)
+            for j in range(1, len(currline) - 1):
                 if (
-                    currLine[j] == joint
-                    and currLine[j - 1] in {joint, lborder, rborder, sep}
-                    and currLine[j + 1] in {joint, lborder, rborder, sep}
+                    currline[j] == joint
+                    and currline[j - 1] in {joint, lborder, rborder, sep}
+                    and currline[j + 1] in {joint, lborder, rborder, sep}
                 ):
-                    currLine[j] = joint  # intersection points
-            final_lines.append("".join(currLine))
+                    currline[j] = joint  # intersection points
+            final_lines.append("".join(currline))
         else:
             final_lines.append(line)
 

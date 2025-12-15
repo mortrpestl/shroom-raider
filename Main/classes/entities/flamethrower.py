@@ -8,7 +8,7 @@ class Flamethrower(Entity):
     """A storable Entity that, if used by the Player, destroys all connected trees.
 
     Default character is '*'
-    
+
     Attributes:
         See parent class
 

@@ -1,13 +1,12 @@
 import json
 import os
-import time
 
 import pandas as pd
-#from LevelManager import get_level_title
+from bonusclasses.security import findPW, scramble, unscramble
+
+# from LevelManager import get_level_title
 from utils.enums import ExitCodes
 from utils.general_utils import format_time, tabulate
-
-from bonusclasses.security import findPW, scramble, unscramble
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
@@ -101,21 +100,23 @@ def read_all_rows() -> dict:
 
 def write_all_rows(rows: dict[str, int]) -> None:
     """Writes all player rows (encrypted) back to Excel.
-    
-    Args: 
+
+    Args:
         rows (dict): The encrypted rows
+
     """
     pd.DataFrame(rows, columns=HEADERS).to_excel(EXCEL_FILE, index=False, engine="openpyxl")
 
 
 def safe_int(value: str | int | None) -> int:
     """Parses empty entries into integers if needed.
-    
+
     Args:
         value (str | int | None): The value to be processed
 
     Returns:
         A processed integer for storage
+
     """
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return 0
@@ -123,10 +124,11 @@ def safe_int(value: str | int | None) -> int:
         return int(value)
     except (ValueError, TypeError):
         return 0
-    
+
+
 def safe_float(value: str | float) -> float:
     """Parses empty entries into floats if needed.
-    
+
     Args:
         value (str | float | None): The value to be processed
 
@@ -135,7 +137,7 @@ def safe_float(value: str | float) -> float:
 
     """
     if value is None or pd.isna(value):
-        return 0    
+        return 0
     try:
         return float(value)
     except (ValueError, TypeError):
@@ -162,7 +164,7 @@ class PlayerData:
 
     """
 
-    def __init__(self, name: str, password: str | None=None) -> None:
+    def __init__(self, name: str, password: str | None = None) -> None:
         """Initializes the player's data storage given a name.
 
         Args:
@@ -228,9 +230,9 @@ class PlayerData:
 
     # * Getter Methods
     def get_password(self) -> str:
-        """
-        Returns:
-            The player's password
+        """Returns:
+        The player's password
+
         """
         return self.password
 
@@ -250,20 +252,21 @@ class PlayerData:
         self.session_win = False
         self.session_dead = False
 
-    def record_move(self, n: int=1) -> None:
+    def record_move(self, n: int = 1) -> None:
         """Adds number of moves to the session data.
-        
+
         Args:
             n (int): The number of moves to be added
 
         """
         self.session_tiles += n
 
-    def record_mushroom(self, n: int=1):
+    def record_mushroom(self, n: int = 1):
         """Adds number of mushrooms to the session data.
-        
-        Args: 
+
+        Args:
             n (int): The number of mushrooms to be added
+
         """
         self.session_mushrooms += n
 
@@ -344,14 +347,14 @@ class PlayerData:
         data["username"] = self.name
         return data
 
-    def apply_report_dict(self, report: dict, return_code: ExitCodes | None = None, elapsed_time: float=0) -> None:
+    def apply_report_dict(self, report: dict, return_code: ExitCodes | None = None, elapsed_time: float = 0) -> None:
         """Processes the updates to be performed after receiving a session report.
 
         Args:
             report (dict): The latest session data
             return_codes (ExitCodes | None): The exit code of the last game
             elapsed_time (float): The time taken for completion
-        
+
         """
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])
@@ -367,14 +370,13 @@ class PlayerData:
 
         self.commit_session()
 
-    def load_report_file(self, path: str, level_id: int | None =None) -> None:
-        """
-        Loads a report file
+    def load_report_file(self, path: str, level_id: int | None = None) -> None:
+        """Loads a report file
 
         Args:
-            path (str): The path to the report file 
+            path (str): The path to the report file
             level_id (int | None): the ID of the level being accessed
-        
+
         """
         with open(path, encoding="utf-8") as f:
             report = json.load(f)

@@ -126,11 +126,11 @@ class Grid:
     def pop_layer_from_coord(self, r: int, c: int, layer: int = -1) -> Entity | None:
         """Remove and return an entity at a specific coordinate and layer.
 
-
         Args:
             r (int): Row index.
             c (int): Column index.
             layer (int): Layer index.
+
         Returns:
             The popped entity, or None if that layer held None.
 
@@ -141,7 +141,7 @@ class Grid:
     def get_grid_by_name(name: str) -> "Grid":
         """Return a Grid object by its name.
 
-        Args: 
+        Args:
             name (str): name of the Grid
 
         Returns:
@@ -162,7 +162,7 @@ class Grid:
             r (int): Row index.
             c (int): Column index.
             layer (int): Layer index.
-        
+
         Returns:
             The entity located at (r, c, layer) or None.
 
@@ -180,7 +180,7 @@ class Grid:
         Args:
             obj (Entity | None): The object being checked
             mode (str): The display mode
-        
+
         Returns:
             A string representing the display symbol, or None if no mapping.
 
@@ -222,7 +222,7 @@ class Grid:
         Args:
             symbol (str): The character at the given coordinate
             coord (list): [r, c], The current coordinate being initialized
-        
+
         Returns:
             A tuple of (entity instance or None, display character for that tile).
 
@@ -249,6 +249,7 @@ class Grid:
 
         Args:
             mode (str): The display mode
+
         """
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
@@ -291,7 +292,7 @@ class Grid:
         held_item_obj = p.get_item()
         held_item = held_item_obj.__class__.__name__ if held_item_obj else "Nothing"
 
-        win = (mushrooms_collected == total_mushrooms)
+        win = mushrooms_collected == total_mushrooms
         lose = p.get_is_dead()
 
         self.visualize_map()
@@ -319,4 +320,3 @@ class Grid:
             return ExitCodes.VICTORY
         elif lose:
             return ExitCodes.DEFEAT
-

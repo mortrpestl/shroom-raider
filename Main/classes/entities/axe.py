@@ -8,7 +8,7 @@ class Axe(Entity):
     """A storable Entity that, if used by the player, destroys a tree.
 
     Default character is 'x'
-    
+
     Attributes:
         See parent class
 

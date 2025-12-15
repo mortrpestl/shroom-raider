@@ -8,7 +8,7 @@ class PavedTile(Entity):
     """An Entity that is created when a rock goes over water. Can be walked on.
 
     Default character is '_'
-    
+
     Attributes:
         See parent class.
 

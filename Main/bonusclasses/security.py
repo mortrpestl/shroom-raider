@@ -18,10 +18,7 @@ def check_validity(data: str) -> bool:
     if 10 > len(data) > 30:
         return False
 
-    for letter in data:
-        if letter not in VALID_LETTERS:
-            return False
-    return True
+    return all(letter in VALID_LETTERS for letter in data)
 
 
 def shift(letter: str, shiftval: str) -> str:
@@ -32,7 +29,7 @@ def shift(letter: str, shiftval: str) -> str:
         shiftval (str): The letter representation of number of shifts
 
     Returns:
-        The shifted letter
+        The shifted letter.
 
     """
     i = CHARTAPE.index(letter)
@@ -51,7 +48,7 @@ def unshift(letter: str, shiftval: str) -> str:
         shiftval (str): The letter representation of number of shifts
 
     Returns:
-        The shifted letter
+        The shifted letter.
 
     """
     i = CHARTAPE.index(letter)
@@ -73,7 +70,7 @@ def scramble(data: str, key: str) -> str:
         key (str): The string key of the cipher
 
     Returns:
-        The scrambled string
+        The scrambled string.
 
     """
     res = r""
@@ -92,7 +89,7 @@ def unscramble(data: str, key: str) -> str:
         key (str): The string key of the cipher
 
     Returns:
-        The original unscrambled string
+        The original unscrambled string.
 
     """
     res = r""
@@ -111,7 +108,7 @@ def findPW(unencrypted: str, encrypted: str) -> str:
         encrypted (str): The string after being scrambled
 
     Returns:
-        The key string of the cipher
+        The key string of the cipher.
 
     """
     pw = r""
@@ -141,7 +138,7 @@ def verify_existing_user(username: str, encrypted_username: str) -> str:
         encrypted_username (str): The stored encrypted username of the current user with their password
 
     Returns:
-        The correct password once verified
+        The correct password once verified.
 
     """
     while True:
@@ -208,7 +205,7 @@ def get_valid_username() -> str:
     """Prompts the user for a valid username
 
     Returns:
-        The username, once verified to be valid
+        The username, once verified to be valid.
 
     """
     username = input("Username (leave blank for guest): [10-30 characters] -> ")

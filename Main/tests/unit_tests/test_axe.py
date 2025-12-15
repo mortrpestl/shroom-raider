@@ -2,6 +2,7 @@ import pathlib
 import sys
 
 import pytest
+
 from Main.classes.entities.import_entities import import_entities
 from Main.classes.grid import Grid
 

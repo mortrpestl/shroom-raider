@@ -1,20 +1,21 @@
 # * RUFF CHECKED: 2 ERRORS LEFT (12/10/2025 7:54 PM)
 
 import io
-import sys
-import time
-import tempfile
+import json
 import os
 import pathlib
-import json
+import sys
+import tempfile
+import time
 from argparse import ArgumentParser
 
+from bonusclasses.leaderboard import show_leaderboard
 from bonusclasses.playerdata import PlayerData
 from bonusclasses.security import get_valid_username, register_new_user, verify_existing_user
-from bonusclasses.leaderboard import show_leaderboard
 from classes.entities.player import Player
 from classes.grid import Grid
 from utils.enums import ExitCodes
+
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -24,6 +25,7 @@ LEVEL_NAME = "DefaultStage"
 HERE = os.path.dirname(__file__)
 report_file = None
 moves_made = 0
+
 
 def check_win_condition(p: Player, g: Grid) -> None:
     """Check if a player has met the win condition of a grid.
@@ -91,7 +93,7 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
 
             if inst in "wasd":
                 p.set_pos(inst)
-                moves_made += 1 
+                moves_made += 1
             elif inst == "p" and p.get_item() is None:
                 p.collect_item()
                 moves_made += 1
@@ -100,6 +102,7 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
 
             check_win_condition(p, g)
 
+
 def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
     """Creates a report of the played game after completion of a level.
 
@@ -107,6 +110,7 @@ def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
         P: The current Player entity
         G: The current Grid object
         win, dead: Indicate whether the player has won the game or has died
+
     """
     global moves_made
     if not report_file:
@@ -131,8 +135,9 @@ def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
     except Exception as e:
         print(f"Failed to write report file {report_file}: {e}")
 
+
 def main() -> None:
-    """Run the main game logic for Shroom Raider. 
+    """Run the main game logic for Shroom Raider.
 
     Processes command line arguments and handles the main gameplay loop.
     """
@@ -142,8 +147,8 @@ def main() -> None:
     argument_parser.add_argument("-o", "--output_file")
     args = argument_parser.parse_args()
 
-    # * LOAD GAME FILE 
-    stage_name = f"{LEVEL_NAME}.txt" if args.stage_file is None else args.stage_file     
+    # * LOAD GAME FILE
+    stage_name = f"{LEVEL_NAME}.txt" if args.stage_file is None else args.stage_file
     with open(stage_name, encoding="utf-8") as lvl_file:
         first_line = lvl_file.readline().lstrip("\ufeff")
         r, c = map(int, first_line.split())
@@ -153,11 +158,10 @@ def main() -> None:
     globals()["P"] = globals()["G"].get_player()
 
     check_win_condition(globals()["P"], globals()["G"])
-    
+
     # * (GAMEPLAY) START GAMEPLAY LOOP IF NO MOVEMENT OR NO OUTPUT FILE.
     if args.movement_file is None or args.output_file is None:
-        try: # does not catch errors; allows for json cleanup to work regardless.
-
+        try:  # does not catch errors; allows for json cleanup to work regardless.
             # * REGISTER USER
             username = get_valid_username()
 
@@ -218,7 +222,6 @@ def main() -> None:
         show_leaderboard(sort_by=("total_wins", "total_mushrooms_collected"), reverse=True)
         input("\nReady to exit the game? (Press Enter)")
         sys.exit()
-        
 
     # * (TESTING) OTHERWISE, PARSE MOVEMENT FILE AND OUTPUT TO FILE.
     elif args.movement_file is not None and args.output_file is not None:
@@ -233,13 +236,14 @@ def main() -> None:
             else:
                 f.write("NO CLEAR\n")
             f.write(globals()["G"].get_vis_map_as_str())
-    
+
     else:  # this is just for safety
         print(
             "Invalid arguments. Usage:\n"
             "python3 shroom_raider.py -f <stage_file>\n"
             "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
         )
+
 
 if __name__ == "__main__":
     P, G = None, None
