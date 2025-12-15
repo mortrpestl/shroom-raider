@@ -46,7 +46,7 @@ def reset(level: str) -> tuple[Grid, Player]:
     return g, p
 
 
-def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: bool) -> None:
+def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) -> None:
     """Parse user inputs to play game.
 
     Args:
