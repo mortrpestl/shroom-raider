@@ -8,6 +8,9 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.append(os.path.abspath(
+    os.path.join(__file__, "../../src")
+))
 
 project = 'Shroom Raider'
 copyright = '2025, Jugemu-Jugemu'
@@ -19,7 +22,7 @@ release = '12/16/2025'
 
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
 ]
 
 templates_path = ['_templates']
@@ -30,5 +33,5 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'haiku'
 html_static_path = ['_static']
