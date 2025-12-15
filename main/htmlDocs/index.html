@@ -55,6 +55,23 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.launch_game">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">launch_game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#shroom_raider.launch_game" title="Link to this definition">¶</a></dt>
+<dd><p>Launch the game and act as the gameplay loop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>str</em>) – the level’s contents.</p></li>
+<li><p><strong>report_path</strong> (<em>str</em>) – the report path to write to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the elapsed time (float) and an ExitCode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="shroom_raider.main">
 <span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.main" title="Link to this definition">¶</a></dt>
 <dd><p>Run the main game logic for Shroom Raider.</p>
@@ -63,7 +80,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="shroom_raider.parser">
-<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instructions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.parser" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instructions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.parser" title="Link to this definition">¶</a></dt>
 <dd><p>Parse user inputs to play game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -74,6 +91,17 @@
 <li><p><strong>level</strong> (<em>str</em>) – A string representation of the ORIGINAL stage</p></li>
 <li><p><strong>reset_only</strong> (<em>bool</em>) – A boolean indicating if moves other than reset can be played</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shroom_raider.register_or_login_user">
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">register_or_login_user</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bonusclasses.playerdata.PlayerData" title="bonusclasses.playerdata.PlayerData"><span class="pre">PlayerData</span></a></span></span><a class="headerlink" href="#shroom_raider.register_or_login_user" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt the user to register or log in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A PlayerData object containing the current user’s data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -94,16 +122,15 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="shroom_raider.write_report">
-<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">write_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.write_report" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">write_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">game_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.write_report" title="Link to this definition">¶</a></dt>
 <dd><p>Create a report of the played game after completion of a level.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> (<a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><em>Grid</em></a>) – The Grid being played on</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><em>Player</em></a>) – The current Player entity</p></li>
-<li><p><strong>win</strong> (<em>bool</em>) – indicates if the player has won</p></li>
-<li><p><strong>dead</strong> (<em>bool</em>) – indicates if the player has died</p></li>
 <li><p><strong>report_file</strong> (<em>str</em>) – stringified report file for the game</p></li>
+<li><p><strong>game_status</strong> (<a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><em>ExitCodes</em></a>) – status of the game (win/lose)</p></li>
 </ul>
 </dd>
 </dl>
@@ -933,7 +960,7 @@
 <span id="leaderboard"></span><h3>Leaderboard<a class="headerlink" href="#module-bonusclasses.leaderboard" title="Link to this heading">¶</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.leaderboard.show_leaderboard">
-<span class="sig-prename descclassname"><span class="pre">bonusclasses.leaderboard.</span></span><span class="sig-name descname"><span class="pre">show_leaderboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'total_wins'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.leaderboard.show_leaderboard" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.leaderboard.</span></span><span class="sig-name descname"><span class="pre">show_leaderboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'total_wins'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.leaderboard.show_leaderboard" title="Link to this definition">¶</a></dt>
 <dd><p>Compare player to other players. Ranked by levels beaten and sum of best times (formatted).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1490,20 +1517,6 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.general_utils.debug_wait">
-<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">R</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Concatenate</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">R</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
-<dd><p>Debug decorator factory for functions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>delay</strong> (<em>float</em><em>|</em><em>int</em>) – time to wait.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The decorated function with debug!</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.format_time">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">format_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.format_time" title="Link to this definition">¶</a></dt>
 <dd><p>Format time in the hh:mm:ss format.</p>
@@ -1579,8 +1592,10 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 <li><a class="reference internal" href="#">Shroom Raider</a><ul>
 <li><a class="reference internal" href="#module-shroom_raider">Main Game Logic</a><ul>
 <li><a class="reference internal" href="#shroom_raider.check_win_condition"><code class="docutils literal notranslate"><span class="pre">check_win_condition()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.launch_game"><code class="docutils literal notranslate"><span class="pre">launch_game()</span></code></a></li>
 <li><a class="reference internal" href="#shroom_raider.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li><a class="reference internal" href="#shroom_raider.parser"><code class="docutils literal notranslate"><span class="pre">parser()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.register_or_login_user"><code class="docutils literal notranslate"><span class="pre">register_or_login_user()</span></code></a></li>
 <li><a class="reference internal" href="#shroom_raider.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
 <li><a class="reference internal" href="#shroom_raider.write_report"><code class="docutils literal notranslate"><span class="pre">write_report()</span></code></a></li>
 </ul>
@@ -1767,7 +1782,6 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 <li><a class="reference internal" href="#utils.general_utils.calculate_percentage"><code class="docutils literal notranslate"><span class="pre">calculate_percentage()</span></code></a></li>
 <li><a class="reference internal" href="#utils.general_utils.clear_prev_n_lines"><code class="docutils literal notranslate"><span class="pre">clear_prev_n_lines()</span></code></a></li>
 <li><a class="reference internal" href="#utils.general_utils.clear_terminal"><code class="docutils literal notranslate"><span class="pre">clear_terminal()</span></code></a></li>
-<li><a class="reference internal" href="#utils.general_utils.debug_wait"><code class="docutils literal notranslate"><span class="pre">debug_wait()</span></code></a></li>
 <li><a class="reference internal" href="#utils.general_utils.format_time"><code class="docutils literal notranslate"><span class="pre">format_time()</span></code></a></li>
 <li><a class="reference internal" href="#utils.general_utils.print_and_wait"><code class="docutils literal notranslate"><span class="pre">print_and_wait()</span></code></a></li>
 <li><a class="reference internal" href="#utils.general_utils.tabulate"><code class="docutils literal notranslate"><span class="pre">tabulate()</span></code></a></li>
