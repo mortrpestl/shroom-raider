@@ -94,15 +94,16 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="shroom_raider.write_report">
-<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">write_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shroom_raider.write_report" title="Link to this definition">¶</a></dt>
-<dd><p>Creates a report of the played game after completion of a level.</p>
+<span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">write_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><span class="pre">Player</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.write_report" title="Link to this definition">¶</a></dt>
+<dd><p>Create a report of the played game after completion of a level.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>P</strong> – The current Player entity</p></li>
-<li><p><strong>G</strong> – The current Grid object</p></li>
-<li><p><strong>win</strong> – Indicate whether the player has won the game or has died</p></li>
-<li><p><strong>dead</strong> – Indicate whether the player has won the game or has died</p></li>
+<li><p><strong>g</strong> (<a class="reference internal" href="#classes.grid.Grid" title="classes.grid.Grid"><em>Grid</em></a>) – The Grid being played on</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#classes.entities.player.Player" title="classes.entities.player.Player"><em>Player</em></a>) – The current Player entity</p></li>
+<li><p><strong>win</strong> (<em>bool</em>) – indicates if the player has won</p></li>
+<li><p><strong>dead</strong> (<em>bool</em>) – indicates if the player has died</p></li>
+<li><p><strong>report_file</strong> (<em>str</em>) – stringified report file for the game</p></li>
 </ul>
 </dd>
 </dl>
@@ -900,7 +901,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classes.grid.Grid.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a></span></span><a class="headerlink" href="#classes.grid.Grid.render" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#classes.entity.Entity" title="classes.entity.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#classes.grid.Grid.render" title="Link to this definition">¶</a></dt>
 <dd><p>Print the Grid and GUI, and return True if the game has ended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -933,7 +934,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.leaderboard.show_leaderboard">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.leaderboard.</span></span><span class="sig-name descname"><span class="pre">show_leaderboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'total_wins'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.leaderboard.show_leaderboard" title="Link to this definition">¶</a></dt>
-<dd><p>Compares player to other players. Ranked by levels beaten and sum of best times (formatted)</p>
+<dd><p>Compare player to other players. Ranked by levels beaten and sum of best times (formatted).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -950,71 +951,116 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">PlayerData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData" title="Link to this definition">¶</a></dt>
-<dd><p>Handles the storing and sending of session data for each game session for a given player.
-Also handles distribution of global player information to leaderboards.</p>
+<dd><p>Handles the storing and sending of session data for each game session for a given player.</p>
+<p>Also handles distribution of global player information to leaderboards.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.name" title="Link to this definition">¶</a></dt>
-<dd><p>A string denoting the name of the player</p>
+<dd><p>the name of the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.password" title="Link to this definition">¶</a></dt>
-<dd><p>A string denoting the password of the player</p>
+<dd><p>the password of the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_mushrooms_collected">
 <span class="sig-name descname"><span class="pre">total_mushrooms_collected</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_mushrooms_collected" title="Link to this definition">¶</a></dt>
-<dd><p>An int denoting the total mushrooms collected by the player</p>
+<dd><p>the total mushrooms collected by the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_tiles_walked">
 <span class="sig-name descname"><span class="pre">total_tiles_walked</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_tiles_walked" title="Link to this definition">¶</a></dt>
-<dd><p>An int denoting the total number of tiles a player walked throughout thegame.</p>
+<dd><p>the total number of tiles a player walked throughout thegame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_wins">
 <span class="sig-name descname"><span class="pre">total_wins</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_wins" title="Link to this definition">¶</a></dt>
-<dd><p>An int denoting the total wins a player had throughout the game.</p>
+<dd><p>the total wins a player had throughout the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_times">
 <span class="sig-name descname"><span class="pre">total_times</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_times" title="Link to this definition">¶</a></dt>
-<dd><p>An int denoting the</p>
+<dd><p>the total time the player has played</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.total_seconds_played">
 <span class="sig-name descname"><span class="pre">total_seconds_played</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.total_seconds_played" title="Link to this definition">¶</a></dt>
-<dd><p>An int denoting the total minimum time taken by a player to beat each of their completed levels</p>
+<dd><p>the total minimum time taken by a player to beat each of their completed levels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.completed_data">
 <span class="sig-name descname"><span class="pre">completed_data</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.completed_data" title="Link to this definition">¶</a></dt>
-<dd><p>A stringified JSON containing data about levels a player has completed.</p>
+<dd><p>JSON containing data about levels a player has completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.completed_levels">
 <span class="sig-name descname"><span class="pre">completed_levels</span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.completed_levels" title="Link to this definition">¶</a></dt>
-<dd><p>A dict containing data about levels a player has completed.</p>
+<dd><p>data about levels a player has completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.apply_report_dict">
 <span class="sig-name descname"><span class="pre">apply_report_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><span class="pre">ExitCodes</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.apply_report_dict" title="Link to this definition">¶</a></dt>
-<dd><p>Processes the updates to be performed after receiving a session report.</p>
+<dd><p>Process the updates to be performed after receiving a session report.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report</strong> (<em>dict</em>) – The latest session data</p></li>
-<li><p><strong>return_codes</strong> (<a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><em>ExitCodes</em></a><em> | </em><em>None</em>) – The exit code of the last game</p></li>
+<li><p><strong>return_code</strong> (<a class="reference internal" href="#utils.enums.ExitCodes" title="utils.enums.ExitCodes"><em>ExitCodes</em></a><em> | </em><em>None</em>) – The exit code of the last game</p></li>
 <li><p><strong>elapsed_time</strong> (<em>float</em>) – The time taken for completion</p></li>
 </ul>
 </dd>
@@ -1024,42 +1070,43 @@ Also handles distribution of global player information to leaderboards.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.commit_session">
 <span class="sig-name descname"><span class="pre">commit_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.commit_session" title="Link to this definition">¶</a></dt>
-<dd><p>Adjusts the player data given a level file.
-Also logs the updated data to the database.</p>
+<dd><p>Adjust the player data given a level file.</p>
+<p>Also logs the updated data to the database.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.get_password">
 <span class="sig-name descname"><span class="pre">get_password</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.get_password" title="Link to this definition">¶</a></dt>
-<dd><p>Returns:
-The player’s password</p>
+<dd><p>Return the user’s password.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The player’s password.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.load_or_create">
 <span class="sig-name descname"><span class="pre">load_or_create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.load_or_create" title="Link to this definition">¶</a></dt>
-<dd><p>Reinitializes the player’s statistics based on records in the database.
-This includes initializing the data for a new player.</p>
+<dd><p>Reinitialize the player’s statistics based on records in the database.</p>
+<p>This includes initializing the data for a new player.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.load_report_file">
-<span class="sig-name descname"><span class="pre">load_report_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.load_report_file" title="Link to this definition">¶</a></dt>
-<dd><p>Loads a report file</p>
+<span class="sig-name descname"><span class="pre">load_report_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.load_report_file" title="Link to this definition">¶</a></dt>
+<dd><p>Load a report file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) – The path to the report file</p></li>
-<li><p><strong>level_id</strong> (<em>int</em><em> | </em><em>None</em>) – the ID of the level being accessed</p></li>
-</ul>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – The path to the report file</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.lookup_excel_username">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_excel_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.lookup_excel_username" title="Link to this definition">¶</a></dt>
-<dd><p>Returns a username from the database if exists and None if does not</p>
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_excel_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.lookup_excel_username" title="Link to this definition">¶</a></dt>
+<dd><p>Return a username from the database if exists and None if does not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>username</strong> (<em>str</em>) – The username to be accessed</p>
@@ -1074,13 +1121,13 @@ username if there is a username in the database that matches</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_death">
 <span class="sig-name descname"><span class="pre">record_death</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_death" title="Link to this definition">¶</a></dt>
-<dd><p>Records a death for the player</p>
+<dd><p>Record a death for the player.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_move">
 <span class="sig-name descname"><span class="pre">record_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_move" title="Link to this definition">¶</a></dt>
-<dd><p>Adds number of moves to the session data.</p>
+<dd><p>Add number of moves to the session data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of moves to be added</p>
@@ -1090,8 +1137,8 @@ username if there is a username in the database that matches</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_mushroom">
-<span class="sig-name descname"><span class="pre">record_mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_mushroom" title="Link to this definition">¶</a></dt>
-<dd><p>Adds number of mushrooms to the session data.</p>
+<span class="sig-name descname"><span class="pre">record_mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_mushroom" title="Link to this definition">¶</a></dt>
+<dd><p>Add number of mushrooms to the session data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of mushrooms to be added</p>
@@ -1102,32 +1149,38 @@ username if there is a username in the database that matches</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.record_win">
 <span class="sig-name descname"><span class="pre">record_win</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.record_win" title="Link to this definition">¶</a></dt>
-<dd><p>Records a win for the player</p>
+<dd><p>Record a win for the player.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.reset_session">
 <span class="sig-name descname"><span class="pre">reset_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.reset_session" title="Link to this definition">¶</a></dt>
-<dd><p>Resets the session</p>
-<p>Start time is recorded (to determine total length later), and win/dead conditions are set to false (as expected from any grid spawn).</p>
+<dd><p>Reset the session.</p>
+<p>Start time is recorded (to determine total length later).
+Win/dead conditions are set to false (as expected from any grid spawn).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.save" title="Link to this definition">¶</a></dt>
-<dd><p>Saves player data to the database.</p>
+<dd><p>Save player data to the database.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.set_password">
-<span class="sig-name descname"><span class="pre">set_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.set_password" title="Link to this definition">¶</a></dt>
-<dd><p>Sets the password.</p>
+<span class="sig-name descname"><span class="pre">set_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.set_password" title="Link to this definition">¶</a></dt>
+<dd><p>Set the password.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – The given key.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.store_new_user">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_new_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted_username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.store_new_user" title="Link to this definition">¶</a></dt>
-<dd><p>Stores a new username and initializes their data in the database if it does not exist in the database.</p>
+<dd><p>Store a new username and initializes their data in the database if it does not exist in the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1141,19 +1194,19 @@ username if there is a username in the database that matches</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.PlayerData.to_dict">
 <span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.PlayerData.to_dict" title="Link to this definition">¶</a></dt>
-<dd><p>Converts session data to a dict.</p>
+<dd><p>Convert session data to a dict.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.decrypt">
-<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">decrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.decrypt" title="Link to this definition">¶</a></dt>
-<dd><p>Decrypts a dictionary of player data given a key.</p>
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">decrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.decrypt" title="Link to this definition">¶</a></dt>
+<dd><p>Decrypt a dictionary of player data given a key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
+<li><p><strong>data_dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
 <li><p><strong>key</strong> (<em>str</em>) – The key used to decrypt the dictionary’s contents</p></li>
 </ul>
 </dd>
@@ -1165,12 +1218,12 @@ username if there is a username in the database that matches</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.encrypt">
-<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">encrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.encrypt" title="Link to this definition">¶</a></dt>
-<dd><p>Encrypts a dictionary of player data given a key.</p>
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">encrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bonusclasses.playerdata.encrypt" title="Link to this definition">¶</a></dt>
+<dd><p>Encrypt a dictionary of player data given a key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
+<li><p><strong>data_dict</strong> (<em>dict</em>) – The dictionary containing the player data</p></li>
 <li><p><strong>key</strong> (<em>str</em>) – The key used to encrypt the dictionary’s contents</p></li>
 </ul>
 </dd>
@@ -1183,8 +1236,8 @@ username if there is a username in the database that matches</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.read_all_rows">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">read_all_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.read_all_rows" title="Link to this definition">¶</a></dt>
-<dd><p>Reads all player rows from Excel and decrypts all fields.
-Used for displaying/reading data, never for saving.</p>
+<dd><p>Read all player rows from Excel and decrypts all fields.</p>
+<p>Used for displaying/reading data, never for saving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The decrypted data in the Excel file transcribed as dictionary.</p>
@@ -1195,8 +1248,8 @@ Used for displaying/reading data, never for saving.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.read_raw_rows">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">read_raw_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.read_raw_rows" title="Link to this definition">¶</a></dt>
-<dd><p>Reads all player rows from Excel without decryption.
-Used for reading data in encrypted form.</p>
+<dd><p>Read all player rows from Excel without decryption.</p>
+<p>Used for reading data in encrypted form.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The raw data (no decryption) in the Excel file transcribed as dictionary.</p>
@@ -1207,7 +1260,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.safe_float">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">safe_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.safe_float" title="Link to this definition">¶</a></dt>
-<dd><p>Parses empty entries into floats if needed.</p>
+<dd><p>Parse empty entries into floats if needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em><em> | </em><em>float</em><em> | </em><em>None</em>) – The value to be processed</p>
@@ -1221,7 +1274,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.safe_int">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">safe_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.safe_int" title="Link to this definition">¶</a></dt>
-<dd><p>Parses empty entries into integers if needed.</p>
+<dd><p>Parse empty entries into integers if needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em><em> | </em><em>int</em><em> | </em><em>None</em>) – The value to be processed</p>
@@ -1235,7 +1288,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.playerdata.write_all_rows">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.playerdata.</span></span><span class="sig-name descname"><span class="pre">write_all_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#bonusclasses.playerdata.write_all_rows" title="Link to this definition">¶</a></dt>
-<dd><p>Writes all player rows (encrypted) back to Excel.</p>
+<dd><p>Write all player rows (encrypted) back to Excel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rows</strong> (<em>dict</em>) – The encrypted rows</p>
@@ -1249,7 +1302,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.check_validity">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">check_validity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#bonusclasses.security.check_validity" title="Link to this definition">¶</a></dt>
-<dd><p>Checks if a given string is a valid password/username</p>
+<dd><p>Check if a given string is a valid password/username.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – The proposed password/username</p>
@@ -1261,9 +1314,9 @@ Used for reading data in encrypted form.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="bonusclasses.security.findPW">
-<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">findPW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unencrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.findPW" title="Link to this definition">¶</a></dt>
-<dd><p>Find the key string given the original and encrypted strings</p>
+<dt class="sig sig-object py" id="bonusclasses.security.findpw">
+<span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">findpw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unencrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.findpw" title="Link to this definition">¶</a></dt>
+<dd><p>Find the key string given the original and encrypted strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1280,7 +1333,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.get_valid_username">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">get_valid_username</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.get_valid_username" title="Link to this definition">¶</a></dt>
-<dd><p>Prompts the user for a valid username</p>
+<dd><p>Prompt the user for a valid username.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The username, once verified to be valid.</p>
@@ -1305,7 +1358,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.scramble">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">scramble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.scramble" title="Link to this definition">¶</a></dt>
-<dd><p>Vigenère cipher</p>
+<dd><p>Vigenère cipher.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1322,7 +1375,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.shift">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">letter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.shift" title="Link to this definition">¶</a></dt>
-<dd><p>Shifts a letter by a number of spaces to the right</p>
+<dd><p>Shift a letter by a number of spaces to the right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1339,7 +1392,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.unscramble">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">unscramble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.unscramble" title="Link to this definition">¶</a></dt>
-<dd><p>Vigenère cipher unscrambler</p>
+<dd><p>Vigenère cipher unscrambler.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1356,7 +1409,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="bonusclasses.security.unshift">
 <span class="sig-prename descclassname"><span class="pre">bonusclasses.security.</span></span><span class="sig-name descname"><span class="pre">unshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">letter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#bonusclasses.security.unshift" title="Link to this definition">¶</a></dt>
-<dd><p>Shifts a letter by a number of spaces to the left</p>
+<dd><p>Shift a letter by a number of spaces to the left.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1405,7 +1458,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.calculate_percentage">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_percentage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">den</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.calculate_percentage" title="Link to this definition">¶</a></dt>
-<dd><p>Calculates formatted percentage (xx%). 0% if divided by 0</p>
+<dd><p>Calculate formatted percentage (xx%). 0% if divided by 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1422,7 +1475,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.clear_prev_n_lines">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">clear_prev_n_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.clear_prev_n_lines" title="Link to this definition">¶</a></dt>
-<dd><p>Clears the previous n lines.</p>
+<dd><p>Clear the previous n lines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number of lines to clear.</p>
@@ -1433,16 +1486,19 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.clear_terminal">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">clear_terminal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.clear_terminal" title="Link to this definition">¶</a></dt>
-<dd><p>Clears the terminal.</p>
+<dd><p>Clear the terminal.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.debug_wait">
-<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
 <dd><p>Debug decorator factory for functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>delay</strong> (<em>float</em><em>|</em><em>int</em>) – time to wait.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1450,7 +1506,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.format_time">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">format_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.format_time" title="Link to this definition">¶</a></dt>
-<dd><p>Formats time in the hh:mm:ss format.</p>
+<dd><p>Format time in the hh:mm:ss format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seconds</strong> (<em>float</em><em>|</em><em>int</em>) – time to format.</p>
@@ -1478,7 +1534,7 @@ Used for reading data in encrypted form.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.tabulate">
 <span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">tabulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.tabulate" title="Link to this definition">¶</a></dt>
-<dd><p>Generates a table</p>
+<dd><p>Generate a table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1693,7 +1749,7 @@ Used for reading data in encrypted form.</p>
 </li>
 <li><a class="reference internal" href="#module-bonusclasses.security">Security System</a><ul>
 <li><a class="reference internal" href="#bonusclasses.security.check_validity"><code class="docutils literal notranslate"><span class="pre">check_validity()</span></code></a></li>
-<li><a class="reference internal" href="#bonusclasses.security.findPW"><code class="docutils literal notranslate"><span class="pre">findPW()</span></code></a></li>
+<li><a class="reference internal" href="#bonusclasses.security.findpw"><code class="docutils literal notranslate"><span class="pre">findpw()</span></code></a></li>
 <li><a class="reference internal" href="#bonusclasses.security.get_valid_username"><code class="docutils literal notranslate"><span class="pre">get_valid_username()</span></code></a></li>
 <li><a class="reference internal" href="#bonusclasses.security.register_new_user"><code class="docutils literal notranslate"><span class="pre">register_new_user()</span></code></a></li>
 <li><a class="reference internal" href="#bonusclasses.security.scramble"><code class="docutils literal notranslate"><span class="pre">scramble()</span></code></a></li>

@@ -35,7 +35,7 @@ def wait(seconds: float) -> None:
 
 
 # decorator
-def debug_wait(delay: float = 2.5) -> function:
+def debug_wait(delay: float = 2.5):
     """Debug decorator factory for functions.
 
     Args:
