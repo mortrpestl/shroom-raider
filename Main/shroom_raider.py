@@ -2,18 +2,28 @@
 
 import io
 import sys
+import time
+import tempfile
+import os
+import pathlib
+import json
 from argparse import ArgumentParser
 
+from Bonus_Classes.PlayerData import PlayerData
+from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
+from Bonus_Classes.Leaderboard import show_leaderboard
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
-
+from Utils.Enums import ExitCodes
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
 
 
-LEVEL_NAME = "TEST"
-
+LEVEL_NAME = "DefaultStage"
+HERE = os.path.dirname(__file__)
+report_file = None
+moves_made = 0
 
 def check_win_condition(p: Player, g: Grid) -> None:
     """Check if a player has met the win condition of a grid.
@@ -59,6 +69,8 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
     """
     # preserve original globals usage (only declare if you intend to assign)
     # item_here and holding_anything are read-only in this function in original code
+    global moves_made
+
     if instructions is None:
         return
 
@@ -79,13 +91,48 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
 
             if inst in "wasd":
                 p.set_pos(inst)
+                moves_made += 1 
             elif inst == "p" and p.get_item() is None:
                 p.collect_item()
+                moves_made += 1
 
             p.collect_shroom()  # if applicable
 
             check_win_condition(p, g)
+            
+            if g.get_is_cleared() or p.get_is_dead():
+                return moves_made
 
+def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
+    """Creates a report of the played game after completion of a level.
+
+    Args:
+        P: The current Player entity
+        G: The current Grid object
+        win, dead: Indicate whether the player has won the game or has died
+    """
+    global moves_made
+    if not report_file:
+        return
+    try:
+        payload = {
+            "mushrooms_collected": P.get_mushroom_count(),
+            "moves_made": moves_made,
+            "win": bool(win),
+            "dead": bool(dead),
+        }
+        tmp = report_file + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f)
+            f.flush()
+            os.fsync(f.fileno())
+        try:
+            pathlib.Path(tmp).replace(report_file)
+        except Exception:
+            with open(report_file, "w", encoding="utf-8") as f:
+                json.dump(payload, f)
+    except Exception as e:
+        print(f"Failed to write report file {report_file}: {e}")
 
 def main() -> None:
     """Run the main game logic for Shroom Raider. 
@@ -98,68 +145,106 @@ def main() -> None:
     argument_parser.add_argument("-o", "--output_file")
     args = argument_parser.parse_args()
 
-    if args.stage_file is None:
-        with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
-            first_line = lvl_file.readline().lstrip("\ufeff")
-            r, c = map(int, first_line.split())
-            level = lvl_file.read()
+    # * LOAD GAME FILE 
+    stage_name = f"{LEVEL_NAME}.txt" if args.stage_file is None else args.stage_file     
+    with open(stage_name, encoding="utf-8") as lvl_file:
+        first_line = lvl_file.readline().lstrip("\ufeff")
+        r, c = map(int, first_line.split())
+        level = lvl_file.read()
 
-        # assign module-level names exactly as original
-        globals()["G"] = Grid(LEVEL_NAME, level)
-        globals()["P"] = globals()["G"].get_player()
+    globals()["G"] = Grid(stage_name[:-3], level)
+    globals()["P"] = globals()["G"].get_player()
 
-        check_win_condition(globals()["P"], globals()["G"])
+    check_win_condition(globals()["P"], globals()["G"])
+    
+    # * (GAMEPLAY) START GAMEPLAY LOOP IF NO MOVEMENT OR NO OUTPUT FILE.
+    if args.movement_file is None or args.output_file is None:
+        try: # does not catch errors; allows for json cleanup to work regardless.
 
-        while True:
-            stop_or_reset_only = globals()["G"].render(globals()["P"])
-            if stop_or_reset_only:
-                sys.exit()
-            # each input() returns one line; parser will process that line
-            parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
+            # * REGISTER USER
+            username = get_valid_username()
 
-    elif args.stage_file is not None:
-        with open(args.stage_file, encoding="utf-8") as lvl_file:
-            first_line = lvl_file.readline().lstrip("\ufeff")
-            r, c = map(int, first_line.split())
-            level = lvl_file.read()
+            encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
 
-        globals()["G"] = Grid("UserInput", level)
-        globals()["P"] = globals()["G"].get_player()
+            if encrypted_username and username != "GUEST":  # existing user
+                password = verify_existing_user(username, encrypted_username)
+                player_data = PlayerData(username, password)
+            elif username == "GUEST":
+                player_data = PlayerData("GUEST", "guest")
+            else:
+                password = register_new_user(username)
+                # store encrypted username & reference username in Excel
+                player_data = PlayerData(username, password)
 
-        check_win_condition(globals()["P"], globals()["G"])
+            # * INITIALIZE REPORT
+            report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
+            os.close(report_fd)
 
-        if args.movement_file is None or args.output_file is None:
+            # * RUN GAME
+            start_time = time.time()
+            return_code = None
             while True:
                 stop_or_reset_only = globals()["G"].render(globals()["P"])
-                if stop_or_reset_only:
-                    sys.exit()
+                if isinstance(stop_or_reset_only, ExitCodes):
+                    return_code = stop_or_reset_only.value
+                    if stop_or_reset_only is ExitCodes.VICTORY:
+                        write_report(globals()["G"], globals()["P"], True, False, report_path)
+                    elif stop_or_reset_only is ExitCodes.DEFEAT:
+                        write_report(globals()["G"], globals()["P"], False, True, report_path)
+                    break
+                # each input() returns one line; parser will process that line
                 parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
+            end_time = time.time()
 
-        elif args.movement_file is not None and args.output_file is not None:
-            # original behavior: parser received movement argument as-is (tests sometimes pass raw move strings)
-            parser(args.movement_file, globals()["P"], globals()["G"], level, reset_only=False)
+            # * LOAD REPORT
+            report = None
+            if pathlib.Path(report_path).stat().st_size > 0:
+                with open(report_path, encoding="utf-8") as f:
+                    report = json.load(f)
 
-            with open(args.output_file, "w", encoding="utf-8") as f:
-                f.write(f"{r} {c}\n")
-                if globals()["P"].get_mushroom_count() == globals()["G"].get_total_mushrooms():
-                    f.write("CLEAR\n")
-                else:
-                    f.write("NO CLEAR\n")
-                f.write(globals()["G"].get_vis_map_as_str())
+            # * PROCESS REPORT
+            if report:
+                elapsed_time = float(end_time - start_time)
+                player_data.apply_report_dict(
+                    report,
+                    return_code=return_code,
+                    elapsed_time=elapsed_time,
+                )
+        finally:
+            # * CLEANUP
+            if pathlib.Path(report_path).exists():
+                pathlib.Path(report_path).unlink()
 
-        else:  # this is just for safety
-            print(
-                "Invalid arguments. Usage:\n"
-                "python3 shroom_raider.py -f <stage_file>\n"
-                "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
-            )
-    else:
-        print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
+        # * LEADERBOARD AND STATS
+        print(repr(player_data))
+        print("MOST WINS IN THE GAME:")
+        show_leaderboard(sort_by=("total_wins", "total_mushrooms_collected"), reverse=True)
+        input("\nReady to exit the game? (Press Enter)")
+        sys.exit()
+        
 
+    # * (TESTING) OTHERWISE, PARSE MOVEMENT FILE AND OUTPUT TO FILE.
+    elif args.movement_file is not None and args.output_file is not None:
+        # original behavior: parser received movement argument as-is (tests sometimes pass raw move strings)
+        # no need to register user for this case!
+        parser(args.movement_file, globals()["P"], globals()["G"], level, reset_only=False)
+
+        with open(args.output_file, "w", encoding="utf-8") as f:
+            f.write(f"{r} {c}\n")
+            if globals()["P"].get_mushroom_count() == globals()["G"].get_total_mushrooms():
+                f.write("CLEAR\n")
+            else:
+                f.write("NO CLEAR\n")
+            f.write(globals()["G"].get_vis_map_as_str())
+    
+    else:  # this is just for safety
+        print(
+            "Invalid arguments. Usage:\n"
+            "python3 shroom_raider.py -f <stage_file>\n"
+            "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
+        )
 
 if __name__ == "__main__":
     P, G = None, None
-    item_here = "No items here"
-    holding_anything = None
 
     main()
