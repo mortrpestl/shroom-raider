@@ -110,5 +110,3 @@ General Utils
 -------------
 .. automodule:: utils.general_utils
    :members:
-
-.. automodule:: utils.generate_tests_to_csv
