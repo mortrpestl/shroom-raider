@@ -2,7 +2,7 @@ import json
 import os
 
 import pandas as pd
-from bonusclasses.security import findPW, scramble, unscramble
+from bonusclasses.security import findpw, scramble, unscramble
 
 # from LevelManager import get_level_title
 from utils.enums import ExitCodes
@@ -24,7 +24,7 @@ HEADERS = [
 
 
 def decrypt(dict: dict[str, int], key: str) -> dict[str, int]:
-    """Decrypts a dictionary of player data given a key.
+    """Decrypt a dictionary of player data given a key.
 
     Args:
         dict (dict): The dictionary containing the player data
@@ -38,7 +38,7 @@ def decrypt(dict: dict[str, int], key: str) -> dict[str, int]:
 
 
 def encrypt(dict: dict[str, int], key: str) -> dict[str, int]:
-    """Encrypts a dictionary of player data given a key.
+    """Encrypt a dictionary of player data given a key.
 
     Args:
         dict (dict): The dictionary containing the player data
@@ -55,7 +55,7 @@ def encrypt(dict: dict[str, int], key: str) -> dict[str, int]:
 
 
 def read_raw_rows() -> dict:
-    """Reads all player rows from Excel without decryption.
+    """Read all player rows from Excel without decryption.
     Used for reading data in encrypted form.
 
     Returns:
@@ -69,7 +69,7 @@ def read_raw_rows() -> dict:
 
 
 def read_all_rows() -> dict:
-    """Reads all player rows from Excel and decrypts all fields.
+    """Read all player rows from Excel and decrypts all fields.
     Used for displaying/reading data, never for saving.
 
     Returns:
@@ -84,7 +84,7 @@ def read_all_rows() -> dict:
 
         if unencrypted_name and encrypted_name and unencrypted_name != encrypted_name:
             try:
-                pw = findPW(unencrypted_name, encrypted_name)
+                pw = findpw(unencrypted_name, encrypted_name)
                 decrypted = decrypt(
                     {k: str(v) for k, v in r.items() if k not in ("username", "encrypted_username")},
                     pw,
@@ -99,7 +99,7 @@ def read_all_rows() -> dict:
 
 
 def write_all_rows(rows: dict[str, int]) -> None:
-    """Writes all player rows (encrypted) back to Excel.
+    """Write all player rows (encrypted) back to Excel.
 
     Args:
         rows (dict): The encrypted rows
@@ -109,7 +109,7 @@ def write_all_rows(rows: dict[str, int]) -> None:
 
 
 def safe_int(value: str | int | None) -> int:
-    """Parses empty entries into integers if needed.
+    """Parse empty entries into integers if needed.
 
     Args:
         value (str | int | None): The value to be processed
@@ -127,7 +127,7 @@ def safe_int(value: str | int | None) -> int:
 
 
 def safe_float(value: str | float) -> float:
-    """Parses empty entries into floats if needed.
+    """Parse empty entries into floats if needed.
 
     Args:
         value (str | float | None): The value to be processed
@@ -165,7 +165,7 @@ class PlayerData:
     """
 
     def __init__(self, name: str, password: str | None = None) -> None:
-        """Initializes the player's data storage given a name.
+        """Initialize the player's data storage given a name.
 
         Args:
             name (str): Denotes the name of the player
@@ -179,16 +179,14 @@ class PlayerData:
         self.total_wins = 0
         self.total_times = 0
         self.total_seconds_played = 0
-        # self.completed_data = "{}"
-        # self.completed_levels = {}
         self.reset_session()
         self.load_or_create()
 
     # * Log-In Validators
 
     @staticmethod
-    def lookup_excel_username(username: str) -> None | str:
-        """Returns a username from the database if exists and None if does not
+    def lookup_excel_username(username: str) -> str | None:
+        """Return a username from the database if exists and None if does not.
 
         Args:
             username (str): The username to be accessed
@@ -207,7 +205,7 @@ class PlayerData:
 
     @staticmethod
     def store_new_user(username: str, encrypted_username: str) -> None:
-        """Stores a new username and initializes their data in the database if it does not exist in the database.
+        """Store a new username and initializes their data in the database if it does not exist in the database.
 
         Args:
             username (str): The username to store in the database.
@@ -224,28 +222,33 @@ class PlayerData:
             "total_wins": 0,
             "total_times": 0,
             "total_seconds_played": 0,
-            # "completed_data": "{}",
         })
         write_all_rows(rows)
 
     # * Getter Methods
     def get_password(self) -> str:
-        """Returns:
-        The player's password
+        """Return the user's password.
+        Returns:
+            The player's password.
 
         """
         return self.password
 
     # * Setter Methods
-    def set_password(self, key) -> None:
-        """Sets the password."""
+    def set_password(self, key: str) -> None:
+        """Set the password.
+        
+        Args:
+            key (str): The given key.
+        """
         self.password = key
 
     # * Session Setter Methods
     def reset_session(self) -> None:
-        """Resets the session
+        """Reset the session.
 
-        Start time is recorded (to determine total length later), and win/dead conditions are set to false (as expected from any grid spawn).
+        Start time is recorded (to determine total length later).
+        Win/dead conditions are set to false (as expected from any grid spawn).
         """
         self.session_mushrooms = 0
         self.session_tiles = 0
@@ -253,7 +256,7 @@ class PlayerData:
         self.session_dead = False
 
     def record_move(self, n: int = 1) -> None:
-        """Adds number of moves to the session data.
+        """Add number of moves to the session data.
 
         Args:
             n (int): The number of moves to be added
@@ -261,8 +264,8 @@ class PlayerData:
         """
         self.session_tiles += n
 
-    def record_mushroom(self, n: int = 1):
-        """Adds number of mushrooms to the session data.
+    def record_mushroom(self, n: int = 1) -> None:
+        """Add number of mushrooms to the session data.
 
         Args:
             n (int): The number of mushrooms to be added
@@ -271,17 +274,18 @@ class PlayerData:
         self.session_mushrooms += n
 
     def record_win(self) -> None:
-        """Records a win for the player"""
+        """Record a win for the player."""
         self.session_win = True
 
     def record_death(self) -> None:
-        """Records a death for the player"""
+        """Record a death for the player."""
         self.session_dead = True
 
     def load_or_create(self) -> None:
-        """Reinitializes the player's statistics based on records in the database.
+        """Reinitialize the player's statistics based on records in the database.
         This includes initializing the data for a new player.
         """
+
         # Read decrypted rows to load user data
         rows = read_all_rows()
         for row in rows:
@@ -299,21 +303,21 @@ class PlayerData:
 
     # * Excel-Interaction Methods
     def commit_session(self) -> None:
-        """Adjusts the player data given a level file.
+        """Adjust the player data given a level file.
         Also logs the updated data to the database.
         """
+
         self.total_mushrooms_collected += self.session_mushrooms
         self.total_tiles_walked += self.session_tiles
         self.total_times += 1
         self.total_seconds_played += self.session_time
         if self.session_win:
             self.total_wins += 1
-        # self.completed_data = json.dumps(self.completed_levels)
         self.save()
         self.reset_session()
 
     def save(self) -> None:
-        """Saves player data to the database."""
+        """Save player data to the database."""
         rows = read_raw_rows()
 
         found = False
@@ -321,7 +325,7 @@ class PlayerData:
             if r["username"] == self.name:
                 r.update(
                     self.to_dict(),
-                )  # to_dict() handles encryption (NOT THIS! PLEASE, PLEASE DONT CHANGE THAT FUNCTIONALITY)
+                )  
                 found = True
                 break
 
@@ -330,14 +334,13 @@ class PlayerData:
         write_all_rows(rows)
 
     def to_dict(self) -> None:
-        """Converts session data to a dict."""
+        """Convert session data to a dict."""
         data = {
             "total_mushrooms_collected": self.total_mushrooms_collected,
             "total_tiles_walked": self.total_tiles_walked,
             "total_wins": self.total_wins,
             "total_times": self.total_times,
             "total_seconds_played": self.total_seconds_played,
-            # "completed_data": self.completed_data,
         }
         if self.password:
             data = encrypt(data, self.password)
@@ -348,11 +351,11 @@ class PlayerData:
         return data
 
     def apply_report_dict(self, report: dict, return_code: ExitCodes | None = None, elapsed_time: float = 0) -> None:
-        """Processes the updates to be performed after receiving a session report.
+        """Process the updates to be performed after receiving a session report.
 
         Args:
             report (dict): The latest session data
-            return_codes (ExitCodes | None): The exit code of the last game
+            return_code (ExitCodes | None): The exit code of the last game
             elapsed_time (float): The time taken for completion
 
         """
@@ -362,7 +365,7 @@ class PlayerData:
         self.session_win = report["win"]
         self.session_dead = report["dead"]
 
-        if return_code in (ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value):
+        if return_code in set((ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value)):
             if return_code == ExitCodes.VICTORY.value:
                 self.record_win()
             self.commit_session()
@@ -370,8 +373,8 @@ class PlayerData:
 
         self.commit_session()
 
-    def load_report_file(self, path: str, level_id: int | None = None) -> None:
-        """Loads a report file
+    def load_report_file(self, path: str) -> None:
+        """Load a report file.
 
         Args:
             path (str): The path to the report file
@@ -385,7 +388,7 @@ class PlayerData:
     # * Display
 
     def __repr__(self) -> list:
-        """Displays the statistics belonging to a player in an organized manner.
+        """Display the statistics belonging to a player in an organized manner.
 
         Returns:
             display: a list of rows depicting the organized dict of the player statistics
@@ -400,6 +403,4 @@ class PlayerData:
             ["Total Time", format_time(self.total_seconds_played)],
         ]
 
-        display = tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"
-
-        return display
+        return tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"

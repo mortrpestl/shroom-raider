@@ -275,7 +275,7 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity) -> ExitCodes:
+    def render(self, p: Entity) -> ExitCodes | None:
         """Print the Grid and GUI, and return True if the game has ended.
 
         Args:
@@ -320,3 +320,4 @@ class Grid:
             return ExitCodes.VICTORY
         elif lose:
             return ExitCodes.DEFEAT
+        return None

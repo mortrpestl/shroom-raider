@@ -103,7 +103,7 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
             check_win_condition(p, g)
 
 
-def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
+def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str) -> None:
     """Creates a report of the played game after completion of a level.
 
     Args:

@@ -6,7 +6,7 @@ VALID_LETTERS = set(CHARTAPE)
 
 
 def check_validity(data: str) -> bool:
-    """Checks if a given string is a valid password/username
+    """Check if a given string is a valid password/username.
 
     Args:
         data (str): The proposed password/username
@@ -22,7 +22,7 @@ def check_validity(data: str) -> bool:
 
 
 def shift(letter: str, shiftval: str) -> str:
-    """Shifts a letter by a number of spaces to the right
+    """Shift a letter by a number of spaces to the right.
 
     Args:
         letter (str): The letter to be shifted
@@ -34,14 +34,14 @@ def shift(letter: str, shiftval: str) -> str:
     """
     i = CHARTAPE.index(letter)
 
-    shiftRight = CHARTAPE.index(shiftval)
-    i += shiftRight
+    shiftright = CHARTAPE.index(shiftval)
+    i += shiftright
 
     return CHARTAPE[i % CHARTAPE_LEN]
 
 
 def unshift(letter: str, shiftval: str) -> str:
-    """Shifts a letter by a number of spaces to the left
+    """Shift a letter by a number of spaces to the left.
 
     Args:
         letter (str): The letter to be shifted
@@ -52,9 +52,9 @@ def unshift(letter: str, shiftval: str) -> str:
 
     """
     i = CHARTAPE.index(letter)
-    shiftLeft = CHARTAPE.index(shiftval)
+    shiftleft = CHARTAPE.index(shiftval)
 
-    i -= shiftLeft
+    i -= shiftleft
 
     if i < 0:
         i += CHARTAPE_LEN
@@ -63,7 +63,7 @@ def unshift(letter: str, shiftval: str) -> str:
 
 
 def scramble(data: str, key: str) -> str:
-    """Vigenère cipher
+    """Vigenère cipher.
 
     Args:
         data (str): The data to be scrambled
@@ -82,7 +82,7 @@ def scramble(data: str, key: str) -> str:
 
 
 def unscramble(data: str, key: str) -> str:
-    """Vigenère cipher unscrambler
+    """Vigenère cipher unscrambler.
 
     Args:
         data (str): The data to be unscrambled
@@ -100,8 +100,8 @@ def unscramble(data: str, key: str) -> str:
     return res
 
 
-def findPW(unencrypted: str, encrypted: str) -> str:
-    """Find the key string given the original and encrypted strings
+def findpw(unencrypted: str, encrypted: str) -> str:
+    """Find the key string given the original and encrypted strings.
 
     Args:
         unencrypted (str): The original string
@@ -202,7 +202,7 @@ def register_new_user(username: str) -> str:
 
 
 def get_valid_username() -> str:
-    """Prompts the user for a valid username
+    """Prompt the user for a valid username.
 
     Returns:
         The username, once verified to be valid.
