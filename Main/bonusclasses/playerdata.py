@@ -386,7 +386,7 @@ class PlayerData:
 
     # * Display
 
-    def __repr__(self) -> list:
+    def __repr__(self) -> str:
         """Display the statistics belonging to a player in an organized manner.
 
         Returns:
@@ -402,4 +402,4 @@ class PlayerData:
             ["Total Time", format_time(self.total_seconds_played)],
         ]
 
-        return tabulate(["Stat", "Value"], stats_rows, max_width=24) + "\n\n"
+        return tabulate(["Stat", "Value"], stats_rows) + "\n\n"
