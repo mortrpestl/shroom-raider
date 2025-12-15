@@ -15,7 +15,7 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: Main.shroom_raider
+.. automodule:: shroom_raider
    :members:
 
 .. automodule:: Classes.Grid
