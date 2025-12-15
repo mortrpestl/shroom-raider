@@ -1,13 +1,13 @@
 import json
-import os
+from pathlib import Path
 
 import pandas as pd
 from bonusclasses.security import findpw, scramble, unscramble
 from utils.enums import ExitCodes
 from utils.general_utils import format_time, tabulate
 
-HERE = os.path.dirname(__file__)
-EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
+HERE = Path.parent
+EXCEL_FILE = Path.resolve(Path(f"{HERE}/../statistics/PlayerData.xlsx"))
 HEADERS = [
     "username",
     "encrypted_username",
@@ -54,7 +54,7 @@ def encrypt(data_dict: dict[str, int], key: str) -> dict[str, int]:
 
 def read_raw_rows() -> dict:
     """Read all player rows from Excel without decryption.
-    
+
     Used for reading data in encrypted form.
 
     Returns:

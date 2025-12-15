@@ -1,12 +1,7 @@
 import os
 import sys
 import time
-from collections.abc import Callable
 from math import ceil
-from typing import Concatenate, ParamSpec, TypeVar
-
-P = ParamSpec("P")
-R = TypeVar("R")
 
 WAIT_TIME = 5
 DEBUG_MODE = True
@@ -14,6 +9,7 @@ DEBUG_MODE = True
 
 def clear_terminal() -> None:
     """Clear the terminal."""
+    print("Clearing Terminal!")
     os.system("cls" if os.name == "nt" else "clear")
 
 
@@ -37,31 +33,6 @@ def wait(seconds: float) -> None:
 
     """
     time.sleep(seconds)
-
-
-# decorator
-def debug_wait(delay: float = 2.5) -> Callable[[Callable[P, R]], Callable[Concatenate[str, P], R]]:
-    """Debug decorator factory for functions.
-
-    Args:
-        delay (float|int): time to wait.
-
-    Returns:
-        The decorated function with debug!
-
-    """
-
-    def decorator(func: Callable[P, R]) -> Callable[Concatenate[str, P]]:
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-            answer = func(*args, **kwargs)
-            if DEBUG_MODE:
-                print("DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils")
-                wait(delay)
-            return answer
-
-        return wrapper
-
-    return decorator
 
 
 def print_and_wait(message: str, seconds: float = 1) -> None:

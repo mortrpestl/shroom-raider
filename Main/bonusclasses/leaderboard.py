@@ -1,12 +1,13 @@
-import os
+
+from pathlib import Path
 
 from bonusclasses.playerdata import read_all_rows
 from utils.general_utils import calculate_percentage, format_time, tabulate
 
-HERE = os.path.dirname(__file__)
+HERE = Path.parent
 
 
-def show_leaderboard(sort_by: str | tuple = "total_wins", reverse: bool = False) -> None:
+def show_leaderboard(sort_by: str | tuple = "total_wins", *, reverse: bool = False) -> None:
     """Compare player to other players. Ranked by levels beaten and sum of best times (formatted).
 
     Args:

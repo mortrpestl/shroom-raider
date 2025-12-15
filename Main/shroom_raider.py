@@ -3,11 +3,11 @@
 import io
 import json
 import os
-import pathlib
 import sys
 import tempfile
 import time
 from argparse import ArgumentParser
+from pathlib import Path
 
 from bonusclasses.leaderboard import show_leaderboard
 from bonusclasses.playerdata import PlayerData
@@ -22,7 +22,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignor
 
 
 LEVEL_NAME = "DefaultStage"
-HERE = os.path.dirname(__file__)
+HERE = Path.parent
 report_file = None
 moves_made = 0
 
@@ -130,12 +130,62 @@ def write_report(g: Grid, p: Player, win: bool, dead: bool, report_file: str) ->
             f.flush()
             os.fsync(f.fileno())
         try:
-            pathlib.Path(tmp).replace(report_file)
+            Path(tmp).replace(report_file)
         except Exception:
             with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(payload, f)
     except Exception as e:
         print(f"Failed to write report file {report_file}: {e}")
+
+
+def launch_game(level: str, report_path: str) -> tuple[float, ExitCodes]:
+    """Launch the game and act as the gameplay loop.
+
+    Args:
+        level (str): the level's contents.
+        report_path (str): the report path to write to.
+
+    Returns:
+        the elapsed time (float) and an ExitCode.
+
+    """
+    start_time = time.time()
+    return_code = None
+    while True:
+        stop_or_reset_only = globals()["G"].render(globals()["P"])
+        if isinstance(stop_or_reset_only, ExitCodes):
+            return_code = stop_or_reset_only
+            if stop_or_reset_only is ExitCodes.VICTORY:
+                write_report(globals()["G"], globals()["P"], True, False, report_path)
+            elif stop_or_reset_only is ExitCodes.DEFEAT:
+                write_report(globals()["G"], globals()["P"], False, True, report_path)
+            break
+        # each input() returns one line; parser will process that line
+        parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
+    end_time = time.time()
+
+    return float(end_time - start_time), return_code
+
+
+def register_or_login_user() -> PlayerData:
+    """Prompt the user to register or log in.
+
+    Returns:
+        A PlayerData object containing the current user's data.
+
+    """
+    username = get_valid_username()
+    encrypted_username, _ = PlayerData.lookup_excel_username(username)
+
+    if encrypted_username and username != "GUEST":  # existing user
+        password = verify_existing_user(username, encrypted_username)
+        return PlayerData(username, password)
+    elif username == "GUEST":
+        return PlayerData("GUEST", "guest")
+    else:
+        password = register_new_user(username)
+        # store encrypted username & reference username in Excel
+        return PlayerData(username, password)
 
 
 def main() -> None:
@@ -163,60 +213,33 @@ def main() -> None:
 
     # * (GAMEPLAY) START GAMEPLAY LOOP IF NO MOVEMENT OR NO OUTPUT FILE.
     if args.movement_file is None or args.output_file is None:
-        try:  # does not catch errors; allows for json cleanup to work regardless.
-            # * REGISTER USER
-            username = get_valid_username()
+        # * REGISTER/LOGIN USER
+        player_data = register_or_login_user()
 
-            encrypted_username, _reference_username = PlayerData.lookup_excel_username(username)
+        # * INITIALIZE REPORT
+        report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
+        os.close(report_fd)
 
-            if encrypted_username and username != "GUEST":  # existing user
-                password = verify_existing_user(username, encrypted_username)
-                player_data = PlayerData(username, password)
-            elif username == "GUEST":
-                player_data = PlayerData("GUEST", "guest")
-            else:
-                password = register_new_user(username)
-                # store encrypted username & reference username in Excel
-                player_data = PlayerData(username, password)
+        # * RUN GAME
+        elapsed_time, return_code = launch_game(level, report_path)
 
-            # * INITIALIZE REPORT
-            report_fd, report_path = tempfile.mkstemp(prefix="shroom_report_", suffix=".json", dir=HERE)
-            os.close(report_fd)
+        # * LOAD REPORT
+        report = None
+        if Path(report_path).stat().st_size > 0:
+            with open(report_path, encoding="utf-8") as f:
+                report = json.load(f)
 
-            # * RUN GAME
-            start_time = time.time()
-            return_code = None
-            while True:
-                stop_or_reset_only = globals()["G"].render(globals()["P"])
-                if isinstance(stop_or_reset_only, ExitCodes):
-                    return_code = stop_or_reset_only.value
-                    if stop_or_reset_only is ExitCodes.VICTORY:
-                        write_report(globals()["G"], globals()["P"], True, False, report_path)
-                    elif stop_or_reset_only is ExitCodes.DEFEAT:
-                        write_report(globals()["G"], globals()["P"], False, True, report_path)
-                    break
-                # each input() returns one line; parser will process that line
-                parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
-            end_time = time.time()
+        # * PROCESS REPORT
+        if report:
+            player_data.apply_report_dict(
+                report,
+                return_code=return_code,
+                elapsed_time=elapsed_time,
+            )
 
-            # * LOAD REPORT
-            report = None
-            if pathlib.Path(report_path).stat().st_size > 0:
-                with open(report_path, encoding="utf-8") as f:
-                    report = json.load(f)
-
-            # * PROCESS REPORT
-            if report:
-                elapsed_time = float(end_time - start_time)
-                player_data.apply_report_dict(
-                    report,
-                    return_code=return_code,
-                    elapsed_time=elapsed_time,
-                )
-        finally:
-            # * CLEANUP
-            if pathlib.Path(report_path).exists():
-                pathlib.Path(report_path).unlink()
+        # * CLEANUP
+        if Path(report_path).exists():
+            Path(report_path).unlink()
 
         # * LEADERBOARD AND STATS
         print(repr(player_data))
