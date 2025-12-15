@@ -99,9 +99,6 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
             p.collect_shroom()  # if applicable
 
             check_win_condition(p, g)
-            
-            if g.get_is_cleared() or p.get_is_dead():
-                return moves_made
 
 def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
     """Creates a report of the played game after completion of a level.
