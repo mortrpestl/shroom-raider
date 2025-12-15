@@ -6,7 +6,6 @@ from math import ceil
 WAIT_TIME = 5
 DEBUG_MODE = True
 
-
 def clear_terminal() -> None:
     """Clears the terminal."""
     os.system("cls" if os.name == "nt" else "clear")
@@ -35,7 +34,7 @@ def wait(seconds: float) -> None:
 
 
 # decorator
-def debug_wait(delay: float = 2.5) -> None:
+def debug_wait(delay: float = 2.5) -> function:
     """Debug decorator factory for functions.
 
     Args:
