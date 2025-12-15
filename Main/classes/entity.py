@@ -36,9 +36,9 @@ class Entity:
         """Initialize an Entity object.
 
         Args:
-            pos: [r, c], the row and column of the entity on the given Grid.
-            on_grid: The grid which contains this entity.
-            ascii_char: The ascii character which corresponds to this entity.
+            pos (list): [r, c], the row and column of the entity on the given Grid.
+            on_grid (Grid): The grid which contains this entity.
+            ascii_char (str): The ascii character which corresponds to this entity.
 
         """
         self.__pos: list[int] = list(pos)

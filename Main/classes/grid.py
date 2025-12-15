@@ -93,6 +93,10 @@ class Grid:
     def get_layers_from_coord(self, r: int, c: int) -> list[Entity | None]:
         """Return the stack of entities at coordinate (r, c).
 
+        Args:
+            r (int): Row index.
+            c (int): Column index.
+
         Returns:
             A list representing the stack of entities at (r, c).
 
@@ -122,6 +126,11 @@ class Grid:
     def pop_layer_from_coord(self, r: int, c: int, layer: int = -1) -> Entity | None:
         """Remove and return an entity at a specific coordinate and layer.
 
+
+        Args:
+            r (int): Row index.
+            c (int): Column index.
+            layer (int): Layer index.
         Returns:
             The popped entity, or None if that layer held None.
 
@@ -131,6 +140,9 @@ class Grid:
     @staticmethod
     def get_grid_by_name(name: str) -> "Grid":
         """Return a Grid object by its name.
+
+        Args: 
+            name (str): name of the Grid
 
         Returns:
             The Grid instance with the given name.

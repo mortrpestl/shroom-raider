@@ -20,7 +20,7 @@ Main Game Logic
 Entity 
 ******
 
-.. automodule:: Classes.entity
+.. automodule:: classes.entity
    :members:
 
 Entities
@@ -74,5 +74,41 @@ Import Tools
 
 Grid
 ****
-.. automodule:: classes.Grid
+.. automodule:: classes.grid
    :members:
+
+
+Leaderboard and Player Data
+***************************
+
+Leaderboard
+-----------
+.. automodule:: bonusclasses.leaderboard 
+   :members:
+
+
+Player Data
+-----------
+.. automodule:: bonusclasses.playerdata
+   :members:
+
+Security System
+---------------
+.. automodule:: bonusclasses.security
+   :members:
+
+
+Utils
+*****
+
+Enums
+-----
+.. automodule:: utils.enums
+   :members:
+
+General Utils
+-------------
+.. automodule:: utils.general_utils
+   :members:
+
+.. automodule:: utils.generate_tests_to_csv
