@@ -6,6 +6,7 @@ from math import ceil
 WAIT_TIME = 5
 DEBUG_MODE = True
 
+
 def clear_terminal() -> None:
     """Clear the terminal."""
     os.system("cls" if os.name == "nt" else "clear")
@@ -39,6 +40,9 @@ def debug_wait(delay: float = 2.5) -> function:
 
     Args:
         delay (float|int): time to wait.
+
+    Returns:
+        A function
 
     """
 
@@ -125,17 +129,18 @@ def tabulate(
         A multi-line string of the table
 
     """
+
     def truncate(text: str, width: int) -> str:
-        """Reduces a string to a specified width
-        
+        """Reduces a string to a specified width.
+
         Args:
             text (str): text to truncate
             width (int): width to adhere to
 
         Returns:
-            The truncated string
-        """
+            The truncated string.
 
+        """
         text = "" if text is None else str(text)
         # replace NaN with -
         if text.lower() == "nan":
@@ -148,21 +153,23 @@ def tabulate(
     col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(r)) + 2, max_width) for c in range(c)]
 
     def build_border() -> str:
-        """Formats a horizontal border
-        
+        """Format a horizontal border.
+
         Returns:
             The built border
+
         """
         return joint + joint.join(tborder * w for w in col_widths) + joint
 
     def build_row(row: list) -> str:
-        """Formats a row with a border
-        
+        """Format a row with a border.
+
         Args:
             row (list): the content to format
 
         Returns:
             A formatted row
+
         """
         cells = [truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(c)]
         return lborder + sep.join(cells) + rborder

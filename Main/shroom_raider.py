@@ -103,13 +103,15 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
             check_win_condition(p, g)
 
 
-def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str) -> None:
-    """Creates a report of the played game after completion of a level.
+def write_report(g: Grid, p: Player, win: bool, dead: bool, report_file: str) -> None:
+    """Create a report of the played game after completion of a level.
 
     Args:
-        P: The current Player entity
-        G: The current Grid object
-        win, dead: Indicate whether the player has won the game or has died
+        g (Grid): The Grid being played on
+        p (Player): The current Player entity
+        win (bool): indicates if the player has won
+        dead (bool): indicates if the player has died
+        report_file (str): stringified report file for the game
 
     """
     global moves_made
@@ -117,7 +119,7 @@ def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str) ->
         return
     try:
         payload = {
-            "mushrooms_collected": P.get_mushroom_count(),
+            "mushrooms_collected": p.get_mushroom_count(),
             "moves_made": moves_made,
             "win": bool(win),
             "dead": bool(dead),

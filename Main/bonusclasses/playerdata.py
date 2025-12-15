@@ -54,6 +54,7 @@ def encrypt(data_dict: dict[str, int], key: str) -> dict[str, int]:
 
 def read_raw_rows() -> dict:
     """Read all player rows from Excel without decryption.
+    
     Used for reading data in encrypted form.
 
     Returns:
@@ -66,6 +67,7 @@ def read_raw_rows() -> dict:
 
 def read_all_rows() -> dict:
     """Read all player rows from Excel and decrypts all fields.
+
     Used for displaying/reading data, never for saving.
 
     Returns:
@@ -145,6 +147,7 @@ def safe_float(value: str | float) -> float:
 
 class PlayerData:
     """Handles the storing and sending of session data for each game session for a given player.
+
     Also handles distribution of global player information to leaderboards.
 
     Attributes:
@@ -281,9 +284,9 @@ class PlayerData:
 
     def load_or_create(self) -> None:
         """Reinitialize the player's statistics based on records in the database.
+
         This includes initializing the data for a new player.
         """
-        
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
@@ -301,9 +304,9 @@ class PlayerData:
     # * Excel-Interaction Methods
     def commit_session(self) -> None:
         """Adjust the player data given a level file.
+
         Also logs the updated data to the database.
         """
-
         self.total_mushrooms_collected += self.session_mushrooms
         self.total_tiles_walked += self.session_tiles
         self.total_times += 1
