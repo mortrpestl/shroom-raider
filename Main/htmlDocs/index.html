@@ -6,28 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Shroom Raider &#8212; Shroom Raider 12/16/2025 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
     <script src="_static/documentation_options.js?v=69f48238"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
-      <div class="header" role="banner"><h1 class="heading"><a href="#">
-          <span>Shroom Raider 12/16/2025 documentation</span></a></h1>
-        <h2 class="heading"><span>Shroom Raider</span></h2>
-      </div>
-      <div class="topnav" role="navigation" aria-label="Top">
-      
-        <p>
-        <a class="uplink" href="#">Contents</a>
-        </p>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Shroom Raider 12/16/2025 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Shroom Raider</a></li> 
+      </ul>
+    </div>  
 
-      </div>
-      <div class="content" role="main">
-        
-        
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
   <div class="toctree-wrapper compound">
 </div>
 <section id="shroom-raider">
@@ -53,8 +60,7 @@
 <dt class="sig sig-object py" id="shroom_raider.main">
 <span class="sig-prename descclassname"><span class="pre">shroom_raider.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#shroom_raider.main" title="Link to this definition">¶</a></dt>
 <dd><p>Run the main game logic for Shroom Raider.</p>
-<p>-&gt; Processes Command Line Arguments
--&gt; Handles Game Loop</p>
+<p>Processes command line arguments and handles the main gameplay loop.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -64,11 +70,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>instructions</strong> – The given input string of the player’s moves</p></li>
-<li><p><strong>p</strong> – The current Player entity</p></li>
-<li><p><strong>g</strong> – The current Grid object</p></li>
-<li><p><strong>level</strong> – A string representation of the ORIGINAL stage</p></li>
-<li><p><strong>reset_only</strong> – A boolean indicating if moves other than reset can be played</p></li>
+<li><p><strong>instructions</strong> (<em>str</em>) – The given input string of the player’s moves</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#Classes.Entities.Player.Player" title="Classes.Entities.Player.Player"><em>Player</em></a>) – The current Player entity</p></li>
+<li><p><strong>g</strong> (<a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><em>Grid</em></a>) – The current Grid object</p></li>
+<li><p><strong>level</strong> (<em>str</em>) – A string representation of the ORIGINAL stage</p></li>
+<li><p><strong>reset_only</strong> (<em>bool</em>) – A boolean indicating if moves other than reset can be played</p></li>
 </ul>
 </dd>
 </dl>
@@ -80,7 +86,7 @@
 <dd><p>Reset a stage to its starting conditions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>level</strong> – A string representation of the stage being reset</p>
+<dd class="field-odd"><p><strong>level</strong> (<em>str</em>) – A string representation of the stage being reset</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A Grid object that contains the reset level, and a Player entity on that Grid.</p>
@@ -230,9 +236,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> – “wasd”, where the Entity intends to move.</p></li>
-<li><p><strong>r</strong> – Target row.</p></li>
-<li><p><strong>c</strong> – Target column.</p></li>
+<li><p><strong>direction</strong> (<em>str</em>) – “wasd”, where the Entity intends to move.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Target row.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Target column.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -248,8 +254,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>r</strong> – Row index.</p></li>
-<li><p><strong>c</strong> – Column index.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -329,8 +335,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>r</strong> – Row index.</p></li>
-<li><p><strong>c</strong> – Column index.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
 </ul>
 </dd>
 </dl>
@@ -342,7 +348,7 @@
 <dd><p>Move the Entity on the Grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>direction</strong> – The direction that the Entity wants to move.</p>
+<dd class="field-odd"><p><strong>direction</strong> (<em>str</em>) – The direction that the Entity wants to move.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the move was successful, False otherwise.</p>
@@ -360,6 +366,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Axe.Axe">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Axe.</span></span><span class="sig-name descname"><span class="pre">Axe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Axe.Axe" title="Link to this definition">¶</a></dt>
 <dd><p>A storable Entity that, if used by the player, destroys a tree.</p>
+<p>Default character is ‘x’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class</span></span></dt>
@@ -374,6 +381,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Flamethrower.Flamethrower">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Flamethrower.</span></span><span class="sig-name descname"><span class="pre">Flamethrower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Flamethrower.Flamethrower" title="Link to this definition">¶</a></dt>
 <dd><p>A storable Entity that, if used by the Player, destroys all connected trees.</p>
+<p>Default character is ‘*’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class</span></span></dt>
@@ -388,6 +396,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Mushroom.Mushroom">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Mushroom.</span></span><span class="sig-name descname"><span class="pre">Mushroom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Mushroom.Mushroom" title="Link to this definition">¶</a></dt>
 <dd><p>An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it.</p>
+<p>Default character is ‘+’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class</span></span></dt>
@@ -402,6 +411,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.PavedTile.PavedTile">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.PavedTile.</span></span><span class="sig-name descname"><span class="pre">PavedTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.PavedTile.PavedTile" title="Link to this definition">¶</a></dt>
 <dd><p>An Entity that is created when a rock goes over water. Can be walked on.</p>
+<p>Default character is ‘_’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class.</span></span></dt>
@@ -416,6 +426,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Player.Player">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Player.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'L'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Player.Player" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the main controllable character of the game.</p>
+<p>Default character is ‘L’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="Classes.Entities.Player.Player.__item">
 <span class="sig-name descname"><span class="pre">__item</span></span><a class="headerlink" href="#Classes.Entities.Player.Player.__item" title="Link to this definition">¶</a></dt>
@@ -550,6 +561,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Rock.Rock">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Rock.</span></span><span class="sig-name descname"><span class="pre">Rock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'R'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Rock.Rock" title="Link to this definition">¶</a></dt>
 <dd><p>A collideable entity that can be pushed by the player.</p>
+<p>Default character is ‘R’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class</span></span></dt>
@@ -610,6 +622,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Tree.Tree">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'T'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Tree.Tree" title="Link to this definition">¶</a></dt>
 <dd><p>A collideable and burnable entity that can be destroyed by the player.</p>
+<p>Default character is ‘T’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class.</span></span></dt>
@@ -641,6 +654,7 @@
 <dt class="sig sig-object py" id="Classes.Entities.Water.Water">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Entities.Water.</span></span><span class="sig-name descname"><span class="pre">Water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Grid.Grid" title="Classes.Grid.Grid"><span class="pre">Grid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'~'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Entities.Water.Water" title="Link to this definition">¶</a></dt>
 <dd><p>A deadly entity that kills the player if stepped on.</p>
+<p>Default character is ‘~’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">See</span> <span class="pre">parent</span> <span class="pre">class.</span></span></dt>
@@ -674,11 +688,20 @@
 <dt class="sig sig-object py" id="Classes.Grid.Grid">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Classes.Grid.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Classes.Grid.Grid" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the play area where players and all game objects reside.</p>
-<p>The Grid is a 3D structure: a 2D list where each coordinate contains a stack of entities.</p>
+<p>The Grid is a 3D data structure: a 2D list where each coordinate contains a stack of entities.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Classes.Grid.Grid.add_layer_to_coord">
 <span class="sig-name descname"><span class="pre">add_layer_to_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.add_layer_to_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Add an entity to a specific coordinate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+<li><p><strong>obj</strong> (<a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><em>Entity</em></a><em> | </em><em>None</em>) – The object to be added into the Grid</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -686,8 +709,14 @@
 <span class="sig-name descname"><span class="pre">get_display_symbol_of_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.get_display_symbol_of_obj" title="Link to this definition">¶</a></dt>
 <dd><p>Return the visual representation of an object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A string representing the display symbol, or None if no mapping.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><em>Entity</em></a><em> | </em><em>None</em>) – The object being checked</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – The display mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representing the display symbol, or None if no mapping.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -744,11 +773,18 @@
 <span class="sig-name descname"><span class="pre">get_obj_in_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.get_obj_in_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Return the entity at coordinate (r, c) and layer, or None.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The entity located at (r, c, layer) or None.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – Row index.</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – Column index.</p></li>
+<li><p><strong>layer</strong> (<em>int</em>) – Layer index.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>IndexError</strong> – If the coordinate is out of Grid bounds.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The entity located at (r, c, layer) or None.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IndexError</strong> – If the coordinate is out of Grid bounds.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -780,8 +816,11 @@
 <span class="sig-name descname"><span class="pre">get_vis_map_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ascii'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.get_vis_map_as_str" title="Link to this definition">¶</a></dt>
 <dd><p>Return the visualization of the Grid as a multi-line string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A single string composed of the visualization rows joined by newline.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>str</em>) – The display mode</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single string composed of the visualization rows joined by newline.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -797,11 +836,17 @@
 <span class="sig-name descname"><span class="pre">init_coord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#Classes.Grid.Grid.init_coord" title="Link to this definition">¶</a></dt>
 <dd><p>Return the entity and display character for a given symbol.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of (entity instance or None, display character for that tile).</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol</strong> (<em>str</em>) – The character at the given coordinate</p></li>
+<li><p><strong>coord</strong> (<em>list</em>) – [r, c], The current coordinate being initialized</p></li>
+</ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the symbol is invalid.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of (entity instance or None, display character for that tile).</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the symbol is invalid.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -828,8 +873,11 @@
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.render" title="Link to this definition">¶</a></dt>
 <dd><p>Print the Grid and GUI, and return True if the game has ended.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if the player has won or lost (game ended), otherwise False.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference internal" href="#Classes.Entity.Entity" title="Classes.Entity.Entity"><em>Entity</em></a>) – The Player object in the current Grid instance</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the player has won or lost (game ended), otherwise False.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -838,6 +886,11 @@
 <dt class="sig sig-object py" id="Classes.Grid.Grid.visualize_map">
 <span class="sig-name descname"><span class="pre">visualize_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'emoji'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Classes.Grid.Grid.visualize_map" title="Link to this definition">¶</a></dt>
 <dd><p>Generate the user-facing visualization of the Grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>str</em>) – The display mode</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -846,15 +899,179 @@
 </section>
 
 
+            <div class="clearer"></div>
+          </div>
+        </div>
       </div>
-      <div class="bottomnav" role="navigation" aria-label="Bottom">
-      
-        <p>
-        <a class="uplink" href="#">Contents</a>
-        </p>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Shroom Raider</a><ul>
+<li><a class="reference internal" href="#module-shroom_raider">Main Game Logic</a><ul>
+<li><a class="reference internal" href="#shroom_raider.check_win_condition"><code class="docutils literal notranslate"><span class="pre">check_win_condition()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.parser"><code class="docutils literal notranslate"><span class="pre">parser()</span></code></a></li>
+<li><a class="reference internal" href="#shroom_raider.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entity">Entity</a><ul>
+<li><a class="reference internal" href="#Classes.Entity.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a><ul>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_collideable"><code class="docutils literal notranslate"><span class="pre">Entity._is_collideable</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_collectable"><code class="docutils literal notranslate"><span class="pre">Entity._is_collectable</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_storable"><code class="docutils literal notranslate"><span class="pre">Entity._is_storable</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_pushable"><code class="docutils literal notranslate"><span class="pre">Entity._is_pushable</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_deadly"><code class="docutils literal notranslate"><span class="pre">Entity._is_deadly</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity._is_burnable"><code class="docutils literal notranslate"><span class="pre">Entity._is_burnable</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.__pos"><code class="docutils literal notranslate"><span class="pre">Entity.__pos</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.__on_grid"><code class="docutils literal notranslate"><span class="pre">Entity.__on_grid</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.__ascii"><code class="docutils literal notranslate"><span class="pre">Entity.__ascii</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.destroy"><code class="docutils literal notranslate"><span class="pre">Entity.destroy()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_ascii"><code class="docutils literal notranslate"><span class="pre">Entity.get_ascii()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_burnable"><code class="docutils literal notranslate"><span class="pre">Entity.get_burnable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_collectable"><code class="docutils literal notranslate"><span class="pre">Entity.get_collectable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_collideable"><code class="docutils literal notranslate"><span class="pre">Entity.get_collideable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_deadly"><code class="docutils literal notranslate"><span class="pre">Entity.get_deadly()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_entity_below"><code class="docutils literal notranslate"><span class="pre">Entity.get_entity_below()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Entity.get_movement_validity()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_obj_in_coord"><code class="docutils literal notranslate"><span class="pre">Entity.get_obj_in_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_on_grid"><code class="docutils literal notranslate"><span class="pre">Entity.get_on_grid()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_pos"><code class="docutils literal notranslate"><span class="pre">Entity.get_pos()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_pushable"><code class="docutils literal notranslate"><span class="pre">Entity.get_pushable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.get_storable"><code class="docutils literal notranslate"><span class="pre">Entity.get_storable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.in_bounds"><code class="docutils literal notranslate"><span class="pre">Entity.in_bounds()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.set_coordinate"><code class="docutils literal notranslate"><span class="pre">Entity.set_coordinate()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entity.Entity.set_pos"><code class="docutils literal notranslate"><span class="pre">Entity.set_pos()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#entities">Entities</a><ul>
+<li><a class="reference internal" href="#module-Classes.Entities.Axe">Axe</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Axe.Axe"><code class="docutils literal notranslate"><span class="pre">Axe</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Flamethrower">Flamethrower</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Flamethrower.Flamethrower"><code class="docutils literal notranslate"><span class="pre">Flamethrower</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Mushroom">Mushroom</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Mushroom.Mushroom"><code class="docutils literal notranslate"><span class="pre">Mushroom</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.PavedTile">Paved Tile</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.PavedTile.PavedTile"><code class="docutils literal notranslate"><span class="pre">PavedTile</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Player">Player</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player"><code class="docutils literal notranslate"><span class="pre">Player</span></code></a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.__item"><code class="docutils literal notranslate"><span class="pre">Player.__item</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.__mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.__mushroom_count</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.__is_dead"><code class="docutils literal notranslate"><span class="pre">Player.__is_dead</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.collect_item"><code class="docutils literal notranslate"><span class="pre">Player.collect_item()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.collect_shroom"><code class="docutils literal notranslate"><span class="pre">Player.collect_shroom()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.get_is_dead"><code class="docutils literal notranslate"><span class="pre">Player.get_is_dead()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.get_item"><code class="docutils literal notranslate"><span class="pre">Player.get_item()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Player.get_movement_validity()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.get_mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.get_mushroom_count()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.increment_mushroom_count"><code class="docutils literal notranslate"><span class="pre">Player.increment_mushroom_count()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.kill"><code class="docutils literal notranslate"><span class="pre">Player.kill()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.set_item"><code class="docutils literal notranslate"><span class="pre">Player.set_item()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.set_pos"><code class="docutils literal notranslate"><span class="pre">Player.set_pos()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Player.Player.use_item"><code class="docutils literal notranslate"><span class="pre">Player.use_item()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Rock">Rock</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Rock.Rock"><code class="docutils literal notranslate"><span class="pre">Rock</span></code></a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Rock.Rock.get_movement_validity"><code class="docutils literal notranslate"><span class="pre">Rock.get_movement_validity()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Rock.Rock.get_pushable"><code class="docutils literal notranslate"><span class="pre">Rock.get_pushable()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Rock.Rock.set_pos"><code class="docutils literal notranslate"><span class="pre">Rock.set_pos()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Tree">Tree</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Tree.Tree"><code class="docutils literal notranslate"><span class="pre">Tree</span></code></a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Tree.Tree.burn_connected"><code class="docutils literal notranslate"><span class="pre">Tree.burn_connected()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Entities.Tree.Tree.chop"><code class="docutils literal notranslate"><span class="pre">Tree.chop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Entities.Water">Water</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.Water.Water"><code class="docutils literal notranslate"><span class="pre">Water</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#import-tools">Import Tools</a><ul>
+<li><a class="reference internal" href="#Classes.Entities.import_entities.import_entities"><code class="docutils literal notranslate"><span class="pre">import_entities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-Classes.Grid">Grid</a><ul>
+<li><a class="reference internal" href="#Classes.Grid.Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a><ul>
+<li><a class="reference internal" href="#Classes.Grid.Grid.add_layer_to_coord"><code class="docutils literal notranslate"><span class="pre">Grid.add_layer_to_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_display_symbol_of_obj"><code class="docutils literal notranslate"><span class="pre">Grid.get_display_symbol_of_obj()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_grid_by_name"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_grid_obj_map"><code class="docutils literal notranslate"><span class="pre">Grid.get_grid_obj_map()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_is_cleared"><code class="docutils literal notranslate"><span class="pre">Grid.get_is_cleared()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_layers_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_layers_from_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_obj_in_coord"><code class="docutils literal notranslate"><span class="pre">Grid.get_obj_in_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_player"><code class="docutils literal notranslate"><span class="pre">Grid.get_player()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.get_total_mushrooms()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.get_vis_map_as_str"><code class="docutils literal notranslate"><span class="pre">Grid.get_vis_map_as_str()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.increment_total_mushrooms"><code class="docutils literal notranslate"><span class="pre">Grid.increment_total_mushrooms()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.init_coord"><code class="docutils literal notranslate"><span class="pre">Grid.init_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.level_clear"><code class="docutils literal notranslate"><span class="pre">Grid.level_clear()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.pop_layer_from_coord"><code class="docutils literal notranslate"><span class="pre">Grid.pop_layer_from_coord()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.render"><code class="docutils literal notranslate"><span class="pre">Grid.render()</span></code></a></li>
+<li><a class="reference internal" href="#Classes.Grid.Grid.visualize_map"><code class="docutils literal notranslate"><span class="pre">Grid.visualize_map()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
       </div>
-
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Shroom Raider 12/16/2025 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Shroom Raider</a></li> 
+      </ul>
+    </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Jugemu-Jugemu.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.

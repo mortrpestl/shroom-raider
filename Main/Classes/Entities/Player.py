@@ -20,6 +20,8 @@ MUSHROOM = items["Mushroom"]
 class Player(Entity):
     """Represent the main controllable character of the game.
 
+    Default character is 'L'
+
     Attributes:
         __item: The item the player is holding.
         __mushroom_count: The number of mushrooms the Player has collected.

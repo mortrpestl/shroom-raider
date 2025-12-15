@@ -7,7 +7,7 @@ from Classes.Entity import Entity
 class Grid:
     """Represent the play area where players and all game objects reside.
 
-    The Grid is a 3D structure: a 2D list where each coordinate contains a stack of entities.
+    The Grid is a 3D data structure: a 2D list where each coordinate contains a stack of entities.
     """
 
     # Class-level dictionary of all grids
@@ -17,8 +17,8 @@ class Grid:
         """Initialize a Grid object from a stage string.
 
         Args:
-            name: The name of the Grid
-            map_data: A string representation of the stage
+            name (str): The name of the Grid
+            map_data (str): A string representation of the stage
 
         """
         self.__name: str = name
@@ -145,6 +145,11 @@ class Grid:
     def get_obj_in_coord(self, r: int, c: int, layer: int = -1) -> Entity | None:
         """Return the entity at coordinate (r, c) and layer, or None.
 
+        Args:
+            r (int): Row index.
+            c (int): Column index.
+            layer (int): Layer index.
+        
         Returns:
             The entity located at (r, c, layer) or None.
 
@@ -159,6 +164,10 @@ class Grid:
     def get_display_symbol_of_obj(self, obj: Entity | None, mode: str = "emoji") -> str | None:
         """Return the visual representation of an object.
 
+        Args:
+            obj (Entity | None): The object being checked
+            mode (str): The display mode
+        
         Returns:
             A string representing the display symbol, or None if no mapping.
 
@@ -182,7 +191,14 @@ class Grid:
     # * Complex Setters
 
     def add_layer_to_coord(self, r: int, c: int, obj: Entity | None) -> None:
-        """Add an entity to a specific coordinate."""
+        """Add an entity to a specific coordinate.
+
+        Args:
+            r (int): Row index.
+            c (int): Column index.
+            obj (Entity | None): The object to be added into the Grid
+
+        """
         self.get_grid_obj_map()[r][c].append(obj)
 
     # * Misc
@@ -190,6 +206,10 @@ class Grid:
     def init_coord(self, symbol: str, coord: list[int]) -> tuple[Entity | None, str]:
         """Return the entity and display character for a given symbol.
 
+        Args:
+            symbol (str): The character at the given coordinate
+            coord (list): [r, c], The current coordinate being initialized
+        
         Returns:
             A tuple of (entity instance or None, display character for that tile).
 
@@ -212,7 +232,11 @@ class Grid:
         return item_type(coord, self, symbol), item_display_value
 
     def visualize_map(self, mode: str = "emoji") -> None:
-        """Generate the user-facing visualization of the Grid."""
+        """Generate the user-facing visualization of the Grid.
+
+        Args:
+            mode (str): The display mode
+        """
         for r in range(self.__map_rows):
             for c in range(self.__map_cols):
                 obj_in_coord = self.get_obj_in_coord(r, c)
@@ -227,6 +251,9 @@ class Grid:
     def get_vis_map_as_str(self, mode: str = "ascii") -> str:
         """Return the visualization of the Grid as a multi-line string.
 
+        Args:
+            mode (str): The display mode
+
         Returns:
             A single string composed of the visualization rows joined by newline.
 
@@ -236,6 +263,9 @@ class Grid:
 
     def render(self, p: Entity) -> bool:
         """Print the Grid and GUI, and return True if the game has ended.
+
+        Args:
+            p (Entity): The Player object in the current Grid instance
 
         Returns:
             True if the player has won or lost (game ended), otherwise False.
