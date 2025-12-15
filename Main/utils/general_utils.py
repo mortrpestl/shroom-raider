@@ -8,12 +8,12 @@ DEBUG_MODE = True
 
 
 def clear_terminal() -> None:
-    """Clears the terminal."""
+    """Clear the terminal."""
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def clear_prev_n_lines(n: int) -> None:
-    """Clears the previous n lines.
+    """Clear the previous n lines.
 
     Args:
         n (int): number of lines to clear.
@@ -70,7 +70,7 @@ def print_and_wait(message: str, seconds: float = 1) -> None:
 
 
 def format_time(seconds: float) -> str:
-    """Formats time in the hh:mm:ss format.
+    """Format time in the hh:mm:ss format.
 
     Args:
         seconds (float|int): time to format.
@@ -84,7 +84,7 @@ def format_time(seconds: float) -> str:
 
 
 def calculate_percentage(num: float, den: float) -> str:
-    """Calculates formatted percentage (xx%). 0% if divided by 0
+    """Calculate formatted percentage (xx%). 0% if divided by 0.
 
     Args:
         num (float|int): numerator of the fraction
@@ -110,7 +110,7 @@ def tabulate(
     joint: str = "+",
     max_width: int = 20,
 ) -> str:
-    """Generates a table
+    """Generate a table.
 
     Args:
         headers (list[str]): Headers for the table.
@@ -127,14 +127,15 @@ def tabulate(
 
     """
 
-    def truncate(text, width):
+    def truncate(text: str | None, width: int) -> str:
+
         text = "" if text is None else str(text)
         # replace NaN with -
         if text.lower() == "nan":
             text = "-"
         return text if len(text) <= width else text[: max(0, width - 3)] + "..."
 
-    table = [headers] + table
+    table = [headers, *table]
     r, c = len(table), len(headers)
     # compute max widths
     col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(r)) + 2, max_width) for c in range(c)]

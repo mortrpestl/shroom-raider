@@ -7,7 +7,7 @@ HERE = os.path.dirname(__file__)
 
 
 def show_leaderboard(sort_by: str | tuple = "total_wins", reverse: bool = False) -> None:
-    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
+    """Compare player to other players. Ranked by levels beaten and sum of best times (formatted).
 
     Args:
         sort_by (str | tuple): sorts the leaderboard using a key or a tuple of keys (by default, total_wins)

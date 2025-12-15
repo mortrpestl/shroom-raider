@@ -3,8 +3,6 @@ import os
 
 import pandas as pd
 from bonusclasses.security import findpw, scramble, unscramble
-
-# from LevelManager import get_level_title
 from utils.enums import ExitCodes
 from utils.general_utils import format_time, tabulate
 
@@ -23,32 +21,32 @@ HEADERS = [
 # ! TODO: documentation
 
 
-def decrypt(dict: dict[str, int], key: str) -> dict[str, int]:
+def decrypt(data_dict: dict[str, int], key: str) -> dict[str, int]:
     """Decrypt a dictionary of player data given a key.
 
     Args:
-        dict (dict): The dictionary containing the player data
+        data_dict (dict): The dictionary containing the player data
         key (str): The key used to decrypt the dictionary's contents
 
     Returns:
         A dict containing the decrypted entries of player data
 
     """
-    return {k: unscramble(str(v), key) for k, v in dict.items()}
+    return {k: unscramble(str(v), key) for k, v in data_dict.items()}
 
 
-def encrypt(dict: dict[str, int], key: str) -> dict[str, int]:
+def encrypt(data_dict: dict[str, int], key: str) -> dict[str, int]:
     """Encrypt a dictionary of player data given a key.
 
     Args:
-        dict (dict): The dictionary containing the player data
+        data_dict (dict): The dictionary containing the player data
         key (str): The key used to encrypt the dictionary's contents
 
     Returns:
         A dict containing the encrypted entries of player data
 
     """
-    return {k: scramble(str(v), key) for k, v in dict.items()}
+    return {k: scramble(str(v), key) for k, v in data_dict.items()}
 
 
 # * Pandas helpers
@@ -63,9 +61,7 @@ def read_raw_rows() -> dict:
 
     """
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
-    rows = df.to_dict(orient="records")
-
-    return rows
+    return df.to_dict(orient="records")
 
 
 def read_all_rows() -> dict:
@@ -86,13 +82,13 @@ def read_all_rows() -> dict:
             try:
                 pw = findpw(unencrypted_name, encrypted_name)
                 decrypted = decrypt(
-                    {k: str(v) for k, v in r.items() if k not in ("username", "encrypted_username")},
+                    {k: str(v) for k, v in r.items() if k not in {"username", "encrypted_username"}},
                     pw,
                 )
                 decrypted["username"] = unencrypted_name
                 decrypted["encrypted_username"] = encrypted_name
                 r.update(decrypted)
-            except Exception as e:
+            except KeyError as e:
                 print(f"Failed to decrypt for {unencrypted_name}: {e}")
 
     return rows
@@ -152,15 +148,15 @@ class PlayerData:
     Also handles distribution of global player information to leaderboards.
 
     Attributes:
-        name: A string denoting the name of the player
-        password: A string denoting the password of the player
-        total_mushrooms_collected: An int denoting the total mushrooms collected by the player
-        total_tiles_walked: An int denoting the total number of tiles a player walked throughout thegame.
-        total_wins: An int denoting the total wins a player had throughout the game.
-        total_times: An int denoting the
-        total_seconds_played: An int denoting the total minimum time taken by a player to beat each of their completed levels
-        completed_data: A stringified JSON containing data about levels a player has completed.
-        completed_levels: A dict containing data about levels a player has completed.
+        name (str): the name of the player
+        password (str): the password of the player
+        total_mushrooms_collected (int): the total mushrooms collected by the player
+        total_tiles_walked (int): the total number of tiles a player walked throughout thegame.
+        total_wins (int): the total wins a player had throughout the game.
+        total_times (int): the total time the player has played
+        total_seconds_played (int):  the total minimum time taken by a player to beat each of their completed levels
+        completed_data (str): JSON containing data about levels a player has completed.
+        completed_levels (dict): data about levels a player has completed.
 
     """
 
@@ -228,6 +224,7 @@ class PlayerData:
     # * Getter Methods
     def get_password(self) -> str:
         """Return the user's password.
+
         Returns:
             The player's password.
 
@@ -237,9 +234,10 @@ class PlayerData:
     # * Setter Methods
     def set_password(self, key: str) -> None:
         """Set the password.
-        
+
         Args:
             key (str): The given key.
+
         """
         self.password = key
 
@@ -285,8 +283,7 @@ class PlayerData:
         """Reinitialize the player's statistics based on records in the database.
         This includes initializing the data for a new player.
         """
-
-        # Read decrypted rows to load user data
+        
         rows = read_all_rows()
         for row in rows:
             if row["username"] == self.name:
@@ -325,7 +322,7 @@ class PlayerData:
             if r["username"] == self.name:
                 r.update(
                     self.to_dict(),
-                )  
+                )
                 found = True
                 break
 
@@ -365,7 +362,7 @@ class PlayerData:
         self.session_win = report["win"]
         self.session_dead = report["dead"]
 
-        if return_code in set((ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value)):
+        if return_code in {ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value}:
             if return_code == ExitCodes.VICTORY.value:
                 self.record_win()
             self.commit_session()
@@ -378,7 +375,6 @@ class PlayerData:
 
         Args:
             path (str): The path to the report file
-            level_id (int | None): the ID of the level being accessed
 
         """
         with open(path, encoding="utf-8") as f:

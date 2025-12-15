@@ -165,7 +165,7 @@ def main() -> None:
             # * REGISTER USER
             username = get_valid_username()
 
-            encrypted_username, reference_username = PlayerData.lookup_excel_username(username)
+            encrypted_username, _reference_username = PlayerData.lookup_excel_username(username)
 
             if encrypted_username and username != "GUEST":  # existing user
                 password = verify_existing_user(username, encrypted_username)
