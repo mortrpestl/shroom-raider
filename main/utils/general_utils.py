@@ -4,12 +4,10 @@ import time
 from math import ceil
 
 WAIT_TIME = 5
-DEBUG_MODE = True
 
 
 def clear_terminal() -> None:
     """Clear the terminal."""
-    print("Clearing Terminal!")
     os.system("cls" if os.name == "nt" else "clear")
 
 

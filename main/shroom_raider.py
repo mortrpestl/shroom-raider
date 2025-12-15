@@ -22,8 +22,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignor
 
 
 LEVEL_NAME = "DefaultStage"
-HERE = Path.parent
-report_file = None
+HERE = Path(__file__).parent
 moves_made = 0
 
 
@@ -58,7 +57,7 @@ def reset(level: str) -> tuple[Grid, Player]:
     return g, p
 
 
-def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) -> None:
+def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: bool | ExitCodes = False) -> None:
     """Parse user inputs to play game.
 
     Args:
@@ -69,8 +68,6 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
         reset_only (bool): A boolean indicating if moves other than reset can be played
 
     """
-    # preserve original globals usage (only declare if you intend to assign)
-    # item_here and holding_anything are read-only in this function in original code
     global moves_made
 
     if instructions is None:
@@ -103,15 +100,14 @@ def parser(instructions: str, p: Player, g: Grid, level: str, reset_only: bool) 
             check_win_condition(p, g)
 
 
-def write_report(g: Grid, p: Player, win: bool, dead: bool, report_file: str) -> None:
+def write_report(g: Grid, p: Player, report_file: str, *, game_status: ExitCodes) -> None:
     """Create a report of the played game after completion of a level.
 
     Args:
         g (Grid): The Grid being played on
         p (Player): The current Player entity
-        win (bool): indicates if the player has won
-        dead (bool): indicates if the player has died
         report_file (str): stringified report file for the game
+        game_status (ExitCodes): status of the game (win/lose)
 
     """
     global moves_made
@@ -121,8 +117,8 @@ def write_report(g: Grid, p: Player, win: bool, dead: bool, report_file: str) ->
         payload = {
             "mushrooms_collected": p.get_mushroom_count(),
             "moves_made": moves_made,
-            "win": bool(win),
-            "dead": bool(dead),
+            "win": game_status is ExitCodes.VICTORY,
+            "dead": game_status is ExitCodes.DEFEAT,
         }
         tmp = report_file + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
@@ -131,7 +127,7 @@ def write_report(g: Grid, p: Player, win: bool, dead: bool, report_file: str) ->
             os.fsync(f.fileno())
         try:
             Path(tmp).replace(report_file)
-        except Exception:
+        except FileNotFoundError:
             with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(payload, f)
     except Exception as e:
@@ -150,21 +146,18 @@ def launch_game(level: str, report_path: str) -> tuple[float, ExitCodes]:
 
     """
     start_time = time.time()
-    return_code = None
+    exit_code = None
     while True:
-        stop_or_reset_only = globals()["G"].render(globals()["P"])
-        if isinstance(stop_or_reset_only, ExitCodes):
-            return_code = stop_or_reset_only
-            if stop_or_reset_only is ExitCodes.VICTORY:
-                write_report(globals()["G"], globals()["P"], True, False, report_path)
-            elif stop_or_reset_only is ExitCodes.DEFEAT:
-                write_report(globals()["G"], globals()["P"], False, True, report_path)
+        exit_code = globals()["G"].render(globals()["P"])
+        if isinstance(exit_code, ExitCodes):
+            write_report(globals()["G"], globals()["P"], report_path, game_status=exit_code)
             break
         # each input() returns one line; parser will process that line
-        parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
+        parser(input(), globals()["P"], globals()["G"], level, reset_only=exit_code)
+        # exits if ExitCode is assigned to did_exit.
     end_time = time.time()
 
-    return float(end_time - start_time), return_code
+    return float(end_time - start_time), exit_code
 
 
 def register_or_login_user() -> PlayerData:

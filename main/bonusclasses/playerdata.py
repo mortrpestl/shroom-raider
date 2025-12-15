@@ -6,7 +6,7 @@ from bonusclasses.security import findpw, scramble, unscramble
 from utils.enums import ExitCodes
 from utils.general_utils import format_time, tabulate
 
-HERE = Path.parent
+HERE = Path(__file__).parent
 EXCEL_FILE = Path.resolve(Path(f"{HERE}/../statistics/PlayerData.xlsx"))
 HEADERS = [
     "username",

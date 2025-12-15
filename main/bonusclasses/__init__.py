@@ -1,1 +1,1 @@
-# package marker for Bonus.Bonus_Classes
+"""Package for extra classes."""

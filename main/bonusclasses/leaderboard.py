@@ -4,7 +4,7 @@ from pathlib import Path
 from bonusclasses.playerdata import read_all_rows
 from utils.general_utils import calculate_percentage, format_time, tabulate
 
-HERE = Path.parent
+HERE = Path(__file__).parent
 
 
 def show_leaderboard(sort_by: str | tuple = "total_wins", *, reverse: bool = False) -> None:
