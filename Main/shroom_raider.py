@@ -11,6 +11,7 @@ from argparse import ArgumentParser
 
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
+from Bonus_Classes.Leaderboard import show_leaderboard
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
 from Utils.Enums import ExitCodes
@@ -186,12 +187,10 @@ def main() -> None:
                 stop_or_reset_only = globals()["G"].render(globals()["P"])
                 if isinstance(stop_or_reset_only, ExitCodes):
                     return_code = stop_or_reset_only.value
-
                     if stop_or_reset_only is ExitCodes.VICTORY:
                         write_report(globals()["G"], globals()["P"], True, False, report_path)
                     elif stop_or_reset_only is ExitCodes.DEFEAT:
                         write_report(globals()["G"], globals()["P"], False, True, report_path)
-                    # TODO Implement leaderboard here
                     break
                 # each input() returns one line; parser will process that line
                 parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
@@ -212,9 +211,14 @@ def main() -> None:
                     elapsed_time=elapsed_time,
                 )
         finally:
+            # * CLEANUP
             if pathlib.Path(report_path).exists():
                 pathlib.Path(report_path).unlink()
+
+        # * LEADERBOARD AND STATS
         print(repr(player_data))
+        print("MOST WINS IN THE GAME:")
+        show_leaderboard(sort_by=("total_wins", "total_mushrooms_collected"), reverse=True)
         input("\nReady to exit the game? (Press Enter)")
         sys.exit()
         

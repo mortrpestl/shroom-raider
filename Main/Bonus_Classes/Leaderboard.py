@@ -1,62 +1,45 @@
 import json
 import os
 
-from LevelManager import get_level_title
-from Utils.general_utils import format_time, tabulate
+from Utils.general_utils import format_time, tabulate, calculate_percentage
+
 
 from Bonus_Classes.PlayerData import read_all_rows
 
+
 HERE = os.path.dirname(__file__)
 
-# TODO: REFACTOR ALL OF THIS.
-# ! you can ignore this muna.
-
-# @debug_wait(WAIT_TIME)
-def show_personal_leaderboard(pdata):
-    """Shows completed levels, etc."""
-    completed = pdata.get_completed_levels()
-    if not completed:
-        print("No completed levels yet.\n")
-        return None
-
-    rows = [
-        [i + 1, get_level_title(*level_ref.split("/")) or "-", format_time(ms)]
-        for i, (level_ref, ms) in enumerate(sorted(completed.items()))
-    ]
-    return tabulate(["#", "Title", "Best Time"], rows, max_width=24)
-
-
-# @debug_wait(WAIT_TIME)
-def show_general_leaderboard():
-    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)"""
+def show_leaderboard(sort_by: str|tuple="total_wins", reverse: bool=False) -> None:
+    """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
+    
+    Args:
+        sort_by: sorts the leaderboard using a key or a tuple of keys (by default, total_wins)
+        reverse: whether the leaderboard is sorted ascending or descending (by default, False)
+    """
     players = read_all_rows()
 
     if not players:
         print("No leaderboard data available.\n")
         return None
 
-    for p in players:
-        try:
-            completed = json.loads(p.get("completed_data", "{}"))
-        except Exception:
-            completed = {}
+    if isinstance(sort_by, str):
+        # sort by key
+        players.sort(key=lambda p: p.get(sort_by), reverse=reverse)
 
-        # Sum of best times (in ms, then convert to formatted)
-        total_ms = sum(completed.values())
-        p["completed_levels"] = completed
-        p["sum_best_ms"] = total_ms
-
-    # Sort by levels completed, then by total ms (lower = better)
-    players.sort(key=lambda p: (-len(p["completed_levels"]), p["sum_best_ms"]))
+    elif isinstance(sort_by, tuple):
+        # sort by the first key then the next...
+        players.sort(key=lambda p: tuple(p.get(i) for i in sort_by), reverse=reverse)
 
     rows = [
         [
             i + 1,
             p.get("username", ""),
-            len(p.get("completed_levels", {})),
-            format_time(p["sum_best_ms"]),
+            p.get("total_wins", 0),
+            p.get("total_times", 0),
+            calculate_percentage(int(p.get("total_wins", 0)), int(p.get("total_times", 0))),
             p.get("total_mushrooms_collected", 0),
             p.get("total_tiles_walked", 0),
+            format_time(float(p.get("total_seconds_played", 0.0)))
         ]
         for i, p in enumerate(players)
     ]
@@ -64,37 +47,11 @@ def show_general_leaderboard():
     headers = [
         "Rank",
         "Username",
-        "Runs Played",
-        "Sum of Best Times",
+        "Total Wins",
+        "Total Runs",
+        "Win Accuracy",
         "Mushrooms Collected",
         "Tiles Walked",
+        "Total Time Played",
     ]
-    return tabulate(headers, rows, max_width=24)
-
-
-# @debug_wait(WAIT_TIME)
-def show_level_leaderboard(level_ref):
-    """Shows players who've beaten a level sorted by time."""
-    players = read_all_rows()
-    level_title = get_level_title(*level_ref.split("/")) or "UNTITLED"
-
-    if not players:
-        print(f"No player data for Level {level_ref} ({level_title}).\n")
-        return None
-
-    level_rows = []
-    for p in players:
-        try:
-            completed = json.loads(p.get("completed_data", "{}"))
-        except Exception:
-            completed = {}
-        if level_ref in completed:
-            level_rows.append((p.get("username", ""), completed[level_ref]))
-
-    if not level_rows:
-        print(f"No completed times for Level {level_ref} ({level_title}).\n")
-        return None
-
-    level_rows.sort(key=lambda x: x[1])
-    rows = [[i + 1, username, level_title, format_time(ms)] for i, (username, ms) in enumerate(level_rows)]
-    return tabulate(["Rank", "Username", "Title", "Time"], rows, max_width=24)
+    print(tabulate(headers, rows, max_width=24))

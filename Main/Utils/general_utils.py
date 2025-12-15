@@ -1,9 +1,7 @@
 import os
 import sys
 import time
-
-from colorama import Fore, Style
-from wcwidth import wcswidth
+from math import ceil
 
 WAIT_TIME = 5
 DEBUG_MODE = True
@@ -21,41 +19,6 @@ def clear_prev_n_lines(n):
 
 def wait(seconds):
     time.sleep(seconds)
-
-
-def center_wr_to_terminal_size(input_str: str | list[str], colors: list = [], grid_mode=False):
-    """Centers strings, optionally with color per line."""
-    if isinstance(input_str, str):
-        input_str = input_str.split("\n")
-    # otherwise, its already a list
-    width = os.get_terminal_size()[0]
-    result = []
-
-    if not grid_mode:  # center a line, then wrap it with color.
-        for line in input_str:
-            txt_width = wcswidth(line)
-            if txt_width != -1:
-                padding_left = (width - txt_width) // 2
-                if colors:
-                    result.append("".join([" "] * padding_left + colors + [line] + [Style.RESET_ALL]))
-                else:
-                    result.append("".join([" "] * padding_left + [line]))
-            else:
-                result.append(line)
-
-    else:  # colors must be a list of lists
-        for r in range(len(input_str)):
-            txt_width = wcswidth(input_str[r])
-            if txt_width == -1:
-                result.append(input_str[r])
-                continue
-            padding_left = (width - txt_width) // 2
-            row_result = [" " * padding_left]
-            for c in range(len(input_str[0])):
-                row_result.append("".join(colors[r][c] + input_str[r][c]))
-            result.append("".join(row_result) + Style.RESET_ALL)
-
-    return "\n".join(result)
 
 
 # decorator
@@ -82,6 +45,11 @@ def print_and_wait(message, seconds=1):
 def format_time(seconds: float) -> str:
     m, s = divmod(seconds, 60)
     return f"{int(m):02}:{s:06.3f}"
+
+
+def calculate_percentage(num: float|int, den: float|int) -> str:
+    if den == 0: return "0%"
+    return str(ceil((num / den) * 100)) + "%"
 
 
 # yes, that's my 10G code right there with some modifications
@@ -126,4 +94,4 @@ def tabulate(headers, table, sep=" ", lborder=" ", rborder=" ", tborder="=", joi
         else:
             final_lines.append(line)
 
-    return center_wr_to_terminal_size("\n".join(final_lines), colors=[Fore.BLUE])
+    return "\n".join(final_lines)
