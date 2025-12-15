@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from classes.entities.import_entities import import_entities
 from classes.entity import Entity
-from Utils.Enums import ExitCodes
+from utils.enums import ExitCodes
 
 
 class Grid:
@@ -36,14 +36,14 @@ class Grid:
         self.__grid_user_display: list[list[str]] = [[] for _ in range(self.__map_rows)]
 
         self.ENTITIES: dict[str, type[Entity]] = import_entities({
-            "player",
-            "tree",
-            "rock",
-            "mushroom",
-            "water",
-            "pavedTile",
-            "axe",
-            "flamethrower",
+            "Player",
+            "Tree",
+            "Rock",
+            "Mushroom",
+            "Water",
+            "PavedTile",
+            "Axe",
+            "Flamethrower",
         })
 
         # Display mappings

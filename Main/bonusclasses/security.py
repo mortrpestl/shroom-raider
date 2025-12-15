@@ -1,4 +1,4 @@
-from Utils.general_utils import clear_prev_n_lines, wait
+from utils.general_utils import clear_prev_n_lines, wait
 
 CHARTAPE = r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
 CHARTAPE_LEN = len(CHARTAPE)

@@ -1,6 +1,6 @@
 import os
 
-from Utils.general_utils import format_time, tabulate, calculate_percentage
+from utils.general_utils import format_time, tabulate, calculate_percentage
 
 
 from bonusclasses.playerdata import read_all_rows

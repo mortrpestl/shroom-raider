@@ -1,6 +1,6 @@
 from classes.entities.import_entities import import_entities
 from classes.entity import Entity
-from classes.Grid import Grid
+from classes.grid import Grid
 
 # * RUFF CHECKED: No errors (12/10/2025)
 

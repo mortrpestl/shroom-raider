@@ -4,10 +4,10 @@ import time
 
 import pandas as pd
 #from LevelManager import get_level_title
-from Utils.Enums import ExitCodes
-from Utils.general_utils import format_time, tabulate
+from utils.enums import ExitCodes
+from utils.general_utils import format_time, tabulate
 
-from .security import findPW, scramble, unscramble
+from bonusclasses.security import findPW, scramble, unscramble
 
 HERE = os.path.dirname(__file__)
 EXCEL_FILE = os.path.abspath(os.path.join(HERE, "..", "Statistics", "PlayerData.xlsx"))
