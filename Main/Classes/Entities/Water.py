@@ -7,6 +7,8 @@ from Classes.Grid import Grid
 class Water(Entity):
     """A deadly entity that kills the player if stepped on.
 
+    Default character is '~'
+    
     Attributes:
         See parent class.
 

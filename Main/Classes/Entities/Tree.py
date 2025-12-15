@@ -7,6 +7,8 @@ from Classes.Grid import Grid
 class Tree(Entity):
     """A collideable and burnable entity that can be destroyed by the player.
 
+    Default character is 'T'
+
     Attributes:
         See parent class.
 
