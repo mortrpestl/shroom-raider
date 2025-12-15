@@ -3,7 +3,7 @@ import os
 from Utils.general_utils import format_time, tabulate, calculate_percentage
 
 
-from Bonus_Classes.PlayerData import read_all_rows
+from bonusclasses.playerdata import read_all_rows
 
 
 HERE = os.path.dirname(__file__)

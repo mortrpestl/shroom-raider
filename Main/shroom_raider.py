@@ -12,8 +12,8 @@ from argparse import ArgumentParser
 from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
 from Bonus_Classes.Leaderboard import show_leaderboard
-from Classes.Entities.Player import Player
-from Classes.Grid import Grid
+from classes.entities.player import Player
+from classes.Grid import Grid
 from Utils.Enums import ExitCodes
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")

@@ -20,7 +20,7 @@ def import_entities(names: set[str]) -> dict[str, type[Any]]:
     imported: dict[str, type[Any]] = {}
     for name in names:
         module_name = name
-        module = __import__(f"Classes.Entities.{module_name}", fromlist=[name])
-        entity_class = getattr(module, name)
+        module = __import__(f"classes.entities.{module_name}", fromlist=[name])
+        entity_class = getattr(module, name[0].upper() + name[1:])
         imported[name] = entity_class
     return imported

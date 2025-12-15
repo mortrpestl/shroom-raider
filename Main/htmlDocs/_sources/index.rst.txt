@@ -20,7 +20,7 @@ Main Game Logic
 Entity 
 ******
 
-.. automodule:: Classes.Entity
+.. automodule:: Classes.entity
    :members:
 
 Entities
@@ -28,51 +28,51 @@ Entities
 
 Axe
 ^^^
-.. automodule:: Classes.Entities.Axe
+.. automodule:: classes.entities.axe
    :members:
 
 Flamethrower
 ^^^^^^^^^^^^
-.. automodule:: Classes.Entities.Flamethrower
+.. automodule:: classes.entities.flamethrower
    :members:
 
 Mushroom
 ^^^^^^^^
-.. automodule:: Classes.Entities.Mushroom
+.. automodule:: classes.entities.mushroom
    :members:
 
 Paved Tile
 ^^^^^^^^^^
-.. automodule:: Classes.Entities.PavedTile
+.. automodule:: classes.entities.pavedtile
    :members:
 
 Player
 ^^^^^^
-.. automodule:: Classes.Entities.Player
+.. automodule:: classes.entities.player
    :members:
 
 Rock
 ^^^^
-.. automodule:: Classes.Entities.Rock
+.. automodule:: classes.entities.rock
    :members:
 
 Tree
 ^^^^
-.. automodule:: Classes.Entities.Tree
+.. automodule:: classes.entities.tree
    :members:
 
 Water
 ^^^^^
-.. automodule:: Classes.Entities.Water
+.. automodule:: classes.entities.water
    :members:
 
 
 Import Tools
 ------------
-.. autofunction:: Classes.Entities.import_entities.import_entities
+.. autofunction:: classes.entities.import_entities.import_entities
 
 
 Grid
 ****
-.. automodule:: Classes.Grid
+.. automodule:: classes.Grid
    :members:

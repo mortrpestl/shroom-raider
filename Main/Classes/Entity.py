@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from Classes.Grid import Grid  # imported only for type checking to avoid circular imports
+    from classes.Grid import Grid  # imported only for type checking to avoid circular imports
 
 
 class Entity:

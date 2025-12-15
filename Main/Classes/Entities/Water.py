@@ -1,5 +1,5 @@
-from Classes.Entity import Entity
-from Classes.Grid import Grid
+from classes.entity import Entity
+from classes.Grid import Grid
 
 # * RUFF CHECKED: No errors (12/10/2025)
 
