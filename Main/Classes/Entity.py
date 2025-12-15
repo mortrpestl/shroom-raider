@@ -78,8 +78,8 @@ class Entity:
         """Return the object on coordinate [r, c] on the same Grid as this Entity.
 
         Args:
-            r: Row index.
-            c: Column index.
+            r (int): Row index.
+            c (int): Column index.
 
         Returns:
             The entity at the given coordinate, or None if empty.
@@ -172,9 +172,9 @@ class Entity:
         """Check if an Entity can move to the target coordinate.
 
         Args:
-            direction: "wasd", where the Entity intends to move.
-            r: Target row.
-            c: Target column.
+            direction (str): "wasd", where the Entity intends to move.
+            r (int): Target row.
+            c (int): Target column.
 
         Returns:
             True if the Entity can move to (r, c), otherwise False.
@@ -214,8 +214,8 @@ class Entity:
         """Set the position of this Entity. DOES NOT MODIFY THE GRID.
 
         Args:
-            r: Row index.
-            c: Column index.
+            r (int): Row index.
+            c (int): Column index.
 
         """
         self.__pos = [r, c]
@@ -226,7 +226,7 @@ class Entity:
         """Move the Entity on the Grid.
 
         Args:
-            direction: The direction that the Entity wants to move.
+            direction (str): The direction that the Entity wants to move.
 
         Returns:
             True if the move was successful, False otherwise.

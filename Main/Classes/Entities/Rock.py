@@ -8,6 +8,8 @@ from Classes.Grid import Grid
 class Rock(Entity):
     """A collideable entity that can be pushed by the player.
 
+    Default character is 'R'
+
     Attributes:
         See parent class
 

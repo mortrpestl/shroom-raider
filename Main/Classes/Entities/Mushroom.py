@@ -7,6 +7,8 @@ from Classes.Grid import Grid
 class Mushroom(Entity):
     """An Entity that can be collected by the player. Collecting all mushrooms in a Grid clears it.
 
+    Default character is '+'
+
     Attributes:
         See parent class
 

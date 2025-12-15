@@ -33,7 +33,7 @@ def reset(level: str) -> tuple[Grid, Player]:
     """Reset a stage to its starting conditions.
 
     Args:
-        level: A string representation of the stage being reset
+        level (str): A string representation of the stage being reset
 
     Returns:
         A Grid object that contains the reset level, and a Player entity on that Grid.
@@ -50,11 +50,11 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
     """Parse user inputs to play game.
 
     Args:
-        instructions: The given input string of the player's moves
-        p: The current Player entity
-        g: The current Grid object
-        level: A string representation of the ORIGINAL stage
-        reset_only: A boolean indicating if moves other than reset can be played
+        instructions (str): The given input string of the player's moves
+        p (Player): The current Player entity
+        g (Grid): The current Grid object
+        level (str): A string representation of the ORIGINAL stage
+        reset_only (bool): A boolean indicating if moves other than reset can be played
 
     """
     # preserve original globals usage (only declare if you intend to assign)
@@ -88,10 +88,9 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
 
 
 def main() -> None:
-    """Run the main game logic for Shroom Raider.
+    """Run the main game logic for Shroom Raider. 
 
-    -> Processes Command Line Arguments
-    -> Handles Game Loop
+    Processes command line arguments and handles the main gameplay loop.
     """
     argument_parser = ArgumentParser()
     argument_parser.add_argument("-f", "--stage_file")
