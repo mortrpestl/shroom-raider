@@ -1462,12 +1462,12 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num</strong> (<em>float</em><em>|</em><em>int</em>) – numerator of the fraction</p></li>
-<li><p><strong>den</strong> (<em>float</em><em>|</em><em>int</em>) – denominator of the fraction</p></li>
+<li><p><strong>num</strong> (<em>float</em><em>|</em><em>int</em>) – numerator of the fraction.</p></li>
+<li><p><strong>den</strong> (<em>float</em><em>|</em><em>int</em>) – denominator of the fraction.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A string in the format xx%</p>
+<dd class="field-even"><p>A string in the format xx%.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1491,14 +1491,14 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.debug_wait">
-<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">debug_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">R</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Concatenate</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">R</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#utils.general_utils.debug_wait" title="Link to this definition">¶</a></dt>
 <dd><p>Debug decorator factory for functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>delay</strong> (<em>float</em><em>|</em><em>int</em>) – time to wait.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A function</p>
+<dd class="field-even"><p>The decorated function with debug!</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1533,23 +1533,20 @@ Win/dead conditions are set to false (as expected from any grid spawn).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.general_utils.tabulate">
-<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">tabulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.tabulate" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.general_utils.</span></span><span class="sig-name descname"><span class="pre">tabulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tborder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#utils.general_utils.tabulate" title="Link to this definition">¶</a></dt>
 <dd><p>Generate a table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>headers</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Headers for the table.</p></li>
 <li><p><strong>table</strong> (<em>list</em><em>[</em><em>list</em><em>]</em>) – List containing rows for the table.</p></li>
-<li><p><strong>sep</strong> (<em>str</em>) – border character between the columns</p></li>
-<li><p><strong>lborder</strong> (<em>str</em>) – left-most border character</p></li>
-<li><p><strong>rborder</strong> (<em>str</em>) – right-most border character</p></li>
-<li><p><strong>tborder</strong> (<em>str</em>) – top and bottom border character</p></li>
-<li><p><strong>joint</strong> (<em>str</em>) – intersection between border elements</p></li>
-<li><p><strong>max_width</strong> (<em>int</em>) – maximum width of the table</p></li>
+<li><p><strong>sep</strong> (<em>str</em>) – border character between the columns.</p></li>
+<li><p><strong>tborder</strong> (<em>str</em>) – top and bottom border character.</p></li>
+<li><p><strong>joint</strong> (<em>str</em>) – intersection between border elements.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A multi-line string of the table</p>
+<dd class="field-even"><p>A multi-line string of the table.</p>
 </dd>
 </dl>
 </dd></dl>
