@@ -3,7 +3,7 @@ import os
 import time
 
 import pandas as pd
-
+#from LevelManager import get_level_title
 from Utils.Enums import ExitCodes
 from Utils.general_utils import format_time, tabulate
 
@@ -19,7 +19,7 @@ HEADERS = [
     "total_wins",
     "total_times",
     "total_seconds_played",
-    "completed_data",
+    # "completed_data",
 ]
 
 # ! TODO: documentation
@@ -67,10 +67,10 @@ def read_raw_rows() -> dict:
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
     rows = df.to_dict(orient="records")
 
-    for r in rows:
-        cd = r.get("completed_data", "{}")
-        if pd.isna(cd) or not cd or str(cd).strip().lower() == "nan":
-            r["completed_data"] = "{}"
+    # for r in rows:
+    #     cd = r.get("completed_data", "{}")
+    #     if pd.isna(cd) or not cd or str(cd).strip().lower() == "nan":
+    #         r["completed_data"] = "{}"
 
     return rows
 
@@ -118,6 +118,15 @@ def safe_int(value: str | int) -> int:
         return int(value)
     except (ValueError, TypeError):
         return 0
+    
+def safe_float(value: str | float) -> float:
+    """Parses empty entries into floats if needed."""
+    if value is None or pd.isna(value):
+        return 0    
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return 0
 
 
 # * Actual Class Declaration
@@ -155,8 +164,8 @@ class PlayerData:
         self.total_wins = 0
         self.total_times = 0
         self.total_seconds_played = 0
-        self.completed_data = "{}"
-        self.completed_levels = {}
+        # self.completed_data = "{}"
+        # self.completed_levels = {}
         self.reset_session()
         self.load_or_create()
 
@@ -197,7 +206,7 @@ class PlayerData:
             "total_wins": 0,
             "total_times": 0,
             "total_seconds_played": 0,
-            "completed_data": "{}",
+            # "completed_data": "{}",
         })
         write_all_rows(rows)
 
@@ -222,7 +231,7 @@ class PlayerData:
         self.session_tiles = 0
         self.session_win = False
         self.session_dead = False
-        self.session_start_time = time.time()
+        #self.session_start_time = time.time()
 
     def record_move(self, n=1):
         """Adds number of moves to the session data."""
@@ -252,12 +261,12 @@ class PlayerData:
                 self.total_tiles_walked = safe_int(row.get("total_tiles_walked"))
                 self.total_wins = safe_int(row.get("total_wins"))
                 self.total_times = safe_int(row.get("total_times"))
-                self.total_seconds_played = safe_int(row.get("total_seconds_played"))
-                self.completed_data = row.get("completed_data", "{}")
-                try:
-                    self.completed_levels = json.loads(self.completed_data)
-                except Exception:
-                    self.completed_levels = {}
+                self.total_seconds_played = safe_float(row.get("total_seconds_played"))
+                # self.completed_data = row.get("completed_data", "{}")
+                # try:
+                #     self.completed_levels = json.loads(self.completed_data)
+                # except Exception:
+                #     self.completed_levels = {}
                 return
 
         raw_rows = read_raw_rows()
@@ -265,38 +274,38 @@ class PlayerData:
         write_all_rows(raw_rows)
 
     # * Level Completion Handler Methods
-    def get_completed_levels(self) -> dict[str, int, None]:
-        """Gets the completed levels of the player"""
-        if not self.completed_levels and self.completed_data:
-            try:
-                self.completed_levels = json.loads(self.completed_data)
-            except Exception:
-                self.completed_levels = {}
-        return self.completed_levels
+    # def get_completed_levels(self) -> dict[str, int, None]:
+    #     """Gets the completed levels of the player"""
+    #     if not self.completed_levels and self.completed_data:
+    #         try:
+    #             self.completed_levels = json.loads(self.completed_data)
+    #         except Exception:
+    #             self.completed_levels = {}
+    #     return self.completed_levels
 
-    def record_level_completion(self, level_id: int, elapsed_time_ms: int):
-        """Adds a completed level and the relevant player data to the player's completed data.
-        If a level has been recompleted, stats can be recomputed (e.g. getting the best time).
+    # def record_level_completion(self, level_id: int, elapsed_time_ms: int):
+    #     """Adds a completed level and the relevant player data to the player's completed data.
+    #     If a level has been recompleted, stats can be recomputed (e.g. getting the best time).
 
-        """
-        completed = self.get_completed_levels()
-        key = str(level_id)
-        completed[key] = min(completed.get(key, elapsed_time_ms), elapsed_time_ms)
-        self.completed_levels = completed
-        self.completed_data = json.dumps(completed)
+    #     """
+    #     completed = self.get_completed_levels()
+    #     key = str(level_id)
+    #     completed[key] = min(completed.get(key, elapsed_time_ms), elapsed_time_ms)
+    #     self.completed_levels = completed
+    #     self.completed_data = json.dumps(completed)
 
     # * Excel-Interaction Methods
-    def commit_session(self, time_elapsed_ms: float):
+    def commit_session(self):
         """Adjusts the player data given a level file.
         Also logs the updated data to the database.
         """
         self.total_mushrooms_collected += self.session_mushrooms
         self.total_tiles_walked += self.session_tiles
         self.total_times += 1
-        self.total_seconds_played += time_elapsed_ms
+        self.total_seconds_played += self.session_time
         if self.session_win:
             self.total_wins += 1
-        self.completed_data = json.dumps(self.completed_levels)
+        # self.completed_data = json.dumps(self.completed_levels)
         self.save()
         self.reset_session()
 
@@ -325,7 +334,7 @@ class PlayerData:
             "total_wins": self.total_wins,
             "total_times": self.total_times,
             "total_seconds_played": self.total_seconds_played,
-            "completed_data": self.completed_data,
+            # "completed_data": self.completed_data,
         }
         if self.password:
             data = encrypt(data, self.password)
@@ -335,87 +344,88 @@ class PlayerData:
         data["username"] = self.name
         return data
 
-    def apply_report_dict(self, report, return_code=None, level_id=None, elapsed_time=0):
+    def apply_report_dict(self, report, return_code=None, elapsed_time: float=0):
         """Processes the updates to be performed after receiving a session report."""
         self.session_mushrooms = safe_int(report["mushrooms_collected"])
         self.session_tiles = safe_int(report["moves_made"])
+        self.session_time = elapsed_time
         self.session_win = report["win"]
         self.session_dead = report["dead"]
 
-        if self.session_win and level_id is not None:
-            self.record_level_completion(level_id, elapsed_time)
+        # if self.session_win and level_id is not None:
+        #     self.record_level_completion(level_id, elapsed_time)
 
         if return_code in (ExitCodes.VICTORY.value, ExitCodes.DEFEAT.value):
             if return_code == ExitCodes.VICTORY.value:
                 self.record_win()
-            self.commit_session(elapsed_time)
+            self.commit_session()
             return
 
-        self.commit_session(elapsed_time)
+        self.commit_session()
 
     def load_report_file(self, path, level_id=None):
         """"""
         with open(path, encoding="utf-8") as f:
             report = json.load(f)
-        return self.apply_report_dict(report, level_id=level_id)
+        return self.apply_report_dict(report)
 
-    def get_completed_levels_organized(self):
-        """Returns an organized dict of levels
+    # def get_completed_levels_organized(self):
+    #     """Returns an organized dict of levels
 
-        Returns:
-            completed_levels_in_folder: an organized dict of levels with an associated folder_id
+    #     Returns:
+    #         completed_levels_in_folder: an organized dict of levels with an associated folder_id
 
-        """
-        completed_levels = self.get_completed_levels()
-        if not completed_levels:
-            return [["None"]]
-            # completed_headers = ["Completed Levels"]
-        else:
+    #     """
+    #     completed_levels = self.get_completed_levels()
+    #     if not completed_levels:
+    #         return [["None"]]
+    #         # completed_headers = ["Completed Levels"]
+    #     else:
 
-            def sort_key(item):
-                try:
-                    folder, level = item[0].split("/")
-                    return int(folder), int(level)
-                except Exception:
-                    return (0, 0)
+    #         def sort_key(item):
+    #             try:
+    #                 folder, level = item[0].split("/")
+    #                 return int(folder), int(level)
+    #             except Exception:
+    #                 return (0, 0)
 
-            sorted_levels = sorted(completed_levels.items(), key=sort_key)
-            completed_rows = [
-                [
-                    level_id,
-                    get_level_title(*level_id.split("/")) or "-",
-                    format_time(ms),
-                ]
-                for level_id, ms in sorted_levels
-            ]
-            return completed_rows
+    #         sorted_levels = sorted(completed_levels.items(), key=sort_key)
+    #         completed_rows = [
+    #             [
+    #                 level_id,
+    #                 get_level_title(*level_id.split("/")) or "-",
+    #                 format_time(ms),
+    #             ]
+    #             for level_id, ms in sorted_levels
+    #         ]
+    #         return completed_rows
 
-    def get_completed_lvl_ids_by_folder_id(self, folder_id) -> dict[str, int]:
-        """Returns an organized dict of levels with an associated folder_id
+    # def get_completed_lvl_ids_by_folder_id(self, folder_id) -> dict[str, int]:
+    #     """Returns an organized dict of levels with an associated folder_id
 
-        Args:
-            folder_id: gets levels based on folder_id
+    #     Args:
+    #         folder_id: gets levels based on folder_id
 
-        Returns:
-            completed_levels_in_folder: an organized dict of levels with an associated folder_id
+    #     Returns:
+    #         completed_levels_in_folder: an organized dict of levels with an associated folder_id
 
-        """
-        completed_rows = self.get_completed_levels_organized()
+    #     """
+    #     completed_rows = self.get_completed_levels_organized()
 
-        if completed_rows == [["None"]]:
-            return set()
+    #     if completed_rows == [["None"]]:
+    #         return set()
 
-        completed_levels_in_folder = set()
+    #     completed_levels_in_folder = set()
 
-        for i in completed_rows:
-            try:
-                lvl_id = i[0].split("/")
-                if int(lvl_id[0]) == folder_id:
-                    completed_levels_in_folder.add(int(lvl_id[1]))
-            except (ValueError, IndexError):
-                continue
+    #     for i in completed_rows:
+    #         try:
+    #             lvl_id = i[0].split("/")
+    #             if int(lvl_id[0]) == folder_id:
+    #                 completed_levels_in_folder.add(int(lvl_id[1]))
+    #         except (ValueError, IndexError):
+    #             continue
 
-        return completed_levels_in_folder
+    #     return completed_levels_in_folder
 
     # * Display
 

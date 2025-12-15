@@ -13,7 +13,7 @@ from Bonus_Classes.PlayerData import PlayerData
 from Bonus_Classes.security import get_valid_username, register_new_user, verify_existing_user
 from Classes.Entities.Player import Player
 from Classes.Grid import Grid
-
+from Utils.Enums import ExitCodes
 # ! the 2 lines of code below were written with AI assistance
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="ignore")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignore")
@@ -21,6 +21,8 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignor
 
 LEVEL_NAME = "DefaultStage"
 HERE = os.path.dirname(__file__)
+report_file = None
+moves_made = 0
 
 def check_win_condition(p: Player, g: Grid) -> None:
     """Check if a player has met the win condition of a grid.
@@ -66,6 +68,8 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
     """
     # preserve original globals usage (only declare if you intend to assign)
     # item_here and holding_anything are read-only in this function in original code
+    global moves_made
+
     if instructions is None:
         return
 
@@ -86,12 +90,48 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
 
             if inst in "wasd":
                 p.set_pos(inst)
+                moves_made += 1 
             elif inst == "p" and p.get_item() is None:
                 p.collect_item()
+                moves_made += 1
 
             p.collect_shroom()  # if applicable
 
             check_win_condition(p, g)
+            
+            if g.get_is_cleared() or p.get_is_dead():
+                return moves_made
+
+def write_report(G: Grid, P: Player, win: bool, dead: bool, report_file: str):
+    """Creates a report of the played game after completion of a level.
+
+    Args:
+        P: The current Player entity
+        G: The current Grid object
+        win, dead: Indicate whether the player has won the game or has died
+    """
+    global moves_made
+    if not report_file:
+        return
+    try:
+        payload = {
+            "mushrooms_collected": P.get_mushroom_count(),
+            "moves_made": moves_made,
+            "win": bool(win),
+            "dead": bool(dead),
+        }
+        tmp = report_file + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f)
+            f.flush()
+            os.fsync(f.fileno())
+        try:
+            pathlib.Path(tmp).replace(report_file)
+        except Exception:
+            with open(report_file, "w", encoding="utf-8") as f:
+                json.dump(payload, f)
+    except Exception as e:
+        print(f"Failed to write report file {report_file}: {e}")
 
 def main() -> None:
     """Run the main game logic for Shroom Raider. 
@@ -141,12 +181,18 @@ def main() -> None:
 
             # * RUN GAME
             start_time = time.time()
+            return_code = None
             while True:
                 stop_or_reset_only = globals()["G"].render(globals()["P"])
-                if stop_or_reset_only:
-                    # TODO implement leaderboard here!
+                if isinstance(stop_or_reset_only, ExitCodes):
+                    return_code = stop_or_reset_only.value
+
+                    if stop_or_reset_only is ExitCodes.VICTORY:
+                        write_report(globals()["G"], globals()["P"], True, False, report_path)
+                    elif stop_or_reset_only is ExitCodes.DEFEAT:
+                        write_report(globals()["G"], globals()["P"], False, True, report_path)
+                    # TODO Implement leaderboard here
                     break
-                    sys.exit()
                 # each input() returns one line; parser will process that line
                 parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
             end_time = time.time()
@@ -168,8 +214,8 @@ def main() -> None:
         finally:
             if pathlib.Path(report_path).exists():
                 pathlib.Path(report_path).unlink()
-
-        input("Ready to exit the game?")
+        print(repr(player_data))
+        input("\nReady to exit the game? (Press Enter)")
         sys.exit()
         
 
@@ -193,66 +239,6 @@ def main() -> None:
             "python3 shroom_raider.py -f <stage_file>\n"
             "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
         )
-
-
-    # if args.stage_file is None:
-    #     with open(f"{LEVEL_NAME}.txt", encoding="utf-8") as lvl_file:
-    #         first_line = lvl_file.readline().lstrip("\ufeff")
-    #         r, c = map(int, first_line.split())
-    #         level = lvl_file.read()
-
-    #     # assign module-level names exactly as original
-    #     globals()["G"] = Grid(LEVEL_NAME, level)
-    #     globals()["P"] = globals()["G"].get_player()
-
-    #     check_win_condition(globals()["P"], globals()["G"])
-
-    #     while True:
-    #         stop_or_reset_only = globals()["G"].render(globals()["P"])
-    #         if stop_or_reset_only:
-    #             sys.exit()
-    #         # each input() returns one line; parser will process that line
-    #         parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
-
-    # elif args.stage_file is not None:
-    #     with open(args.stage_file, encoding="utf-8") as lvl_file:
-    #         first_line = lvl_file.readline().lstrip("\ufeff")
-    #         r, c = map(int, first_line.split())
-    #         level = lvl_file.read()
-
-    #     globals()["G"] = Grid("UserInput", level)
-    #     globals()["P"] = globals()["G"].get_player()
-
-    #     check_win_condition(globals()["P"], globals()["G"])
-
-    #     if args.movement_file is None or args.output_file is None:
-    #         while True:
-    #             stop_or_reset_only = globals()["G"].render(globals()["P"])
-    #             if stop_or_reset_only:
-    #                 sys.exit()
-    #             parser(input(), globals()["P"], globals()["G"], level, reset_only=stop_or_reset_only)
-
-    #     elif args.movement_file is not None and args.output_file is not None:
-    #         # original behavior: parser received movement argument as-is (tests sometimes pass raw move strings)
-    #         parser(args.movement_file, globals()["P"], globals()["G"], level, reset_only=False)
-
-    #         with open(args.output_file, "w", encoding="utf-8") as f:
-    #             f.write(f"{r} {c}\n")
-    #             if globals()["P"].get_mushroom_count() == globals()["G"].get_total_mushrooms():
-    #                 f.write("CLEAR\n")
-    #             else:
-    #                 f.write("NO CLEAR\n")
-    #             f.write(globals()["G"].get_vis_map_as_str())
-
-    #     else:  # this is just for safety
-    #         print(
-    #             "Invalid arguments. Usage:\n"
-    #             "python3 shroom_raider.py -f <stage_file>\n"
-    #             "python3 shroom_raider.py -f <stage_file> -m <moves> -o <output_file>",
-    #         )
-    # else:
-    #     print("Invalid arguments. Use -f <stage_file> or -f <stage_file> -m <moves> -o <output_file>")
-
 
 if __name__ == "__main__":
     P, G = None, None

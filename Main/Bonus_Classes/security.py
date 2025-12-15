@@ -1,5 +1,4 @@
-from colorama import Fore
-from Utils.general_utils import wait
+from Utils.general_utils import clear_prev_n_lines, wait
 
 CHARTAPE = r"""0gqbmpWKBfZViX5azxo4RMFs.n}yj1DSAuHrLtdQI3OJk2Cc'9"8TvNU7 ,YP/h{lewE6:G"""
 CHARTAPE_LEN = len(CHARTAPE)
@@ -146,18 +145,18 @@ def verify_existing_user(username: str, encrypted_username: str):
 
     """
     while True:
-        password = input(center_wr_to_terminal_size(f"Password for {username}: ", colors=[Fore.BLUE])).strip()
+        password = input(f"Password for {username}: ").strip()
         if not password:
-            print(center_wr_to_terminal_size("Password cannot be empty.", colors=[Fore.RED]))
+            print("Password cannot be empty.")
             continue
 
         # scramble username with password
         test_encrypted = scramble(username, password)
         if test_encrypted == encrypted_username and len(password) == len(username):
-            print(center_wr_to_terminal_size("Password correct!", colors=[Fore.GREEN]))
+            print("Password correct!")
             return password
         else:
-            print(center_wr_to_terminal_size("Invalid password, try again.", colors=[Fore.RED]))
+            print("Invalid password, try again.")
 
         wait(1)
         clear_prev_n_lines(2)
@@ -174,32 +173,30 @@ def register_new_user(username: str):
 
     """
     while True:
-        password = input(center_wr_to_terminal_size(f"Enter new password for {username}: ", colors=[Fore.BLUE])).strip()
-        confirm = input(center_wr_to_terminal_size("Confirm password: ", colors=[Fore.BLUE])).strip()
+        password = input(f"Enter new password for {username}: ").strip()
+        confirm = input("Confirm password: ").strip()
         if not password:
-            print(center_wr_to_terminal_size("Password cannot be empty.", colors=[Fore.RED]))
+            print("Password cannot be empty.")
 
             wait(1)
             clear_prev_n_lines(3)
         elif len(password) != len(username):
-            print(center_wr_to_terminal_size("Password must have the same length as username", colors=[Fore.RED]))
+            print("Password must have the same length as username")
 
             wait(1)
             clear_prev_n_lines(3)
         elif password != confirm:
-            print(center_wr_to_terminal_size("Passwords do not match. Try again.", colors=[Fore.RED]))
+            print("Passwords do not match. Try again.")
 
             wait(1)
             clear_prev_n_lines(3)
         elif not check_validity(password):
-            print(
-                center_wr_to_terminal_size("Invalid password. Please only use alphanumeric symbols", colors=[Fore.RED]),
-            )
+            print("Invalid password. Please only use alphanumeric symbols")
 
             wait(1)
             clear_prev_n_lines(3)
         else:
-            print(center_wr_to_terminal_size("Password confirmed!", colors=[Fore.GREEN]))
+            print("Password confirmed!")
 
             wait(1)
             clear_prev_n_lines(3)
@@ -214,19 +211,15 @@ def get_valid_username():
         The username, once verified to be valid
 
     """
-    username = input(
-        center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]),
-    )
+    username = input("Username (leave blank for guest): [10-30 characters] -> ")
 
     if not username:
         return "GUEST"
 
     while not check_validity(username):
-        print(center_wr_to_terminal_size("Sorry, that is an invalid username...", colors=[Fore.RED]))
+        print("Sorry, that is an invalid username...")
         wait(1)
         clear_prev_n_lines(2)
-        username = input(
-            center_wr_to_terminal_size("Username (leave blank for guest): [10-30 characters] -> ", colors=[Fore.BLUE]),
-        )
+        username = input("Username (leave blank for guest): [10-30 characters] -> ")
 
     return username

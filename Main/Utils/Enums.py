@@ -1,12 +1,9 @@
 from enum import Enum
 
-
 class ExitCodes(Enum):
     VICTORY = 0
     DEFEAT = 2
-    QUIT = 3
-    INVALID = 4
-
+    INVALID = 3
 
 class DisplayMode(Enum):
     EMOJI = 0

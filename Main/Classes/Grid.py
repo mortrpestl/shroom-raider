@@ -2,6 +2,7 @@ from typing import ClassVar
 
 from Classes.Entities.import_entities import import_entities
 from Classes.Entity import Entity
+from Utils.Enums import ExitCodes
 
 
 class Grid:
@@ -261,7 +262,7 @@ class Grid:
         self.visualize_map(mode)
         return "\n".join("".join(row) for row in self.__grid_user_display)
 
-    def render(self, p: Entity) -> bool:
+    def render(self, p: Entity) -> ExitCodes:
         """Print the Grid and GUI, and return True if the game has ended.
 
         Args:
@@ -274,9 +275,9 @@ class Grid:
         total_mushrooms = self.get_total_mushrooms()
         mushrooms_collected = p.get_mushroom_count()
         below = p.get_entity_below()
-        item_here = below.__class__.__name__ if below else "None"
+        item_here = below.__class__.__name__ if below else "Empty Tile"
         held_item_obj = p.get_item()
-        held_item = held_item_obj.__class__.__name__ if held_item_obj else "None"
+        held_item = held_item_obj.__class__.__name__ if held_item_obj else "Nothing"
 
         win = (mushrooms_collected == total_mushrooms)
         lose = p.get_is_dead()
@@ -302,5 +303,8 @@ class Grid:
                 f"What will you do?",
                 end="",
             )
+        if win:
+            return ExitCodes.VICTORY
+        elif lose:
+            return ExitCodes.DEFEAT
 
-        return win or lose
