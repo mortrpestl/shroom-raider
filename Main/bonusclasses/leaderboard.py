@@ -52,4 +52,4 @@ def show_leaderboard(sort_by: str | tuple = "total_wins", reverse: bool = False)
         "Tiles Walked",
         "Total Time Played",
     ]
-    print(tabulate(headers, rows, max_width=24))
+    print(tabulate(headers, rows))

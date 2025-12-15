@@ -1,10 +1,16 @@
 import os
 import sys
 import time
+from collections.abc import Callable
 from math import ceil
+from typing import Concatenate, ParamSpec, TypeVar
+
+P = ParamSpec("P")
+R = TypeVar("R")
 
 WAIT_TIME = 5
 DEBUG_MODE = True
+
 
 def clear_terminal() -> None:
     """Clear the terminal."""
@@ -34,16 +40,19 @@ def wait(seconds: float) -> None:
 
 
 # decorator
-def debug_wait(delay: float = 2.5) -> function:
+def debug_wait(delay: float = 2.5) -> Callable[[Callable[P, R]], Callable[Concatenate[str, P], R]]:
     """Debug decorator factory for functions.
 
     Args:
         delay (float|int): time to wait.
 
+    Returns:
+        The decorated function with debug!
+
     """
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
+    def decorator(func: Callable[P, R]) -> Callable[Concatenate[str, P]]:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             answer = func(*args, **kwargs)
             if DEBUG_MODE:
                 print("DEBUG MODE ON. Happy debugging! Turn off by toggling DEBUG_MODE in general_utils")
@@ -86,11 +95,11 @@ def calculate_percentage(num: float, den: float) -> str:
     """Calculate formatted percentage (xx%). 0% if divided by 0.
 
     Args:
-        num (float|int): numerator of the fraction
-        den (float|int): denominator of the fraction
+        num (float|int): numerator of the fraction.
+        den (float|int): denominator of the fraction.
 
     Returns:
-        A string in the format xx%
+        A string in the format xx%.
 
     """
     if den == 0:
@@ -103,39 +112,35 @@ def tabulate(
     headers: list[str],
     table: list[list],
     sep: str = " ",
-    lborder: str = " ",
-    rborder: str = " ",
     tborder: str = "=",
     joint: str = "+",
-    max_width: int = 20,
 ) -> str:
     """Generate a table.
 
     Args:
         headers (list[str]): Headers for the table.
         table (list[list]): List containing rows for the table.
-        sep (str): border character between the columns
-        lborder (str): left-most border character
-        rborder (str): right-most border character
-        tborder (str): top and bottom border character
-        joint (str): intersection between border elements
-        max_width (int): maximum width of the table
+        sep (str): border character between the columns.
+        tborder (str): top and bottom border character.
+        joint (str): intersection between border elements.
 
     Returns:
-        A multi-line string of the table
+        A multi-line string of the table.
 
     """
+    max_width = 20
+
     def truncate(text: str, width: int) -> str:
-        """Reduces a string to a specified width
-        
+        """Reduce a string to a specified width.
+
         Args:
-            text (str): text to truncate
+            text (str): text to truncate.
             width (int): width to adhere to
 
         Returns:
-            The truncated string
-        """
+            The truncated string.
 
+        """
         text = "" if text is None else str(text)
         # replace NaN with -
         if text.lower() == "nan":
@@ -148,28 +153,29 @@ def tabulate(
     col_widths = [min(max(len(truncate(table[r][c], max_width)) for r in range(r)) + 2, max_width) for c in range(c)]
 
     def build_border() -> str:
-        """Formats a horizontal border
-        
+        """Format a horizontal border.
+
         Returns:
-            The built border
+            The built border.
+
         """
         return joint + joint.join(tborder * w for w in col_widths) + joint
 
     def build_row(row: list) -> str:
-        """Formats a row with a border
-        
+        """Format a row with a border.
+
         Args:
-            row (list): the content to format
+            row (list): the content to format.
 
         Returns:
-            A formatted row
+            A formatted row.
+
         """
         cells = [truncate(str(row[c]), col_widths[c]).center(col_widths[c]) for c in range(c)]
-        return lborder + sep.join(cells) + rborder
+        return sep + sep.join(cells) + sep
 
     lines = [build_border(), build_row(headers), build_border()]
-    for row in table[1:]:
-        lines.append(build_row(row))
+    lines.extend([build_row(row) for row in table[1:]])
     lines.append(build_border())
 
     # fix intersections
@@ -180,8 +186,8 @@ def tabulate(
             for j in range(1, len(currline) - 1):
                 if (
                     currline[j] == joint
-                    and currline[j - 1] in {joint, lborder, rborder, sep}
-                    and currline[j + 1] in {joint, lborder, rborder, sep}
+                    and currline[j - 1] in {joint, sep}
+                    and currline[j + 1] in {joint, sep}
                 ):
                     currline[j] = joint  # intersection points
             final_lines.append("".join(currline))
