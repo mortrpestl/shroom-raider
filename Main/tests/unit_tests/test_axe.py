@@ -2,8 +2,8 @@ import pathlib
 import sys
 
 import pytest
-from classes.entities.import_entities import import_entities
-from classes.grid import Grid
+from Main.classes.entities.import_entities import import_entities
+from Main.classes.grid import Grid
 
 sys.path.append((pathlib.Path(__file__).parent / "../..").resolve())
 

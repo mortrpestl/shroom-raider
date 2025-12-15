@@ -7,22 +7,38 @@ WAIT_TIME = 5
 DEBUG_MODE = True
 
 
-def clear_terminal():
+def clear_terminal() -> None:
+    """Clears the terminal."""
     os.system("cls" if os.name == "nt" else "clear")
 
 
-def clear_prev_n_lines(n):
+def clear_prev_n_lines(n: int) -> None:
+    """Clears the previous n lines.
+    
+    Args:
+        n (int): number of lines to clear.
+    """
     for _ in range(n):
         sys.stdout.write("\033[F")
         sys.stdout.write("\033[K")
 
 
-def wait(seconds):
+def wait(seconds: float|int) -> None:
+    """Do nothing for the specified amount of seconds.
+
+    Args:
+        seconds (float|int): seconds to wait.
+    """
     time.sleep(seconds)
 
 
 # decorator
-def debug_wait(delay=2.5):
+def debug_wait(delay: float|int=2.5) -> None:
+    """Debug decorator factory for functions.
+    
+    Args:
+        delay (float|int): time to wait.
+    """
     def decorator(func):
         def wrapper(*args, **kwargs):
             answer = func(*args, **kwargs)
@@ -36,24 +52,62 @@ def debug_wait(delay=2.5):
     return decorator
 
 
-def print_and_wait(message, seconds=1):
+def print_and_wait(message: str, seconds: int|float=1) -> None:
+    """Print a message then wait some number of seconds.
+    
+    Args:
+        message (str): the message to print.
+        seconds (float|int): waiting time after print.
+    """
     print(message)
     wait(seconds)
     clear_terminal()
 
 
-def format_time(seconds: float) -> str:
+def format_time(seconds: float|int) -> str:
+    """Formats time in the hh:mm:ss format.
+    
+    Args:
+        seconds (float|int): time to format.
+    
+    Returns:
+        A string of the formatted time. 
+    """
     m, s = divmod(seconds, 60)
     return f"{int(m):02}:{s:06.3f}"
 
 
 def calculate_percentage(num: float|int, den: float|int) -> str:
+    """Calculates formatted percentage (xx%). 0% if divided by 0
+
+    Args:
+        num (float|int): numerator of the fraction
+        den (float|int): denominator of the fraction
+
+    Returns:
+        A string in the format xx%
+    """
     if den == 0: return "0%"
     return str(ceil((num / den) * 100)) + "%"
 
 
 # yes, that's my 10G code right there with some modifications
-def tabulate(headers, table, sep=" ", lborder=" ", rborder=" ", tborder="=", joint="+", max_width=20):
+def tabulate(headers: list[str], table: list[list], sep:str=" ", lborder:str=" ", rborder:str=" ", tborder:str="=", joint:str="+", max_width:int=20) -> str:
+    """Generates a table
+    
+    Args:
+        headers (list[str]): Headers for the table.
+        table (list[list]): List containing rows for the table.
+        sep (str): border character between the columns
+        lborder (str): left-most border character
+        rborder (str): right-most border character
+        tborder (str): top and bottom border character
+        joint (str): intersection between border elements
+        max_width (int): maximum width of the table
+
+    Returns:
+        A multi-line string of the table
+    """
     def truncate(text, width):
         text = "" if text is None else str(text)
         # replace NaN with -
