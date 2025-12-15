@@ -5,11 +5,11 @@ CHARTAPE_LEN = len(CHARTAPE)
 VALID_LETTERS = set(CHARTAPE)
 
 
-def check_validity(data: str):
+def check_validity(data: str) -> bool:
     """Checks if a given string is a valid password/username
 
     Args:
-        data: The proposed password/username
+        data (str): The proposed password/username
 
     Returns:
         True if valid, False if not
@@ -24,12 +24,12 @@ def check_validity(data: str):
     return True
 
 
-def shift(letter: str, shiftval: str):
+def shift(letter: str, shiftval: str) -> str:
     """Shifts a letter by a number of spaces to the right
 
     Args:
-        letter: The letter to be shifted
-        shiftval: The letter representation of number of shifts
+        letter (str): The letter to be shifted
+        shiftval (str): The letter representation of number of shifts
 
     Returns:
         The shifted letter
@@ -43,12 +43,12 @@ def shift(letter: str, shiftval: str):
     return CHARTAPE[i % CHARTAPE_LEN]
 
 
-def unshift(letter: str, shiftval: str):
+def unshift(letter: str, shiftval: str) -> str:
     """Shifts a letter by a number of spaces to the left
 
     Args:
-        letter: The letter to be shifted
-        shiftval: The letter representation of number of shifts
+        letter (str): The letter to be shifted
+        shiftval (str): The letter representation of number of shifts
 
     Returns:
         The shifted letter
@@ -65,12 +65,12 @@ def unshift(letter: str, shiftval: str):
     return CHARTAPE[i % CHARTAPE_LEN]
 
 
-def scramble(data: str, key: str):
+def scramble(data: str, key: str) -> str:
     """Vigenère cipher
 
     Args:
-        data: The data to be scrambled
-        key: The string key of the cipher
+        data (str): The data to be scrambled
+        key (str): The string key of the cipher
 
     Returns:
         The scrambled string
@@ -84,12 +84,12 @@ def scramble(data: str, key: str):
     return res
 
 
-def unscramble(data: str, key: str):
+def unscramble(data: str, key: str) -> str:
     """Vigenère cipher unscrambler
 
     Args:
-        data: The data to be unscrambled
-        key: The string key of the cipher
+        data (str): The data to be unscrambled
+        key (str): The string key of the cipher
 
     Returns:
         The original unscrambled string
@@ -103,12 +103,12 @@ def unscramble(data: str, key: str):
     return res
 
 
-def findPW(unencrypted: str, encrypted: str):
+def findPW(unencrypted: str, encrypted: str) -> str:
     """Find the key string given the original and encrypted strings
 
     Args:
-        unencrypted: The original string
-        encrypted: The string after being scrambled
+        unencrypted (str): The original string
+        encrypted (str): The string after being scrambled
 
     Returns:
         The key string of the cipher
@@ -133,12 +133,12 @@ def findPW(unencrypted: str, encrypted: str):
     return pw
 
 
-def verify_existing_user(username: str, encrypted_username: str):
+def verify_existing_user(username: str, encrypted_username: str) -> str:
     """Prompt for password until correct for existing user.
 
     Args:
-        username: The username of the current user
-        encrypted_username: The stored encrypted username of the current user with their password
+        username (str): The username of the current user
+        encrypted_username (str): The stored encrypted username of the current user with their password
 
     Returns:
         The correct password once verified
@@ -162,11 +162,11 @@ def verify_existing_user(username: str, encrypted_username: str):
         clear_prev_n_lines(2)
 
 
-def register_new_user(username: str):
+def register_new_user(username: str) -> str:
     """Prompt for valid password and confirmation for new user.
 
     Args:
-        username: The username of the new user
+        username (str): The username of the new user
 
     Returns:
         The confirmed password.
@@ -204,7 +204,7 @@ def register_new_user(username: str):
             return password
 
 
-def get_valid_username():
+def get_valid_username() -> str:
     """Prompts the user for a valid username
 
     Returns:

@@ -1,4 +1,3 @@
-import json
 import os
 
 from Utils.general_utils import format_time, tabulate, calculate_percentage
@@ -13,8 +12,8 @@ def show_leaderboard(sort_by: str|tuple="total_wins", reverse: bool=False) -> No
     """Compares player to other players. Ranked by levels beaten and sum of best times (formatted)
     
     Args:
-        sort_by: sorts the leaderboard using a key or a tuple of keys (by default, total_wins)
-        reverse: whether the leaderboard is sorted ascending or descending (by default, False)
+        sort_by (str | tuple): sorts the leaderboard using a key or a tuple of keys (by default, total_wins)
+        reverse (bool): whether the leaderboard is sorted ascending or descending (by default, False)
     """
     players = read_all_rows()
 
