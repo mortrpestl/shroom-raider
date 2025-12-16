@@ -1,4 +1,3 @@
-import os
 import sys
 import time
 from math import ceil
@@ -8,7 +7,7 @@ WAIT_TIME = 5
 
 def clear_terminal() -> None:
     """Clear the terminal."""
-    os.system("cls" if os.name == "nt" else "clear")
+    print("\033[2J\033[H", end="")
 
 
 def clear_prev_n_lines(n: int) -> None:

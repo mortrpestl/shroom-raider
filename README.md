@@ -1,5 +1,8 @@
 # **[CS11] Jugemu Jugemu**
 
+NOTE: For the **level design contest**  content, check out the `leveldesigncontest` folder in Main!
+
+
 **Full Name:**
 
 Jugemu Jugemu Go-Kō-no-Surikire Kaijari-suigyo no Suigyō-matsu Unrai-matsu Fūrai-matsu Kū-Neru Tokoro ni Sumu Tokoro Yaburakōji no Burakōji Paipo Paipo Paipo no Shūringan Shūringan no Gūrindai Gūrindai no Ponpokopii no Ponpokonaa no Chōkyūmei no Chōsuke
