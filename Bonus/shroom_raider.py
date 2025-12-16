@@ -74,8 +74,10 @@ def print_levels_table(levels: dict, selected: int = 1, completed_lvl_ids: set |
         completed_lvl_ids = set()
 
     display = []
-    with Path("Assets/UI/LevelSelectArt.txt").read_text(encoding="utf+8") as art:
-        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.GREEN]))
+
+    art = Path("Assets/UI/LevelSelectArt.txt").read_text(encoding="utf-8")
+    display.append(center_wr_to_terminal_size(art, colors=[Fore.GREEN]))
+
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to | [!] Go Back\n")
     spanner = "---===x{🌲}x===---\n"
 
@@ -117,8 +119,9 @@ def print_folders_table(folders: dict, selected: int = 1) -> None:
 
     """
     display = []
-    with Path("Assets/UI/FolderSelectArt.txt").read_text(encoding="utf+8") as art:
-        display.append(center_wr_to_terminal_size(art.read(), colors=[Fore.RED]))
+    art = Path("Assets/UI/FolderSelectArt.txt").read_text(encoding="utf-8")
+    display.append(center_wr_to_terminal_size(art, colors=[Fore.RED]))
+
     display.append("[w] Up | [s] Down | [Q] Quit Launcher | [Enter] Go to\n")
     spanner = "---===x{🔥}x===---\n"
 

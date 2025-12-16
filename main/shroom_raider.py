@@ -7,6 +7,7 @@ import sys
 import tempfile
 import time
 from argparse import ArgumentParser
+from collections.abc import Callable
 from pathlib import Path
 
 from bonusclasses.leaderboard import show_leaderboard
@@ -23,7 +24,36 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="ignor
 
 LEVEL_NAME = "DefaultStage"
 HERE = Path(__file__).parent
-moves_made = 0
+
+
+def move_counter() -> tuple[Callable, Callable]:
+    """Create two functions for accessing and incrementing the total number of moves made.
+
+    Returns:
+    A function for accessing the total number of moves made in the level.
+    A function for incrementing the total number of moves made in the level.
+
+    """
+    moves_made = 0
+
+    def access() -> int:
+        """Access the total number of moves made in the level.
+
+        Returns:
+            The number of moves made so far.
+
+        """
+        return moves_made
+
+    def increment() -> None:
+        """Increments the total number of moves made in the level."""
+        nonlocal moves_made
+        moves_made += 1
+
+    return access, increment
+
+
+get_move_count, increment_move_count = move_counter()
 
 
 def check_win_condition(p: Player, g: Grid) -> None:
@@ -68,8 +98,6 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
         reset_only (bool): A boolean indicating if moves other than reset can be played
 
     """
-    global moves_made
-
     if instructions is None:
         return
 
@@ -90,10 +118,10 @@ def parser(instructions: str, p: Player, g: Grid, level: str, *, reset_only: boo
 
             if inst in "wasd":
                 p.set_pos(inst)
-                moves_made += 1
+                increment_move_count()
             elif inst == "p" and p.get_item() is None:
                 p.collect_item()
-                moves_made += 1
+                increment_move_count()
 
             p.collect_shroom()  # if applicable
 
@@ -110,13 +138,12 @@ def write_report(g: Grid, p: Player, report_file: str, *, game_status: ExitCodes
         game_status (ExitCodes): status of the game (win/lose)
 
     """
-    global moves_made
     if not report_file:
         return
     try:
         payload = {
             "mushrooms_collected": p.get_mushroom_count(),
-            "moves_made": moves_made,
+            "moves_made": get_move_count(),
             "win": game_status is ExitCodes.VICTORY,
             "dead": game_status is ExitCodes.DEFEAT,
         }
@@ -130,7 +157,7 @@ def write_report(g: Grid, p: Player, report_file: str, *, game_status: ExitCodes
         except FileNotFoundError:
             with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(payload, f)
-    except Exception as e:
+    except (OSError, TypeError, FileNotFoundError) as e:
         print(f"Failed to write report file {report_file}: {e}")
 
 

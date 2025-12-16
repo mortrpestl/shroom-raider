@@ -5,18 +5,16 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-import os
 import sys
+from pathlib import Path
 
-sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, Path("..").resolve())
 sys.path.append(
-    os.path.abspath(
-        os.path.join(__file__, "../../src"),
-    ),
+    (Path(__file__) / "../../src").resolve(),
 )
 
 project = "Shroom Raider"
-copyright = "2025, Jugemu-Jugemu"
+copyright = "2025, Jugemu-Jugemu"  # noqa: A001
 author = "Jugemu-Jugemu"
 release = "12/16/2025"
 
