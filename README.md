@@ -1,9 +1,12 @@
 # Shroom Raider
 
-*Shroom Raider* is a Python-based game we implemented for the course Introduction to Programming (CS11) in University of the Philippines Diliman
+*Shroom Raider* is a Python-based game we implemented for the course "Introduction to Programming (CS11)" in the University of the Philippines - Diliman. It features a Sokoban-esque game style, inspired by games like _Dwarf Fortress_ and _Baba Is You_.
+
+![](md_images/intro.png)
 
 ## Details 
 Group Name: Jugemu Jugemu Go-Kō-no-Surikire Kaijari-suigyo no Suigyō-matsu Unrai-matsu Fūrai-matsu Kū-Neru Tokoro ni Sumu Tokoro Yaburakōji no Burakōji Paipo Paipo Paipo no Shūringan Shūringan no Gūrindai Gūrindai no Ponpokopii no Ponpokonaa no Chōkyūmei no Chōsuke
+
 Group Members: Diogn Mortera, Miguel Villarica, Francois Zingapan
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/l5DU_0yz)
