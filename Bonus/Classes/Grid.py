@@ -541,7 +541,7 @@ class Grid:
         # NOTE grid_display is separate to "bypass" weirdness from ANSI
 
         # * TITLE DISPLAY
-        span = max((wcswidth(self.__grid_user_display[0]) - 3) // 4, 1)
+        span = max((wcswidth("".join(self.__grid_user_display[0])) - 3) // 4, 1)
         spanner = f"{Fore.GREEN}\nx{'-' * span}{'=' * span}{{🍄}}{'=' * span}{'-' * span}x\n{Style.RESET_ALL}"
         with open("Assets/UI/GameProperArt.txt", encoding="utf+8") as art:
             title_display.append(f"{Fore.RED}\n{art.read()}\n{Style.RESET_ALL}")
